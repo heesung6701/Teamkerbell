@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment"
+
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/sign_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:id="@+id/iv_sign_red"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_sign_red"
+            />
+
+        <ImageView
+            android:id="@+id/iv_sign_yellow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="9dp"
+            app:srcCompat="@drawable/ic_sign_yellow"
+            />
+
+        <ImageView
+            android:id="@+id/iv_sign_green"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="9dp"
+            app:srcCompat="@drawable/ic_sign_green"
+            />
+    </LinearLayout>
+    <include layout="@layout/content_recyclerview"/>
+
+</LinearLayout>

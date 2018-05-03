@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/btn_board"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_size"
+            android:background="@color/mainColor">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="게시판"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_next"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+
+            >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="대화상대"/>
+        <TextView
+            android:id="@+id/tv_numberOfUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="(5명)"/></LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/listview_divideline_height"
+            android:background="@drawable/shape_line_divider"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listView_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <Button
+            android:id="@+id/btn_invite"
+            android:layout_width="match_parent"
+            android:theme="@style/FlatButton"
+            android:layout_height="40dp"
+            android:text="팀원초대"
+            android:textSize="14dp"
+            android:elevation="0dp"
+            android:background="@drawable/shape_action_bar"
+            android:stateListAnimator="@null"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:background="@color/mainColor">
+            <ImageButton
+                android:id="@+id/btn_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_out"
+                android:layout_marginLeft="16dp"
+                android:tint="@color/white"
+                android:layout_alignParentLeft="true"
+                android:background="@android:color/transparent"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_settings"
+                android:layout_marginRight="16dp"
+                android:tint="@color/white"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"/>
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

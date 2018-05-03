@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/btn_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/list_item_iv_profile"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="top"
+
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_profile_default_png"
+            app:civ_border_color="@color/mainColorY"
+            app:civ_border_width="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/list_item_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="30"
+                android:text="sopt"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <LinearLayout
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@color/mainColor"
+                  android:orientation="vertical"
+                  >
+                  <TextView
+                      android:id="@+id/list_item_tv_title"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@color/mainColorDark"
+                      android:padding="10dp"
+                      android:text="신호등이 등록되었습니다"
+                      android:maxLines="1"
+                      android:textColor="@color/white"
+                      android:textStyle="bold"
+                      />
+                  <TextView
+                      android:id="@+id/list_item_tv_content"
+                      android:layout_width="200dp"
+                      android:layout_height="wrap_content"
+                      android:maxLines="3"
+                      android:padding="10dp"
+                      android:text="내용"
+                      /></LinearLayout>
+
+              <TextView
+                  android:id="@+id/list_item_tv_time"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="bottom"
+                  android:gravity="end"
+                  android:text="오후 3.27"
+                  android:textSize="12sp" />
+              <TextView
+                  android:id="@+id/list_item_tv_count"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="bottom"
+                  android:layout_weight="1"
+                  android:gravity="start"
+                  android:padding="5dp"
+                  android:text="1"/>
+          </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

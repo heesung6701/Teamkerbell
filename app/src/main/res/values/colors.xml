@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/mainColorP</color>
+    <color name="colorPrimaryDark">#BDBDBD</color>
+    <color name="colorAccent">#5A3884</color>
+
+
+
+    <color name="mainColor">#5A3884</color>
+    <color name="mainColorDark">#141E3B</color>
+
+    <color name="grey">#d8d8d8</color>
+    <color name="greyLight">#f2f2f2</color>
+
+
+
+    <color name="mainColorM">#52afb5</color>
+
+    <color name="mainColorB">#84C5F5</color>
+    <color name="mainColorBDark">#1A74A6</color>
+
+    <color name="mainColorP">#5A3884</color>
+    <color name="mainColorPDark">#141E3B</color>
+
+    <color name="mainColorY">#FFC539</color>
+    <color name="mainColorYDark">#e4af2f</color>
+
+
+
+    <color name="red">#a71a1a</color>
+    <color name="yellow">#fae78b</color>
+    <color name="green">#0ca228</color>
+
+    <color name="red_off">#ff9999</color>
+    <color name="yellow_off">#feefac</color>
+    <color name="green_off">#9fd9b6</color>
+
+    <color name="color92992">#9E9E9E</color>
+
+    <color name="shadow">#80a1a1a1</color>
+
+    <color name="blue">#4e89c8</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="chatColor">#EBEBEB</color>
+    <color name="chatTextColor">#757575</color>
+    <color name="chatContentColor">#F4F4F4</color>
+</resources>

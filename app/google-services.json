@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "274327380214",
+    "firebase_url": "https://timpelfairy.firebaseio.com",
+    "project_id": "timpelfairy",
+    "storage_bucket": "timpelfairy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274327380214:android:a994cc2f8f648a20",
+        "android_client_info": {
+          "package_name": "forbiddamage.sopt.com.teamkerbell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274327380214-d5nq7u6hmtf2eduaiumdqrsmag2ve3v7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIgDbp-XfuGAvp673DWrAZQMpSY087ru8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274327380214:android:d131fce350c5de9d",
+        "android_client_info": {
+          "package_name": "org.teamfairy.sopt.teamkerbell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274327380214-d5nq7u6hmtf2eduaiumdqrsmag2ve3v7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIgDbp-XfuGAvp673DWrAZQMpSY087ru8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    android:padding="16dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeActivity"
+    tools:showIn="@layout/activity_notice">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="토론 동아리" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="7sp"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:textSize="16sp"
+                tools:text="교류전 일정이 확정되어 안내드립니다:)
+장소 : 숙대 명신관 512호
+일시 : 5월 21일" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/iv_profile"
+                    android:layout_width="40dp"
+
+                    android:layout_height="40dp"
+                    android:src="@drawable/icon_profile_default_png"
+                    app:civ_border_width="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="7sp"
+                        android:textSize="16sp"
+                        tools:text="아이도루" />
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:lineSpacingExtra="7sp"
+                        android:textSize="12sp"
+                        tools:text="3월 13일 13:00" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_commit"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="56dp"
+                android:layout_marginTop="41dp"
+                android:background="@drawable/shape_round_grey"
+                android:text="@string/action_commit"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:theme="@style/FlatButton" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

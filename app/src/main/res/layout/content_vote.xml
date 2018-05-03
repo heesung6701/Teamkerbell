@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity"
+    tools:showIn="@layout/activity_vote">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_border_shadow"
+        android:elevation="4dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:paddingTop="22dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/iv_profile"
+                android:layout_width="40dp"
+
+                android:layout_height="40dp"
+                android:src="@drawable/icon_profile_default_png"
+                app:civ_border_width="0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="7sp"
+                    android:textSize="16sp"
+                    tools:text="아이도루" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:lineSpacingExtra="7sp"
+                    android:textSize="12sp"
+                    tools:text="3월 13일 13:00" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+
+                android:paddingTop="20dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="22dp"
+
+                tools:text="사용자 이름" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="7sp"
+            android:textSize="16sp"
+
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:layout_marginBottom="16dp"
+            tools:text="저희 그날 강의실 대여가 안된다고 하는데 다들 주위 스터디룸 'ㅇㅇㅇ'에서 진행하는거 괜찮으신가요??
+다들 괜찮으신지 응답부탁드려요!" />
+
+        <TextView
+            android:id="@+id/tv_end_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:lineSpacingExtra="5sp"
+
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:paddingBottom="22dp"
+            tools:text="투표마감 : 3월 15일 13:00" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_response"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
+
+    </LinearLayout>
+
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/grey"-->
+        <!--/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="63dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:weightSum="3"-->
+        <!--android:gravity="center"-->
+        <!--&gt;-->
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/btn_red"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/shape_press_dark">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_focus_red"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--app:srcCompat="@drawable/ic_sign"-->
+                <!--android:tint="@color/red_off"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:visibility="invisible"-->
+                <!--/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--app:srcCompat="@drawable/ic_sign_red"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--/>-->
+
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="34dp"-->
+            <!--android:background="@color/grey"-->
+            <!--/>-->
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/btn_yellow"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/shape_press_dark"-->
+
+            <!--&gt;-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_focus_yellow"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--app:srcCompat="@drawable/ic_sign"-->
+                <!--android:tint="@color/yellow_off"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:visibility="invisible"-->
+                <!--/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--app:srcCompat="@drawable/ic_sign_yellow"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--/>-->
+        <!--</RelativeLayout>-->
+
+
+        <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="34dp"-->
+            <!--android:background="@color/grey"-->
+            <!--/>-->
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/btn_green"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/shape_press_dark"-->
+            <!--&gt;-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_focus_green"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--app:srcCompat="@drawable/ic_sign"-->
+                <!--android:tint="@color/green_off"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--app:srcCompat="@drawable/ic_sign_green"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--/>-->
+        <!--</RelativeLayout>-->
+
+    <!--</LinearLayout>-->
+</LinearLayout>

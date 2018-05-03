@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/list_item_tv_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:padding="5dp"
+        android:text="1"/>
+
+    <TextView
+        android:id="@+id/list_item_tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="end"
+        android:text="오후 3.27"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/mainColor"
+        android:orientation="vertical"
+        >
+    <TextView
+        android:id="@+id/list_item_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mainColorDark"
+        android:padding="10dp"
+        android:text="신호등이 등록되었습니다"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/list_item_tv_content"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:padding="10dp"
+        android:text="내용
+        엊쩌구
+            저쩌구"
+        /></LinearLayout>
+</LinearLayout>

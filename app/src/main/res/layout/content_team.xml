@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/layout_team_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="127dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_teamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            tools:text="SOPT" />
+
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/layout_team_select"
+        android:layout_below="@id/layout_team_select"
+        android:layout_marginTop="7dp"
+        tools:text="5명" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_notice"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_notice" />
+
+                <ImageView
+                    android:id="@+id/iv_notice_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_notice"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@drawable/ic_sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_notice"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_notice" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_pick"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_pick" />
+
+                <ImageView
+                    android:id="@+id/iv_pick_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_pick"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@drawable/ic_sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_pick"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_pick" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_vote"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_vote" />
+
+                <ImageView
+                    android:id="@+id/iv_vote_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_vote"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@drawable/ic_sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_vote"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_vote" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_signal"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_signal" />
+
+                <ImageView
+                    android:id="@+id/iv_signal_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_signal"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@drawable/ic_sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_signal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_signal" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_role"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_notice" />
+
+                <ImageView
+                    android:id="@+id/iv_role_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_role"
+                    android:layout_marginTop="9dp"
+                    app:srcCompat="@drawable/ic_sign" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_role"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_role" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</RelativeLayout>

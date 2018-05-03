@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_notice_list">
+
+    <include layout="@layout/content_recyclerview"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/top_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_tab_layout_height"
+        app:tabSelectedTextColor="@color/mainColorM"
+        app:tabIndicatorColor="@color/mainColorM"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:paddingTop="8dp"
+        android:layout_marginTop="@dimen/top_tab_layout_height"
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_tab">
+    </android.support.v4.view.ViewPager>
+</android.support.design.widget.CoordinatorLayout>

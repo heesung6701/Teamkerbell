@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_card"
+    android:backgroundTint="@color/mainColor"
+    android:padding="0dp"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_card"
+    android:backgroundTint="@color/color92992"
+    android:elevation="0dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp">
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/mainColor"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:background="@drawable/shape_card"/>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:theme="@style/FlatButton"
+            android:text="작업 선택"
+            android:textSize="14sp"
+            android:background="@color/mainColor"
+            android:layout_width="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:paddingBottom="10dp"
+            android:layout_height="40dp" />
+
+    </RelativeLayout>
+    <Button
+
+        android:theme="@style/FlatButton"
+        android:id="@+id/btn_copy"
+        android:background="@color/white"
+        android:text="복사"
+        android:textSize="14sp"
+        android:layout_marginBottom="0.7dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_width="match_parent"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:layout_height="40dp" />
+
+    <Button
+
+        android:theme="@style/FlatButton"
+        android:id="@+id/btn_light"
+        android:backgroundTint="@color/white"
+        android:text="신호등"
+        android:textSize="14sp"
+        android:background="@drawable/shape_action_bar"
+        android:layout_width="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginBottom="0.7dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:layout_height="40dp" />
+    <Button
+
+        android:theme="@style/FlatButton"
+        android:id="@+id/btn_notice"
+        android:text="공지"
+        android:textSize="14sp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginBottom="0.7dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:layout_height="40dp" />
+    <Button
+
+        android:theme="@style/FlatButton"
+        android:id="@+id/btn_vote"
+        android:text="투표"
+        android:textSize="14sp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginBottom="0.7dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:layout_height="40dp" />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="40dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        android:background="@drawable/shape_card"/>
+    <Button
+
+        android:theme="@style/FlatButton"
+        android:id="@+id/btn_pick"
+        android:text="Pick"
+        android:textSize="14sp"
+        android:layout_marginBottom="0.7dp"
+        android:elevation="0dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:stateListAnimator="@null"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+</RelativeLayout>
+</LinearLayout>
+</LinearLayout>

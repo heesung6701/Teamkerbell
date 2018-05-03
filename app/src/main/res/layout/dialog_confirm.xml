@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:background="@drawable/shape_border_txtview_vote_make"
+    >
+
+    <TextView
+        android:id="@+id/dialog_confirm_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="삭제 하시겠습니까?"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        >
+        <Button
+
+            android:theme="@style/FlatButton"
+            android:id="@+id/btn_confirm_yes"
+            android:background="@drawable/shape_roundbtn"
+            android:text="네"
+            android:textSize="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_confirm_no"
+            android:background="@drawable/shape_round_default"
+
+            android:theme="@style/FlatButton"
+            android:text="아니요"
+            android:textSize="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

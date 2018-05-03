@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_border_txtview_vote_make"
+    android:orientation="vertical"
+
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    >
+
+
+    <TextView
+        android:text="멤버"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/EditText_mainColor"
+
+        >
+        <EditText
+            android:gravity="center_vertical"
+            android:id="@+id/edt_name_find"
+            android:background="@drawable/shape_border_txtview_vote_make"
+            android:hint="이름을 입력하세요"
+            android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:inputType="text"
+            android:maxLines="1">
+        </EditText>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dialog_select_user_List"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_weight="1">
+
+    </android.support.v7.widget.RecyclerView>
+    <Button
+        android:id="@+id/btn_complete_dialog"
+        android:layout_width="140dp"
+        android:theme="@style/FlatButton"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_round_yellow"
+        android:elevation="0dp"
+        android:text="완료"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"/>
+</LinearLayout>

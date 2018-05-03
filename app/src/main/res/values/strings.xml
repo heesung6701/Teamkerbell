@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">팀커벨</string>
+
+
+    <string name="title_activity_notice_card">공지</string>
+    <string name="title_activity_notice_list">공지</string>
+    <string name="title_activity_notice">공지</string>
+
+    <string name="title_activity_signal_list">신호등</string>
+    <string name="title_activity_signal">신호등</string>
+
+
+    <string name="title_activity_vote_list">투표</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_name">이름</string>
+    <string name="prompt_email">이메일</string>
+    <string name="prompt_phone">연락처</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="prompt_password_chk">비밀번호 확인</string>
+    <string name="action_sign_in">로그인</string>
+    <string name="action_register_info">계정이 없으신가요? </string>
+    <string name="action_register">회원가입</string>
+
+
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">이메일 형태로 입력해주세요.</string>
+    <string name="error_invalid_password">8자리 이상의 비밀번호를 사용해주세요.</string>
+    <string name="error_incorrect_password">비밀번호가 일치하지 않습니다.</string>
+    <string name="error_field_required">필수 입력</string>
+    <string name="error_field_existed">이미 존재하는 사용자 입니다.</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+
+
+    <!-- common string -->
+    <string name="action_complete">완료</string>
+    <string name="title_activity_main">MainActivity</string>
+
+
+    <string name="txt_team_list">팀 리스트</string>
+    <string name="txt_reorder">순서변경하기</string>
+    <string name="txt_team_add">팀 추가하기</string>
+    <string name="action_notice">공지</string>
+    <string name="action_pick">PICK</string>
+    <string name="action_vote">투표</string>
+    <string name="action_signal">신호등</string>
+    <string name="action_role">역할분담</string>
+    <string name="action_show_list">리스트로 보기</string>
+    <string name="action_commit">확인</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_vote">VoteActivity</string>
+
+</resources>

@@ -1,0 +1,51 @@
+package org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter
+
+import android.os.Bundle
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_TAB
+import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment
+import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.utils.Utils
+import kotlin.properties.Delegates
+
+/**
+ * Created by lumiere on 2018-05-01.
+ */
+class SignalTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
+
+    var tabCount: Int = 0
+    var receivedTab: SignalListFragment by Delegates.notNull()
+    var requestedTab: SignalListFragment by Delegates.notNull()
+
+
+
+    constructor(fm: FragmentManager?, tabCount: Int,group : Team) : this(fm) {
+        this.tabCount = tabCount
+        this.receivedTab = SignalListFragment()
+        receivedTab.group=group
+        receivedTab.state=Utils.SIGNAL_RECEIVE
+
+        this.requestedTab = SignalListFragment()
+        requestedTab.group=group
+        requestedTab.state=Utils.SIGNAL_REQUEST
+    }
+
+    override fun getItem(position: Int): Fragment? {
+        when (position) {
+            Utils.TAB_RECEIVE -> {
+                return receivedTab
+            }
+            Utils.TAB_REQUEST -> {
+                return requestedTab
+            }
+        }
+
+        return null
+    }
+
+    override fun getCount(): Int = tabCount
+}
