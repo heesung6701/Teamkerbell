@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import io.realm.RealmResults
@@ -11,6 +12,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 /**
  * Created by lumiere on 2018-01-06.
@@ -18,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
 class NoticeListTask(context: Context, var handler: Handler, token: String?) : NetworkTask(context, token) {
 
     var message: String = "No Message"
+    var msgCode = MSG_FAIL
     var g_idx: Int? = null
 
     fun extractFeatureFromJson(jsonResponse: String){
@@ -54,6 +59,7 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
 
                     }
                     realm.commitTransaction()
+                    msgCode= MSG_SUCCESS
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -73,10 +79,11 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
         extractFeatureFromJson(result!!)
 
 
-        var msg = handler.obtainMessage()
-        msg.what = 0
+        val msg = handler.obtainMessage()
+        msg.what = msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
 
-        var data = Bundle()
+        val data = Bundle()
         data.putString("message", message)
         msg.data = data
         handler.sendMessage(msg)

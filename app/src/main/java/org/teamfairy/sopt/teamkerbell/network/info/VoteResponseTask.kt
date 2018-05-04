@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
@@ -101,6 +102,8 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
+
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
 
         val data = Bundle()

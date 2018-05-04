@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
@@ -9,6 +10,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
@@ -17,7 +19,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
  */
 class GroupRListTask(context: Context, var handler: Handler?, token: String?) : NetworkTask(context, token) {
 
-    var msg_code: Int = MSG_FAIL
+    var msgCode: Int = MSG_FAIL
 
     fun extractFeatureFromJson(jsonResponse: String) {
 
@@ -45,7 +47,7 @@ class GroupRListTask(context: Context, var handler: Handler?, token: String?) : 
                             g.photo = data.getString("photo")
                         realm.copyToRealmOrUpdate(g)
                     }
-                    msg_code = MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                     realm.commitTransaction()
 
 
@@ -73,7 +75,8 @@ class GroupRListTask(context: Context, var handler: Handler?, token: String?) : 
 
         if(handler!=null) {
             val msg = handler!!.obtainMessage()
-            msg.what = MSG_SUCCESS
+            msg.what = msgCode
+            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

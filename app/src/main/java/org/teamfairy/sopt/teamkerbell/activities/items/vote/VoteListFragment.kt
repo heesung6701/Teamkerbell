@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote
 
+import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -15,6 +16,7 @@ import io.realm.RealmResults
 import io.realm.Sort
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
@@ -27,6 +29,10 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_VOTE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_REQ
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_RES
 import org.teamfairy.sopt.teamkerbell.network.info.VoteListTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FINISHED
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -76,6 +82,10 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
+        val i = Intent(activity.applicationContext,VoteActivity::class.java)
+        i.putExtra(INTENT_VOTE,dataList[pos] as Vote)
+        i.putExtra(INTENT_GROUP,group)
+        startActivity(i)
     }
 
     private fun connectVoteList() {

@@ -5,8 +5,6 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_TAB
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.Utils

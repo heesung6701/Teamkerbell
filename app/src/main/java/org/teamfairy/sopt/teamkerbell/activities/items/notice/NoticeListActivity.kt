@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.app_bar_more.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
@@ -25,6 +24,8 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -76,7 +77,7 @@ class NoticeListActivity : AppCompatActivity(),View.OnClickListener, SwipeRefres
         val pos = recyclerView.getChildAdapterPosition(p0)
 
         val i = Intent(applicationContext,NoticeActivity::class.java)
-        i.putExtra(TagUtils.INTENT_NOTICE,dataList[pos] as Notice)
+        i.putExtra(INTENT_NOTICE,dataList[pos] as Notice)
         startActivity(i)
     }
 

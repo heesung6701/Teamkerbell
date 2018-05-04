@@ -4,6 +4,7 @@ import android.content.Context
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
  * Created by lumiere on 2018-01-01.
@@ -16,6 +17,7 @@ data class Pick(
         var pick_idx: Int?,
         override var g_idx: Int
 ) : ListDataInterface {
+
     override var name: String = ""
 
     override var photo: String = ""
@@ -39,6 +41,11 @@ data class Pick(
 
     override fun getSubTitle(): String {
         return write_time
+    }
+
+
+    override fun getTime(): String {
+        return Utils.getMonthDayTime(write_time)
     }
 
 }

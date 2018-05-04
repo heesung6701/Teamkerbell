@@ -7,6 +7,7 @@ import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
  * Created by lumiere on 2018-01-01.
@@ -40,6 +41,7 @@ data class Vote(
         return voteR
     }
 
+    fun isFinished() : Boolean = status==0
     override fun setPhotoInfo(realm: Realm) {
         val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
             name = userR.name
@@ -51,6 +53,11 @@ data class Vote(
 
     override fun getSubTitle(): String {
         return content!!
+
+    }
+
+    override fun getTime(): String{
+        return Utils.getMonthDayTime(write_time)
     }
 
     constructor(source: Parcel) : this(

@@ -6,6 +6,7 @@ import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
  * Created by lumiere on 2018-01-01.
@@ -17,6 +18,8 @@ data class SignalResponse(
         var content: String?,
         var write_time: String?
 ) : ListDataInterface,Parcelable {
+
+
     override var g_idx: Int = 0
 
     override var name: String = ""
@@ -46,6 +49,11 @@ data class SignalResponse(
         if (write_time.isNullOrEmpty()) write_time = "아직 답변하지 않았습니다."
         return write_time!!
     }
+    override fun getTime(): String {
+        return Utils.getMonthDayTime(write_time!!)
+    }
+
+
 
     constructor(source: Parcel) : this(
             source.readInt(),

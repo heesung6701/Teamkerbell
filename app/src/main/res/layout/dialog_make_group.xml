@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/shape_roundbtn"
+            android:background="@drawable/shape_round"
             android:text="만들기"
             android:textColor="@color/white"
             android:textSize="20dp"

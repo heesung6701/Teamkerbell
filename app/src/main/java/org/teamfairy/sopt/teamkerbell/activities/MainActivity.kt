@@ -12,12 +12,12 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.activities.home.TeamActivity
 
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TeamListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 

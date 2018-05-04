@@ -14,9 +14,6 @@ import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_recyclerview.*
 import kotlinx.android.synthetic.main.content_signal.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_RESPONDED
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
@@ -24,6 +21,9 @@ import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseListTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference

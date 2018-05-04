@@ -28,7 +28,7 @@
                 android:layout_height="46dp"
                 android:orientation="horizontal"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/shape_round_yellow"
+                android:background="@drawable/shape_round"
                 android:textColor="@color/white"
                 android:text="완료" />
 

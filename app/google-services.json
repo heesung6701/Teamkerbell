@@ -1,58 +1,35 @@
 {
   "project_info": {
-    "project_number": "274327380214",
-    "firebase_url": "https://timpelfairy.firebaseio.com",
-    "project_id": "timpelfairy",
-    "storage_bucket": "timpelfairy.appspot.com"
+    "project_number": "655030232758",
+    "firebase_url": "https://teamkerbell-f5393.firebaseio.com",
+    "project_id": "teamkerbell-f5393",
+    "storage_bucket": "teamkerbell-f5393.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:274327380214:android:a994cc2f8f648a20",
-        "android_client_info": {
-          "package_name": "forbiddamage.sopt.com.teamkerbell"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "274327380214-d5nq7u6hmtf2eduaiumdqrsmag2ve3v7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBIgDbp-XfuGAvp673DWrAZQMpSY087ru8"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:274327380214:android:d131fce350c5de9d",
+        "mobilesdk_app_id": "1:655030232758:android:d131fce350c5de9d",
         "android_client_info": {
           "package_name": "org.teamfairy.sopt.teamkerbell"
         }
       },
       "oauth_client": [
         {
-          "client_id": "274327380214-d5nq7u6hmtf2eduaiumdqrsmag2ve3v7.apps.googleusercontent.com",
+          "client_id": "655030232758-k2u42nrtfjs6jetrnobkpj6k2ndic2v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.teamfairy.sopt.teamkerbell",
+            "certificate_hash": "c00e17da6eaa90a02a1c53ad479e04e501685f80"
+          }
+        },
+        {
+          "client_id": "655030232758-94pm2b3ircgr61ju8fe07teont9v9kee.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBIgDbp-XfuGAvp673DWrAZQMpSY087ru8"
+          "current_key": "AIzaSyAwinbTbxeZApgzq3sa7XJKgBozKXSuzwA"
         }
       ],
       "services": {
@@ -60,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655030232758-94pm2b3ircgr61ju8fe07teont9v9kee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

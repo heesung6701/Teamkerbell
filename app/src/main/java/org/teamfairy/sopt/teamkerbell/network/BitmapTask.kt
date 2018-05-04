@@ -46,6 +46,7 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
         val msg = Message()
         msg.obj = obj
         msg.what = msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
 
         handler.sendMessage(msg)
     }

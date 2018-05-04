@@ -8,5 +8,20 @@ class IntentTag {
 
         const val EXIT = "EXIT"
         const val FROMSIGNUP = "FromSignUp"
+
+
+        const val INTENT_GROUP : String="GROUP"
+        const val INTENT_NOTICE : String="NOTICE"
+        const val INTENT_VOTE : String="VOTE"
+
+        const val INTENT_SIGNAL : String="SIGNAL"
+
+
+        const val INTENT_RESPONDED : String="RESPONDED"
+        const val INTENT_FINISHED : String="FINISHED"
+
+
+        const val INTENT_TAB : String="TAB"
+
     }
 }

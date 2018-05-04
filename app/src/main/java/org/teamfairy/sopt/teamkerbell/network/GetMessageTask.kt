@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.network
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.json.JSONException
 import org.json.JSONObject
@@ -67,6 +68,7 @@ open class GetMessageTask(context: Context, var handler: Handler?,token : String
         if(handler!=null) {
             val msg = handler!!.obtainMessage()
             msg.what = msgCode
+            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
 
             val bundle = Bundle()
             bundle.putString("message", message)

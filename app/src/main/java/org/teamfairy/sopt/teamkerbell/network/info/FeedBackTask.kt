@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
@@ -16,7 +17,7 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
 
     val dataList = ArrayList<RoleFeedback>()
 
-    var msg_code: Int = MSG_FAIL
+    var msgCode: Int = MSG_FAIL
     var message: String = "No Message"
 
     fun extractFeatureFromJson(jsonResponse: String) {
@@ -40,7 +41,7 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
                         dataList.add(RoleFeedback(responseIdx, uIdx, content))
                     }
 
-                    msg_code = MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
 
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -64,7 +65,8 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
         extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
-        msg.what = msg_code
+        msg.what = msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
         msg.obj=dataList
         val data = Bundle()
         data.putString("message", message)

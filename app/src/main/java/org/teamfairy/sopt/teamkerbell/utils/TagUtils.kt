@@ -17,16 +17,6 @@ class TagUtils {
 
 
 
-        const val INTENT_GROUP : String="GROUP"
-        const val INTENT_NOTICE : String="NOTICE"
-        const val INTENT_SIGNAL : String="SIGNAL"
-
-
-        const val INTENT_RESPONDED : String="RESPONDED"
-
-
-        const val INTENT_TAB : String="TAB"
-
 
     }
 }

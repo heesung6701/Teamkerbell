@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import io.realm.Realm
 import org.json.JSONArray
@@ -11,6 +12,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getReal
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
@@ -84,6 +86,7 @@ class UserRListTask(context: Context, var handler: Handler?, token: String?) : N
         if (handler != null) {
             val msg = handler!!.obtainMessage()
             msg.what = msgCode
+            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

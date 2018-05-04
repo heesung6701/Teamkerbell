@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -24,6 +22,8 @@ import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 

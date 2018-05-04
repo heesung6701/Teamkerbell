@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.content_notice.*
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 
 class NoticeActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class NoticeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_notice)
         setSupportActionBar(toolbar)
 
-        val notice = intent.getParcelableExtra<Notice>(TagUtils.INTENT_NOTICE)
+        val notice = intent.getParcelableExtra<Notice>(INTENT_NOTICE)
         notice.setPhotoInfo(applicationContext)
 
         tv_title.text=notice.getMainTitle()

@@ -10,4 +10,5 @@ interface ListDataInterface : UserInfoInterface {
 
     fun getMainTitle() : String
     fun getSubTitle() : String
+    fun getTime(): String
 }

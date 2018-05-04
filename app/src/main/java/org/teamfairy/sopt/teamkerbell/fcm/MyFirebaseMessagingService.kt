@@ -33,6 +33,7 @@ import org.teamfairy.sopt.teamkerbell._utils.StatusCode
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
+
     private var nId: Int = 0
     /**
      * Called when message is received.

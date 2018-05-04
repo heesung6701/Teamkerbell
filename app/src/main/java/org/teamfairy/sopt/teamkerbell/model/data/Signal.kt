@@ -23,6 +23,8 @@ data class Signal(
         var entire_status: Int,
         var color: String?
 ) : ListDataInterface, Parcelable {
+
+
     override var name: String = ""
 
     override var photo: String = ""
@@ -44,6 +46,9 @@ data class Signal(
         return content!!
     }
 
+    override fun getTime(): String {
+        return Utils.getMonthDayTime(write_time)
+    }
 
 
     override fun getSubTitle(): String {

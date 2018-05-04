@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
@@ -10,6 +11,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 /**
  * Created by lumiere on 2018-01-06.
@@ -18,6 +22,7 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
 
     constructor(context: Context, handler : Handler) : this(context,handler,null)
     var message: String = "No Message"
+    var msgCode = MSG_FAIL
 
     fun extractFeatureFromJson(jsonResponse: String){
 
@@ -51,6 +56,7 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
 
                     }
                     realm.commitTransaction()
+                    msgCode = MSG_SUCCESS
 
                 }
                 else{
@@ -76,7 +82,8 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
 
 
         val msg = handler.obtainMessage()
-        msg.what = 0
+        msg.what = msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
 
         val data = Bundle()
         data.putString("message",message)

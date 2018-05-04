@@ -3,12 +3,14 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
@@ -81,6 +83,7 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
         val data = Bundle()
         data.putString("message", message)

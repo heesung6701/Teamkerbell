@@ -9,6 +9,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.utils.Utils
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 /**
  * Created by lumiere on 2018-01-04.
@@ -16,6 +18,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.User
 class LoginTask(context: Context, var handler: Handler): NetworkTask(context) {
 
     var message: String = "No Message"
+    var msgCode = Utils.MSG_FAIL
 
     fun extractFeatureFromJson(jsonResponse: String){
 
@@ -42,6 +45,7 @@ class LoginTask(context: Context, var handler: Handler): NetworkTask(context) {
 
                     LoginToken.setPref(context,user,
                             baseJsonResponse.getString("token"))
+                    msgCode=MSG_SUCCESS
                 }
                 else{
                     Log.d("NetworkTask:Error",message)
@@ -63,6 +67,8 @@ class LoginTask(context: Context, var handler: Handler): NetworkTask(context) {
         extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
+        msg.what=msgCode
+        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
         val data = Bundle()
         data.putString("message",message)
         msg.data=data

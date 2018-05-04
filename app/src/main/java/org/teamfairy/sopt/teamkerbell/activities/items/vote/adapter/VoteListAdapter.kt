@@ -29,7 +29,7 @@ class VoteListAdapter(var dataList: ArrayList<ListDataInterface>) : RecyclerView
     override fun onBindViewHolder(holder: VoteListViewHolder, position: Int) {
         holder.tvTitle.text = dataList[position].name
         holder.tvCount.text = dataList[position].g_idx.toString()
-        holder.tvSubTitle.text = dataList[position].getSubTitle()
+        holder.tvSubTitle.text = dataList[position].getTime()
 
     }
 

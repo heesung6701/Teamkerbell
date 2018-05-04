@@ -11,9 +11,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.StatusCode
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedR
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
@@ -22,14 +22,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
  */
 class JoinedListTask(context: Context, var handler: Handler?, token: String?) : NetworkTask(context, token) {
 
-    var msg_code: Int? = MSG_FAIL
+    var msgCode: Int? = MSG_FAIL
 
 
     fun extractFeatureFromJson(jsonResponse: String) {
 
         var realm: Realm?=null
 
-        msg_code = MSG_FAIL
+        msgCode = MSG_FAIL
 
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
@@ -64,7 +64,7 @@ class JoinedListTask(context: Context, var handler: Handler?, token: String?) : 
                     realm.copyToRealmOrUpdate(isUpdateR)
 
                     realm.commitTransaction()
-                    msg_code = MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -92,7 +92,8 @@ class JoinedListTask(context: Context, var handler: Handler?, token: String?) : 
 
         if (handler != null) {
             val msg = handler!!.obtainMessage()
-            msg.what = msg_code!!
+            msg.what = msgCode!!
+            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

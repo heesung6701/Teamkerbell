@@ -5,6 +5,7 @@
     android:layout_height="376dp"
     android:layout_margin="12dp"
     android:background="@drawable/shape_border_shadow"
+    android:elevation="4dp"
     android:orientation="vertical"
     android:padding="4dp">
 

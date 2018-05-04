@@ -21,6 +21,8 @@ data class Notice(
         override var g_idx: Int,
         var notice_idx: Int
 ) : ListDataInterface, Parcelable {
+
+
     override var name: String = ""
 
     override var photo: String = ""
@@ -45,6 +47,12 @@ data class Notice(
     override fun getSubTitle(): String {
         return Utils.getMonthDayTime(write_time)
     }
+
+    override fun getTime(): String {
+        return Utils.getMonthDayTime(write_time)
+    }
+
+
 
     fun toNoticeR(): NoticeR {
         val noticeR = NoticeR()

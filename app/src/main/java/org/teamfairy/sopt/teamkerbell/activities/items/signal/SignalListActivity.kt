@@ -8,12 +8,10 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_signal_list.*
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_RESPONDED
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter.SignalTabAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import kotlin.properties.Delegates
 
 class SignalListActivity : AppCompatActivity() {

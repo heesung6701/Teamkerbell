@@ -7,11 +7,11 @@ import android.support.design.widget.TabLayout
 import kotlinx.android.synthetic.main.activity_team.*
 import kotlinx.android.synthetic.main.content_team.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 
 class TeamActivity : AppCompatActivity() {
 

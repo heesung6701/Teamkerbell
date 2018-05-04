@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.content_vote_list.*
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteTabAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import kotlin.properties.Delegates
 
 class VoteListActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class VoteListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_vote_list)
         setSupportActionBar(toolbar)
 
-        group = intent.getParcelableExtra(TagUtils.INTENT_GROUP)
+        group = intent.getParcelableExtra(INTENT_GROUP)
 
 
         top_tab.addTab(top_tab.newTab().setText("수신"))

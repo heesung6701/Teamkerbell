@@ -29,6 +29,9 @@ import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.info.SignalListTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.experimental.and
@@ -151,9 +154,9 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         val signal: Signal? = dataList[pos] as Signal
 
         val intent = Intent(activity, SignalActivity::class.java)
-        intent.putExtra(TagUtils.INTENT_SIGNAL, signal)
-        intent.putExtra(TagUtils.INTENT_GROUP, group)
-        intent.putExtra(TagUtils.INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_REQUEST))
+        intent.putExtra(INTENT_SIGNAL, signal)
+        intent.putExtra(INTENT_GROUP, group)
+        intent.putExtra(INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_REQUEST))
         startActivity(intent)
     }
 
