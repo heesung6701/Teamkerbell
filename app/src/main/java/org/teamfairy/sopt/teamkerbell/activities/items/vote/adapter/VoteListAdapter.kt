@@ -1,6 +1,7 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.LinearLayout
@@ -11,6 +12,7 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
+import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.viewholder.VoteListViewHolder
 
 
@@ -27,6 +29,11 @@ class VoteListAdapter(var dataList: ArrayList<ListDataInterface>) : RecyclerView
     }
 
     override fun onBindViewHolder(holder: VoteListViewHolder, position: Int) {
+        val vote = dataList[position] as Vote
+        if(vote.isFinished())
+            holder.tvTitle.setTextColor(Color.LTGRAY)
+        else
+            holder.tvTitle.setTextColor(Color.DKGRAY)
         holder.tvTitle.text = dataList[position].name
         holder.tvCount.text = dataList[position].g_idx.toString()
         holder.tvSubTitle.text = dataList[position].getTime()

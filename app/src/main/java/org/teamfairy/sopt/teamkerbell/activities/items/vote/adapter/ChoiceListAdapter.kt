@@ -1,8 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter
 
 import android.content.Context
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -32,7 +30,7 @@ class ChoiceListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mCon
             holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.white))
             holder.tvCount.setTextColor(ContextCompat.getColor(mContext,R.color.white))
         }else{
-            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round_grey_light)
+            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round_gray_light)
             holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.black))
             holder.tvCount.setTextColor(ContextCompat.getColor(mContext,R.color.black))
         }

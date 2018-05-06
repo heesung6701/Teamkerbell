@@ -13,5 +13,5 @@ import org.teamfairy.sopt.teamkerbell.R
 open class UserListHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
     val tvName : TextView = itemView.findViewById(R.id.li_user_name)
     val ivProfile : ImageView = itemView.findViewById(R.id.li_user_profile)
-    val chk : CheckBox = itemView.findViewById(R.id.li_user_chk)
+    val chk : CheckBox = itemView.findViewById<CheckBox>(R.id.li_user_chk)
 }

@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:background="@drawable/shape_press_dark"
+
     android:paddingLeft="22dp"
     android:paddingRight="22dp"
     android:paddingTop="19dp"
@@ -66,7 +67,7 @@
                 android:maxLines="1"
                 android:textSize="12sp"
                 tools:text="2018.01.05"
-                android:textColor="@color/greyLight" />
+                android:textColor="@color/gray" />
             </LinearLayout>
             <TextView
                 android:id="@+id/li_tv_content"

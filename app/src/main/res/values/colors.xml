@@ -2,25 +2,28 @@
 <resources>
     <color name="colorPrimary">@color/mainColorP</color>
     <color name="colorPrimaryDark">#BDBDBD</color>
-    <color name="colorAccent">#5A3884</color>
+    <color name="colorAccent">@color/mainColorM</color>
 
 
 
     <color name="mainColor">#5A3884</color>
     <color name="mainColorDark">#141E3B</color>
 
-    <color name="grey">#d8d8d8</color>
-    <color name="greyLight">#f2f2f2</color>
-
-
-
     <color name="mainColorM">#52afb5</color>
+
+
+    <color name="mainColorP">#5A3884</color>
+    <color name="mainColorPDark">#141E3B</color>
+
+    <color name="gray">#d8d8d8</color>
+    <color name="grayLight">#f2f2f2</color>
+    <color name="grayDark">#000</color>
+
+
 
     <color name="mainColorB">#84C5F5</color>
     <color name="mainColorBDark">#1A74A6</color>
 
-    <color name="mainColorP">#5A3884</color>
-    <color name="mainColorPDark">#141E3B</color>
 
     <color name="mainColorY">#FFC539</color>
     <color name="mainColorYDark">#e4af2f</color>

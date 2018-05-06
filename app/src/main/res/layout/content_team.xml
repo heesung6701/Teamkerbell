@@ -7,6 +7,7 @@
     android:padding="2dp"
     >
 
+    
     <LinearLayout
         android:id="@+id/layout_team_select"
         android:layout_width="wrap_content"
@@ -14,7 +15,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="127dp"
         android:gravity="center_vertical">
-
+        
         <TextView
             android:id="@+id/tv_teamName"
             android:layout_width="wrap_content"
@@ -23,28 +24,49 @@
             tools:text="SOPT" />
 
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="15dp"
+            app:srcCompat="@drawable/ic_arrow_drop_down"
+            
+            />
 
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:layout_alignStart="@id/layout_team_select"
+        android:layout_below="@id/layout_team_select"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_profile_home"
+            android:layout_marginEnd="8dp"
+            />
     <TextView
         android:id="@+id/tv_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/layout_team_select"
-        android:layout_below="@id/layout_team_select"
-        android:layout_marginTop="7dp"
+
+        android:focusable="true"
+        android:clickable="true"
+        android:textColor="@drawable/select_text_press"
+
         tools:text="5명" />
+    </LinearLayout>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:overScrollMode="never"
         android:scrollbars="none"
         >
 
@@ -226,4 +248,20 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="157dp"
+        android:layout_height="219dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:overScrollMode="never"
+        android:layout_below="@+id/layout_team_select"
+        android:layout_alignStart="@+id/layout_team_select"
+        android:background="@drawable/shape_border_shadow"
+        android:elevation="4dp"
+        android:visibility="gone"
+        />
+
 </RelativeLayout>

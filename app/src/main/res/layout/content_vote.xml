@@ -4,26 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity"
-    tools:showIn="@layout/activity_vote"
-    android:orientation="vertical">
+    tools:showIn="@layout/activity_vote">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
+        android:orientation="vertical"
+
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="22dp"
+
+        android:layout_marginBottom="20dp"
         >
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical">
 
-            android:paddingLeft="22dp"
-            android:paddingRight="22dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_category"
+                />
+        <TextView
+            android:id="@+id/tv_chat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="기획"
+            android:text="기획"
+            android:layout_marginStart="6dp"
+            />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="18dp"
+            android:lineSpacingExtra="7sp"
+
+            android:textSize="16sp"
+            tools:text="저희 그날 강의실 대여가 안된다고 하는데 다들 주위 스터디룸 'ㅇㅇㅇ'에서 진행하는거 괜찮으신가요??
+다들 괜찮으신지 응답부탁드려요!" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+
             android:paddingTop="22dp"
-            android:orientation="horizontal">
+            >
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/iv_profile"
@@ -34,8 +77,8 @@
                 app:civ_border_width="0dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:orientation="vertical">
 
@@ -59,199 +102,219 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-
-
-
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-
-                android:paddingTop="20dp"
-                android:paddingLeft="22dp"
-                android:paddingRight="22dp"
-
-                tools:text="사용자 이름" />
-
-        <TextView
-            android:id="@+id/tv_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:lineSpacingExtra="7sp"
-            android:textSize="16sp"
-
-            android:paddingLeft="22dp"
-            android:paddingRight="22dp"
-            android:layout_marginBottom="16dp"
-            tools:text="저희 그날 강의실 대여가 안된다고 하는데 다들 주위 스터디룸 'ㅇㅇㅇ'에서 진행하는거 괜찮으신가요??
-다들 괜찮으신지 응답부탁드려요!" />
-
         <TextView
             android:id="@+id/tv_end_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:lineSpacingExtra="5sp"
+            android:gravity="end"
 
-            android:paddingLeft="22dp"
-            android:paddingRight="22dp"
-            android:paddingBottom="22dp"
+            android:textSize="14sp"
             tools:text="투표마감 : 3월 15일 13:00" />
+        </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
-        android:id="@+id/layout_response"
+        android:id="@+id/layout_result"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:visibility="gone"
+
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+
+                    android:id="@+id/btn_by_choice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_press_dark"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+
+                    android:textStyle="bold"
+                    android:text="@string/tab_by_choice"
+                    android:textColor="@drawable/select_text_press"
+                    android:textSize="16sp" />
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="34dp"
+                    android:background="@color/gray" />
+
+                <TextView
+
+                    android:id="@+id/btn_by_member"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_press_dark"
+                    android:gravity="center"
+                    android:text="@string/tab_by_member"
+
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@drawable/select_text_press"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="34dp"
+                    android:background="@color/gray" />
+
+                <TextView
+
+                    android:id="@+id/btn_by_not_voted"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_press_dark"
+                    android:gravity="center"
+                    android:text="@string/tab_by_not_voted"
+
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@drawable/select_text_press"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="20dp"
+
+            android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_send_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/shape_press_dark"
+            android:layout_centerVertical="true"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_notifications"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:lineSpacingExtra="7sp"
+                android:layout_marginStart="10dp"
+                android:text="@string/action_send_notification"
+                />
+
+
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_back_choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textColor="@drawable/select_text_press"
+                android:clickable="true"
+                android:focusable="true"
+                android:textStyle="bold"
+                android:text="다혜 피자먹고싶어요"
+
+                />
+
+        </RelativeLayout>
+
+        <include layout="@layout/content_recyclerview"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="7dp"
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_choices"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="5명 참여중"
-            android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            />
+            android:layout_marginStart="8dp"
+            android:layout_gravity="end"
+            android:textColor="@drawable/select_text_press"
+            android:clickable="true"
+            android:focusable="true"
+            android:textStyle="bold"
+            tools:text="5명 참여중" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView_choice"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="2dp"
-            />
+            android:overScrollMode="never"
+            android:padding="2dp" />
 
         <Button
             android:id="@+id/btn_complete"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginBottom="56dp"
+            android:background="@drawable/shape_round_gray"
             android:text="@string/action_complete"
-            android:background="@drawable/shape_round_grey"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="56dp"
-            />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/grey"-->
-        <!--/>-->
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="63dp"-->
-        <!--android:background="@color/white"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:weightSum="3"-->
-        <!--android:gravity="center"-->
-        <!--&gt;-->
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/btn_red"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/shape_press_dark">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/iv_focus_red"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--app:srcCompat="@drawable/ic_sign"-->
-                <!--android:tint="@color/red_off"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--app:srcCompat="@drawable/ic_sign_red"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-
-        <!--</RelativeLayout>-->
-
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="34dp"-->
-            <!--android:background="@color/grey"-->
-            <!--/>-->
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/btn_yellow"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/shape_press_dark"-->
-
-            <!--&gt;-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/iv_focus_yellow"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--app:srcCompat="@drawable/ic_sign"-->
-                <!--android:tint="@color/yellow_off"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--app:srcCompat="@drawable/ic_sign_yellow"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-
-
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="34dp"-->
-            <!--android:background="@color/grey"-->
-            <!--/>-->
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/btn_green"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/shape_press_dark"-->
-            <!--&gt;-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/iv_focus_green"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--app:srcCompat="@drawable/ic_sign"-->
-                <!--android:tint="@color/green_off"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-            <!--<ImageView-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--app:srcCompat="@drawable/ic_sign_green"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-
-    <!--</LinearLayout>-->
 </LinearLayout>

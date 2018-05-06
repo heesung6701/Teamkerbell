@@ -143,7 +143,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
                 YELLOW ->
                     iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
                 else ->
-                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grey))
+                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
             }
 
         }else{
@@ -194,7 +194,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
             YELLOW ->
                 iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
             else ->
-                iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grey))
+                iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
         }
 
         adapter.notifyDataSetChanged()

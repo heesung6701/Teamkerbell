@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dataList.add(Team(0,"",""))
         adapter =  TeamListAdapter(dataList,this)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -80,6 +79,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         groupR.forEach {
             dataList.add(it.toGroup())
         }
+        dataList.add(Team(0,"",""))
         adapter.notifyDataSetChanged()
     }
 

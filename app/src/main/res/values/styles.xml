@@ -35,8 +35,8 @@
 
     <style name="EditText_mainColor">
         <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/greyLight</item>
-        <item name="android:textColorHighlight">@color/greyLight</item>
+        <item name="android:textColorHint">@color/grayLight</item>
+        <item name="android:textColorHighlight">@color/grayLight</item>
         <item name="android:textSize">20sp</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
 

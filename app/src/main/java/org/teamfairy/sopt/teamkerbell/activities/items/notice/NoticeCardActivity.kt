@@ -16,6 +16,8 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
+import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
@@ -33,10 +35,14 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
 
     private var recyclerView : RecyclerView by Delegates.notNull()
 
-    private var adapter: CardListAdapter by Delegates.notNull()
-    private var dataList: ArrayList<Notice> = arrayListOf<Notice>()
+    private var adapterCard: CardListAdapter by Delegates.notNull()
+
+    var adapterList: ListDataAdapter by Delegates.notNull()
+    var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
 
     var group : Team by Delegates.notNull()
+
+    var showCard = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,20 +51,41 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
 
         group = intent.getParcelableExtra(INTENT_GROUP)
 
-        adapter = CardListAdapter(dataList,applicationContext,this)
+        adapterCard = CardListAdapter(dataList,applicationContext,this)
 
         recyclerView  = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recyclerView.adapter=adapter
+        recyclerView.adapter=adapterCard
+
+        adapterList = ListDataAdapter(dataList,applicationContext)
+        adapterList.setOnItemClick(this)
 
 
-        btn_show_list.setOnClickListener {
-            val i = Intent(applicationContext,NoticeListActivity::class.java)
-            i.putExtra(INTENT_GROUP,group)
-            startActivity(i)
+        tv_show_list.setOnClickListener {
+
+            changeMode()
+//            val i = Intent(applicationContext,NoticeListActivity::class.java)
+//            i.putExtra(INTENT_GROUP,group)
+//            startActivity(i)
         }
 
         btn_back.setOnClickListener { onBackPressed() }
+    }
+
+    fun changeMode(){
+        showCard=!showCard
+        if(showCard){
+            tv_show_list.text=getString(R.string.action_show_card)
+            recyclerView.setPadding(0,0,0,0)
+            recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+            recyclerView.adapter=adapterCard
+        }else{
+            tv_show_list.text=getString(R.string.action_show_list)
+            recyclerView.setPadding(16,16,16,16)
+            recyclerView.layoutManager=LinearLayoutManager(this)
+            recyclerView.adapter=adapterList
+        }
+
     }
 
     override fun onResume() {
@@ -70,7 +97,7 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         val pos = recyclerView.getChildAdapterPosition(p0)
 
         val i = Intent(applicationContext,NoticeActivity::class.java)
-        i.putExtra(INTENT_NOTICE,dataList[pos])
+        i.putExtra(INTENT_NOTICE,dataList[pos] as Notice)
         startActivity(i)
     }
 
@@ -83,14 +110,14 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         result.iterator().forEach {
             dataList.add(it.toNotice(realm))
         }
-        adapter.notifyDataSetChanged()
+        adapterCard.notifyDataSetChanged()
 
     }
 
     private fun connectNoticeList() {
 
         dataList.clear()
-        adapter.notifyDataSetChanged()
+        adapterCard.notifyDataSetChanged()
 
         val task = NoticeListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.g_idx = group.g_idx

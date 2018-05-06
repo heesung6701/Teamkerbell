@@ -41,7 +41,7 @@ data class Vote(
         return voteR
     }
 
-    fun isFinished() : Boolean = status==0
+    fun isFinished() : Boolean = status==1
     override fun setPhotoInfo(realm: Realm) {
         val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
             name = userR.name

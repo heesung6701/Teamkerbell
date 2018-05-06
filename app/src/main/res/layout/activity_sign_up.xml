@@ -125,7 +125,7 @@
         android:id="@+id/btn_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_round_grey"
+        android:background="@drawable/shape_round_gray"
         android:text="@string/action_complete"
         android:textColor="@color/mainColorP"
         android:textStyle="bold"

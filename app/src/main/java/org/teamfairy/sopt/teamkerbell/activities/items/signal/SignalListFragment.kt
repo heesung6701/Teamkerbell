@@ -13,13 +13,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.android.synthetic.main.fragment_signal_list.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
@@ -65,13 +67,14 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         const val YELLOW: Byte = 2
         const val GREEN: Byte = 4
         val ALL: Byte = RED or YELLOW or GREEN
-        const val DEFAULT: Byte = 0
+        const val DEFAULT: Byte = 8
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val v = inflater.inflate(R.layout.fragment_signal_list, container, false)
+
 
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
@@ -86,52 +89,62 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         if (state == Utils.SIGNAL_RECEIVE) {
             signBar.visibility = View.VISIBLE
             activeSignBar(v)
-        } else View.GONE
+        } else signBar.visibility =  View.GONE
 
         mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
         connectSignalList()
 
+
+
         return v
     }
 
     private fun activeSignBar(v: View) {
-        val signRed = v.findViewById<ImageView>(R.id.iv_sign_red)
-        val signYellow = v.findViewById<ImageView>(R.id.iv_sign_yellow)
-        val signGreen = v.findViewById<ImageView>(R.id.iv_sign_green)
+
+        val signRed: RelativeLayout = v.findViewById(R.id.btn_red)
+        val signYellow: RelativeLayout = v.findViewById(R.id.btn_yellow)
+        val signGreen: RelativeLayout = v.findViewById(R.id.btn_green)
 
         signRed.setOnClickListener {
-            signFilter = signFilter xor RED
-            if (signFilter and RED == RED)
-                signRed.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.red))
-            else
-                signRed.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.grey))
+            signFilter = if (signFilter == RED) DEFAULT
+            else RED
+            updateColorFilter()
             updateList()
         }
 
         signYellow.setOnClickListener {
-            signFilter = signFilter xor YELLOW
-            if (signFilter and YELLOW == YELLOW)
-                signYellow.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.yellow))
-            else
-                signYellow.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.grey))
+            signFilter = if (signFilter == YELLOW) DEFAULT
+            else YELLOW
+            updateColorFilter()
             updateList()
 
         }
 
         signGreen.setOnClickListener {
-            signFilter = signFilter xor GREEN
-            if (signFilter and GREEN == GREEN)
-                signGreen.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.green))
-            else
-                signGreen.setColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.grey))
+            signFilter = if (signFilter == GREEN) DEFAULT
+            else GREEN
 
+            updateColorFilter()
             updateList()
         }
 
     }
 
+    private fun updateColorFilter() {
+
+        if (signFilter and RED != RED) iv_focus_red.visibility = View.GONE else iv_focus_red.visibility = View.VISIBLE
+
+
+        if (signFilter and YELLOW == YELLOW) iv_focus_yellow.visibility = View.VISIBLE else iv_focus_yellow.visibility = View.GONE
+
+        if (signFilter and GREEN == GREEN) iv_focus_green.visibility = View.VISIBLE else iv_focus_green.visibility = View.GONE
+
+        if (dataList.size > 0)
+            recyclerView.scrollToPosition(0)
+
+    }
 
     private fun updateList() {
         dataList.clear()
@@ -144,6 +157,18 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                 else -> DEFAULT
             }
             if (c and signFilter != 0.toByte())
+                dataList.add(it)
+        }
+
+        signalList.forEach {
+            val c: Byte = when (it.color) {
+                "r" -> RED
+                "g" -> GREEN
+                "y" -> YELLOW
+                "a" -> ALL
+                else -> DEFAULT
+            }
+            if (c and signFilter == 0.toByte())
                 dataList.add(it)
         }
         adapter.notifyDataSetChanged()

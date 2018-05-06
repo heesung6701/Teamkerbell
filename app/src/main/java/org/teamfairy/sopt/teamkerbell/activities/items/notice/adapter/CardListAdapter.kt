@@ -7,17 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
 
 /**
  * Created by lumiere on 2017-12-30.
  */
-class CardListAdapter(var dataList: ArrayList<Notice>,var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
+class CardListAdapter(var dataList: ArrayList<ListDataInterface>,var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder?, position: Int) {
         val pos = holder!!.adapterPosition
 
-        val notice = dataList[pos]
+        val notice = dataList[pos] as Notice
         holder.tvTitle.text=notice.getMainTitle()
         holder.tvTime.text=notice.getSubTitle()
         holder.tvContent.text=notice.content

@@ -41,10 +41,6 @@
             android:label="@string/title_activity_notice_card"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.items.notice.NoticeListActivity"
-            android:label="@string/title_activity_notice_list"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.items.notice.NoticeActivity"
             android:label="@string/title_activity_notice"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -63,7 +59,7 @@
         <activity
             android:name=".activities.items.vote.VoteActivity"
             android:label="@string/title_activity_vote"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

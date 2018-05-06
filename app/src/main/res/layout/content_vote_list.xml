@@ -6,7 +6,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/activity_notice_list">
+    tools:showIn="@layout/activity_vote_list">
 
     <include layout="@layout/content_recyclerview"/>
 

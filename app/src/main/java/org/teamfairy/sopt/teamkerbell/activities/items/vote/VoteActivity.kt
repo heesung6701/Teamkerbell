@@ -1,23 +1,29 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_vote.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.btn_complete
-import org.teamfairy.sopt.teamkerbell.R.id.tv_count
+import org.teamfairy.sopt.teamkerbell.R.id.*
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ChoiceListAdapter
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByChoiceListAdapter
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByMemberListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
@@ -31,110 +37,342 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class VoteActivity : AppCompatActivity() ,View.OnClickListener{
+class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+
+    private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
+    override fun onRefresh() {
+        connectVoteResponse(vote.vote_idx)
+        mSwipeRefreshLayout.isRefreshing = false
+    }
 
 
     private var fromList = false
 
     var group: Team by Delegates.notNull()
-    var vote : Vote by Delegates.notNull()
-    var voteResponse : VoteResponse by Delegates.notNull()
+    var vote: Vote by Delegates.notNull()
+    var voteResponse: VoteResponse by Delegates.notNull()
 
 
+    private var dataListChoice: ArrayList<HashMap<String, String>> = arrayListOf<HashMap<String, String>>()
 
-
-    private var dataListChoice: ArrayList<HashMap<String,String>> = arrayListOf<HashMap<String,String>>()
     private var recyclerChoice: RecyclerView by Delegates.notNull()
     private var adapterChoice: ChoiceListAdapter by Delegates.notNull()
+
+
+    private var dataListResult: ArrayList<HashMap<String, String>> = arrayListOf<HashMap<String, String>>()
+
+    private var recyclerResult: RecyclerView by Delegates.notNull()
+
+    private var adapterResultC: ResultByChoiceListAdapter by Delegates.notNull()
+    private var adapterResultM: ResultByMemberListAdapter by Delegates.notNull()
+    private var adapterResultN: ResultByChoiceListAdapter by Delegates.notNull()
+
+    private var isShowResult = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(toolbar)
 
+
+        recentTap = btn_by_choice
+
+
         group = intent.getParcelableExtra(INTENT_GROUP)
         vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
 
         vote.setPhotoInfo(applicationContext)
 
-        tv_title.text=vote.title
-        tv_content.text=vote.content
-        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext,"user"+vote.u_idx))
+
+        supportActionBar!!.title = vote.title
+        tv_chat_name.text = group.real_name
+
+        tv_content.text = vote.content
+        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "user" + vote.u_idx))
             iv_profile.setImageResource(R.drawable.icon_profile_default_png)
-        tv_name.text=vote.name
-        tv_time.text=vote.getTime()
+        tv_name.text = vote.name
+        tv_time.text = vote.getTime()
 
 
-            layout_response.visibility= View.VISIBLE
 
-            recyclerChoice = findViewById(R.id.recyclerView_choice)
-            recyclerChoice.layoutManager = LinearLayoutManager(this)
-            adapterChoice= ChoiceListAdapter(dataListChoice,applicationContext)
-            adapterChoice.setOnItemClick(this)
-            recyclerChoice.adapter=adapterChoice
 
-            if(adapterChoice.selectedId==-1){
-                btn_complete.isEnabled=false
+        recyclerChoice = findViewById(R.id.recyclerView_choice)
+        recyclerChoice.layoutManager = LinearLayoutManager(this)
+        adapterChoice = ChoiceListAdapter(dataListChoice, applicationContext)
+        adapterChoice.setOnItemClick(this)
+        recyclerChoice.adapter = adapterChoice
+
+        recyclerResult = findViewById(R.id.recyclerView)
+        recyclerResult.layoutManager = LinearLayoutManager(this)
+        adapterResultC = ResultByChoiceListAdapter(dataListResult, applicationContext)
+        adapterResultM = ResultByMemberListAdapter(dataListResult, applicationContext)
+        adapterResultN = ResultByChoiceListAdapter(dataListResult, applicationContext)
+        recyclerResult.adapter = adapterResultC
+
+
+        btn_by_choice.setOnClickListener(resultTabOnClickListener)
+        btn_by_member.setOnClickListener(resultTabOnClickListener)
+        btn_by_not_voted.setOnClickListener(resultTabOnClickListener)
+
+
+        mSwipeRefreshLayout = findViewById(R.id.swipe_layout)
+        mSwipeRefreshLayout.setOnRefreshListener(this)
+
+
+        if(vote.isFinished()){
+            showResult()
+            btn_complete.visibility=if(vote.isFinished()) View.INVISIBLE else View.VISIBLE
+        }else {
+            showChoices()
+            if(vote.isFinished()) {
+                enableCompleteButton()
+                btn_complete.setOnClickListener {
+                    updateVoteResponse()
+                }
             }
-
-            btn_complete.setOnClickListener {
-                updateVoteResponse()
-            }
-
-        btn_back.setOnClickListener {
-            finish()
         }
 
 
+        btn_back.setOnClickListener {
+            if (isShowResult && !vote.isFinished())
+                showChoices()
+            else
+                finish()
+        }
+
+        tv_count.setOnClickListener {
+            showResult()
+            updateResultList()
+        }
+        tv_back_choice.setOnClickListener {
+            showChoices()
+            updateChoiceList()
+        }
+
+
+
+
+        layout_send_noti.setOnClickListener {
+            val task = GetMessageTask(applicationContext,HandlerPress(this),LoginToken.getToken(applicationContext))
+            val jsonParam = JSONObject()
+            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_VOTEID,voteResponse.vote.vote_idx)
+            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_GID,group.g_idx)
+            task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS,jsonParam.toString())
+        }
         connectVoteResponse(vote.vote_idx)
+
     }
+
+    private var recentTap: TextView by Delegates.notNull()
+    private var resultTabOnClickListener = View.OnClickListener {
+        changeResultTap(it.id)
+        updateResultList()
+    }
+
+    private fun changeResultTap(it: Int) {
+
+        dataListResult.clear()
+        when (it) {
+            R.id.btn_by_choice -> {
+                layout_send_noti.visibility = View.GONE
+                recentTap.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray))
+                btn_by_choice.setTextColor(ContextCompat.getColor(applicationContext, R.color.mainColor))
+                recentTap = btn_by_choice
+                recyclerResult.adapter = adapterResultC
+            }
+            R.id.btn_by_member -> {
+                layout_send_noti.visibility = View.GONE
+                recentTap.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray))
+                btn_by_member.setTextColor(ContextCompat.getColor(applicationContext, R.color.mainColor))
+                recentTap = btn_by_member
+
+                recyclerResult.adapter = adapterResultM
+            }
+            R.id.btn_by_not_voted -> {
+                layout_send_noti.visibility = View.VISIBLE
+                recentTap.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray))
+                btn_by_not_voted.setTextColor(ContextCompat.getColor(applicationContext, R.color.mainColor))
+                recentTap = btn_by_not_voted
+
+                recyclerResult.adapter = adapterResultN
+            }
+        }
+
+    }
+
+    private fun updateResultList() {
+
+        dataListResult.clear()
+        when (recentTap.id) {
+            R.id.btn_by_choice -> {
+
+                tv_back_choice.visibility=View.VISIBLE
+
+                voteResponse.examples.iterator().forEach {
+                    val choiceIdx = it.key
+                    var count = 0
+
+                    val hashChoice = HashMap<String, String>()
+                    hashChoice["type"] = "header"
+                    hashChoice["count"] = count.toString()
+                    hashChoice["content"] = it.value
+                    dataListResult.add(hashChoice)
+
+                    voteResponse.responses.iterator().forEach {
+                        if (it.value == choiceIdx) {
+
+                            val hashResponse = HashMap<String, String>()
+                            hashResponse["type"] = "item"
+                            val user = DatabaseHelpUtils.getUser(applicationContext, it.key)
+                            hashResponse["name"] = user.name.toString()
+                            hashResponse["u_idx"] = user.u_idx.toString()
+                            hashResponse["photo"] = user.photo.toString()
+
+                            dataListResult.add(hashResponse)
+                            count++
+                        }
+                    }
+
+                    hashChoice["count"] = count.toString()
+                }
+
+
+                recyclerResult.adapter.notifyDataSetChanged()
+            }
+            R.id.btn_by_member -> {
+
+
+                tv_back_choice.visibility=View.GONE
+                voteResponse.responses.iterator().forEach {
+                    val h = HashMap<String, String>()
+
+                    val user = DatabaseHelpUtils.getUser(applicationContext, it.key)
+                    val choice = voteResponse.examples[it.value]
+
+                    h["u_idx"] = user.u_idx.toString()
+                    h["photo"] = user.photo.toString()
+                    h["name"] = user.name.toString()
+                    h["content"] = choice ?: "체다치즈 화났음"
+                    h["time"] = "투표한 시간도 보내주나??" //상형한테 물어봐야제
+
+
+                    dataListResult.add(h)
+
+                }
+
+                recyclerResult.adapter.notifyDataSetChanged()
+            }
+            R.id.btn_by_not_voted -> {
+
+                tv_back_choice.visibility=View.GONE
+
+                voteResponse.responses.iterator().forEach {
+
+                    val choice = voteResponse.examples[it.value]
+
+                    if (choice == null) {
+                        val hashResponse = HashMap<String, String>()
+
+                        val u = DatabaseHelpUtils.getUser(applicationContext, it.key)
+                        hashResponse["name"] = u.name.toString()
+                        hashResponse["u_idx"] = u.u_idx.toString()
+                        hashResponse["photo"] = u.photo.toString()
+
+                        dataListResult.add(hashResponse)
+                    }
+
+                }
+
+                recyclerResult.adapter.notifyDataSetChanged()
+            }
+        }
+
+    }
+
+
+    private fun enableCompleteButton() {
+        if (unableVote()) {
+            btn_complete.isEnabled = false
+            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_gray_light)
+        } else {
+            btn_complete.isEnabled = true
+            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round)
+        }
+    }
+
+    private fun unableVote(): Boolean = (vote.isFinished() || adapterChoice.selectedId != -1 && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
+            && dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]))
+
+    private fun showResult() {
+        isShowResult = true
+
+        changeResultTap(R.id.btn_by_choice)
+
+        layout_choices.visibility = View.GONE
+        layout_result.visibility = View.VISIBLE
+
+    }
+
+    private fun showChoices() {
+
+        isShowResult = false
+
+        layout_choices.visibility = View.VISIBLE
+        layout_result.visibility = View.GONE
+
+
+
+    }
+
     override fun onClick(p0: View?) {
         val pos = recyclerChoice.getChildAdapterPosition(p0)
-        if(!vote.isFinished()) {
+        if (!vote.isFinished()) {
             adapterChoice.selectedId = pos
             adapterChoice.notifyDataSetChanged()
 
-            btn_complete.isEnabled=true
+            enableCompleteButton()
         }
     }
 
-    fun updateExampleList(){
+    fun updateChoiceList() {
 
-        val userChoiceIdx = if(isVoted()) voteResponse.responses[LoginToken.getUserIdx(applicationContext)]!! else -1
-
-        if(!vote.isFinished()) {
-
-            dataListChoice.clear()
-
-            var totalCnt =0
-            voteResponse.examples.iterator().forEach {
-                val h = HashMap<String, String>()
-                h.put("content", it.value)
-                var cnt = 0
-                val choiceId = it.key
-                voteResponse.responses.iterator().forEach {
-                    if (it.value == choiceId)
-                        cnt++
-                }
-                h["count"] = cnt.toString() + " 명"
-                totalCnt+=cnt
-                h["choice_idx"] = it.key.toString()
+        val userChoiceIdx = if (isVoted()) voteResponse.responses[LoginToken.getUserIdx(applicationContext)]!! else -1
 
 
-                dataListChoice.add(h)
 
-                if(it.key==userChoiceIdx)
-                    adapterChoice.selectedId=dataListChoice.lastIndex
+        dataListChoice.clear()
+
+        var totalCnt = 0
+        voteResponse.examples.iterator().forEach {
+            val h = HashMap<String, String>()
+            h["content"] = it.value
+            var cnt = 0
+            val choiceId = it.key
+            voteResponse.responses.iterator().forEach {
+                if (it.value == choiceId)
+                    cnt++
             }
+            h["count"] = cnt.toString() + " 명"
+            totalCnt += cnt
+            h["choice_idx"] = it.key.toString()
 
-            tv_count.text= ("""${totalCnt.toString()}/${voteResponse.responses.size.toString()}명 참여중""")
-            adapterChoice.notifyDataSetChanged()
+
+            dataListChoice.add(h)
+
+            if (it.key == userChoiceIdx)
+                adapterChoice.selectedId = dataListChoice.lastIndex
         }
+
+        tv_count.text = ("""${totalCnt.toString()} 명 참여중""")
+        adapterChoice.notifyDataSetChanged()
+
+
+        enableCompleteButton()
     }
 
 
-    private fun updateVoteResponse(){
-        val selectIdx =adapterChoice.selectedId
+    private fun updateVoteResponse() {
+        val selectIdx = adapterChoice.selectedId
         if (selectIdx != -1) {
             if (dataListChoice[selectIdx].containsKey("choice_idx")
                     && dataListChoice[selectIdx]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]) {
@@ -159,16 +397,17 @@ class VoteActivity : AppCompatActivity() ,View.OnClickListener{
             Toast.makeText(applicationContext, "항목을 선택해주세요", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun isVoted() : Boolean = voteResponse.responses.containsKey(LoginToken.getUserIdx(applicationContext))
 
-    fun updateSuccess(){
+    private fun isVoted(): Boolean = voteResponse.responses.containsKey(LoginToken.getUserIdx(applicationContext))
 
+    fun updateSuccess() {
         if (fromList) finish()
 
         voteResponse.responses[LoginToken.getUserIdx(applicationContext)] = dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt()
-        updateExampleList()
+        updateChoiceList()
 
     }
+
     private fun connectVoteResponse(vote_idx: Int) {
         val task = VoteResponseTask(applicationContext, HandlerGetVoteResponse(this), LoginToken.getToken(applicationContext))
         task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + group.g_idx + "/" + vote_idx)
@@ -179,11 +418,12 @@ class VoteActivity : AppCompatActivity() ,View.OnClickListener{
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
-            if (activity != null){
+            if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.voteResponse = msg.obj as VoteResponse
-                        activity.updateExampleList()
+                        if (activity.isShowResult) activity.updateResultList()
+                        else activity.updateChoiceList()
                     }
                     Utils.MSG_FAIL -> {
 
@@ -199,7 +439,7 @@ class VoteActivity : AppCompatActivity() ,View.OnClickListener{
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
-            if (activity != null){
+            if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.updateSuccess()
@@ -208,6 +448,21 @@ class VoteActivity : AppCompatActivity() ,View.OnClickListener{
 
                     }
                 }
+            }
+        }
+    }
+    private class HandlerPress(activity: VoteActivity) : Handler() {
+        private val mActivity: WeakReference<VoteActivity> = WeakReference<VoteActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            if (activity != null){
+                val message = msg.data.getString("message")
+                if(message.toString().contains("Success"))
+                    Toast.makeText(activity.applicationContext,"요청하였습니다",Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(activity.applicationContext,"실패하였습니다",Toast.LENGTH_SHORT).show()
+
             }
         }
     }

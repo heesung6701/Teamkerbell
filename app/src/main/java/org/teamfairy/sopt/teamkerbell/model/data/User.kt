@@ -6,7 +6,7 @@ import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 /**
  * Created by lumiere on 2018-01-01.
  */
-data class User(
+open class User(
         var u_idx: Int, //Primary Key
         var name: String?,
         var phone: String?,
