@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.content_team.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
@@ -33,15 +34,15 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import kotlin.properties.Delegates
 
-class TeamActivity : AppCompatActivity() ,View.OnClickListener{
+class TeamActivity : AppCompatActivity(), View.OnClickListener {
 
 
-    var adapterGroup : TextListAdapter by Delegates.notNull()
-    var adapterUser : UserListAdapter by Delegates.notNull()
-    var dataListGroup =  ArrayList<Team>()
-    var dataListUser =  ArrayList<User>()
+    private var adapterGroup: TextListAdapter by Delegates.notNull()
+    private var adapterUser: UserListAdapter by Delegates.notNull()
+    private var dataListGroup = ArrayList<Team>()
+    private var dataListUser = ArrayList<User>()
 
-    var group : Team by Delegates.notNull()
+    var group: Team by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team)
@@ -77,32 +78,40 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
             startActivity(i)
         }
 
+        btn_role.setOnClickListener {
+            val i = Intent(applicationContext, RoleListActivity::class.java)
+            i.putExtra(INTENT_GROUP, group)
+            startActivity(i)
+        }
 
-        recyclerView.layoutManager=LinearLayoutManager(this)
-        adapterGroup = TextListAdapter(dataListGroup,applicationContext)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapterGroup = TextListAdapter(dataListGroup, applicationContext)
         adapterGroup.setOnItemClickListener(this)
-        recyclerView.adapter=adapterGroup
+        recyclerView.adapter = adapterGroup
 
-        adapterUser= UserListAdapter(dataListUser,applicationContext)
+        adapterUser = UserListAdapter(dataListUser, applicationContext)
 
         getGroupListFromRealm()
         getUserListFromRealm()
 
         layout_team_select.setOnClickListener {
-            if (recyclerView.visibility == View.GONE)
-                recyclerView.visibility = View.VISIBLE
-            else
-                recyclerView.visibility = View.GONE
+            recyclerView.visibility = if (recyclerView.visibility == View.GONE) View.VISIBLE else View.GONE
         }
         tv_count.setOnClickListener {
             makeUserDialog()
         }
+
+        layout_parent.setOnClickListener {
+            if (dialog != null && dialog!!.isShowing) dialog!!.dismiss()
+            recyclerView.visibility = View.GONE
+        }
     }
 
 
-    private var dialog: Dialog by Delegates.notNull()
+    private var dialog: Dialog? = null
 
-    private fun makeUserDialog(){
+    private fun makeUserDialog() {
 
         val builder = AlertDialog.Builder(this, R.style.CustomDialog)
 
@@ -111,10 +120,9 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
         dialog = builder.create()
 
         val recyclerView = dialogView.findViewById<RecyclerView>(R.id.dialog_recyclerView)
-        recyclerView.layoutManager=LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        recyclerView.adapter=adapterUser
-
+        recyclerView.adapter = adapterUser
 
 
         val display = windowManager.defaultDisplay
@@ -124,32 +132,33 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
         val screenWidth = size.x
 
         val lp = WindowManager.LayoutParams()
-        lp.copyFrom(dialog.window.attributes)
+        lp.copyFrom(dialog!!.window.attributes)
         lp.height = screenHeight / 2
         lp.width = (screenWidth * 0.7f).toInt()
 
-        dialog.show()
+        dialog!!.show()
 
 
-        val window = dialog.window
+        val window = dialog!!.window
         window.attributes = lp
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
         val btnCreate = dialogView.findViewById<ImageButton>(R.id.btn_create)
         btnCreate.setOnClickListener {
-            Toast.makeText(applicationContext,"??",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "??", Toast.LENGTH_SHORT).show()
         }
 
     }
 
 
-    private fun changeGroup(){
+    private fun changeGroup() {
         tv_teamName.text = group.real_name
         tv_count.text = "${group.g_idx}명"
-        adapterGroup.currentGIdx=group.g_idx
+        adapterGroup.currentGIdx = group.g_idx
         adapterGroup.notifyDataSetChanged()
     }
+
     private fun getGroupListFromRealm() {
 
         val realm = getRealmDefault(applicationContext)
@@ -161,7 +170,7 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
             dataListGroup.add(it.toGroup())
         }
 
-        adapterGroup.currentGIdx=group.g_idx
+        adapterGroup.currentGIdx = group.g_idx
 
         adapterGroup.notifyDataSetChanged()
     }
@@ -174,7 +183,8 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
         adapterUser.notifyDataSetChanged()
         val joinedRs = realm.where(JoinedR::class.java).equalTo("g_idx", group.g_idx).notEqualTo("u_idx", LoginToken.getUserIdx(applicationContext)).findAll()
         joinedRs.iterator().forEach {
-            val userR: UserR = realm.where(UserR::class.java).equalTo("u_idx", it.u_idx).findFirst() ?: UserR()
+            val userR: UserR = realm.where(UserR::class.java).equalTo("u_idx", it.u_idx).findFirst()
+                    ?: UserR()
             dataListUser.add(userR.toUser())
         }
         adapterUser.notifyDataSetChanged()
@@ -182,9 +192,9 @@ class TeamActivity : AppCompatActivity() ,View.OnClickListener{
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
-        group= dataListGroup[pos]
+        group = dataListGroup[pos]
         changeGroup()
-        recyclerView.visibility=View.GONE
+        recyclerView.visibility = View.GONE
     }
 
 

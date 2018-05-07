@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <size android:height="@dimen/listview_divideline_height" />
-    <solid android:color="@android:color/black" />
+    <size android:height="@dimen/listview_divide_line_height" />
+    <solid android:color="@color/gray" />
 </shape>

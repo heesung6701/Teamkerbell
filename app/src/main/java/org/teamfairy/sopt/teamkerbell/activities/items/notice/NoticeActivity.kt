@@ -12,6 +12,12 @@ import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
+import android.R.attr.y
+import android.R.attr.x
+import android.graphics.Point
+import android.view.Display
+
+
 
 class NoticeActivity : AppCompatActivity() {
 
@@ -29,6 +35,7 @@ class NoticeActivity : AppCompatActivity() {
             iv_profile.setImageResource(R.drawable.icon_profile_default_png)
         tv_name.text=notice.name
         tv_time.text=notice.getSubTitle()
+
 
         btn_commit.setOnClickListener {
             finish()

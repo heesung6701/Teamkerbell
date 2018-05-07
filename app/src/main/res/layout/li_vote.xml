@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="84dp"
-    android:layout_margin="8dp"
     android:padding="16dp"
-    android:background="@drawable/shape_border_shadow"
-    android:elevation="4dp"
+    android:background="@drawable/shape_press_dark"
     android:gravity="center_vertical"
     android:orientation="vertical">
 

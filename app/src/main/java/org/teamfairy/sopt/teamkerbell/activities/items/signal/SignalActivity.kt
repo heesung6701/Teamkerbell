@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_recyclerview.*
@@ -48,13 +49,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
     private var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
 
 
+
     companion object {
         const val RED = 1
         const val YELLOW = 2
         const val GREEN = 4
+        const val DEFAULT = 8
     }
 
-    private var selectColor = GREEN
+    private var selectColor = DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
         signal = intent.getParcelableExtra(INTENT_SIGNAL)
         signal.setPhotoInfo(applicationContext)
 
+        when(signal.color){
+            "r"->   updateColor(RED)
+            "y"->   updateColor(YELLOW)
+            "g"->  updateColor(GREEN)
+            else->DEFAULT
+        }
+
+
+
         tv_name.text = signal.name
         tv_time.text=Utils.getYearMonthDay(signal.write_time)
         tv_content.text= signal.content
@@ -73,31 +85,13 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
         updateUI()
 
         btn_red.setOnClickListener {
-            when(selectColor){
-                GREEN -> iv_focus_green.visibility=View.INVISIBLE
-                YELLOW ->iv_focus_yellow.visibility=View.INVISIBLE
-            }
-            selectColor=RED
-            iv_focus_red.visibility=View.VISIBLE
-            updateColor()
+            updateColor(RED)
         }
         btn_yellow.setOnClickListener {
-            when(selectColor){
-                RED-> iv_focus_red.visibility=View.INVISIBLE
-                GREEN -> iv_focus_green.visibility=View.INVISIBLE
-            }
-            selectColor= YELLOW
-            iv_focus_yellow.visibility=View.VISIBLE
-            updateColor()
+            updateColor(YELLOW)
         }
         btn_green.setOnClickListener {
-            when(selectColor){
-                RED-> iv_focus_red.visibility=View.INVISIBLE
-                YELLOW -> iv_focus_yellow.visibility=View.INVISIBLE
-            }
-            selectColor= GREEN
-            iv_focus_green.visibility=View.VISIBLE
-            updateColor()
+            updateColor(GREEN)
         }
 
 
@@ -109,7 +103,21 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
     }
-    private fun updateColor(){
+    private fun updateColor(c : Int){
+        if(selectColor!=DEFAULT && selectColor==c) return
+        when(selectColor){
+            GREEN -> iv_focus_green.visibility=View.INVISIBLE
+            YELLOW ->iv_focus_yellow.visibility=View.INVISIBLE
+            RED ->iv_focus_red.visibility=View.INVISIBLE
+        }
+
+        selectColor=c
+
+        when(selectColor){
+            GREEN -> iv_focus_green.visibility=View.VISIBLE
+            YELLOW ->iv_focus_yellow.visibility=View.VISIBLE
+            RED ->iv_focus_red.visibility=View.VISIBLE
+        }
 
         if(responded)
             connectSignalResponseList()
@@ -152,9 +160,11 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
 
             btnMore.visibility= View.GONE
             layout_response_list.visibility=View.GONE
+
         }
 
     }
+
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)

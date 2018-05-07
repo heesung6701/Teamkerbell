@@ -16,5 +16,5 @@ open class RoleR : RealmObject(){
     var master_idx : Int?=null
     var write_time : String?=null
 
-    fun toRole(): Role = Role(role_idx!!, g_idx, title, master_idx, write_time)
+    fun toRole(): Role = Role(role_idx!!, g_idx!!, title, master_idx, write_time)
 }

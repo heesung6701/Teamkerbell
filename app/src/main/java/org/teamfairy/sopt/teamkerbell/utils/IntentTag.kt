@@ -13,6 +13,8 @@ class IntentTag {
         const val INTENT_GROUP : String="GROUP"
         const val INTENT_NOTICE : String="NOTICE"
         const val INTENT_VOTE : String="VOTE"
+        const val INTENT_ROLE : String="ROLE"
+        const val INTENT_TASK : String="TASK"
 
         const val INTENT_SIGNAL : String="SIGNAL"
 

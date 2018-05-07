@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:background="@drawable/shape_press_dark"
+
+    android:paddingStart="40dp"
+    android:paddingEnd="29dp"
+    android:paddingTop="19dp"
+    android:paddingBottom="16dp"
+    android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/li_tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                tools:text="서비스 마케팅 발표"/>
+
+            <TextView
+                android:id="@+id/li_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:maxLines="1"
+                android:textSize="12sp"
+                android:lineSpacingExtra="8sp"
+                tools:text="2018.01.05"
+                android:textColor="@color/gray" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/li_tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                tools:text="아이도루" />
+                <TextView
+                    android:id="@+id/li_tv_chat_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:textSize="12sp"
+                    tools:text="기획"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/list_item_btn_expand"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_marginStart="10dp"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:rotation="90"-->
+            <!--android:tint="@color/mainColorY"-->
+            <!--android:visibility="visible"-->
+            <!--app:srcCompat="@drawable/ic_expand" />-->
+
+    </LinearLayout>
+

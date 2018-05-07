@@ -5,7 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -44,6 +46,7 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
 
     var showCard = true
 
+    var divider : DividerItemDecoration by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notice_card)
@@ -61,14 +64,16 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         adapterList.setOnItemClick(this)
 
 
+        divider = DividerItemDecoration(
+                recyclerView.context,
+        DividerItemDecoration.VERTICAL
+        )
+        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
+
+
         tv_show_list.setOnClickListener {
-
             changeMode()
-//            val i = Intent(applicationContext,NoticeListActivity::class.java)
-//            i.putExtra(INTENT_GROUP,group)
-//            startActivity(i)
-        }
-
+                  }
         btn_back.setOnClickListener { onBackPressed() }
     }
 
@@ -79,11 +84,16 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
             recyclerView.setPadding(0,0,0,0)
             recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
             recyclerView.adapter=adapterCard
+
+            recyclerView.removeItemDecoration(divider)
+
         }else{
             tv_show_list.text=getString(R.string.action_show_list)
             recyclerView.setPadding(16,16,16,16)
             recyclerView.layoutManager=LinearLayoutManager(this)
             recyclerView.adapter=adapterList
+
+            recyclerView.addItemDecoration(divider)
         }
 
     }

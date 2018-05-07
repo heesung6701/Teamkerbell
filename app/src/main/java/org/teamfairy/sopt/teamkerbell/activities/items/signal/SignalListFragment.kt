@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Message
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -83,6 +84,13 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 
+        val divider = DividerItemDecoration(
+                recyclerView.context,
+                DividerItemDecoration.VERTICAL
+        )
+        divider.setDrawable(ContextCompat.getDrawable(activity.baseContext, R.drawable.shape_line_divider))
+        recyclerView.addItemDecoration(divider)
+
 
         val signBar = v.findViewById<LinearLayout>(R.id.sign_bar)
 
@@ -110,14 +118,14 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         signRed.setOnClickListener {
             signFilter = if (signFilter == RED) DEFAULT
             else RED
-            updateColorFilter()
+            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
             updateList()
         }
 
         signYellow.setOnClickListener {
             signFilter = if (signFilter == YELLOW) DEFAULT
             else YELLOW
-            updateColorFilter()
+            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
             updateList()
 
         }
@@ -126,20 +134,20 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             signFilter = if (signFilter == GREEN) DEFAULT
             else GREEN
 
-            updateColorFilter()
+            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
             updateList()
         }
 
     }
 
-    private fun updateColorFilter() {
-
-        if (signFilter and RED != RED) iv_focus_red.visibility = View.GONE else iv_focus_red.visibility = View.VISIBLE
+    private fun updateColorFilter(ivFocusRed  : ImageView, ivFocusYellow : ImageView, ivFocusGreen : ImageView) {
 
 
-        if (signFilter and YELLOW == YELLOW) iv_focus_yellow.visibility = View.VISIBLE else iv_focus_yellow.visibility = View.GONE
+        if (signFilter and RED != RED) ivFocusRed.visibility = View.GONE else ivFocusRed.visibility = View.VISIBLE
 
-        if (signFilter and GREEN == GREEN) iv_focus_green.visibility = View.VISIBLE else iv_focus_green.visibility = View.GONE
+        if (signFilter and YELLOW == YELLOW) ivFocusYellow.visibility = View.VISIBLE else ivFocusYellow.visibility = View.GONE
+
+        if (signFilter and GREEN == GREEN) ivFocusGreen.visibility = View.VISIBLE else ivFocusGreen.visibility = View.GONE
 
         if (dataList.size > 0)
             recyclerView.scrollToPosition(0)

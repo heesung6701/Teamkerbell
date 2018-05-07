@@ -59,7 +59,19 @@
         <activity
             android:name=".activities.items.vote.VoteActivity"
             android:label="@string/title_activity_vote"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.role.RoleListActivity"
+            android:label="@string/title_activity_role_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.role.RoleActivity"
+            android:label="@string/title_activity_role"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.role.TaskActivity"
+            android:label="@string/title_activity_task"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

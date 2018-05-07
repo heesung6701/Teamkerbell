@@ -60,7 +60,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
 
     private var dataListResult: ArrayList<HashMap<String, String>> = arrayListOf<HashMap<String, String>>()
-
     private var recyclerResult: RecyclerView by Delegates.notNull()
 
     private var adapterResultC: ResultByChoiceListAdapter by Delegates.notNull()
@@ -68,6 +67,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     private var adapterResultN: ResultByChoiceListAdapter by Delegates.notNull()
 
     private var isShowResult = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,25 +119,20 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
-        if(vote.isFinished()){
+        if (vote.isFinished()) {
             showResult()
-            btn_complete.visibility=if(vote.isFinished()) View.INVISIBLE else View.VISIBLE
-        }else {
+            btn_complete.visibility = View.GONE
+        } else {
             showChoices()
-            if(vote.isFinished()) {
-                enableCompleteButton()
-                btn_complete.setOnClickListener {
-                    updateVoteResponse()
-                }
+            enableCompleteButton()
+            btn_complete.setOnClickListener {
+                updateVoteResponse()
             }
         }
 
 
         btn_back.setOnClickListener {
-            if (isShowResult && !vote.isFinished())
-                showChoices()
-            else
-                finish()
+            finish()
         }
 
         tv_count.setOnClickListener {
@@ -153,11 +148,11 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
 
         layout_send_noti.setOnClickListener {
-            val task = GetMessageTask(applicationContext,HandlerPress(this),LoginToken.getToken(applicationContext))
+            val task = GetMessageTask(applicationContext, HandlerPress(this), LoginToken.getToken(applicationContext))
             val jsonParam = JSONObject()
-            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_VOTEID,voteResponse.vote.vote_idx)
-            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_GID,group.g_idx)
-            task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS,jsonParam.toString())
+            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_VOTEID, voteResponse.vote.vote_idx)
+            jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_GID, group.g_idx)
+            task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS, jsonParam.toString())
         }
         connectVoteResponse(vote.vote_idx)
 
@@ -206,7 +201,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         when (recentTap.id) {
             R.id.btn_by_choice -> {
 
-                tv_back_choice.visibility=View.VISIBLE
+                tv_back_choice.visibility = View.VISIBLE
 
                 voteResponse.examples.iterator().forEach {
                     val choiceIdx = it.key
@@ -242,7 +237,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             R.id.btn_by_member -> {
 
 
-                tv_back_choice.visibility=View.GONE
+                tv_back_choice.visibility = View.GONE
                 voteResponse.responses.iterator().forEach {
                     val h = HashMap<String, String>()
 
@@ -264,7 +259,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             }
             R.id.btn_by_not_voted -> {
 
-                tv_back_choice.visibility=View.GONE
+                tv_back_choice.visibility = View.GONE
 
                 voteResponse.responses.iterator().forEach {
 
@@ -319,7 +314,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         layout_choices.visibility = View.VISIBLE
         layout_result.visibility = View.GONE
-
 
 
     }
@@ -404,7 +398,8 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         if (fromList) finish()
 
         voteResponse.responses[LoginToken.getUserIdx(applicationContext)] = dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt()
-        updateChoiceList()
+        showResult()
+        updateResultList()
 
     }
 
@@ -451,17 +446,18 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             }
         }
     }
+
     private class HandlerPress(activity: VoteActivity) : Handler() {
         private val mActivity: WeakReference<VoteActivity> = WeakReference<VoteActivity>(activity)
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
-            if (activity != null){
+            if (activity != null) {
                 val message = msg.data.getString("message")
-                if(message.toString().contains("Success"))
-                    Toast.makeText(activity.applicationContext,"요청하였습니다",Toast.LENGTH_SHORT).show()
+                if (message.toString().contains("Success"))
+                    Toast.makeText(activity.applicationContext, "요청하였습니다", Toast.LENGTH_SHORT).show()
                 else
-                    Toast.makeText(activity.applicationContext,"실패하였습니다",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity.applicationContext, "실패하였습니다", Toast.LENGTH_SHORT).show()
 
             }
         }

@@ -10,6 +10,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.realm.RoleR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
@@ -24,19 +25,17 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
     var msgCode = MSG_FAIL
 
 
-    fun extractFeatureFromJson(jsonResponse: String){
+    fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Role>?{
 
+        val datas : ArrayList<Role> = ArrayList<Role>()
         message = "No Message"
 
-        val realm = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has("message")) {
                 message = baseJsonResponse.getString("message")
                 if(message.contains("Success")){
 
-                    realm.beginTransaction()
-                    realm.where(RoleR::class.java).findAll().deleteAllFromRealm()
 
                     val dataArray : JSONArray = baseJsonResponse.getJSONArray("data")
                     for(i in 0 until dataArray.length()){
@@ -48,14 +47,12 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
                             roleR.title = obj.getString("title")
                             roleR.master_idx = obj.getInt("master_idx")
                             roleR.write_time = obj.getString("write_time")
-
-                            realm.copyToRealmOrUpdate(roleR)
+                            datas.add(roleR.toRole())
 
                         }
                     }
-                    realm.commitTransaction()
                     msgCode=MSG_SUCCESS
-
+                    return datas
                 }
                 else{
                     Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
@@ -66,8 +63,8 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
         } catch (e: JSONException) {
             e.printStackTrace()
         }finally {
-            if(realm.isInTransaction) realm.commitTransaction()
         }
+        return null
 
     }
 

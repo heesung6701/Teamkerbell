@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,9 @@ class CardListAdapter(var dataList: ArrayList<ListDataInterface>,var mContext : 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CardViewHolder {
         val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_card, parent, false)
         mainView.setOnClickListener(mOnClickListener)
-        return CardViewHolder(mainView)
+        val c =  CardViewHolder(mainView)
+        c.tvContent.movementMethod = ScrollingMovementMethod()
+        return c
     }
 
 

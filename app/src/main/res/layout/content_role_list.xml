@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListFragment"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity"
+    tools:showIn="@layout/activity_role_list">
     <TextView
-        android:id="@+id/tv_show_finished"
+        android:id="@+id/tv_show_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16dp"
         android:layout_gravity="end"
-        android:text="@string/action_show_finished"
+        android:text="@string/action_show_favorite"
         android:textColor="@drawable/select_text_press"
         android:focusable="true"
         android:clickable="true"

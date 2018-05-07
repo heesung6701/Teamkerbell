@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.TaskActivity"
+    tools:showIn="@layout/activity_task">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="17dp"
+        android:orientation="vertical"
+        android:background="@drawable/shape_border_shadow"
+        android:elevation="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_chat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="채팅방이름 " />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_marginStart="-24dp"
+            android:layout_marginEnd="-24dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_task_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="8dp"
+            tools:text="역할이름" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:lineSpacingExtra="5sp"
+            android:textSize="14sp"
+            tools:text="작성자 : 아이도루" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5sp"
+            android:layout_marginTop="1dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textSize="14sp"
+            tools:text=" 3월 15일 13:00" />
+
+        <TextView
+            android:text="@string/txt_project_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5sp"
+            android:textSize="14sp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_marginTop="30dp"
+             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_horizon"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                />
+            <ImageButton
+                android:id="@+id/btn_take_role"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/ic_add"
+                android:background="@android:color/transparent"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
