@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.ChoiceListViewHolder
 import org.teamfairy.sopt.teamkerbell.viewholder.ResultByMemberViewHolder
 
@@ -22,7 +25,7 @@ class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>,
         holder.tvContent.text = dataList[position]["content"]
         holder.tvName.text = dataList[position]["name"]
 
-        if (NetworkUtils.getBitmapList(dataList[position]["photo"], holder.ivProfile, mContext, "user" + dataList[position]["u_idx"]))
+        if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext, "$INTENT_USER/${dataList[position][JSON_U_IDX]}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 
     }

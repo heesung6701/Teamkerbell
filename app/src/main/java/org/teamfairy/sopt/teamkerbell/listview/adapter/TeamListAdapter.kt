@@ -10,7 +10,7 @@ import org.teamfairy.sopt.teamkerbell.viewholder.TeamViewHolder
 /**
  * Created by lumiere on 2017-12-30.
  */
-class TeamListAdapter(var dataList: ArrayList<Team>,var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
          val TYPE_ITEM = 1
@@ -25,8 +25,8 @@ class TeamListAdapter(var dataList: ArrayList<Team>,var mOnClickListener: View.O
             }
             else->{ // TYPE_ITEM
                 val h = holder as TeamViewHolder
-                h.tvName.text= dataList[position].real_name
-                h.tvCount.text= dataList[position].g_idx.toString()
+                h.tvName.text= dataList[position]["name"]
+                h.tvCount.text= dataList[position]["cnt"]
             }
         }
 

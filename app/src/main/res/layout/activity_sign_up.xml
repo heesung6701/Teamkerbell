@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/prompt_phone"
             android:inputType="phone"
+            android:digits="0123456789-"
             android:maxLines="1"
             android:maxLength="13"
             android:imeOptions="actionNext"

@@ -25,6 +25,12 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESULT_R
 import java.io.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_USER_ARRAY
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL_STR
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
@@ -86,25 +92,31 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 method="PUT"
                 jsonResponse = makeHttpRequestFormData(*params)
             } else if (params[0] == URL_MAKE_GROUP ||
+                    params[0] == URL_MAKE_ROOM ||
                     params[0]==URL_ROLE_RESULT_REGISTER ) {
                 method="POST"
                 jsonResponse = makeHttpRequestFormData(*params)
             } else {//get method
                 method="GET"
                 jsonResponse = makeHttpRequestGet(*params)
+                //URL_GROUP_NOTICE
+                //URL_GROUPLIST
+                //URL_ROOMLIST
+                // URL_JOINED_GROUP
+                // URL_JOINED_ROOM
+
                 //URL_REGIST_CHECK
-                //URL_SHOW_GROUPLIST
                 //URL_USERLIST_LIGHT
                 //URL_GROUP_PICK
                 //URL_DETAIL_LIGHTS_RESPONSE
                 //URL_UNPERFORMED
                 //URL_DETAIL_VOTE_RESPONSE
-                // URL_JOINED
                 // URL_USER
                 //URL_ROLE_SHOW_TASK
                 //URL_ROLE_SHOW_RESPONSE
                 //URL_ROLE_SHOW_USER
                 //URL_NEWINFO
+
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -225,17 +237,17 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             urlConnection.connect()
 
 
-            try {
+            inputStream = try {
 
                 if (urlConnection.responseCode / 100 == 2) {
-                    inputStream = urlConnection.inputStream
+                    urlConnection.inputStream
                 } else {
-                    inputStream = urlConnection.errorStream
+                    urlConnection.errorStream
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.d(LOG_TAG + "/HTTP_ERROR", urlConnection.responseCode.toString() + "")
-                inputStream = urlConnection.errorStream
+                urlConnection.errorStream
             }
 
             jsonResponse = readFromStream(inputStream)
@@ -301,17 +313,17 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             osw.write(params[1])
             osw.flush()
 
-            try {
+            inputStream = try {
 
                 if (urlConnection.responseCode / 100 == 2) {
-                    inputStream = urlConnection.inputStream
+                    urlConnection.inputStream
                 } else {
-                    inputStream = urlConnection.errorStream
+                    urlConnection.errorStream
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.d("$LOG_TAG/HTTP_ERROR", "")
-                inputStream = urlConnection.errorStream
+                urlConnection.errorStream
             }
 
             jsonResponse = readFromStream(inputStream)
@@ -407,6 +419,22 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             val jsonObj =JSONObject(params[1])
             Log.d(LOG_TAG,params[1])
+
+
+
+            if(jsonObj.has(JSON_G_IDX)){
+                addFormField(request, JSON_G_IDX,jsonObj.getString(JSON_G_IDX))
+                Log.d(LOG_TAG,"$JSON_G_IDX/"+jsonObj.getString(JSON_G_IDX))
+            }
+
+            if(jsonObj.has(JSON_USER_ARRAY)){
+                addFormField(request, JSON_USER_ARRAY,jsonObj.getString(JSON_USER_ARRAY))
+                Log.d(LOG_TAG,"$JSON_USER_ARRAY/"+jsonObj.getString(JSON_USER_ARRAY))
+            }
+
+
+
+            //프로필, 그룹 추가
             if(jsonObj.has("name")){
                 addFormField(request,"name",jsonObj.getString("name"))
                 Log.d(LOG_TAG,"name/"+jsonObj.getString("name"))
@@ -419,10 +447,13 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 addFormField(request,"phone",jsonObj.getString("phone"))
                 Log.d(LOG_TAG,"phone/"+jsonObj.getString("phone"))
             }
+
             if(file!=null){
-                addFilePart(request,os,"photo",file!!)
+                addFilePart(request,os,JSON_PHOTO,file!!)
                 Log.d(LOG_TAG,"file/"+file.toString())
             }
+
+            //역할추가
             if (jsonObj.has("role_idx")){
                 addFormField(request, "role_idx", jsonObj.getString("role_idx"))
                 Log.d(LOG_TAG, "role_idx/" + jsonObj.getString("role_idx"))
@@ -448,22 +479,22 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
 
             urlConnection.connect()
-            try {
+            inputStream = try {
                 if (urlConnection.responseCode / 100 == 2) {
-                    inputStream = urlConnection.inputStream
+                    urlConnection.inputStream
                 } else {
-                    inputStream = urlConnection.errorStream
+                    urlConnection.errorStream
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.d(LOG_TAG + "/HTTP_ERROR", "")
-                inputStream = urlConnection.errorStream
+                urlConnection.errorStream
             }
 
             jsonResponse = readFromStream(inputStream)
             Log.d("$LOG_TAG/RESPONSE", jsonResponse)
 
-            if (os != null) os.close()
+            os?.close()
             request.close()
 
 

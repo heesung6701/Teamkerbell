@@ -10,6 +10,7 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
 
 /**
@@ -23,7 +24,7 @@ class CardListAdapter(var dataList: ArrayList<ListDataInterface>,var mContext : 
         holder.tvTitle.text=notice.getMainTitle()
         holder.tvTime.text=notice.getSubTitle()
         holder.tvContent.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"user"+notice.u_idx))
+        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"${INTENT_USER}/${notice.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 
         holder.tvName.text=notice.name

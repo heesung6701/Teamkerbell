@@ -4,13 +4,16 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/shape_press_dark"
-    android:layout_margin="6dp">
+    android:gravity="start"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp">
 
     <TextView
         android:id="@+id/li_tv_content"
-        android:gravity="center"
         android:textColor="@color/grayDark"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:ellipsize="end"

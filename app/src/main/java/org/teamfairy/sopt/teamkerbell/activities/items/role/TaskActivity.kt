@@ -18,7 +18,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
-import org.teamfairy.sopt.teamkerbell.model.realm.JoinedR
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
@@ -104,7 +104,7 @@ class TaskActivity : AppCompatActivity(){
         dataListUser.clear()
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
-        val joinedR = realm.where(JoinedR::class.java).equalTo("g_idx", group.g_idx).findAll()
+        val joinedR = realm.where(JoinedGroupR::class.java).equalTo("g_idx", group.g_idx).findAll()
         joinedR.forEach{
             val uIdx = it.u_idx
             val user: User = (realm.where(UserR::class.java).equalTo("u_idx", uIdx).findFirst()

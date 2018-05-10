@@ -11,20 +11,21 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
-import org.teamfairy.sopt.teamkerbell.network.info.GroupRListTask
-import org.teamfairy.sopt.teamkerbell.network.info.JoinedListTask
-import org.teamfairy.sopt.teamkerbell.network.info.UserRListTask
 import android.os.Build
 import android.app.NotificationChannel
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_ROOM
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
+import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 
 
 /**
@@ -115,8 +116,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 title = jsonObject.getString("title")
             if (jsonObject.has("body"))
                 content = jsonObject.getString("body")
-            if (jsonObject.has("g_idx"))
-                g_idx = jsonObject.getInt("g_idx")
+            if (jsonObject.has(JSON_G_IDX))
+                g_idx = jsonObject.getInt(JSON_G_IDX)
 
             if (jsonObject.has("data")) {
                 code = jsonObject.getInt("data")
@@ -130,26 +131,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.groupChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
             }
-            StatusCode.joinedChange ->
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED, true)
-            StatusCode.useChange ->
+            StatusCode.joinedGroupChange ->
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
+            StatusCode.userChange ->
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
-            StatusCode.groupJoinedChange -> {
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED, true)
-            }
-            StatusCode.groupUserChange -> {
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
-            }
-            StatusCode.joinedUserChange -> {
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED, true)
-            }
+            StatusCode.roomChange ->
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
+            StatusCode.joinedRoomChange ->
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
+
             StatusCode.groupJoinedUserChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
-                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
             }
             StatusCode.votePush ->
                 sendNotification(title!!, content!!, null)
@@ -162,15 +156,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         }
 
-        if (LoginToken.getToken(applicationContext).isNotEmpty()) {
-            val taskUser = UserRListTask(applicationContext, null, LoginToken.getToken(applicationContext))
-            taskUser.execute(USGS_REQUEST_URL.URL_USER)
+        if (LoginToken.isValid()) {
 
-            val taskGroup = GroupRListTask(applicationContext, null, LoginToken.getToken(applicationContext))
-            taskGroup.execute(USGS_REQUEST_URL.URL_GROUPLIST)
-
-            val taskJoin = JoinedListTask(applicationContext, null, LoginToken.getToken(applicationContext))
-            taskJoin.execute(USGS_REQUEST_URL.URL_JOINED)
+            NetworkUtils.connectUserList(applicationContext,null)
+            NetworkUtils.connectGroupList(applicationContext,null)
+            NetworkUtils.connectRoomList(applicationContext,null)
+            NetworkUtils.connectJoinedGroupList(applicationContext,null)
+            NetworkUtils.connectJoinedRoomList(applicationContext,null)
         }
     }
 

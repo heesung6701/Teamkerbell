@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -34,7 +35,7 @@
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.home.TeamActivity"
+            android:name=".activities.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.items.notice.NoticeCardActivity"
@@ -71,6 +72,32 @@
         <activity
             android:name=".activities.items.role.TaskActivity"
             android:label="@string/title_activity_task"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.group.MakeGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.group.invite.InviteActivity"
+            android:label="@string/title_activity_invite"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.group.invite.InvitePhoneActivity"
+            android:label="@string/title_activity_invite_phone"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.group.invite.InviteMailActivity"
+            android:label="@string/title_activity_invite_mail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.group.invite.ScanActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.notice.MakeNoticeActivity"
+            android:label="@string/title_activity_make_notice"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.home.room.MakeRoomActivity"
+            android:label="@string/title_activity_make_room"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

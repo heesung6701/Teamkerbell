@@ -31,6 +31,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VOTEID
 import org.teamfairy.sopt.teamkerbell.network.info.VoteResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -88,7 +89,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         tv_chat_name.text = group.real_name
 
         tv_content.text = vote.content
-        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "user" + vote.u_idx))
+        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "$INTENT_USER/${vote.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default_png)
         tv_name.text = vote.name
         tv_time.text = vote.getTime()

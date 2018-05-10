@@ -1,7 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.listview.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -9,17 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.viewholder.TextViewHolder
-import org.w3c.dom.Text
-import kotlin.properties.Delegates
 
 /**
  * Created by lumiere on 2018-05-05.
  */
-class  TextListAdapter(var dataList : ArrayList<Team>,var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
+class  TextListAdapter(var dataList : ArrayList<GroupInterface>,var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
 
-     var currentGIdx : Int =-1
+     var currentIdx : Int =-1
     private var onItemClick: View.OnClickListener? = null
 
     override fun getItemCount(): Int = dataList.size
@@ -27,7 +25,7 @@ class  TextListAdapter(var dataList : ArrayList<Team>,var mContext: Context) : R
     override fun onBindViewHolder(holder: TextViewHolder, position: Int) { // binding
 
         holder.tvContent.text = dataList[position].real_name
-        if(dataList[position].g_idx==currentGIdx){
+        if(dataList[position].getIdx()==currentIdx){
             holder.tvContent.setTypeface(holder.tvContent.typeface,Typeface.BOLD)
             holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.mainColor))
         }else{

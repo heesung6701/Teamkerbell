@@ -56,7 +56,7 @@
                     android:maxLines="1"
                     android:imeOptions="actionNext"
                     android:singleLine="true"
-                    android:text="f"
+                    android:text="heesung6701@naver.com"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -74,7 +74,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="f"
+                    android:text="asdfghjk"
                     />
 
             </android.support.design.widget.TextInputLayout>

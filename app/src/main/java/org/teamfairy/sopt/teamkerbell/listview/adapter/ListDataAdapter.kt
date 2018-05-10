@@ -11,6 +11,7 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 
 
 /**
@@ -54,7 +55,7 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
 
 
         val url = dataList[position].photo
-        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext,"user"+dataList.get(position).u_idx))
+        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext,"$INTENT_USER/${dataList.get(position).u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 
     }

@@ -1,12 +1,16 @@
 package org.teamfairy.sopt.teamkerbell._utils
 
 import android.content.Context
+import android.support.v7.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import android.util.Log
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 
 /**
@@ -46,9 +50,57 @@ class DatabaseHelpUtils {
         }
 
 
+
+        fun getUserListFromRealm(applicationContext: Context, dataListUser: ArrayList<User>, adapterUser: RecyclerView.Adapter<*>, group: Team) {
+
+            val realm = getRealmDefault(applicationContext)
+
+            dataListUser.clear()
+            adapterUser.notifyDataSetChanged()
+            val joinedRs = realm.where(JoinedGroupR::class.java).equalTo("g_idx", group.g_idx).findAll()
+            joinedRs.iterator().forEach {
+                val userR: UserR = realm.where(UserR::class.java).equalTo("u_idx", it.u_idx).findFirst()
+                        ?: UserR()
+                dataListUser.add(userR.toUser())
+            }
+            adapterUser.notifyDataSetChanged()
+            realm.close()
+        }
+        fun getGroupListFromRealm(applicationContext: Context, dataListGroup: ArrayList<Team>, adapterGroup: RecyclerView.Adapter<*>, group: Team) {
+
+            val realm = getRealmDefault(applicationContext)
+
+            dataListGroup.clear()
+            adapterGroup.notifyDataSetChanged()
+            val groupR = realm.where(GroupR::class.java).findAll()
+            groupR.iterator().forEach {
+                dataListGroup.add(it.toGroup())
+            }
+
+            adapterGroup.notifyDataSetChanged()
+            realm.close()
+        }
+
+        fun getRoomListFromRealm(applicationContext: Context, dataListRoom: ArrayList<Room>, adapterRoom: RecyclerView.Adapter<*>, group: Team) {
+
+            val realm = getRealmDefault(applicationContext)
+
+            dataListRoom.clear()
+            adapterRoom.notifyDataSetChanged()
+            val roomR = realm.where(RoomR::class.java).findAll()
+            roomR.iterator().forEach {
+                dataListRoom.add(it.toChatRoom())
+            }
+
+            adapterRoom.notifyDataSetChanged()
+            realm.close()
+        }
+
         const val PREF_ISUPDATE_USER = "user"
         const val PREF_ISUPDATE_GROUP = "group"
-        const val PREF_ISUPDATE_JOINED = "joined"
+        const val PREF_ISUPDATE_ROOM = "room"
+        const val PREF_ISUPDATE_JOINED_GROUP = "joined_group"
+        const val PREF_ISUPDATE_JOINED_ROOM = "joined_room"
         const val PREF_ISUPDATE = "pref_msg_isUpdate"
 
 

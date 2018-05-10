@@ -68,7 +68,10 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
             }
         } catch (e: JSONException) {
             e.printStackTrace()
+        }finally {
+            if(realm.isInTransaction) realm.commitTransaction()
         }
+        if(!realm.isClosed) realm.close()
 
     }
 

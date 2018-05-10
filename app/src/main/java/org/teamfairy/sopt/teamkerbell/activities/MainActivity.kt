@@ -8,23 +8,28 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell.activities.home.TeamActivity
+import org.teamfairy.sopt.teamkerbell.activities.group.MakeGroupActivity
+import org.teamfairy.sopt.teamkerbell.activities.home.HomeActivity
 
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TeamListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
+import org.teamfairy.sopt.teamkerbell.utils.CurrentGroup
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
 
-    private var dataList = ArrayList<Team>()
+    private var dataList = ArrayList<HashMap<String,String>>()
+    private var groupList = ArrayList<Team>()
 
     private var recyclerView : RecyclerView by Delegates.notNull()
     private  var adapter : TeamListAdapter by Delegates.notNull()
@@ -34,6 +39,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        tv_hello.text= ("${LoginToken.getUser(applicationContext).name}님 안녕하세요!")
 
         adapter =  TeamListAdapter(dataList,this)
 
@@ -49,14 +56,16 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
             addItem(pos)
             return
         }
-        val intent = Intent(applicationContext, TeamActivity::class.java)
-        intent.putExtra(INTENT_GROUP,dataList[pos])
+        val intent = Intent(applicationContext, HomeActivity::class.java)
+//        CurrentGroup.setGroup(groupList[pos])
+        intent.putExtra(INTENT_GROUP,groupList[pos])
         startActivity(intent)
     }
 
     private fun addItem(pos : Int ){
 
-        Toast.makeText(applicationContext,pos.toString()+" add",Toast.LENGTH_SHORT).show()
+        val i = Intent(applicationContext, MakeGroupActivity::class.java)
+        startActivity(i)
     }
 
     override fun onResume() {
@@ -73,13 +82,20 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         val realm = getRealmDefault(applicationContext)
 
         dataList.clear()
+        groupList.clear()
+
         adapter.notifyDataSetChanged()
         var i = 0
         val groupR = realm.where(GroupR::class.java).findAll()
         groupR.forEach {
-            dataList.add(it.toGroup())
+            val h = HashMap<String,String>()
+            h["name"] = it.real_name
+            h["cnt"] = (realm.where(JoinedGroupR::class.java).equalTo("g_idx",it.g_idx).findAll().size?:0 ).toString()
+            dataList.add(h)
+            groupList.add(it.toGroup())
+
         }
-        dataList.add(Team(0,"",""))
+        dataList.add(HashMap<String,String>())
         adapter.notifyDataSetChanged()
     }
 

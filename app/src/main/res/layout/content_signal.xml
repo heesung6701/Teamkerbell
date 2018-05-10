@@ -182,6 +182,7 @@
         android:visibility="gone"
         android:gravity="top"
         android:padding="4dp"
+        android:hint="@string/txt_enter_content"
         android:inputType="text" />
 
     <LinearLayout

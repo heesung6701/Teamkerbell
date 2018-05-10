@@ -5,16 +5,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.realm.Sort
+import kotlinx.android.synthetic.main.activity_notice_card.*
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
+import org.teamfairy.sopt.teamkerbell.R.id.tv_show_list
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
@@ -25,6 +30,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
@@ -75,6 +81,12 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
             changeMode()
                   }
         btn_back.setOnClickListener { onBackPressed() }
+
+        fab.setOnClickListener {view ->
+            val i = Intent(applicationContext,MakeNoticeActivity::class.java)
+            i.putExtra(INTENT_GROUP,group)
+            startActivity(i)
+        }
     }
 
     fun changeMode(){
@@ -131,13 +143,7 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
 
         val task = NoticeListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.g_idx = group.g_idx
-
-        val builtUri = Uri.parse(URL_DETAIL_NOTICE)
-                .buildUpon()
-                .appendQueryParameter(URL_DETAIL_PARAM_GID, group.g_idx.toString())
-                .build()
-
-        task.execute(builtUri.toString())
+        task.execute(URL_GROUP_NOTICE.plus("/${group.g_idx}"))
 
     }
 

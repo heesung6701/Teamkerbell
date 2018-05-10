@@ -10,8 +10,8 @@ import java.util.*
 class Utils {
     companion object {
         const val TAB_CONTACT = 0
-        const val TAB_HOME = 1
-        const val TAB_CHAT = 2
+        const val TAB_ROOM = 1
+        const val TAB_HOME = 2
 
 
         const val TAB_RECEIVE = 0
@@ -105,6 +105,8 @@ class Utils {
         }
 
         fun getMonthDayTime(txt: String): String {
+            if(txt.isBlank() || txt.isEmpty()) return ""
+
             return txt.substring("yyyy-".length, "yyyy-MM".length).toInt().toString() + "월" +
                     txt.substring("yyyy-MM-".length, "yyyy-MM-dd".length).toInt().toString() + "일" +
                     txt.substring("yyyy-MM-dd".length, "yyyy-MM-dd HH:mm".length)

@@ -30,6 +30,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_CLIENTTOKEN
@@ -53,7 +54,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             if (activity != null) {
 
-
                 activity.mAuthTask = null
                 activity.showProgress(false)
 
@@ -73,6 +73,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
 
     fun login() {
+
+
+
+        //로그인할때 받아와야되나??
+        NetworkUtils.connectGroupList(applicationContext,null,true)
+        NetworkUtils.connectUserList(applicationContext,null,true)
+        NetworkUtils.connectJoinedGroupList(applicationContext,null,true)
+        NetworkUtils.connectJoinedRoomList(applicationContext,null,true)
+        NetworkUtils.connectRoomList(applicationContext,null,true)
 
 
         val dataBase: FirebaseDatabase = FirebaseDatabase.getInstance()

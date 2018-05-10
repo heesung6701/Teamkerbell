@@ -16,10 +16,7 @@ open class GroupR() : RealmObject(){
     var ctrl_name: String="알수없음"
     var photo: String=""
 
-    fun toChatListData(): ChatListData {
-        return ChatListData(this.toGroup(), "", "",0)
-    }
-    fun toContactListData(): ContactListData = ContactListData(Team(g_idx, real_name, ctrl_name, photo), null, true)
+
 
     fun toGroup() : Team = Team(g_idx, real_name, ctrl_name, photo)
 }

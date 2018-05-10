@@ -8,15 +8,15 @@
     android:id="@+id/layout_parent"
     >
 
-    
+
     <LinearLayout
-        android:id="@+id/layout_team_select"
+        android:id="@+id/layout_select_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="127dp"
         android:gravity="center_vertical">
-        
+
         <TextView
             android:id="@+id/tv_teamName"
             android:layout_width="wrap_content"
@@ -26,11 +26,12 @@
 
 
         <ImageView
+            android:id="@+id/iv_drop_down"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="15dp"
             app:srcCompat="@drawable/ic_arrow_drop_down"
-            
+
             />
 
 
@@ -41,8 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:orientation="horizontal"
-        android:layout_alignStart="@id/layout_team_select"
-        android:layout_below="@id/layout_team_select"
+        android:layout_alignStart="@id/layout_select_team"
+        android:layout_below="@id/layout_select_team"
         android:gravity="center_vertical"
         >
         <ImageView
@@ -51,16 +52,16 @@
             app:srcCompat="@drawable/ic_profile_home"
             android:layout_marginEnd="8dp"
             />
-    <TextView
-        android:id="@+id/tv_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@drawable/select_text_press"
+            android:focusable="true"
+            android:clickable="true"
+            android:textColor="@drawable/select_text_press"
 
-        tools:text="5명" />
+            tools:text="5명" />
     </LinearLayout>
 
     <HorizontalScrollView
@@ -258,8 +259,8 @@
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
         android:overScrollMode="never"
-        android:layout_below="@+id/layout_team_select"
-        android:layout_alignStart="@+id/layout_team_select"
+        android:layout_below="@+id/layout_select_team"
+        android:layout_alignStart="@+id/layout_select_team"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
         android:visibility="gone"

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity"
+    tools:showIn="@layout/activity_invite">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        >
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_weight="1"
+        android:text="@string/txt_invite_url"
+        />
+
+        <Button
+            android:id="@+id/btn_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:textSize="14sp"
+            android:text="@string/txt_copy_url"
+            android:background="@drawable/shape_round"
+            android:textColor="@color/white"
+            android:padding="3dp"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_invite_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="27dp"
+        tools:text="https://www.teamkerbell.com/landing/#/seed/xUDdiimw"
+        />
+
+    <TextView
+        android:id="@+id/tv_invite_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/select_text_press"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="18sp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/txt_invite_email"
+        />
+    <TextView
+        android:id="@+id/tv_invite_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/select_text_press"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="18sp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/txt_invite_phone"
+        />
+
+    <TextView
+        android:id="@+id/tv_invite_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/select_text_press"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="18sp"
+        android:layout_marginBottom="21dp"
+        android:text="@string/txt_invite_qr"
+        />
+    
+    <ImageView
+        android:id="@+id/iv_qr_code"
+        android:layout_width="225dp"
+        android:layout_height="225dp"
+        android:src="@color/gray"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
+        />
+</LinearLayout>

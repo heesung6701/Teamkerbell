@@ -13,10 +13,11 @@
     >
 
     <TextView
+        android:id="@+id/tv_hello"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="체다님, 안녕하세요!"
+        tools:text="체다님, 안녕하세요!"
         android:layout_marginTop="112dp"
         android:layout_marginBottom="64dp"
         android:textSize="18sp"

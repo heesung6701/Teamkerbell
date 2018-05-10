@@ -16,7 +16,7 @@ import android.R.attr.y
 import android.R.attr.x
 import android.graphics.Point
 import android.view.Display
-
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 
 
 class NoticeActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class NoticeActivity : AppCompatActivity() {
 
         tv_title.text=notice.getMainTitle()
         tv_content.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"user"+notice.u_idx))
+        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"$INTENT_USER/${notice.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default_png)
         tv_name.text=notice.name
         tv_time.text=notice.getSubTitle()

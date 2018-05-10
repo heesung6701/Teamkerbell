@@ -9,6 +9,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.TaskListViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 
 
 /**
@@ -48,7 +49,7 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
                 val url = DatabaseHelpUtils.getUser(mContext, uIdx).photo
 
                 holder.ivProfiles[i].visibility = View.VISIBLE
-                if (NetworkUtils.getBitmapList(url, holder.ivProfiles[i], mContext, "user$uIdx")) {
+                if (NetworkUtils.getBitmapList(url, holder.ivProfiles[i], mContext, "$INTENT_USER/$uIdx")) {
                     holder.ivProfiles[i].setImageResource(R.drawable.icon_profile_default_png)
                 }
             }

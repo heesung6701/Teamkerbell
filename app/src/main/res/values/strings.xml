@@ -2,9 +2,17 @@
     <string name="app_name">팀커벨</string>
 
 
+    <string name="title_activity_make_room">대화</string>
+
+
     <string name="title_activity_notice_card">공지</string>
     <string name="title_activity_notice_list">공지</string>
     <string name="title_activity_notice">공지</string>
+    <string name="title_activity_make_notice">공지 작성</string>
+
+    <string name="title_activity_invite">팀원 추가</string>
+    <string name="title_activity_invite_phone">추가 하기</string>
+    <string name="title_activity_invite_mail">초대 하기</string>
 
     <string name="title_activity_signal_list">신호등</string>
     <string name="title_activity_signal">신호등</string>
@@ -16,12 +24,16 @@
 
     <string name="title_activity_role_list">역할분담</string>
     <string name="title_activity_role">역할분담</string>
+    <string name="title_activity_task">역할분담</string>
+
+
     <!-- Strings related to login -->
     <string name="prompt_name">이름</string>
     <string name="prompt_email">이메일</string>
     <string name="prompt_phone">연락처</string>
     <string name="prompt_password">비밀번호</string>
     <string name="prompt_password_chk">비밀번호 확인</string>
+    <string name="prompt_enter_over_twelve">12자 이하로 입력해주세요</string>
     <string name="action_sign_in">로그인</string>
     <string name="action_register_info">계정이 없으신가요? </string>
     <string name="action_register">회원가입</string>
@@ -45,6 +57,16 @@
     <string name="txt_reorder">순서변경하기</string>
     <string name="txt_team_add">팀 추가하기</string>
     <string name="txt_project_member">프로젝트 멤버</string>
+    <string name="txt_enter_team_name">팀 이름을 입력해주세요.</string>
+    <string name="txt_enter_room_name">그룹 이름을 입력해주세요.</string>
+    <string name="txt_invite_qr">QR코드로 추가하기</string>
+    <string name="txt_invite_phone">연락처로 추가하기</string>
+    <string name="txt_invite_email">초대 메일 보내기</string>
+    <string name="txt_copy_url">링크 복사</string>
+    <string name="txt_invite_url">외부 링크로 추가하기</string>
+    <string name="txt_select_user">팀원 선택</string>
+    <string name="txt_enter_content">내용을 입력해주세요</string>
+    <string name="txt_select_room">채팅방을 선택해주세요.</string>
 
     <string name="action_notice">공지</string>
     <string name="action_pick">PICK</string>
@@ -57,14 +79,18 @@
     <string name="action_show_finished">마감된 투표 보기</string>
     <string name="action_show_not_finished">진행중인 투표 보기</string>
     <string name="action_commit">확인</string>
+    <string name="action_start">시작하기</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add">추가</string>
+    <string name="action_send">전송</string>
+    <string name="action_send_notification">푸시알림 보내기</string>
 
 
     <string name="tab_by_choice">항목별</string>
     <string name="tab_by_member">멤버별</string>
     <string name="tab_by_not_voted">미투표</string>
-    <string name="action_send_notification">푸시알림 보내기</string>
-    <string name="txt_select_user">팀원 선택</string>
-    <string name="title_activity_task">TaskActivity</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

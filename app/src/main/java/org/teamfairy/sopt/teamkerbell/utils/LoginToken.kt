@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.util.Log
+import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 
 /**
@@ -15,6 +16,7 @@ class LoginToken(){
         private var user : User?=null
         private var token: String=""
 
+        fun isValid() : Boolean=    (token.isNotEmpty() && user != null )
 
         fun getUserIdx(context: Context): Int{
             if(user ==null) getPref(context)
@@ -29,7 +31,6 @@ class LoginToken(){
             if(token.isNotEmpty()) getPref(context)
             return token
         }
-
 
         fun getPref(context: Context){
 
@@ -73,6 +74,5 @@ class LoginToken(){
             pref.apply()
 
         }
-
     }
 }

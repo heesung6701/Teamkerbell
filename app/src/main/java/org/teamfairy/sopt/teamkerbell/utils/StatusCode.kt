@@ -6,12 +6,14 @@ package org.teamfairy.sopt.teamkerbell._utils
 class StatusCode {
     companion object {
         const val groupChange = 101
-        const val joinedChange =102
-        const val useChange = 103
-        const val groupJoinedChange = 104
-        const val groupUserChange = 105
-        const val joinedUserChange = 106
-        const val groupJoinedUserChange = 107
+        const val joinedGroupChange =102
+        const val userChange = 103
+        const val joinedRoomChange = 104
+        const val roomChange = 105
+
+
+        const val groupJoinedUserChange = 116
+
         const val votePush = 301
         const val makeNotice = 302
         const val makeLights = 303

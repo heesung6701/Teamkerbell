@@ -68,12 +68,12 @@ class SplashActivity : AppCompatActivity() {
 
 
         DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_GROUP,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED,true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_GROUP,true)
         DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_USER,true)
 
         NetworkUtils.connectUserList(applicationContext, null)
         NetworkUtils.connectGroupList(applicationContext, null)
-        NetworkUtils.connectJoinedList(applicationContext, null)
+        NetworkUtils.connectJoinedGroupList(applicationContext, null)
 
         startActivity(intent)
 

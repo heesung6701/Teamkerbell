@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/li_iv_profile"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_profile_default_png"
+        android:layout_alignParentStart="true"
+        app:civ_border_color="@color/mainColorY"
+        app:civ_border_width="0dp" />
+
+
+        <TextView
+            android:id="@+id/li_tv_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="13dp"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/li_iv_profile"
+            android:layout_toStartOf="@id/li_tv_time"
+            tools:text="ALL" />
+
+        <TextView
+            android:id="@+id/li_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3월 13일 13:00"
+            android:layout_alignParentEnd="true"
+            android:lineSpacingExtra="7sp"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+
+
+
+
+    <TextView
+        android:id="@+id/li_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/li_tv_room_name"
+        android:layout_alignStart="@id/li_tv_room_name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="피피티 템플릿 이걸로 할까요?"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/li_tv_count"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/ic_sign_red"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/li_tv_content"
+        android:visibility="invisible"
+
+        />
+</RelativeLayout>

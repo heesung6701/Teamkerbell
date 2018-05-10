@@ -9,11 +9,16 @@ import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
  */
 data class Team(
         var g_idx: Int, //Primary Key
-        var real_name: String,
+        override var real_name: String,
         var ctrl_name: String,
         var photo: String?
-) : Parcelable{
+) : GroupInterface,Parcelable{
+
     constructor(g_idx: Int,real_name: String,ctrl_name: String):this(g_idx,real_name,ctrl_name,null)
+
+    override fun toString(): String =("${g_idx}/${real_name}/${ctrl_name}/${photo}")
+
+    override fun getIdx(): Int =g_idx
 
     fun toGroupR(): GroupR {
         val groupR= GroupR()
@@ -47,5 +52,11 @@ data class Team(
             override fun createFromParcel(source: Parcel): Team = Team(source)
             override fun newArray(size: Int): Array<Team?> = arrayOfNulls(size)
         }
+
+
+        var ARG_G_IDX = "g_idx"
+        var ARG_REAL_NAME = "real_name"
+        var ARG_CTRL_NAME = "ctrl_name"
+        var ARG_PHOTO = "photo"
     }
 }
