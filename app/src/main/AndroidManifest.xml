@@ -98,6 +98,18 @@
         <activity
             android:name=".activities.home.room.MakeRoomActivity"
             android:label="@string/title_activity_make_room"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.vote.MakeVoteActivity"
+            android:label="@string/title_activity_make_vote"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.signal.MakeSignalActivity"
+            android:label="@string/title_activity_make_signal"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.items.role.MakeRoleActivity"
+            android:label="@string/title_activity_make_role"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

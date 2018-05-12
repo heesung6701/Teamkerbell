@@ -2,7 +2,6 @@ package org.teamfairy.sopt.teamkerbell.model.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.android.gms.internal.wr
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -15,6 +14,9 @@ class Room(
         var ctrl_name: String,
         var photo: String?
 ) : GroupInterface, Parcelable{
+    constructor() : this(-1,"","")
+    constructor(room_idx: Int, real_name: String, ctrl_name: String):this(room_idx,real_name,ctrl_name,null)
+
     override fun getIdx() =room_idx
 
     var lastMsgStr = ""
@@ -30,11 +32,10 @@ class Room(
 
     }
 
-    constructor(g_idx: Int,real_name: String,ctrl_name: String):this(g_idx,real_name,ctrl_name,null)
 
     fun toChatRoomR(): RoomR {
         val chatRoomR= RoomR()
-        chatRoomR.chatroom_idx=room_idx
+        chatRoomR.room_idx=room_idx
         chatRoomR.real_name=real_name
         chatRoomR.ctrl_name=ctrl_name
         chatRoomR.photo=photo?:""
@@ -64,5 +65,11 @@ class Room(
             override fun createFromParcel(source: Parcel): Room = Room(source)
             override fun newArray(size: Int): Array<Room?> = arrayOfNulls(size)
         }
+
+
+        var ARG_ROOM_IDX = "room_idx"
+        var ARG_REAL_NAME = "real_name"
+        var ARG_CTRL_NAME = "ctrl_name"
+        var ARG_PHOTO = "photo"
     }
 }

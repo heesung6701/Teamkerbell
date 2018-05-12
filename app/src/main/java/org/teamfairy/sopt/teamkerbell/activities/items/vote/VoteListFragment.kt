@@ -107,14 +107,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         val task: NetworkTask = VoteListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
-        var url: String? = null
-        val builtUri = Uri.parse(URL_DETAIL_VOTE)
-                .buildUpon()
-                .appendQueryParameter(URL_DETAIL_PARAM_GID, group.g_idx.toString())
-                .build()
-        url = builtUri.toString()
-
-        task.execute(url.toString())
+        task.execute("$URL_DETAIL_VOTE/${group.g_idx}")
     }
 
     private fun updateVoteList(){

@@ -97,7 +97,7 @@ class SplashActivity : AppCompatActivity() {
             if (!isSuccess) {
                     val i = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(i)
-//                finish()
+                   finish()
             }
         }, 3000)
     }

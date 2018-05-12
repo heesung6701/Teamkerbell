@@ -5,7 +5,7 @@
     android:layout_height="36dp"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:background="@drawable/shape_round_gray_light"
+    android:background="@drawable/shape_round_btn_gray_light"
 
     android:layout_margin="6dp"
     android:padding="8dp"

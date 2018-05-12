@@ -1,7 +1,9 @@
 package org.teamfairy.sopt.teamkerbell.activities.home
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TabLayout
 import kotlinx.android.synthetic.main.activity_home.*
 import org.teamfairy.sopt.teamkerbell.R
@@ -10,13 +12,18 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import org.teamfairy.sopt.teamkerbell.activities.home.adapter.MainTabAdapter
 import org.teamfairy.sopt.teamkerbell.activities.home.fragment.ContactFragment
 import org.teamfairy.sopt.teamkerbell.activities.home.fragment.HomeFragment
 import org.teamfairy.sopt.teamkerbell.activities.home.interfaces.HasGroupFragment
+import org.teamfairy.sopt.teamkerbell.activities.home.room.MakeRoomActivity
 import org.teamfairy.sopt.teamkerbell.activities.home.room.RoomListFragment
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter.SignalTabAdapter
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_CONTACT
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_HOME
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_ROOM
 
 
 class HomeActivity : AppCompatActivity() {
@@ -56,6 +63,29 @@ class HomeActivity : AppCompatActivity() {
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(main_tab))
         viewPager.setCurrentItem(TAB_HOME,false)
 
+        viewPager.addOnPageChangeListener(object  : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                when(position){
+                    TAB_CONTACT->{
+                        fab.hide()
+                    }
+                    TAB_ROOM->{
+                        fab.show()
+                    }
+                    TAB_HOME->{
+                        fab.hide()
+                    }
+                }
+            }
+
+        })
 
 //        this.contactTab = ContactFragment.newInstance(group)
 //        this.roomListTab = RoomListFragment.newInstance(group)

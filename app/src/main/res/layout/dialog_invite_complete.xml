@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="240dp"
     android:layout_height="136dp"
-    android:background="@drawable/shape_border_txtview_vote_make"
+    android:background="@drawable/shape_round_default"
 
     android:orientation="vertical" >
 
@@ -28,7 +28,7 @@
                 android:layout_height="46dp"
                 android:orientation="horizontal"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/shape_round"
+                android:background="@drawable/shape_round_btn"
                 android:textColor="@color/white"
                 android:text="완료" />
 

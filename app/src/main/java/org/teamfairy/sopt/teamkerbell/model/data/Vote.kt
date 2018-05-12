@@ -17,7 +17,7 @@ data class Vote(
         override var u_idx: Int,
         var write_time: String,
         var content: String?,
-        override var g_idx: Int,
+        override var room_idx: Int,
         var title: String?,
         var status: Int?
 ) : ListDataInterface, Parcelable {
@@ -35,7 +35,7 @@ data class Vote(
         voteR.u_idx=u_idx
         voteR.write_time=write_time
         voteR.content=content
-        voteR.g_idx=g_idx
+        voteR.g_idx=room_idx
         voteR.title=title
         voteR.status=status
         return voteR
@@ -77,7 +77,7 @@ data class Vote(
         writeInt(u_idx)
         writeString(write_time)
         writeString(content)
-        writeInt(g_idx)
+        writeInt(room_idx)
         writeString(title)
         writeValue(status)
     }

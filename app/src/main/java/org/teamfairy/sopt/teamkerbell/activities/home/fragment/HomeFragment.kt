@@ -129,7 +129,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     private fun showGroupInfo() {
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
         tvTeamName.text = group.real_name
-        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo("g_idx",group.g_idx).findAll().size?:1 }명")
+        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll().size }명")
         realm.close()
     }
 
@@ -219,7 +219,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
 
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
         tvTeamName.text = group.real_name
-        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo("g_idx",group.g_idx).findAll().size?:1 }명")
+        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll().size}명")
         realm.close()
 
         adapterGroup.currentIdx = group.g_idx

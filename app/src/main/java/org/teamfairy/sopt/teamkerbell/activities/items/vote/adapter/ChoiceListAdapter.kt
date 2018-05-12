@@ -26,11 +26,11 @@ class ChoiceListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mCon
         holder.tvContent.text = dataList[position]["content"]
         holder.tvCount.text = dataList[position]["count"]
         if(position==selectedId){
-            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round)
+            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn)
             holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.white))
             holder.tvCount.setTextColor(ContextCompat.getColor(mContext,R.color.white))
         }else{
-            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round_gray_light)
+            holder.itemView.background=ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_gray_light)
             holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.black))
             holder.tvCount.setTextColor(ContextCompat.getColor(mContext,R.color.black))
         }

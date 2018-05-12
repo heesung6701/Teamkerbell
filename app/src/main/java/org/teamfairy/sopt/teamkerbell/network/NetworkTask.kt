@@ -5,7 +5,6 @@ import android.os.AsyncTask
 import android.os.Build
 import android.util.Log
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT
@@ -29,6 +28,8 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_USER_ARRAY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -85,7 +86,9 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                     params[0]== URL_MODIFY_ROLE_USER ){
                 method="PUT"
                 jsonResponse = makeHttpRequestPost(*params)
-            }else if (params[0] == URL_LEAVE) {
+            }else if (params[0] == URL_LEAVE_GROUP ||
+                    params[0] == URL_LEAVE_ROOM
+                    ) {
                 jsonResponse = makeHttpRequestDelete(*params)
 
             } else if (params[0] == URL_PROFILE) {

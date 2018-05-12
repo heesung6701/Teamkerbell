@@ -1,28 +1,58 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.notice
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_notice.*
+import kotlinx.android.synthetic.main.content_select_room.*
+import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_CHATROOM
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CHATID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_UID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.Utils
+import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
+    override fun onClick(p0: View?) {
+        val pos = recyclerView.getChildAdapterPosition(p0)
+
+        room = dataListRoom[pos] as Room
+        adapter.currentIdx = room?.room_idx ?: -1
+        tv_room_name.text=room?.real_name ?: getText(R.string.txt_select_room)
+        closeRoomList()
+    }
+
+    val LOG_TAG = this::class.java.name
+
 
     var group: Team by Delegates.notNull()
     var room: Room? = null
+
+    private var isConnecting: Boolean = false
 
 
     private var adapter: TextListAdapter by Delegates.notNull()
@@ -35,23 +65,11 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar)
 
         group = intent.getParcelableExtra(INTENT_GROUP)
-        room = intent.getParcelableExtra(INTENT_CHATROOM)
+        room = intent.getParcelableExtra(INTENT_ROOM)?:null
 
-        NetworkUtils.connectRoomList(applicationContext,null,true,group.g_idx)
+        NetworkUtils.connectRoomList(applicationContext, null, true, group.g_idx)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TextListAdapter(dataListRoom, applicationContext)
-        adapter.setOnItemClickListener(this)
-        adapter.currentIdx = room?.room_idx ?: -1
-        recyclerView.adapter = adapter
-
-        layout_select_team.setOnClickListener {
-            if (recyclerView.visibility != View.VISIBLE)
-                openRoomList()
-            else
-                closeRoomList()
-        }
+        setRoomListInit()
 
         edt_response.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -63,23 +81,65 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
             onBackPressed()
         }
         btn_commit.setOnClickListener {
-
+            attemptMake()
         }
 
     }
 
 
-    private fun closeRoomList() {
-        if(recyclerView.visibility!=View.GONE) {
-            recyclerView.visibility = View.GONE
-            iv_drop_down.rotation = 0.0f
-        }
+    private fun setRoomListInit(){
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = TextListAdapter(dataListRoom, applicationContext)
+        adapter.setOnItemClickListener(this)
+        adapter.currentIdx = room?.room_idx ?: -1
+        recyclerView.adapter = adapter
 
+        layout_select_room.setOnClickListener {
+            if (recyclerView.visibility != View.VISIBLE)
+                openRoomList()
+            else
+                closeRoomList()
+        }
     }
+    private fun attemptMake() {
+        if (!isConnecting) {
+            val content = edt_response!!.text.toString()
+
+            if (content.isNotEmpty()) {
+
+                val jsonParam = JSONObject()
+
+                try {
+                    jsonParam.put(URL_MAKE_NOTICE_PARAM_CHATID, group.g_idx)
+                    jsonParam.put(URL_MAKE_NOTICE_PARAM_ROOM_IDX, room!!.room_idx)
+                    jsonParam.put(URL_MAKE_NOTICE_PARAM_CONTENT, content)
+
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                val registTask = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
+                isConnecting = true
+                registTask.execute(URL_MAKE_NOTICE, jsonParam.toString())
+            } else
+                Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
+        } else
+            Toast.makeText(applicationContext, getText(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
+    }
+
+        private fun closeRoomList() {
+            if (recyclerView.visibility != View.GONE) {
+                recyclerView.visibility = View.GONE
+                iv_drop_down.rotation = 0.0f
+            }
+
+        }
 
     private fun openRoomList() {
 
-        if(recyclerView.visibility!=View.VISIBLE) {
+        if (recyclerView.visibility != View.VISIBLE) {
             recyclerView.visibility = View.VISIBLE
             iv_drop_down.rotation = 180.0f
 
@@ -87,12 +147,49 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onClick(p0: View?) {
-        val pos = recyclerView.getChildAdapterPosition(p0)
 
-        room = dataListRoom[pos] as Room
-        adapter.currentIdx = room?.room_idx ?: -1
-        closeRoomList()
+
+    private fun makeSuccess(msg : Message){
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                Toast.makeText(applicationContext, "공지 등록되었습니다", Toast.LENGTH_SHORT).show()
+
+
+                val obj = msg.obj as String
+                val idx = obj.toInt()
+                val group = group
+
+                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group, LoginToken.getUserIdx(applicationContext),this)
+
+                val intent = Intent(applicationContext, NoticeCardActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.putExtra(INTENT_GROUP, group)
+                startActivity(intent)
+
+                finish()
+            }
+            else -> {
+
+                val result = msg.data.getString("message")
+
+                if (result.contains("Failed")) {
+                    isConnecting = false
+                    Toast.makeText(applicationContext, "에러 : $result", Toast.LENGTH_SHORT).show()
+                } else {
+                    isConnecting = false
+                    Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
     }
 
+    private class HandlerMake(activity: MakeNoticeActivity) : Handler() {
+        private val mActivity: WeakReference<MakeNoticeActivity> = WeakReference<MakeNoticeActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            mActivity.get()?.makeSuccess(msg)
+        }
+    }
 }

@@ -12,7 +12,7 @@ class IntentTag {
 
         const val INTENT_USER : String="USER"
         const val INTENT_GROUP : String="GROUP"
-        const val INTENT_CHATROOM : String="CHATROOM"
+        const val INTENT_ROOM : String="CHATROOM"
         const val INTENT_NOTICE : String="NOTICE"
         const val INTENT_VOTE : String="VOTE"
         const val INTENT_ROLE : String="ROLE"

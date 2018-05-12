@@ -15,7 +15,7 @@ data class Pick(
         var write_time: String,
         var content: String?,
         var pick_idx: Int?,
-        override var g_idx: Int
+        override var room_idx: Int
 ) : ListDataInterface {
 
     override var name: String = ""

@@ -47,7 +47,7 @@
                     android:id="@+id/list_item_tv_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_round_chat"
+                    android:background="@drawable/shape_round_btn_chat"
                     android:backgroundTint="@color/white"
                     android:maxWidth="200dp"
                     android:padding="10dp"

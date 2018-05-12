@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity"
+    tools:showIn="@layout/activity_make_vote">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp">
+            <!--<TextView-->
+                <!--android:id="@+id/tv_room_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="16sp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_marginStart="24dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--tools:text=" 팀커벨"-->
+                <!--/>-->
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/gray"-->
+                <!--/>-->
+
+
+          <include layout="@layout/content_select_room" android:id="@+id/layout_select_room"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:overScrollMode="never"
+                android:background="@drawable/shape_border_shadow"
+                android:elevation="4dp"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/layout_select_room"
+                android:layout_alignEnd="@id/layout_select_room"
+                android:layout_below="@id/layout_select_room"
+                />
+
+            <LinearLayout
+                android:layout_below="@id/layout_select_room"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+
+
+                <EditText
+                    android:id="@+id/edt_title"
+                    android:background="@drawable/shape_round_gray_light"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/txt_enter_vote_title"
+                    android:maxLines="1"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="8dp"
+                    android:textSize="16sp"
+                    android:theme="@style/EditText_mainColor" />
+
+                <EditText
+                    android:id="@+id/edt_content"
+                    android:background="@drawable/shape_round_gray_light"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="200dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:hint="@string/txt_enter_content"
+                    android:theme="@style/EditText_mainColor" />
+
+                <LinearLayout
+                    android:id="@+id/layout_vote_examples"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/edt_vote_example1"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:background="@drawable/shape_round_gray_light"
+                        android:gravity="center_vertical"
+                        android:hint="@string/txt_enter_vote_example"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingEnd="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="6dp"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"
+                        android:theme="@style/EditText_mainColor" />
+
+
+                    <EditText
+                        android:id="@+id/edt_vote_example2"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:background="@drawable/shape_round_gray_light"
+                        android:gravity="center_vertical"
+                        android:hint="@string/txt_enter_vote_example"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingEnd="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="6dp"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"
+                        android:theme="@style/EditText_mainColor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="26dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    >
+
+                    <ImageButton
+                        android:id="@+id/btn_vote_example_add"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        android:theme="@style/FlatButton"
+                        android:background="@android:color/transparent"
+                        android:tint="@color/grayDark"
+                        app:srcCompat="@drawable/ic_add" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="16sp"
+                        tools:text="항목 추가하기"
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/chk_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        app:buttonTint="@color/mainColorM" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/txt_end_time" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/layout_end_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btn_end_time_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        tools:text="2018-06-05"
+                        android:textSize="20sp"
+                        android:theme="@style/FlatButton"
+
+                        />
+
+                    <Button
+                        android:id="@+id/btn_end_time_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        tools:text="00:00"
+                        android:textSize="20sp"
+                        android:theme="@style/FlatButton"
+
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

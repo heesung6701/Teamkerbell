@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="41dp"
-                android:background="@drawable/shape_round"
+                android:background="@drawable/shape_round_btn"
                 android:text="@string/action_commit"
                 android:textSize="18sp"
                 android:textColor="@color/white"

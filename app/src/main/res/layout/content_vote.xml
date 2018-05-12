@@ -309,7 +309,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="56dp"
-            android:background="@drawable/shape_round_gray"
+            android:background="@drawable/shape_round_btn_gray"
             android:text="@string/action_complete"
             android:textColor="@color/white"
             android:textSize="18sp"

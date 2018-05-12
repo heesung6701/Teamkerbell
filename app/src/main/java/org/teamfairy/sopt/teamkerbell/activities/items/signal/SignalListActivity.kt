@@ -1,14 +1,18 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.signal
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_signal_list.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_signal_list.*
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter.SignalTabAdapter
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -42,6 +46,12 @@ class SignalListActivity : AppCompatActivity() {
 
         btn_back.setOnClickListener {
             finish()
+        }
+
+        fab.setOnClickListener {
+            val i = Intent(applicationContext, MakeSignalActivity::class.java)
+            i.putExtra(INTENT_GROUP,group)
+            startActivity(i)
         }
     }
 

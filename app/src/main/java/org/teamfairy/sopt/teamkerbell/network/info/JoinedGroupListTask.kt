@@ -11,6 +11,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -49,8 +51,8 @@ class JoinedGroupListTask(context: Context, var handler: Handler?, token: String
                         val data: JSONObject = dataArray.getJSONObject(i)
 
 
-                        val uIdx = data.getInt("u_idx")
-                        val gIdx = data.getInt("g_idx")
+                        val uIdx = data.getInt(User.ARG_U_IDX)
+                        val gIdx = data.getInt(Team.ARG_G_IDX)
 
                         val joinedR = realm.createObject(JoinedGroupR::class.java)
                         joinedR.g_idx = gIdx

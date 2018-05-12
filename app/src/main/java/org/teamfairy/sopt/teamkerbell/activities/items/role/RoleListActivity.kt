@@ -22,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -79,7 +80,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
-        val i = Intent(applicationContext,RoleActivity::class.java)
+        val i = Intent(applicationContext, RoleActivity::class.java)
         i.putExtra(INTENT_GROUP, group)
         i.putExtra(INTENT_ROLE, dataList[pos])
         startActivity(i)
@@ -89,6 +90,21 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(USGS_REQUEST_URL.URL_ROLE_SHOW)
     }
+    private  fun successGetRoleList(msg : Message){
+        when (msg.what) {
+            MSG_SUCCESS -> {
+                val datas = msg.obj as ArrayList<Role>
+                dataList.clear()
+                datas.forEach {
+                    it.setPhotoInfo(applicationContext)
+                    dataList.add(it)
+                }
+                adapter.notifyDataSetChanged()
+            }
+            else -> {
+            }
+        }
+    }
 
     private class HandlerGet(activity: RoleListActivity) : Handler() {
         private val mActivity: WeakReference<RoleListActivity> = WeakReference<RoleListActivity>(activity)
@@ -96,13 +112,8 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
             if (activity != null) {
-                val datas=msg.obj as ArrayList<Role>
-                activity.dataList.clear()
-                datas.forEach {
-                    it.setPhotoInfo(activity.applicationContext)
-                    activity.dataList.add(it)
-                }
-                activity.adapter.notifyDataSetChanged()
+               activity.successGetRoleList(msg)
+
             }
         }
     }

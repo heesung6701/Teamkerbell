@@ -11,7 +11,15 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -25,11 +33,11 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
     var msgCode = MSG_FAIL
     var g_idx: Int? = null
 
-    fun extractFeatureFromJson(jsonResponse: String){
+    fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Notice>?{
 
         message = "No Message"
+        val datas = ArrayList<Notice>()
 
-        val realm = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has("message")) {
@@ -38,28 +46,23 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
 
                     val dataArray: JSONArray = baseJsonResponse.getJSONArray("data")
 
-                    val noticeRs: RealmResults<NoticeR?> = realm.where(NoticeR::class.java).equalTo("g_idx", g_idx).findAll()
-                    realm.beginTransaction()
-                    noticeRs.deleteAllFromRealm()
-
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
 
 
-                        val obj = NoticeR()
+                        val obj = Notice()
 
-                        obj.u_idx = data.getInt("u_idx")
-                        obj.chat_idx = data.getInt("chat_idx")
-                        obj.write_time = data.getString("write_time")
-                        obj.content = data.getString("content")
-                        obj.g_idx = data.getInt("g_idx")
-                        obj.notice_idx = data.getInt("notice_idx")
+                        obj.u_idx = data.getInt(JSON_U_IDX)
+                        obj.chat_idx = data.getInt(JSON_CHAT_IDX)
+                        obj.write_time = data.getString(JSON_WRITE_TIME)
+                        obj.content = data.getString(JSON_CONTENT)
+                        obj.room_idx = data.getInt(JSON_ROOM_IDX)
+                        obj.notice_idx = data.getInt(JSON_NOTICE_IDX)
 
-                        realm.copyToRealmOrUpdate(obj)
-
+                        datas.add(obj)
                     }
-                    realm.commitTransaction()
                     msgCode= MSG_SUCCESS
+                    return datas
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -69,22 +72,21 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
         } catch (e: JSONException) {
             e.printStackTrace()
         }finally {
-            if(realm.isInTransaction) realm.commitTransaction()
         }
-        if(!realm.isClosed) realm.close()
-
+        return null
     }
 
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-        extractFeatureFromJson(result!!)
+        val obj = extractFeatureFromJson(result!!)
 
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
         Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        msg.obj = obj
 
         val data = Bundle()
         data.putString("message", message)

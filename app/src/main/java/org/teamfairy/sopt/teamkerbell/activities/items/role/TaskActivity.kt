@@ -104,10 +104,10 @@ class TaskActivity : AppCompatActivity(){
         dataListUser.clear()
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
-        val joinedR = realm.where(JoinedGroupR::class.java).equalTo("g_idx", group.g_idx).findAll()
+        val joinedR = realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll()
         joinedR.forEach{
             val uIdx = it.u_idx
-            val user: User = (realm.where(UserR::class.java).equalTo("u_idx", uIdx).findFirst()
+            val user: User = (realm.where(UserR::class.java).equalTo(User.ARG_U_IDX, uIdx).findFirst()
                     ?: UserR()).toUser()
             dataListUser.add(user)
         }

@@ -1,13 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.notice
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -18,22 +15,20 @@ import kotlinx.android.synthetic.main.activity_notice_card.*
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
-import org.teamfairy.sopt.teamkerbell.R.id.tv_show_list
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_NOTICE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -49,8 +44,9 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
     var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
 
     var group : Team by Delegates.notNull()
+    var room : Room by Delegates.notNull()
 
-    var showCard = true
+    private var showCard = true
 
     var divider : DividerItemDecoration by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +55,8 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         setSupportActionBar(toolbar)
 
         group = intent.getParcelableExtra(INTENT_GROUP)
+        room = intent.getParcelableExtra(INTENT_ROOM)?:Room()
+
 
         adapterCard = CardListAdapter(dataList,applicationContext,this)
 
@@ -82,9 +80,10 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
                   }
         btn_back.setOnClickListener { onBackPressed() }
 
-        fab.setOnClickListener {view ->
+        fab.setOnClickListener { _ ->
             val i = Intent(applicationContext,MakeNoticeActivity::class.java)
             i.putExtra(INTENT_GROUP,group)
+            i.putExtra(INTENT_ROOM,room)
             startActivity(i)
         }
     }
@@ -123,14 +122,11 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         startActivity(i)
     }
 
-    fun getNoticeListFromRealm() {
+    fun getNoticeList(result : ArrayList<Notice>) {
 
-        val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
-
-        val result = realm.where(NoticeR::class.java).equalTo("g_idx", group.g_idx).sort("write_time", Sort.DESCENDING).findAll()
         dataList.clear()
         result.iterator().forEach {
-            dataList.add(it.toNotice(realm))
+            dataList.add(it)
         }
         adapterCard.notifyDataSetChanged()
 
@@ -151,7 +147,9 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
         private val mFragment: WeakReference<NoticeCardActivity> = WeakReference<NoticeCardActivity>(fragment)
 
         override fun handleMessage(msg: Message) {
-            mFragment.get()?.getNoticeListFromRealm()
+            if(msg.obj is ArrayList<*>){
+                mFragment.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
+            }
         }
     }
 }

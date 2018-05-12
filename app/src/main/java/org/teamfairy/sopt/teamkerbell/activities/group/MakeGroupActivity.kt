@@ -2,10 +2,12 @@ package org.teamfairy.sopt.teamkerbell.activities.group
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.provider.ContactsContract
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -15,12 +17,17 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
+import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.activities.home.HomeActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.make.MakeGroupTask
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
@@ -99,13 +106,22 @@ class MakeGroupActivity : AppCompatActivity() {
                     joinedR.g_idx = group.g_idx
                     Log.d("RealmDB/added", joinedR.toString())
 
+                    Log.d("RealmDB/added", joinedR.toString())
+
                     realm.copyToRealmOrUpdate(group.toGroupR())
                     Log.d("RealmDB/added", group.toString())
 
                     realm.commitTransaction()
 
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
+
                     FirebaseMessageUtils.setDatabaseGroup(group.ctrl_name)
                     FirebaseMessageUtils.dataBaseEndpoints.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(0)
+
+                    val i = Intent(application,HomeActivity::class.java)
+                    i.putExtra(IntentTag.INTENT_GROUP,group)
+                    startActivity(i)
 
                     finish()
 

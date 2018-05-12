@@ -18,10 +18,11 @@ data class Notice(
         var chat_idx: Int?,
         var write_time: String,
         var content: String?,
-        override var g_idx: Int,
+        override var room_idx: Int,
         var notice_idx: Int
 ) : ListDataInterface, Parcelable {
 
+    constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0)
 
     override var name: String = ""
 
@@ -54,18 +55,6 @@ data class Notice(
 
 
 
-    fun toNoticeR(): NoticeR {
-        val noticeR = NoticeR()
-        noticeR.u_idx = this.u_idx
-        noticeR.chat_idx = this.chat_idx
-        noticeR.content = this.content
-        noticeR.g_idx = this.g_idx
-        noticeR.notice_idx = this.notice_idx
-        noticeR.write_time = this.write_time
-        return noticeR
-    }
-
-
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readValue(Int::class.java.classLoader) as Int?,
@@ -82,7 +71,7 @@ data class Notice(
         writeValue(chat_idx)
         writeString(write_time)
         writeString(content)
-        writeInt(g_idx)
+        writeInt(room_idx)
         writeInt(notice_idx)
     }
 

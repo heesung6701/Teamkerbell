@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:paddingLeft="25dp"
     android:paddingRight="25dp"
-    android:background="@drawable/shape_border_txtview_vote_make"
     >
 
     <TextView
@@ -31,7 +30,7 @@
 
             android:theme="@style/FlatButton"
             android:id="@+id/btn_confirm_yes"
-            android:background="@drawable/shape_round"
+            android:background="@drawable/shape_round_btn"
             android:text="네"
             android:textSize="20dp"
             android:layout_marginRight="20dp"

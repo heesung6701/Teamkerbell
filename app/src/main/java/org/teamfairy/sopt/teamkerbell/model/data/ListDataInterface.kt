@@ -6,7 +6,7 @@ package org.teamfairy.sopt.teamkerbell.model.data
  */
 interface ListDataInterface : UserInfoInterface {
     var u_idx: Int
-    var g_idx : Int
+    var room_idx : Int
 
     fun getMainTitle() : String
     fun getSubTitle() : String

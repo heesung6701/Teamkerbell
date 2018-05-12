@@ -20,7 +20,7 @@ data class SignalResponse(
 ) : ListDataInterface,Parcelable {
 
 
-    override var g_idx: Int = 0
+    override var room_idx: Int = 0
 
     override var name: String = ""
 

@@ -35,7 +35,7 @@ class VoteListAdapter(var dataList: ArrayList<ListDataInterface>) : RecyclerView
         else
             holder.tvTitle.setTextColor(Color.DKGRAY)
         holder.tvTitle.text = dataList[position].name
-        holder.tvCount.text = dataList[position].g_idx.toString()
+        holder.tvCount.text = dataList[position].room_idx.toString()
         holder.tvSubTitle.text = dataList[position].getTime()
 
     }

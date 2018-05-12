@@ -48,11 +48,11 @@ class MakeGroupTask(context: Context, handler: Handler, token : String?): GetMes
             if(baseJsonResponse.has("data")) {
                 val data = baseJsonResponse.getJSONObject("data")
 
-                group = Team(data.getInt("g_idx"),
-                        data.getString("real_name"),
-                        data.getString("ctrl_name"))
-                if (data.has("photo"))
-                    group.photo = data.getString("photo")
+                group = Team(data.getInt(Team.ARG_G_IDX),
+                        data.getString(Team.ARG_REAL_NAME),
+                        data.getString(Team.ARG_CTRL_NAME))
+                if (data.has(Team.ARG_PHOTO))
+                    group.photo = data.getString(Team.ARG_PHOTO)
 
                 return group as Any
             }

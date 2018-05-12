@@ -3,6 +3,8 @@ package org.teamfairy.sopt.teamkerbell.activities.home.room
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -12,6 +14,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import org.json.JSONObject
 
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
@@ -26,10 +30,14 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
+import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 
@@ -38,29 +46,31 @@ import kotlin.properties.Delegates
  * Use the [RoomListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RoomListFragment : Fragment(),View.OnClickListener ,SwipeRefreshLayout.OnRefreshListener, HasGroupFragment{
+class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, HasGroupFragment {
 
     private val TAG = this::class.java.simpleName
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
 
     override fun onRefresh() {
-        NetworkUtils.connectRoomList(activity.applicationContext,null,true)
-        NetworkUtils.connectJoinedRoomList(activity.applicationContext,null,true)
+        NetworkUtils.connectRoomList(activity.applicationContext, null, true)
+        NetworkUtils.connectJoinedRoomList(activity.applicationContext, null, true)
         mSwipeRefreshLayout.isRefreshing = false
     }
 
 
-    override  var group: Team by Delegates.notNull()
+    override var group: Team by Delegates.notNull()
 
     var adapter: RoomListAdapter by Delegates.notNull()
     var dataList: ArrayList<Room> = arrayListOf<Room>()
-    var recyclerView : RecyclerView by Delegates.notNull()
+    var recyclerView: RecyclerView by Delegates.notNull()
 
     var file: File? = null
 
     var isUpdateJoined: IsUpdateR? = null
 
+
+    var fab : FloatingActionButton by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         group = arguments.getParcelable(ARG_GROUP)
@@ -75,12 +85,13 @@ class RoomListFragment : Fragment(),View.OnClickListener ,SwipeRefreshLayout.OnR
         dataList = arrayListOf<Room>()
         adapter = RoomListAdapter(dataList, activity.applicationContext)
         adapter.setOnItemClickListener(this)
+        adapter.setOnLongClickHandler(HandlerDelete(this))
         recyclerView.adapter = adapter
 
-        val fab = v.findViewById<FloatingActionButton>(R.id.fab)
+        fab = activity.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            val i = Intent(activity.applicationContext,MakeRoomActivity::class.java)
-            i.putExtra(IntentTag.INTENT_GROUP,group)
+            val i = Intent(activity.applicationContext, MakeRoomActivity::class.java)
+            i.putExtra(IntentTag.INTENT_GROUP, group)
             startActivity(i)
         }
 
@@ -106,8 +117,12 @@ class RoomListFragment : Fragment(),View.OnClickListener ,SwipeRefreshLayout.OnR
 
     override fun onResume() {
         super.onResume()
+
+        NetworkUtils.connectRoomList(activity.applicationContext, HandlerGet(this))
+        NetworkUtils.connectJoinedRoomList(activity.applicationContext, HandlerGet(this))
+
         updateRoomList()
-        addChangeJoinedListener()
+        addChangeJoinedRoomListener()
     }
 
     override fun onStop() {
@@ -115,40 +130,32 @@ class RoomListFragment : Fragment(),View.OnClickListener ,SwipeRefreshLayout.OnR
         isUpdateJoined?.removeAllChangeListeners()
     }
 
-    private fun updateRoomList() {
-
-        val realm = getRealmDefault(activity.applicationContext)
-
-        dataList.clear()
-        adapter.notifyDataSetChanged()
-        var i = 0
-        val groupR = realm.where(JoinedRoomR::class.java).equalTo(JSON_G_IDX,group.g_idx).findAll()
-        groupR.forEach {
-            val roomR = realm.where(RoomR::class.java).equalTo(JSON_ROOM_IDX,it.room_idx).findFirst()?:RoomR()
-            dataList.add(roomR.toChatRoom())
-//            updateRecentMessage(it.toChatRoom(), i)
-            i++
-        }
-        adapter.notifyDataSetChanged()
-    }
 
     override fun onClick(p0: View?) {
-        val pos= recyclerView.getChildAdapterPosition(p0)
+        val pos = recyclerView.getChildAdapterPosition(p0)
     }
 
-    private fun addChangeJoinedListener() {
+    private fun addChangeJoinedRoomListener() {
 
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        isUpdateJoined = realm.where(IsUpdateR::class.java).equalTo("what", StatusCode.joinedGroupChange).findFirst()
+        isUpdateJoined = realm.where(IsUpdateR::class.java).equalTo("what", StatusCode.joinedRoomChange).findFirst()
         if (isUpdateJoined == null) {
             realm.beginTransaction()
-            isUpdateJoined = realm.createObject(IsUpdateR::class.java, StatusCode.joinedGroupChange)
+            isUpdateJoined = realm.createObject(IsUpdateR::class.java, StatusCode.joinedRoomChange)
             isUpdateJoined!!.isUpdate = false
             realm.commitTransaction()
+        } else {
+            if (isUpdateJoined?.isUpdate == true) {
+                realm.beginTransaction()
+                updateRoomList()
+                isUpdateJoined!!.isUpdate = false
+                realm.commitTransaction()
+            }
         }
         isUpdateJoined!!.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
             if (t.isUpdate) {
-                Log.d("$TAG /isUpdateJoined","is ${t.isUpdate}")
+                Log.d("$TAG /isUpdateJoinedRoom", "is ${t.isUpdate}")
+
                 updateRoomList()
                 realm.executeTransaction {
                     t.isUpdate = false
@@ -158,11 +165,98 @@ class RoomListFragment : Fragment(),View.OnClickListener ,SwipeRefreshLayout.OnR
 
     }
 
+    private fun deleteRoom(room: Room) {
+        val task = GetMessageTask(activity.applicationContext, HandlerDeleteSuccess(this, room), LoginToken.getToken(activity.applicationContext))
+
+        val jsonParam = JSONObject()
+        try {
+            jsonParam.put(URL_LEAVE_ROOM_PARAM_ROOM_IDX, room.room_idx)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, jsonParam.toString())
+    }
+
+    private fun updateRoomList() {
+
+        val realm = getRealmDefault(activity.applicationContext)
+
+        dataList.clear()
+        adapter.notifyDataSetChanged()
+        var i = 0
+        val groupR = realm.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll()
+        groupR.forEach {
+            val roomR = realm.where(RoomR::class.java).equalTo(Room.ARG_ROOM_IDX, it.room_idx).findFirst()
+                    ?: RoomR()
+
+            dataList.add(roomR.toChatRoom())
+//            updateRecentMessage(it.toChatRoom(), i)
+            i++
+        }
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun connectRoomList(b: Boolean) {
+        NetworkUtils.connectRoomList(activity.applicationContext, HandlerGet(this), b)
+    }
+
+    fun successDelete(room: Room) {
+        Toast.makeText(activity.applicationContext, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+        realm.executeTransactionAsync {
+            it.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).equalTo(Room.ARG_ROOM_IDX, room.room_idx).findFirst()?.deleteFromRealm()
+        }
+        connectRoomList(true)
+    }
+
+    private class HandlerGet(fragment: RoomListFragment) : Handler() {
+        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
+
+        override fun handleMessage(msg: Message) {
+            val fragment = mFragment.get()
+            if (fragment != null) {
+                fragment.updateRoomList()
+            }
+        }
+    }
+
+    private class HandlerDelete(fragment: RoomListFragment) : Handler() {
+        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
+
+        override fun handleMessage(msg: Message) {
+            val fragment = mFragment.get()
+            if (fragment != null) {
+                fragment.deleteRoom(fragment.dataList[msg.what])
+            }
+        }
+    }
+
+    private class HandlerDeleteSuccess(fragment: RoomListFragment, var room: Room) : Handler() {
+        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
+
+        override fun handleMessage(msg: Message) {
+            val fragment = mFragment.get()
+            if (fragment != null) {
+                val activity = fragment.activity
+                when (msg.what) {
+                    Utils.MSG_SUCCESS -> {
+                        fragment.successDelete(room)
+                    }
+                    else -> {
+                        Toast.makeText(activity.applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+
     override fun changeGroup(g: Team) {
-        group=g
+        group = g
         updateRoomList()
 
     }
+
 
     companion object {
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

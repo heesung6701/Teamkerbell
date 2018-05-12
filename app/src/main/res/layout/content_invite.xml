@@ -29,7 +29,7 @@
             android:layout_height="24dp"
             android:textSize="14sp"
             android:text="@string/txt_copy_url"
-            android:background="@drawable/shape_round"
+            android:background="@drawable/shape_round_btn"
             android:textColor="@color/white"
             android:padding="3dp"
             />

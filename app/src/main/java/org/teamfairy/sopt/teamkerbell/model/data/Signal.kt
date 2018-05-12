@@ -18,7 +18,7 @@ data class Signal(
         var chat_idx: Int?,
         var write_time: String,
         var open_status: Int?,
-        override var g_idx: Int, //Foreign Key
+        override var room_idx: Int, //Foreign Key
         var content: String?,
         var entire_status: Int,
         var color: String?
@@ -64,7 +64,7 @@ data class Signal(
         signalR.color = color
         signalR.content = content
         signalR.entire_status = entire_status
-        signalR.g_idx = g_idx
+        signalR.g_idx = room_idx
         signalR.open_status = open_status
         signalR.u_idx = u_idx
         signalR.write_time = write_time
@@ -91,7 +91,7 @@ data class Signal(
         writeValue(chat_idx)
         writeString(write_time)
         writeValue(open_status)
-        writeInt(g_idx)
+        writeInt(room_idx)
         writeString(content)
         writeInt(entire_status)
         writeString(color)

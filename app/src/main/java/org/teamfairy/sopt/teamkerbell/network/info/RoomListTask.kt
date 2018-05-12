@@ -45,7 +45,7 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
                         val r = RoomR()
-                        r.chatroom_idx = data.getInt(JSON_ROOM_IDX)
+                        r.room_idx = data.getInt(JSON_ROOM_IDX)
                         r.real_name = data.getString(JSON_REAL_NAME)
                         r.ctrl_name = data.getString(JSON_CTRL_NAME)
                         if (data.has(JSON_PHOTO))
@@ -53,6 +53,7 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                         realm.copyToRealmOrUpdate(r)
                     }
                     msgCode = MSG_SUCCESS
+
                     realm.commitTransaction()
 
 

@@ -1,6 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -9,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -18,7 +16,6 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_vote.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ChoiceListAdapter
@@ -289,10 +286,10 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     private fun enableCompleteButton() {
         if (unableVote()) {
             btn_complete.isEnabled = false
-            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_gray_light)
+            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn_gray_light)
         } else {
             btn_complete.isEnabled = true
-            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round)
+            btn_complete.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn)
         }
     }
 
