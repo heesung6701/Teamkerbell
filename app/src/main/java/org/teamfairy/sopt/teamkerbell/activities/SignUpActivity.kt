@@ -1,19 +1,14 @@
 package org.teamfairy.sopt.teamkerbell.activities
 
-import android.Manifest.permission.READ_PHONE_STATE
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.content.ContextCompat
-import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -24,12 +19,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.*
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_CLIENTTOKEN
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_ID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK_PARAM_ID
@@ -37,73 +27,25 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_PHONE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_PWD
-import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import java.net.URLEncoder
 
 class SignUpActivity : AppCompatActivity() {
 
-    private val mHandlerSignUp: Handler = HandlerSignUp(this)
 
-    private class HandlerSignUp(activity: SignUpActivity) : Handler() {
-        private val mActivity: WeakReference<SignUpActivity> = WeakReference<SignUpActivity>(activity)
-
-        override fun handleMessage(msg: Message) {
-
-            val activity = mActivity.get()
-
-            if (activity != null) {
-
-
-                activity.mSignUpTask = null
-
-                val result = msg.data.getString("message")
-
-                when {
-                    result.contains("Success") -> {
-                        val intent = Intent(activity.applicationContext, LoginActivity::class.java)
-                        intent.putExtra(IntentTag.FROMSIGNUP, true)
-                        activity.startActivity(intent)
-                        activity.finish()
-                    }
-                    result.contains("Failed") -> Toast.makeText(activity.applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    val mHandlerIdCheck: Handler = HandlerIdCheck(this)
-
-    private class HandlerIdCheck(activity: SignUpActivity) : Handler() {
-        private val mActivity: WeakReference<SignUpActivity> = WeakReference<SignUpActivity>(activity)
-
-        override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-                val result = msg.data.getString("message")
-
-                activity.isExistID = result.contains("Exist")
-                if (activity.isExistID) {
-                    activity.email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.red), PorterDuff.Mode.SRC_ATOP)
-                    activity.email.error = activity.getString(R.string.error_field_existed)
-                } else {
-                    activity.email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(activity.applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
-                    activity.email.error = null
-                }
-
-            }
-        }
-    }
 
 
     private var mSignUpTask: GetMessageTask? = null
     private var isSamePwd: Boolean = false
     private var isExistID: Boolean = false
 
+    var emailStr : String =""
+    var passwordStr : String = ""
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -158,6 +100,8 @@ class SignUpActivity : AppCompatActivity() {
             }
         })
 
+        val idCheckTask = GetMessageTask(applicationContext, HandlerIdCheck(this))
+
         email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -167,7 +111,6 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(txt: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (txt!!.isNotEmpty()) {
-                    val idCheckTask = GetMessageTask(applicationContext, mHandlerIdCheck)
                     val encodeTxt: String = URLEncoder.encode(txt.toString(), "UTF-8")
                     val str = String(encodeTxt.toByteArray(Charsets.UTF_8))
 
@@ -233,8 +176,8 @@ class SignUpActivity : AppCompatActivity() {
         password.error = null
 
         // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
-        val passwordStr = password.text.toString()
+        emailStr = email.text.toString()
+        passwordStr = password.text.toString()
 
         var cancel = false
         var focusView: View? = null
@@ -287,8 +230,57 @@ class SignUpActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            mSignUpTask = GetMessageTask(applicationContext, mHandlerSignUp)
+            mSignUpTask = GetMessageTask(applicationContext, HandlerSignUp(this))
             mSignUpTask!!.execute(URL_REGIST, jsonParam.toString())
+        }
+    }
+
+
+    fun signUpSuccess(msg: Message) {
+        mSignUpTask = null
+
+
+        when (msg.what) {
+            MSG_SUCCESS -> {
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                intent.putExtra(FROMSIGNUP, true)
+                intent.putExtra(INTENT_ID, emailStr)
+                intent.putExtra(INTENT_PWD, passwordStr)
+                startActivity(intent)
+                finish()
+            }
+            else -> {
+                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    fun updateIdCheck(msg : Message){
+        val result = msg.data.getString("message")
+
+        isExistID = result.contains("Exist")
+        if (isExistID) {
+            email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.red), PorterDuff.Mode.SRC_ATOP)
+            email.error = getString(R.string.error_field_existed)
+        } else {
+            email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
+            email.error = null
+        }
+    }
+    private class HandlerSignUp(activity: SignUpActivity) : Handler() {
+        private val mActivity: WeakReference<SignUpActivity> = WeakReference<SignUpActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+
+            mActivity.get()?.signUpSuccess(msg)
+        }
+    }
+
+
+    private class HandlerIdCheck(activity: SignUpActivity) : Handler() {
+        private val mActivity: WeakReference<SignUpActivity> = WeakReference<SignUpActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            mActivity.get()?.updateIdCheck(msg)
         }
     }
 }

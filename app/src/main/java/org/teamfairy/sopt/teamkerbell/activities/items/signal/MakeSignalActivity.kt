@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
-import io.realm.RealmList
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*
@@ -22,7 +21,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getReal
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
@@ -31,14 +30,14 @@ import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_CHATID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_CONTENT
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_ENTIRESTATUS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_GID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_OPENSTATUS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_UID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT_PARAM_USERARRAY
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CHATID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_OPENSTATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_USERARRAY
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -124,12 +123,12 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
 
                         val jsonParam = JSONObject()
                         try {
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_UID, LoginToken.getUserIdx(applicationContext))
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_CHATID, group.g_idx)
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_GID, group.g_idx)
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_CONTENT, content)
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_OPENSTATUS, openStatus)
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_ENTIRESTATUS, entireStatus)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_UID, LoginToken.getUserIdx(applicationContext))
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CHATID, group.g_idx)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_ROOM_IDX, room!!.room_idx)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, content)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_OPENSTATUS, openStatus)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS, entireStatus)
                             val jsonArray = JSONArray()
                             if (entireStatus == ENTIRE_STATUS_CHOSE) {
                                 userList.iterator().forEach {
@@ -137,7 +136,7 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
                                         jsonArray.put(it.u_idx)
                                 }
                             }
-                            jsonParam.put(URL_MAKE_LIGHT_PARAM_USERARRAY, jsonArray)
+                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_USERARRAY, jsonArray)
 
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -145,7 +144,7 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
 
                         val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
                         isConnecting = true
-                        task.execute(URL_MAKE_LIGHT, jsonParam.toString())
+                        task.execute(URL_MAKE_SIGNAL, jsonParam.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
 
@@ -238,7 +237,7 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_LIGHT, idx, activity.content, activity.group, LoginToken.getUserIdx(activity.applicationContext), activity)
+                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_LIGHT, idx, activity.content, activity.group, activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
 
                         Handler().postDelayed(Runnable {
                             activity.finish()

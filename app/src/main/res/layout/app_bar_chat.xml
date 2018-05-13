@@ -18,8 +18,8 @@
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -28,7 +28,7 @@
             android:id="@+id/toolbar"
             android:layout_width="wrap_content"
             app:contentInsetRight="16dp"
-            android:layout_height="46dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/transparent"
             app:popupTheme="@style/AppTheme.PopupOverlay" />

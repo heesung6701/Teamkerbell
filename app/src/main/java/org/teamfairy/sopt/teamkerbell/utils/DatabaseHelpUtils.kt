@@ -115,14 +115,14 @@ class DatabaseHelpUtils {
             return pref.getBoolean(key,true)
         }
 
-        fun setRecentChatIdx(applicationContext: Context, g_idx: Int, chat_idx:Int){
+        fun setRecentChatIdx(applicationContext: Context, room_idx: Int, chat_idx:Int){
             val pref = applicationContext.getSharedPreferences("recentChatIdx", Context.MODE_PRIVATE).edit()
-            pref.putInt("group$g_idx", chat_idx)
+            pref.putInt("room$room_idx", chat_idx)
             pref.apply()
         }
-        fun getRecentChatIdx(applicationContext: Context, g_idx: Int) : Int{
+        fun getRecentChatIdx(applicationContext: Context, room_idx: Int) : Int{
             val pref = applicationContext.getSharedPreferences("recentChatIdx", Context.MODE_PRIVATE)
-            return pref.getInt("group$g_idx", -1)
+            return pref.getInt("room$room_idx", -1)
         }
 
 

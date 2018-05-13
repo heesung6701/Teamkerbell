@@ -1,17 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter
 
-import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.LinearLayout
-import android.support.v4.content.ContextCompat
-import android.text.TextUtils
-import org.teamfairy.sopt.teamkerbell.listview.viewholder.ListContentHolder
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Signal
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.viewholder.VoteListViewHolder
 

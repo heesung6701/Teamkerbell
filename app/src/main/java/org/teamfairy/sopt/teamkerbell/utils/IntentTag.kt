@@ -13,12 +13,20 @@ class IntentTag {
         const val INTENT_USER : String="USER"
         const val INTENT_GROUP : String="GROUP"
         const val INTENT_ROOM : String="CHATROOM"
+        const val INTENT_TASK : String="TASK"
+
+        const val INTENT_CONTENT : String="CONTENT"
+
+
+        const val INTENT_MODE : String="MODE"
+        const val INTENT_ID : String="ID"
+        const val INTENT_PWD : String="PWD"
+
+        const val INTENT_SIGNAL : String="SIGNAL"
         const val INTENT_NOTICE : String="NOTICE"
         const val INTENT_VOTE : String="VOTE"
         const val INTENT_ROLE : String="ROLE"
-        const val INTENT_TASK : String="TASK"
-
-        const val INTENT_SIGNAL : String="SIGNAL"
+        const val INTENT_PICK_IDX : String="PICK_IDX"
 
 
         const val INTENT_RESPONDED : String="RESPONDED"

@@ -122,7 +122,7 @@ class MakeRoomActivity : AppCompatActivity() {
 
                     realm.commitTransaction()
 
-                    FirebaseMessageUtils.setDatabaseGroup(room.ctrl_name)
+                    FirebaseMessageUtils.setDatabaseGroup(group,room)
                     FirebaseMessageUtils.dataBaseEndpoints.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(0)
 
                     finish()

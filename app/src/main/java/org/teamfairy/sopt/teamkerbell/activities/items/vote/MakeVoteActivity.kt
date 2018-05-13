@@ -13,12 +13,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ContextThemeWrapper
 import android.view.View
-import android.view.WindowManager
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
-import io.realm.RealmResults
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*
@@ -26,17 +24,13 @@ import kotlinx.android.synthetic.main.content_make_vote.*
 import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.iv_drop_down
-import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_CHOICE
@@ -305,7 +299,7 @@ class MakeVoteActivity : AppCompatActivity(), View.OnClickListener {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_VOTE, idx.toInt(), activity.edt_content.text.toString(), activity.group!!, LoginToken.getUserIdx(activity.applicationContext), activity)
+                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_VOTE, idx.toInt(), activity.edt_content.text.toString(), activity.group,activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
 
                         Handler().postDelayed(Runnable {
                             val intent = Intent(activity.applicationContext, VoteActivity::class.java)

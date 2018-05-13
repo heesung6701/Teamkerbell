@@ -116,8 +116,6 @@ class MakeGroupActivity : AppCompatActivity() {
                     DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
                     DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
 
-                    FirebaseMessageUtils.setDatabaseGroup(group.ctrl_name)
-                    FirebaseMessageUtils.dataBaseEndpoints.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(0)
 
                     val i = Intent(application,HomeActivity::class.java)
                     i.putExtra(IntentTag.INTENT_GROUP,group)

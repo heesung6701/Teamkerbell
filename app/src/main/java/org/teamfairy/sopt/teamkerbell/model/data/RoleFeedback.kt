@@ -3,6 +3,7 @@ package org.teamfairy.sopt.teamkerbell.model.data
 import android.content.Context
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 
 
@@ -13,20 +14,13 @@ class RoleFeedback(
         var response_idx: Int,
         var u_idx: Int,
         var content: String
-) : UserInfoInterface {
+) : UserInfoInterface() {
 
-    override var name: String = ""
-
-    override var photo: String = ""
-
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
+    fun setPhotoInfo(context: Context) {
+        super.setPhotoInfo(context, u_idx)
     }
 
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
+    fun setPhotoInfo(realm: Realm) {
+        super.setPhotoInfo(realm, u_idx)
     }
 }

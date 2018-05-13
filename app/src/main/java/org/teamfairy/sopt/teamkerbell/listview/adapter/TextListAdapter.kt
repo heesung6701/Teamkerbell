@@ -8,14 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.viewholder.TextViewHolder
 
 /**
  * Created by lumiere on 2018-05-05.
  */
-class  TextListAdapter(var dataList : ArrayList<GroupInterface>,var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
+class  TextListAdapter(var dataList : ArrayList<GroupInterface>, var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
 
      var currentIdx : Int =-1
     private var onItemClick: View.OnClickListener? = null

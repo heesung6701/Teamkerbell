@@ -10,4 +10,9 @@ open class IsUpdateR() : RealmObject(){
     @PrimaryKey
     var what: Int=-1
     var isUpdate : Boolean = false
+
+    companion object {
+        const  val ARG_WHAT = "what"
+
+    }
 }

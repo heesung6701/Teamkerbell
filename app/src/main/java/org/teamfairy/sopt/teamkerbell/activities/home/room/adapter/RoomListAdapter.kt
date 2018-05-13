@@ -5,18 +5,10 @@ import android.os.Handler
 import android.os.Message
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.LinearLayout
-import android.support.v4.content.ContextCompat
-import android.text.TextUtils
-import org.teamfairy.sopt.teamkerbell.listview.viewholder.ListContentHolder
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.sendMessage
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.home.room.viewholder.RoomViewHolder
-import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.Signal
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 
 
@@ -42,11 +34,11 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         val room = dataList[position]
 
         holder!!.tvName.text = room.real_name
-        holder.tvContent.text = dataList[position].real_name
-        holder.tvTime.text = dataList[position].getTime()
+        holder.tvContent.text = room.lastMsgStr
+        holder.tvTime.text = room.lastMsgTime
         if(dataList[position].newMsgCnt>0){
             holder.tvCount.visibility=View.VISIBLE
-            holder.tvCount.text= dataList[position].newMsgCnt.toString()
+            holder.tvCount.text= room.newMsgCnt.toString()
         }else
             holder.tvCount.visibility=View.INVISIBLE
 

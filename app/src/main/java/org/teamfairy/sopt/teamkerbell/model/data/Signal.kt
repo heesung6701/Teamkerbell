@@ -5,6 +5,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -22,24 +24,14 @@ data class Signal(
         var content: String?,
         var entire_status: Int,
         var color: String?
-) : ListDataInterface, Parcelable {
+) : UserInfoInterface(), ListDataInterface, Parcelable {
 
-
-    override var name: String = ""
-
-    override var photo: String = ""
-
-
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
+    fun setPhotoInfo(context: Context) {
+        super.setPhotoInfo(context, u_idx)
     }
 
-
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
+    fun setPhotoInfo(realm: Realm) {
+        super.setPhotoInfo(realm, u_idx)
     }
 
     override fun getMainTitle(): String {

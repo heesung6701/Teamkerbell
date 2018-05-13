@@ -1,7 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.vote
 
 import android.content.Intent
-import android.net.Uri
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.os.Handler
@@ -20,12 +19,11 @@ import kotlinx.android.synthetic.main.fragment_vote_list.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteListAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_VOTE
 import org.teamfairy.sopt.teamkerbell.network.info.VoteListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP

@@ -28,6 +28,7 @@ class NoticeActivity : AppCompatActivity() {
 
         val notice = intent.getParcelableExtra<Notice>(INTENT_NOTICE)
         notice.setPhotoInfo(applicationContext)
+        notice.setGroupInfo(applicationContext)
 
         tv_title.text=notice.getMainTitle()
         tv_content.text=notice.content

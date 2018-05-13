@@ -4,10 +4,8 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
 import android.util.Log
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_LIGHT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MODIFY_ROLE_USER
@@ -28,9 +26,12 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_USER_ARRAY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL_STR
@@ -70,9 +71,10 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             if (params[0] == URL_REGIST ||
                     params[0] == URL_LOGIN ||
                     params[0] == URL_MAKE_NOTICE ||
-                    params[0] == URL_MAKE_LIGHT ||
+                    params[0] == URL_MAKE_SIGNAL ||
                     params[0] == URL_MAKE_VOTE ||
-                    params[0] == URL_INVITE ||
+                    params[0] == URL_INVITE_GROUP ||
+                    params[0] == URL_INVITE_ROOM ||
                     params[0] == URL_RESPONSE_LIGHTS ||
                     params[0] == URL_RESPONSE_PRESS ||
                     params[0] == URL_RESPONSE_NOTICE ||
@@ -173,7 +175,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             try {
 
-                if (urlConnection.responseCode / 100 == 2) {
+                    if (urlConnection.responseCode / 100 == 2) {
                     inputStream = urlConnection.inputStream
                 } else {
                     inputStream = urlConnection.errorStream

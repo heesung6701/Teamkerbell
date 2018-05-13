@@ -27,6 +27,7 @@
     <string name="title_activity_role_list">역할분담</string>
     <string name="title_activity_role">역할분담</string>
     <string name="title_activity_task">역할분담</string>
+    <string name="title_activity_make_role">역할분담 만들기</string>
 
 
     <!-- Strings related to login -->
@@ -68,6 +69,9 @@
     <string name="txt_enter_vote_example">항목을 입력해주세요</string>
     <string name="txt_select_room">채팅방을 선택해주세요.</string>
     <string name="txt_end_time">마감 시간</string>
+    <string name="txt_enter_title">제목을 입력해주세요</string>
+    <string name="txt_add_task">항목 추가하기</string>
+
 
     <string name="action_notice">공지</string>
     <string name="action_pick">PICK</string>
@@ -98,7 +102,6 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_make_role">MakeRoleActivity</string>
-
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>

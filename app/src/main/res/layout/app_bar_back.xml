@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -28,7 +28,7 @@
         app:titleTextColor="@color/black"
         android:layout_width="wrap_content"
         app:contentInsetRight="16dp"
-        android:layout_height="@dimen/action_bar_size"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/transparent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />

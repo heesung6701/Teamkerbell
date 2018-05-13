@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
+import org.teamfairy.sopt.teamkerbell.R.id.name
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -17,28 +20,15 @@ data class SignalResponse(
         var color: String?,
         var content: String?,
         var write_time: String?
-) : ListDataInterface,Parcelable {
+) : UserInfoInterface(), ListDataInterface,Parcelable {
 
 
     override var room_idx: Int = 0
 
-    override var name: String = ""
-
-    override var photo: String = ""
+    fun setPhotoInfo(context: Context) =super.setPhotoInfo(context,u_idx)
 
 
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
-    }
-
-
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
-
-    }
+    fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm,u_idx)
 
     override fun getMainTitle(): String {
         if (content.isNullOrEmpty()) content = ""

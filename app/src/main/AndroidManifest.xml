@@ -110,6 +110,10 @@
         <activity
             android:name=".activities.items.role.MakeRoleActivity"
             android:label="@string/title_activity_make_role"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.chat.ChatActivity"
+            android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import kotlinx.android.synthetic.main.activity_role_list.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
@@ -22,6 +23,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.RoleTaskListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import java.lang.ref.WeakReference
@@ -67,6 +69,7 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
         btn_back.setOnClickListener {
             finish()
         }
+
 
 
     }

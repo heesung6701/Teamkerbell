@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
@@ -16,15 +16,15 @@ import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
 /**
  * Created by lumiere on 2017-12-30.
  */
-class CardListAdapter(var dataList: ArrayList<ListDataInterface>,var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
+class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder?, position: Int) {
         val pos = holder!!.adapterPosition
 
         val notice = dataList[pos] as Notice
-        holder.tvTitle.text=notice.getMainTitle()
+        holder.tvTitle.text=notice.roomName
         holder.tvTime.text=notice.getSubTitle()
         holder.tvContent.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"${INTENT_USER}/${notice.u_idx}"))
+        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"$INTENT_USER/${notice.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 
         holder.tvName.text=notice.name

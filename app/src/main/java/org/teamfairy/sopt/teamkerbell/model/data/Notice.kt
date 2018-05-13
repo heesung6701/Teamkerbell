@@ -3,10 +3,15 @@ package org.teamfairy.sopt.teamkerbell.model.data
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.TimeUtils
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInfoInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
+import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -20,40 +25,24 @@ data class Notice(
         var content: String?,
         override var room_idx: Int,
         var notice_idx: Int
-) : ListDataInterface, Parcelable {
+) : GroupInfoInterface(), ListDataInterface, Parcelable {
+
 
     constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0)
 
-    override var name: String = ""
+    override fun getMainTitle(): String = content!!
 
-    override var photo: String = ""
+    override fun getSubTitle(): String = Utils.getMonthDayTime(write_time)
 
+    override fun getTime(): String = Utils.getMonthDayTime(write_time)
 
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
-    }
+    fun setGroupInfo(context: Context) = super.setGroupInfo(context, room_idx)
 
+    fun setGroupInfo(realm: Realm) = super.setGroupInfo(realm, room_idx)
 
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
-    }
+    fun setPhotoInfo(context: Context) = super.setPhotoInfo(context, u_idx)
 
-    override fun getMainTitle(): String {
-        return content!!
-    }
-
-    override fun getSubTitle(): String {
-        return Utils.getMonthDayTime(write_time)
-    }
-
-    override fun getTime(): String {
-        return Utils.getMonthDayTime(write_time)
-    }
-
-
+    fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm, u_idx)
 
     constructor(source: Parcel) : this(
             source.readInt(),

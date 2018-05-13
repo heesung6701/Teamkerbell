@@ -130,7 +130,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
     }
 
     companion object {
-        fun makeNotificationMessage(to : String,title : String, body : String,g_idx: Int) : String{
+        fun makeNotificationMessage(to : String,title : String, body : String,g_idx: Int,room_idx: Int) : String{
             val jsonParam = JSONObject()
 
             try {
@@ -141,6 +141,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
                 data.put("body",body)
                 data.put("title",title)
                 data.put("g_idx",g_idx)
+                data.put("room_idx",room_idx)
 
                 jsonParam.put("data",data)
 
@@ -151,7 +152,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
 
             return jsonParam.toString()
         }
-        fun makeDataMessage(to : String,title : String, body : String,g_idx: Int) : String{
+        fun makeDataMessage(to : String,title : String, body : String,g_idx: Int,room_idx: Int) : String{
             val jsonParam = JSONObject()
 
             try {
@@ -162,6 +163,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
                 data.put("body",body)
                 data.put("title",title)
                 data.put("g_idx",g_idx)
+                data.put("room_idx",g_idx)
                 jsonParam.put("data", data)
 
             } catch (e: Exception) {

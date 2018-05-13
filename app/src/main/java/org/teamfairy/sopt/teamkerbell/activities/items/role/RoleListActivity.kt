@@ -11,16 +11,19 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import kotlinx.android.synthetic.main.activity_role_list.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.RoleListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Role
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
@@ -37,6 +40,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
 
     var group: Team by Delegates.notNull()
+    var room : Room?=null
 
     private var dataList: ArrayList<Role> = arrayListOf<Role>()
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -49,6 +53,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
 
         group = intent.getParcelableExtra(INTENT_GROUP)
+        room =intent.getParcelableExtra(INTENT_ROOM)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -71,6 +76,13 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
             finish()
         }
 
+
+        fab.setOnClickListener {
+            val i = Intent(applicationContext, MakeRoleActivity::class.java)
+            i.putExtra(INTENT_GROUP,group)
+            i.putExtra(INTENT_ROOM,room)
+            startActivity(i)
+        }
     }
 
     override fun onResume() {
@@ -96,7 +108,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
                 val datas = msg.obj as ArrayList<Role>
                 dataList.clear()
                 datas.forEach {
-                    it.setPhotoInfo(applicationContext)
+//                    it.setPhotoInfo(applicationContext)
                     dataList.add(it)
                 }
                 adapter.notifyDataSetChanged()

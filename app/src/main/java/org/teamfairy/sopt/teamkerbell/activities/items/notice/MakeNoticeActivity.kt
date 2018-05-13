@@ -21,14 +21,13 @@ import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_ROOM_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_UID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -159,7 +158,7 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
                 val idx = obj.toInt()
                 val group = group
 
-                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group, LoginToken.getUserIdx(applicationContext),this)
+                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group,room!!, LoginToken.getUserIdx(applicationContext),this)
 
                 val intent = Intent(applicationContext, NoticeCardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

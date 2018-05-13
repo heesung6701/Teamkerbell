@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 
 
@@ -21,20 +22,14 @@ class TaskResponse(
         var fileArray: ArrayList<String>,
 
         var count: Int
-) : UserInfoInterface,Parcelable {
-    override var name: String = ""
+) : UserInfoInterface(),Parcelable {
 
-    override var photo: String = ""
-
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
+    fun setPhotoInfo(context: Context) {
+        super.setPhotoInfo(context, u_idx)
     }
 
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
+    fun setPhotoInfo(realm: Realm) {
+        super.setPhotoInfo(realm, u_idx)
     }
 
     constructor(source: Parcel) : this(

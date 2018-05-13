@@ -10,20 +10,17 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_notice_card.*
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -126,6 +123,8 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
 
         dataList.clear()
         result.iterator().forEach {
+            it.setPhotoInfo(applicationContext)
+            it.setGroupInfo(applicationContext)
             dataList.add(it)
         }
         adapterCard.notifyDataSetChanged()

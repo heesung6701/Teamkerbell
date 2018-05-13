@@ -3,6 +3,8 @@ package org.teamfairy.sopt.teamkerbell.model.data
 import android.content.Context
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -16,23 +18,16 @@ data class Pick(
         var content: String?,
         var pick_idx: Int?,
         override var room_idx: Int
-) : ListDataInterface {
-
-    override var name: String = ""
-
-    override var photo: String = ""
+) : UserInfoInterface(), ListDataInterface {
 
 
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
+    fun setPhotoInfo(context: Context) {
+      super.setPhotoInfo(context,u_idx)
     }
 
 
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-        name = userR.name
-        photo = userR.photo
+    fun setPhotoInfo(realm: Realm) {
+        super.setPhotoInfo(realm,u_idx)
     }
 
     override fun getMainTitle(): String {

@@ -38,6 +38,10 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_I
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.EXIT
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
 import java.lang.ref.WeakReference
 
 
@@ -116,14 +120,18 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // Set up the login form.
         populateAutoComplete()
 
+        easter_egg.setOnClickListener {
+            email.setText("hh@naver.com")
+            password.setText("12341234")
+        }
 
-        if (intent.getBooleanExtra(IntentTag.EXIT, false)) {
+        if (intent.getBooleanExtra(EXIT, false)) {
             finish()
         }
 
-        if (intent.getBooleanExtra(IntentTag.FROMSIGNUP, false)) {
-            email.setText(intent.getStringExtra("id") ?: "")
-            password.setText(intent.getStringExtra("pwd") ?: "")
+        if (intent.getBooleanExtra(FROMSIGNUP, false)) {
+            email.setText(intent.getStringExtra(INTENT_ID) ?: "")
+            password.setText(intent.getStringExtra(INTENT_PWD) ?: "")
             attemptLogin()
         }
 

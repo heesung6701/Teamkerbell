@@ -5,6 +5,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -20,14 +22,14 @@ data class Vote(
         override var room_idx: Int,
         var title: String?,
         var status: Int?
-) : ListDataInterface, Parcelable {
-    override var name: String = ""
+) : UserInfoInterface(),ListDataInterface, Parcelable {
 
-    override var photo: String = ""
+    fun setPhotoInfo(context: Context) {
+        super.setPhotoInfo(context, u_idx)
+    }
 
-    override fun setPhotoInfo(context: Context) {
-        val realm = DatabaseHelpUtils.getRealmDefault(context)
-        setPhotoInfo(realm)
+    fun setPhotoInfo(realm: Realm) {
+        super.setPhotoInfo(realm, u_idx)
     }
     fun toVoteR(): VoteR {
         val voteR = VoteR()
@@ -42,11 +44,7 @@ data class Vote(
     }
 
     fun isFinished() : Boolean = status==1
-    override fun setPhotoInfo(realm: Realm) {
-        val userR = realm.where(UserR::class.java).equalTo("u_idx", u_idx).findFirst() ?: UserR()
-            name = userR.name
-            photo = userR.photo
-    }
+
     override fun getMainTitle(): String {
         return title!!
     }

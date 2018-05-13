@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.model.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 
 /**

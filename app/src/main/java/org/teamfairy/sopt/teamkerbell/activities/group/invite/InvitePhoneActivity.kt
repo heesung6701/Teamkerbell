@@ -25,10 +25,10 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_PARAM_GID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_PARAM_NAME
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_PARAM_PHONE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_GID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_PHONE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -85,14 +85,14 @@ class InvitePhoneActivity : AppCompatActivity() {
 
         val jsonParam = JSONObject()
         try {
-            jsonParam.put(URL_INVITE_PARAM_GID, group.g_idx)
-            jsonParam.put(URL_INVITE_PARAM_NAME, name)
-            jsonParam.put(URL_INVITE_PARAM_PHONE, phone)
+            jsonParam.put(URL_INVITE_GROUP_PARAM_GID, group.g_idx)
+            jsonParam.put(URL_INVITE_GROUP_PARAM_NAME, name)
+            jsonParam.put(URL_INVITE_GROUP_PARAM_PHONE, phone)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         val inviteTask = GetMessageTask(applicationContext, HandlerInvite(this))
-        inviteTask.execute(URL_INVITE, jsonParam.toString())
+        inviteTask.execute(URL_INVITE_GROUP, jsonParam.toString())
     }
 
     fun invite(msg: Message) {

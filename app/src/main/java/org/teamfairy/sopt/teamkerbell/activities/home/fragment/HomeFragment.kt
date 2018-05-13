@@ -33,7 +33,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.GroupInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR

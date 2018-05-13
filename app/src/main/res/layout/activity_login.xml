@@ -34,6 +34,7 @@
             >
 
             <ImageView
+                android:id="@+id/easter_egg"
                 android:layout_width="140dp"
                 android:layout_height="130dp"
                 android:layout_gravity="bottom|center_horizontal"
