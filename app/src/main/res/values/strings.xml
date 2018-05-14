@@ -103,5 +103,6 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_chat">ChatActivity</string>
+    <string name="txt_my_profile">내프로필</string>
 
 </resources>

@@ -9,6 +9,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.*
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 
 /**
  * Created by lumiere on 2018-04-27.
@@ -46,15 +47,15 @@ class DatabaseHelpUtils {
             return userR.toUser()
         }
 
-
-
-        fun getUserListFromRealm(applicationContext: Context, dataListUser: ArrayList<User>, adapterUser: RecyclerView.Adapter<*>, group: Team) {
+        fun getUserListFromRealm(applicationContext: Context, dataListUser: ArrayList<User>, adapterUser: RecyclerView.Adapter<*>, group: Team,withoutUser : Boolean) {
 
             val realm = getRealmDefault(applicationContext)
 
             dataListUser.clear()
             adapterUser.notifyDataSetChanged()
-            val joinedRs = realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll()
+
+            val joinedRs = if(withoutUser) realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).notEqualTo(User.ARG_U_IDX,LoginToken.getUserIdx(applicationContext)).findAll()
+            else realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll()
             joinedRs.iterator().forEach {
                 val userR: UserR = realm.where(UserR::class.java).equalTo(User.ARG_U_IDX, it.u_idx).findFirst()
                         ?: UserR()
@@ -62,6 +63,10 @@ class DatabaseHelpUtils {
             }
             adapterUser.notifyDataSetChanged()
             realm.close()
+        }
+
+        fun getUserListFromRealm(applicationContext: Context, dataListUser: ArrayList<User>, adapterUser: RecyclerView.Adapter<*>, group: Team) {
+            getUserListFromRealm(applicationContext,dataListUser,adapterUser,group,false)
         }
         fun getGroupListFromRealm(applicationContext: Context, dataListGroup: ArrayList<Team>, adapterGroup: RecyclerView.Adapter<*>, group: Team) {
 

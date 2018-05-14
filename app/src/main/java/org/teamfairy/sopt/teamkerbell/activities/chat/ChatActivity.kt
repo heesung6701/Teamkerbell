@@ -558,7 +558,7 @@ class ChatActivity : AppCompatActivity() {
             Log.d(LOG_TAG, "removeListener")
             dataBaseEndpoints.removeEventListener(mEndPointListener)
             dataBaseMessages.removeEventListener(mMessageAddListener)
-            dataBaseLastMessage!!.child("chat_idx").removeEventListener(lastChatIdxListener)
+            dataBaseLastMessage!!.child(ARG_CHAT_IDX).removeEventListener(lastChatIdxListener)
             isAddedFirebaseListener = false
         }
     }
@@ -569,7 +569,7 @@ class ChatActivity : AppCompatActivity() {
             dataList.clear()
             dataBaseEndpoints.addValueEventListener(mEndPointListener)
             dataBaseMessages.addChildEventListener(mMessageAddListener)
-            dataBaseLastMessage!!.child("chat_idx").addValueEventListener(lastChatIdxListener)
+            dataBaseLastMessage!!.child(ARG_CHAT_IDX).addValueEventListener(lastChatIdxListener)
             isAddedFirebaseListener = true
         }
     }

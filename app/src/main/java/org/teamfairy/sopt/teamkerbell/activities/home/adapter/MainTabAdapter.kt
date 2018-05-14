@@ -1,16 +1,11 @@
 package org.teamfairy.sopt.teamkerbell.activities.home.adapter
 
-import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import org.teamfairy.sopt.teamkerbell.activities.home.fragment.ContactFragment
+import org.teamfairy.sopt.teamkerbell.activities.home.contact.ContactFragment
 import org.teamfairy.sopt.teamkerbell.activities.home.fragment.HomeFragment
-import org.teamfairy.sopt.teamkerbell.activities.home.interfaces.HasGroupFragment
-import org.teamfairy.sopt.teamkerbell.activities.home.interfaces.HasGroupFragment.Companion.ARG_GROUP
 import org.teamfairy.sopt.teamkerbell.activities.home.room.RoomListFragment
-import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
