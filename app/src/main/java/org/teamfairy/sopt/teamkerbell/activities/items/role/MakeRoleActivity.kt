@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
@@ -31,23 +33,13 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class MakeRoleActivity : AppCompatActivity() , View.OnClickListener {
-    override fun onClick(p0: View?) {
-        val pos = recyclerView.getChildAdapterPosition(p0)
-
-        room = dataListRoom[pos] as Room
-        adapter.currentIdx = room?.room_idx ?: -1
-        tv_room_name.text = room?.real_name ?: getText(R.string.txt_select_room)
-        closeRoomList()
+class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
+    override fun changeRoom(room: Room) {
+        this.room = room
     }
 
-    var group: Team by Delegates.notNull()
-    var room: Room? = null
-
-
-    private var adapter: TextListAdapter by Delegates.notNull()
-    private var dataListRoom = java.util.ArrayList<GroupInterface>()
-    private var recyclerView: RecyclerView by Delegates.notNull()
+    override var group: Team by Delegates.notNull()
+    override var room: Room? = null
 
 
     var edtTaskList = arrayListOf<EditText>()
@@ -60,7 +52,7 @@ class MakeRoleActivity : AppCompatActivity() , View.OnClickListener {
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM)
 
-        setRoomListInit()
+        SelectRoomFunc(this)
 
         layout_add_task.setOnClickListener {
             val edtView = layoutInflater.inflate(R.layout.item_vote_example_edt, null, false)
@@ -102,39 +94,6 @@ class MakeRoleActivity : AppCompatActivity() , View.OnClickListener {
     }
 
 
-    private fun setRoomListInit() {
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TextListAdapter(dataListRoom, applicationContext)
-        adapter.setOnItemClickListener(this)
-        adapter.currentIdx = room?.room_idx ?: -1
-        recyclerView.adapter = adapter
-
-        layout_select_room.setOnClickListener {
-            if (recyclerView.visibility != View.VISIBLE)
-                openRoomList()
-            else
-                closeRoomList()
-        }
-    }
-
-    private fun openRoomList() {
-
-        if (recyclerView.visibility != View.VISIBLE) {
-            recyclerView.visibility = View.VISIBLE
-            iv_drop_down.rotation = 180.0f
-
-            DatabaseHelpUtils.getRoomListFromRealm(applicationContext, dataListRoom as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group)
-        }
-    }
-
-    private fun closeRoomList() {
-        if (recyclerView.visibility != View.GONE) {
-            recyclerView.visibility = View.GONE
-            iv_drop_down.rotation = 0.0f
-        }
-
-    }
 
     override fun finish() {
 

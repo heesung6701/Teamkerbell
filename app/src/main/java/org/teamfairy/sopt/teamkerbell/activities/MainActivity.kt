@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         val i = Intent(applicationContext, MakeGroupActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(i)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
     }
 
     override fun onResume() {

@@ -72,5 +72,7 @@ class Room(
         var ARG_REAL_NAME = "real_name"
         var ARG_CTRL_NAME = "ctrl_name"
         var ARG_PHOTO = "photo"
+        var ARG_ALL_IDX = -1
+        var ARG_ALL = "All"
     }
 }

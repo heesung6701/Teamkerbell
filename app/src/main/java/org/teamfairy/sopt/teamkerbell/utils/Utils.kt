@@ -32,13 +32,13 @@ class Utils {
         const val TAB_BYMEMBER = 1
         const val TAB_NOTYET = 2
 
-        const val SIGNAL_RECEIVE = 1
-        const val SIGNAL_REQUEST = 2
+        const val SIGNAL_RECEIVER = 1
+        const val SIGNAL_SENDER = 2
         const val SIGNAL_ALL = 3
 
 
-        const val VOTE_RECEIVE = 1
-        const val VOTE_REQUEST = 2
+        const val VOTE_RECEIVER = 1
+        const val VOTE_SENDER = 2
         const val VOTE_ALL = 3
 
 

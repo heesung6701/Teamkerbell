@@ -125,9 +125,9 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
                     if (data.isSender(mContext))
-                        intent.putExtra("mode", Utils.SIGNAL_REQUEST)
+                        intent.putExtra("mode", Utils.SIGNAL_SENDER)
                     else
-                        intent.putExtra("mode", Utils.SIGNAL_RECEIVE)
+                        intent.putExtra("mode", Utils.SIGNAL_RECEIVER)
 
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     mContext.startActivity(intent)

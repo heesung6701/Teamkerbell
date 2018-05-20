@@ -6,6 +6,8 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import android.util.Log
 import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.*
@@ -83,11 +85,12 @@ class DatabaseHelpUtils {
             realm.close()
         }
 
-        fun getRoomListFromRealm(applicationContext: Context, dataListRoom: ArrayList<Room>, adapterRoom: RecyclerView.Adapter<*>, group: Team) {
+        fun getRoomListFromRealm(applicationContext: Context, dataListRoom: ArrayList<Room>, adapterRoom: RecyclerView.Adapter<*>, group: Team,containAll : Boolean) {
 
             val realm = getRealmDefault(applicationContext)
 
             dataListRoom.clear()
+            if(containAll) dataListRoom.add(Room(ARG_ALL_IDX,ARG_ALL,ARG_ALL))
             adapterRoom.notifyDataSetChanged()
             val joinedRoomR = realm.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll()
             joinedRoomR.iterator().forEach {
@@ -97,6 +100,9 @@ class DatabaseHelpUtils {
 
             adapterRoom.notifyDataSetChanged()
             realm.close()
+        }
+        fun getRoomListFromRealm(applicationContext: Context, dataListRoom: ArrayList<Room>, adapterRoom: RecyclerView.Adapter<*>, group: Team) {
+            getRoomListFromRealm(applicationContext,dataListRoom,adapterRoom,group,false)
         }
 
         const val PREF_ISUPDATE_USER = "user"

@@ -11,9 +11,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_notice_card.*
-import kotlinx.android.synthetic.main.app_bar_more.*
+import kotlinx.android.synthetic.main.app_bar_filter.*
 import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.R.id.tv_title
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.adapter.CardListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
@@ -30,76 +33,91 @@ import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 
-class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
+class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivityInterface {
+    override fun changeRoom(room: Room) {
+        this.room=room
+        connectNoticeList()
+    }
 
-
-    private var recyclerView : RecyclerView by Delegates.notNull()
 
     private var adapterCard: CardListAdapter by Delegates.notNull()
 
-    var adapterList: ListDataAdapter by Delegates.notNull()
+    private var adapterList: ListDataAdapter by Delegates.notNull()
     var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
+    private var recyclerView: RecyclerView by Delegates.notNull()
 
-    var group : Team by Delegates.notNull()
-    var room : Room by Delegates.notNull()
+
+
+    override var group: Team by Delegates.notNull()
+    override var room: Room?=null
 
     private var showCard = true
 
-    var divider : DividerItemDecoration by Delegates.notNull()
+    private var divider: DividerItemDecoration by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notice_card)
         setSupportActionBar(toolbar)
+        tv_title.text = supportActionBar!!.title
 
         group = intent.getParcelableExtra(INTENT_GROUP)
-        room = intent.getParcelableExtra(INTENT_ROOM)?:Room()
+        room = intent.getParcelableExtra(INTENT_ROOM) ?: Room()
 
 
-        adapterCard = CardListAdapter(dataList,applicationContext,this)
+        adapterCard = CardListAdapter(dataList, applicationContext, this)
 
-        recyclerView  = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recyclerView.adapter=adapterCard
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapterCard
 
-        adapterList = ListDataAdapter(dataList,applicationContext)
+
+        adapterList = ListDataAdapter(dataList, applicationContext)
         adapterList.setOnItemClick(this)
 
 
         divider = DividerItemDecoration(
                 recyclerView.context,
-        DividerItemDecoration.VERTICAL
+                DividerItemDecoration.VERTICAL
         )
         divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
 
+        FilterFunc(this)
 
-        tv_show_list.setOnClickListener {
-            changeMode()
-                  }
-        btn_back.setOnClickListener { onBackPressed() }
+
+        tv_show_list.setOnClickListener { changeMode() }
+
 
         fab.setOnClickListener { _ ->
-            val i = Intent(applicationContext,MakeNoticeActivity::class.java)
-            i.putExtra(INTENT_GROUP,group)
-            i.putExtra(INTENT_ROOM,room)
+            val i = Intent(applicationContext, MakeNoticeActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            i.putExtra(INTENT_GROUP, group)
+            i.putExtra(INTENT_ROOM, room)
             startActivity(i)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
+
+        btn_back.setOnClickListener { onBackPressed() }
+
+
     }
 
-    fun changeMode(){
-        showCard=!showCard
-        if(showCard){
-            tv_show_list.text=getString(R.string.action_show_card)
-            recyclerView.setPadding(0,0,0,0)
-            recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-            recyclerView.adapter=adapterCard
+
+
+    private fun changeMode() {
+        showCard = !showCard
+        if (showCard) {
+            tv_show_list.text = getString(R.string.action_show_card)
+            recyclerView.setPadding(0, 0, 0, 0)
+            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = adapterCard
 
             recyclerView.removeItemDecoration(divider)
 
-        }else{
-            tv_show_list.text=getString(R.string.action_show_list)
-            recyclerView.setPadding(16,16,16,16)
-            recyclerView.layoutManager=LinearLayoutManager(this)
-            recyclerView.adapter=adapterList
+        } else {
+            tv_show_list.text = getString(R.string.action_show_list)
+            recyclerView.setPadding(16, 16, 16, 16)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapterList
 
             recyclerView.addItemDecoration(divider)
         }
@@ -114,12 +132,12 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
 
-        val i = Intent(applicationContext,NoticeActivity::class.java)
-        i.putExtra(INTENT_NOTICE,dataList[pos] as Notice)
+        val i = Intent(applicationContext, NoticeActivity::class.java)
+        i.putExtra(INTENT_NOTICE, dataList[pos] as Notice)
         startActivity(i)
     }
 
-    fun getNoticeList(result : ArrayList<Notice>) {
+    fun getNoticeList(result: ArrayList<Notice>) {
 
         dataList.clear()
         result.iterator().forEach {
@@ -143,12 +161,14 @@ class NoticeCardActivity : AppCompatActivity() ,View.OnClickListener{
     }
 
     private class HandlerGet(fragment: NoticeCardActivity) : Handler() {
-        private val mFragment: WeakReference<NoticeCardActivity> = WeakReference<NoticeCardActivity>(fragment)
+        private val mActivity: WeakReference<NoticeCardActivity> = WeakReference<NoticeCardActivity>(fragment)
 
         override fun handleMessage(msg: Message) {
-            if(msg.obj is ArrayList<*>){
-                mFragment.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
+            if (msg.obj is ArrayList<*>) {
+                mActivity.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
             }
         }
     }
+
+
 }

@@ -114,7 +114,8 @@
         <activity
             android:name=".activities.chat.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.unperformed.UnperformedNoticeActivity"></activity>
     </application>
 
 </manifest>

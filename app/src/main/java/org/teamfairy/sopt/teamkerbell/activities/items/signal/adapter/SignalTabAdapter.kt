@@ -1,11 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter
 
-import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
@@ -25,11 +24,11 @@ class SignalTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
         this.tabCount = tabCount
         this.receivedTab = SignalListFragment()
         receivedTab.group=group
-        receivedTab.state=Utils.SIGNAL_RECEIVE
+        receivedTab.state=Utils.SIGNAL_RECEIVER
 
         this.requestedTab = SignalListFragment()
         requestedTab.group=group
-        requestedTab.state=Utils.SIGNAL_REQUEST
+        requestedTab.state=Utils.SIGNAL_SENDER
     }
 
     override fun getItem(position: Int): Fragment? {
@@ -45,5 +44,10 @@ class SignalTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
         return null
     }
 
+    fun changeRoom(room: Room){
+        requestedTab.changeRoom(room)
+        receivedTab.changeRoom(room)
+
+    }
     override fun getCount(): Int = tabCount
 }

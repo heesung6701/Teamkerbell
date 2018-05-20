@@ -53,7 +53,6 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
     var txtSearch : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        group = arguments.getParcelable(ARG_GROUP)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -114,27 +113,6 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
         group=g
     }
 
-    companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ContactFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        fun newInstance(group : Team): ContactFragment {
-            val fragment = ContactFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_GROUP, group)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
 
 }// Required empty public constructor

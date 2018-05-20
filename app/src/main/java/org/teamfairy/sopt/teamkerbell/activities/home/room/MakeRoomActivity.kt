@@ -9,7 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
-import kotlinx.android.synthetic.main.app_bar_back.*
+import kotlinx.android.synthetic.main.app_bar_close.*
 import kotlinx.android.synthetic.main.content_make_room.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
@@ -52,9 +52,14 @@ class MakeRoomActivity : AppCompatActivity() {
         btn_start.setOnClickListener {
             attemptMakeRoom()
         }
-        btn_back.setOnClickListener {
+        btn_close.setOnClickListener {
             finish()
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
 
     private fun attemptMakeRoom() {

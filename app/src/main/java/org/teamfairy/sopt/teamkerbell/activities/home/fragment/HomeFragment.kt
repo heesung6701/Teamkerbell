@@ -58,7 +58,6 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     var tvCount : TextView by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            group = arguments.getParcelable(ARG_GROUP)
 
     }
 
@@ -257,23 +256,5 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     }
 
 
-    companion object {
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @group group group.
-         * @return A new instance of fragment HomeFragment.
-         */
-        fun newInstance(group: Team): HomeFragment {
-            val fragment = HomeFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_GROUP, group)
-            fragment.arguments = args
-            return fragment
-        }
-
-    }
 
 }

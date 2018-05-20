@@ -18,13 +18,19 @@ import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_vote_list.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteListAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_VOTE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_RECEIVER
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_SENDER
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_RECEIVER
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.VoteListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
@@ -36,7 +42,8 @@ import kotlin.properties.Delegates
 /**
  * A placeholder fragment containing a simple view.
  */
-class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener ,RoomActivityInterface{
+
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -44,8 +51,14 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-    var group: Team by Delegates.notNull()
-    var state = Utils.VOTE_RECEIVE
+    override var group: Team by Delegates.notNull()
+    override var room: Room?=null
+
+    override fun changeRoom(room: Room) {
+        this.room=room
+        updateVoteList()
+    }
+    var state = Utils.VOTE_RECEIVER
 
 
     private var showFinished = false
@@ -105,14 +118,17 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         val task: NetworkTask = VoteListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
-        task.execute("$URL_DETAIL_VOTE/${group.g_idx}")
+        val url = if(state==Utils.VOTE_SENDER) URL_GROUP_VOTE_SENDER else URL_GROUP_VOTE_RECEIVER
+        task.execute("$url/${group.g_idx}")
     }
 
     private fun updateVoteList(){
         dataList.clear()
         voteList.forEach {
-            if(it.isFinished() == showFinished)
-                dataList.add(it)
+            if(it.isFinished() == showFinished) {
+                if(it.room_idx==room?.room_idx?:it.room_idx)
+                    dataList.add(it)
+            }
         }
         adapter.notifyDataSetChanged()
     }
@@ -124,9 +140,9 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         when (state) {
             Utils.VOTE_ALL ->
                 result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).sort("write_time", Sort.DESCENDING).findAll()
-            Utils.VOTE_RECEIVE ->
+            Utils.VOTE_RECEIVER ->
                 result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).notEqualTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
-            Utils.VOTE_REQUEST ->
+            Utils.VOTE_SENDER ->
                 result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).equalTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
         }
         voteList.clear()
@@ -142,10 +158,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         private val mFragment: WeakReference<VoteListFragment> = WeakReference<VoteListFragment>(fragment)
 
         override fun handleMessage(msg: Message) {
-            val fragment = mFragment.get()
-            if (fragment != null) {
-                fragment.getVoteListFromRealm()
-            }
+            mFragment.get()?.getVoteListFromRealm()
         }
     }
 

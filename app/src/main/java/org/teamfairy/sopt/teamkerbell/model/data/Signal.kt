@@ -4,11 +4,8 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
-import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
@@ -47,21 +44,8 @@ data class Signal(
         return Utils.getMonthDayTime(write_time)
     }
 
-    constructor(light_idx: Int, u_idx: Int, chat_idx: Int?, write_time: String, open_status: Int?, g_idx: Int, content: String?, entire_status: Int) : this(light_idx, u_idx, chat_idx, write_time, open_status, g_idx, content, entire_status, null)
+    constructor(light_idx: Int, u_idx: Int, chat_idx: Int?, write_time: String, open_status: Int?, room_idx: Int, content: String?, entire_status: Int) : this(light_idx, u_idx, chat_idx, write_time, open_status, room_idx, content, entire_status, null)
 
-    fun toLightsR(): SignalR {
-        val signalR = SignalR()
-        signalR.light_idx = light_idx
-        signalR.chat_idx = chat_idx
-        signalR.color = color
-        signalR.content = content
-        signalR.entire_status = entire_status
-        signalR.g_idx = room_idx
-        signalR.open_status = open_status
-        signalR.u_idx = u_idx
-        signalR.write_time = write_time
-        return signalR
-    }
 
     constructor(source: Parcel) : this(
             source.readInt(),

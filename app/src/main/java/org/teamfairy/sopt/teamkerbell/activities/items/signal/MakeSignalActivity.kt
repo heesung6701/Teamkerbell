@@ -12,16 +12,14 @@ import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_signal.*
-import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
-import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
-import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
@@ -49,21 +47,17 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.OPEN_STATUS_SECRET
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
-    override fun onClick(p0: View?) {
-        val pos = recyclerView.getChildAdapterPosition(p0)
-
-        room = dataListRoom[pos] as Room
-        adapter.currentIdx = room?.room_idx ?: -1
-        tv_room_name.text = room?.real_name ?: getText(R.string.txt_select_room)
+class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
+    override fun changeRoom(room: Room) {
+        this.room = room
         getUserListFromRealm()
-        closeRoomList()
     }
+
 
     val LOG_TAG = this::class.java.name
 
-    private var userRecyclerView: RecyclerView by Delegates.notNull()
-    var adapterUser: UserListAdapter by Delegates.notNull()
+    private var recyclerView: RecyclerView by Delegates.notNull()
+    var adapter: UserListAdapter by Delegates.notNull()
     private var userList: ArrayList<UserCheckData> = arrayListOf<UserCheckData>()
     var dataList: ArrayList<Team>? = arrayListOf()
 
@@ -74,13 +68,10 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
     var content: String = ""
 
 
-    var group: Team by Delegates.notNull()
-    var room: Room? = null
+    override var group: Team by Delegates.notNull()
+    override var room: Room? = null
 
 
-    private var adapter: TextListAdapter by Delegates.notNull()
-    private var dataListRoom = java.util.ArrayList<GroupInterface>()
-    private var recyclerView: RecyclerView by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,15 +81,16 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
         group = intent.getParcelableExtra<Team>(INTENT_GROUP)
         room = intent.getParcelableExtra<Room>(INTENT_ROOM)
 
+
+        SelectRoomFunc(this)
         setUserListInit()
-        setRoomListInit()
 
         chk_particular.setOnCheckedChangeListener { _, p1 ->
             if (room != null) {
                 if (p1) {
-                    userRecyclerView.visibility = View.VISIBLE
+                    recyclerView.visibility = View.VISIBLE
                 } else
-                    userRecyclerView.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
                 adapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
@@ -158,46 +150,14 @@ class MakeSignalActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun setUserListInit() {
-        userRecyclerView = findViewById(R.id.recyclerView_user)
-        userRecyclerView.layoutManager = LinearLayoutManager(applicationContext);
-        adapterUser = UserListAdapter(userList as ArrayList<User>, applicationContext)
-        userRecyclerView.adapter = adapterUser
-
-    }
-
-    private fun setRoomListInit() {
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TextListAdapter(dataListRoom, applicationContext)
-        adapter.setOnItemClickListener(this)
-        adapter.currentIdx = room?.room_idx ?: -1
+        recyclerView = findViewById(R.id.recyclerView_user)
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext);
+        adapter = UserListAdapter(userList as ArrayList<User>, applicationContext)
         recyclerView.adapter = adapter
 
-        layout_select_room.setOnClickListener {
-            if (recyclerView.visibility != View.VISIBLE)
-                openRoomList()
-            else
-                closeRoomList()
-        }
     }
 
-    private fun openRoomList() {
 
-        if (recyclerView.visibility != View.VISIBLE) {
-            recyclerView.visibility = View.VISIBLE
-            iv_drop_down.rotation = 180.0f
-
-            DatabaseHelpUtils.getRoomListFromRealm(applicationContext, dataListRoom as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group)
-        }
-    }
-
-    private fun closeRoomList() {
-        if (recyclerView.visibility != View.GONE) {
-            recyclerView.visibility = View.GONE
-            iv_drop_down.rotation = 0.0f
-        }
-
-    }
 
     private fun getUserListFromRealm() {
         if (room == null) return

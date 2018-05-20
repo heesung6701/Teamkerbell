@@ -12,14 +12,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_role_list.*
+import kotlinx.android.synthetic.main.app_bar_filter.*
 import org.teamfairy.sopt.teamkerbell.R
 
-import kotlinx.android.synthetic.main.app_bar_more.*
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.RoleListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_SHOW
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
@@ -30,7 +33,10 @@ import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 
-class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
+    override fun changeRoom(room: Room) {
+        this.room=room
+    }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -39,8 +45,8 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
     }
 
 
-    var group: Team by Delegates.notNull()
-    var room : Room?=null
+    override var group: Team by Delegates.notNull()
+    override var room : Room?=null
 
     private var dataList: ArrayList<Role> = arrayListOf<Role>()
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -50,6 +56,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_role_list)
         setSupportActionBar(toolbar)
+        tv_title.text = supportActionBar!!.title
 
 
         group = intent.getParcelableExtra(INTENT_GROUP)
@@ -72,6 +79,9 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
+
+        FilterFunc(this)
+
         btn_back.setOnClickListener {
             finish()
         }
@@ -79,9 +89,11 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
         fab.setOnClickListener {
             val i = Intent(applicationContext, MakeRoleActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             i.putExtra(INTENT_GROUP,group)
             i.putExtra(INTENT_ROOM,room)
             startActivity(i)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
     }
 
@@ -100,7 +112,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
     private fun connectRoleList() {
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_ROLE_SHOW)
+        task.execute("$URL_ROLE_SHOW/${room?.room_idx?:""}")
     }
     private  fun successGetRoleList(msg : Message){
         when (msg.what) {

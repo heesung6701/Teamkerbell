@@ -89,7 +89,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     var fab : FloatingActionButton by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        group = arguments.getParcelable(ARG_GROUP)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -109,6 +108,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             val i = Intent(activity.applicationContext, MakeRoomActivity::class.java)
             i.putExtra(IntentTag.INTENT_GROUP, group)
             startActivity(i)
+            activity.overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
 
 
@@ -342,24 +342,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
 
-    companion object {
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param group
-         * @return A new instance of fragment RoomListFragment.
-         */
-        fun newInstance(group: Team): RoomListFragment {
-            val fragment = RoomListFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_GROUP, group)
-            fragment.arguments = args
-            return fragment
-        }
-    }
     abstract class ValueEventListenerByPosition(var position: Int,var room_idx:Int) : ValueEventListener
 
 

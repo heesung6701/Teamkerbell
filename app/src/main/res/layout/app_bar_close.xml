@@ -6,14 +6,12 @@
     android:orientation="horizontal"
     android:background="@drawable/shape_action_bar">
 
-    <ImageButton
-        android:id="@+id/btn_close"
+
+    <View
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_close"
-        android:background="@android:color/transparent"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"/>
+        android:visibility="invisible"
+        android:layout_margin="10dp"/>
 
 
     <LinearLayout
@@ -34,10 +32,13 @@
         android:background="@android:color/transparent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
     </LinearLayout>
-    <View
+    <ImageButton
+        android:id="@+id/btn_close"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:visibility="invisible"
-        android:layout_margin="10dp"/>
+        app:srcCompat="@drawable/ic_close"
+        android:background="@android:color/transparent"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

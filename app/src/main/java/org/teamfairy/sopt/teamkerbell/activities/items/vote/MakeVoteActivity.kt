@@ -27,6 +27,8 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
@@ -47,14 +49,9 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.properties.Delegates
 
-class MakeVoteActivity : AppCompatActivity(), View.OnClickListener {
-    override fun onClick(p0: View?) {
-        val pos = recyclerView.getChildAdapterPosition(p0)
-
-        room = dataListRoom[pos] as Room
-        adapter.currentIdx = room?.room_idx ?: -1
-        tv_room_name.text = room?.real_name ?: getText(R.string.txt_select_room)
-        closeRoomList()
+class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
+    override fun changeRoom(room: Room) {
+        this.room = room
     }
 
     val LOG_TAG = this::class.java.name
@@ -66,17 +63,13 @@ class MakeVoteActivity : AppCompatActivity(), View.OnClickListener {
     var endDate = "2018-06-05"
     var endTime = "00:00:00"
 
-    var group: Team by Delegates.notNull()
-    var room: Room? = null
+    override var group: Team by Delegates.notNull()
+    override var room: Room? = null
 
 
     var cnt_vote_examples = 2
     var voteExamples = arrayListOf<EditText>()
 
-
-    private var adapter: TextListAdapter by Delegates.notNull()
-    private var dataListRoom = ArrayList<GroupInterface>()
-    private var recyclerView: RecyclerView by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,12 +77,9 @@ class MakeVoteActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar)
 
         group = intent.getParcelableExtra<Team>(INTENT_GROUP) as Team
-
         room = intent.getParcelableExtra(INTENT_ROOM) ?: null
-        tv_room_name.text = room?.real_name ?: getText(R.string.txt_select_room)
 
-
-        setRoomListInit()
+        SelectRoomFunc(this)
 
         voteExamples.add(edt_vote_example1)
         voteExamples.add(edt_vote_example2)
@@ -220,39 +210,6 @@ class MakeVoteActivity : AppCompatActivity(), View.OnClickListener {
         btn_back.setOnClickListener {
             finish()
         }
-    }
-
-    private fun setRoomListInit(){
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TextListAdapter(dataListRoom, applicationContext)
-        adapter.setOnItemClickListener(this)
-        adapter.currentIdx = room?.room_idx ?: -1
-        recyclerView.adapter = adapter
-
-        layout_select_room.setOnClickListener {
-            if (recyclerView.visibility != View.VISIBLE)
-                openRoomList()
-            else
-                closeRoomList()
-        }
-    }
-    private fun openRoomList() {
-
-        if (recyclerView.visibility != View.VISIBLE) {
-            recyclerView.visibility = View.VISIBLE
-            iv_drop_down.rotation = 180.0f
-
-            DatabaseHelpUtils.getRoomListFromRealm(applicationContext, dataListRoom as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group)
-        }
-    }
-
-    private fun closeRoomList() {
-        if (recyclerView.visibility != View.GONE) {
-            recyclerView.visibility = View.GONE
-            iv_drop_down.rotation = 0.0f
-        }
-
     }
 
     fun getTimeFormatStr(hour: Int, minute: Int): String {

@@ -19,6 +19,8 @@ import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
@@ -35,28 +37,20 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
-    override fun onClick(p0: View?) {
-        val pos = recyclerView.getChildAdapterPosition(p0)
-
-        room = dataListRoom[pos] as Room
-        adapter.currentIdx = room?.room_idx ?: -1
-        tv_room_name.text=room?.real_name ?: getText(R.string.txt_select_room)
-        closeRoomList()
+class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
+    override fun changeRoom(room: Room) {
+        this.room = room
     }
+
 
     val LOG_TAG = this::class.java.name
 
 
-    var group: Team by Delegates.notNull()
-    var room: Room? = null
+    override var group: Team by Delegates.notNull()
+    override var room: Room? = null
 
     private var isConnecting: Boolean = false
 
-
-    private var adapter: TextListAdapter by Delegates.notNull()
-    private var dataListRoom = ArrayList<GroupInterface>()
-    private var recyclerView: RecyclerView by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,11 +58,11 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar)
 
         group = intent.getParcelableExtra(INTENT_GROUP)
-        room = intent.getParcelableExtra(INTENT_ROOM)?:null
+        room = intent.getParcelableExtra(INTENT_ROOM) ?: null
 
         NetworkUtils.connectRoomList(applicationContext, null, true, group.g_idx)
 
-        setRoomListInit()
+        SelectRoomFunc(this)
 
         edt_response.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -85,22 +79,12 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-
-    private fun setRoomListInit(){
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TextListAdapter(dataListRoom, applicationContext)
-        adapter.setOnItemClickListener(this)
-        adapter.currentIdx = room?.room_idx ?: -1
-        recyclerView.adapter = adapter
-
-        layout_select_room.setOnClickListener {
-            if (recyclerView.visibility != View.VISIBLE)
-                openRoomList()
-            else
-                closeRoomList()
-        }
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
+
+
     private fun attemptMake() {
         if (!isConnecting) {
             val content = edt_response!!.text.toString()
@@ -128,27 +112,8 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
             Toast.makeText(applicationContext, getText(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
     }
 
-        private fun closeRoomList() {
-            if (recyclerView.visibility != View.GONE) {
-                recyclerView.visibility = View.GONE
-                iv_drop_down.rotation = 0.0f
-            }
 
-        }
-
-    private fun openRoomList() {
-
-        if (recyclerView.visibility != View.VISIBLE) {
-            recyclerView.visibility = View.VISIBLE
-            iv_drop_down.rotation = 180.0f
-
-            DatabaseHelpUtils.getRoomListFromRealm(applicationContext, dataListRoom as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group)
-        }
-    }
-
-
-
-    private fun makeSuccess(msg : Message){
+    private fun makeSuccess(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
                 Toast.makeText(applicationContext, "공지 등록되었습니다", Toast.LENGTH_SHORT).show()
@@ -158,7 +123,7 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
                 val idx = obj.toInt()
                 val group = group
 
-                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group,room!!, LoginToken.getUserIdx(applicationContext),this)
+                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group, room!!, LoginToken.getUserIdx(applicationContext), this)
 
                 val intent = Intent(applicationContext, NoticeCardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -191,4 +156,5 @@ class MakeNoticeActivity : AppCompatActivity(), View.OnClickListener {
             mActivity.get()?.makeSuccess(msg)
         }
     }
+
 }

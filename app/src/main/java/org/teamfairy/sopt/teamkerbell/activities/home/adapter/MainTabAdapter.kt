@@ -23,9 +23,13 @@ class MainTabAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
     constructor(fm: FragmentManager?, tabCount: Int, group: Team) : this(fm) {
         this.tabCount = tabCount
-        this.homeTab = HomeFragment.newInstance(group)
-        this.roomTab = RoomListFragment.newInstance(group)
-        this.contactTab = ContactFragment.newInstance(group)
+
+        this.homeTab = HomeFragment()
+        this.homeTab.group=group
+        this.roomTab = RoomListFragment()
+        this.roomTab.group=group
+        this.contactTab = ContactFragment()
+        this.contactTab.group=group
 
     }
 

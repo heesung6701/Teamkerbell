@@ -1,7 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.signal
 
 import android.content.Intent
-import android.net.Uri
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.os.Handler
@@ -22,14 +21,18 @@ import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_signal_list.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_PARAM_GID
+import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
+import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_RECEIVER
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.SignalListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
@@ -43,15 +46,25 @@ import kotlin.properties.Delegates
 /**
  * A placeholder fragment containing a simple view.
  */
-class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
+
+
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
         connectSignalList()
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-    var group: Team by Delegates.notNull()
-    var state = Utils.SIGNAL_RECEIVE
+    override var group: Team by Delegates.notNull()
+    override var room: Room? = null
+
+    override fun changeRoom(room: Room) {
+        this.room = room
+        updateList()
+    }
+
+
+    var state = Utils.SIGNAL_RECEIVER
 
     private var signalList: ArrayList<Signal> = arrayListOf<Signal>()
 
@@ -92,10 +105,10 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         val signBar = v.findViewById<LinearLayout>(R.id.sign_bar)
 
-        if (state == Utils.SIGNAL_RECEIVE) {
+        if (state == Utils.SIGNAL_RECEIVER) {
             signBar.visibility = View.VISIBLE
             activeSignBar(v)
-        } else signBar.visibility =  View.GONE
+        } else signBar.visibility = View.GONE
 
         mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
@@ -116,14 +129,14 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         signRed.setOnClickListener {
             signFilter = if (signFilter == RED) DEFAULT
             else RED
-            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
+            updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
         }
 
         signYellow.setOnClickListener {
             signFilter = if (signFilter == YELLOW) DEFAULT
             else YELLOW
-            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
+            updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
 
         }
@@ -132,13 +145,13 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             signFilter = if (signFilter == GREEN) DEFAULT
             else GREEN
 
-            updateColorFilter(iv_focus_red,iv_focus_yellow,iv_focus_green)
+            updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
         }
 
     }
 
-    private fun updateColorFilter(ivFocusRed  : ImageView, ivFocusYellow : ImageView, ivFocusGreen : ImageView) {
+    private fun updateColorFilter(ivFocusRed: ImageView, ivFocusYellow: ImageView, ivFocusGreen: ImageView) {
 
 
         if (signFilter and RED != RED) ivFocusRed.visibility = View.GONE else ivFocusRed.visibility = View.VISIBLE
@@ -162,8 +175,10 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                 "a" -> ALL
                 else -> DEFAULT
             }
-            if (c and signFilter != 0.toByte())
-                dataList.add(it)
+            if (c and signFilter != 0.toByte()) {
+                if (it.room_idx == (room?.room_idx) ?: it.room_idx)
+                    dataList.add(it)
+            }
         }
 
         signalList.forEach {
@@ -174,8 +189,10 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                 "a" -> ALL
                 else -> DEFAULT
             }
-            if (c and signFilter == 0.toByte())
-                dataList.add(it)
+            if (c and signFilter == 0.toByte()) {
+                if (it.room_idx == (room?.room_idx) ?: it.room_idx)
+                    dataList.add(it)
+            }
         }
         adapter.notifyDataSetChanged()
     }
@@ -187,7 +204,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         val intent = Intent(activity, SignalActivity::class.java)
         intent.putExtra(INTENT_SIGNAL, signal)
         intent.putExtra(INTENT_GROUP, group)
-        intent.putExtra(INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_REQUEST))
+        intent.putExtra(INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_SENDER))
         startActivity(intent)
     }
 
@@ -200,45 +217,43 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         val task = SignalListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
-        val builtUri = Uri.parse(URL_DETAIL_LIGHTS)
-                .buildUpon()
-                .appendQueryParameter(URL_DETAIL_PARAM_GID, group.g_idx.toString())
-                .build()
-        url = builtUri.toString()
 
-        task.execute(url)
+        url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
+        task.execute("$url/${group.g_idx}")
     }
 
 
-    private fun getSignalListFromRealm() {
+    fun getSignalList(result: ArrayList<Signal>) {
 
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-
-
-        var result: RealmResults<SignalR>? = null
-        when (state) {
-            Utils.SIGNAL_ALL ->
-                result = realm.where(SignalR::class.java).equalTo("g_idx", group.g_idx).sort("write_time", Sort.DESCENDING).findAll()
-            Utils.SIGNAL_RECEIVE ->
-                result = realm.where(SignalR::class.java).equalTo("g_idx", group.g_idx).notEqualTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
-            Utils.SIGNAL_REQUEST ->
-                result = realm.where(SignalR::class.java).equalTo("g_idx", group.g_idx).equalTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
-        }
         signalList.clear()
-        result!!.iterator().forEach {
-            signalList.add(it.toSignal(realm))
+        result.iterator().forEach {
+            when (state) {
+                Utils.SIGNAL_ALL ->
+                    signalList.add(it)
+                Utils.SIGNAL_RECEIVER ->
+                    if (it.u_idx != LoginToken.getUserIdx(activity.applicationContext))
+                        signalList.add(it)
+                Utils.SIGNAL_SENDER ->
+                    if (it.u_idx == LoginToken.getUserIdx(activity.applicationContext))
+                        signalList.add(it)
+            }
         }
-
         updateList()
-
-
     }
+
 
     private class HandlerGet(fragment: SignalListFragment) : Handler() {
         private val mFragment: WeakReference<SignalListFragment> = WeakReference<SignalListFragment>(fragment)
 
         override fun handleMessage(msg: Message) {
-            mFragment.get()?.getSignalListFromRealm()
+            when (msg.what) {
+                Utils.MSG_SUCCESS -> {
+                    mFragment.get()?.getSignalList(msg.obj as ArrayList<Signal>)
+                }
+                else -> {
+
+                }
+            }
         }
     }
 

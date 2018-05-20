@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListFragment
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
@@ -26,11 +27,11 @@ class VoteTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
         this.tabCount = tabCount
         this.receivedTab = VoteListFragment()
         receivedTab.group=group
-        receivedTab.state=Utils.VOTE_RECEIVE
+        receivedTab.state=Utils.VOTE_RECEIVER
 
         this.requestedTab = VoteListFragment()
         requestedTab.group=group
-        requestedTab.state=Utils.VOTE_REQUEST
+        requestedTab.state=Utils.VOTE_SENDER
     }
 
     override fun getItem(position: Int): Fragment? {
@@ -46,5 +47,8 @@ class VoteTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
         return null
     }
 
+    fun changeRoom( room : Room){
+        receivedTab.changeRoom(room)
+    }
     override fun getCount(): Int = tabCount
 }

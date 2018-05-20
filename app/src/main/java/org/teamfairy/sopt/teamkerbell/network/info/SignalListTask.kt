@@ -10,7 +10,16 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell.model.realm.SignalR
+import org.teamfairy.sopt.teamkerbell.model.data.Signal
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_COLOR
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_LIGHT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -24,9 +33,11 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-    fun extractFeatureFromJson(jsonResponse: String){
+    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Signal>?{
 
         message = "No Message"
+        val datas = ArrayList<Signal>()
+
         val realm  = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
@@ -40,24 +51,23 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
                     for( i in 0 until dataArray.length()){
                         val data : JSONObject = dataArray.getJSONObject(i)
 
-                        val obj = SignalR()
-                        obj.light_idx=data.getInt("light_idx")
-                        obj.u_idx=data.getInt("u_idx")
-                        obj.chat_idx=data.getInt("chat_idx")
-                        obj.write_time=data.getString("write_time")
-                        obj.open_status=data.getInt("open_status")
-                        obj.g_idx=data.getInt("g_idx")
-                        obj.content=data.getString("content")
-                        obj.entire_status=data.getInt("entire_status")
-                        if(data.has("color"))
-                            obj.color=data.getString("color")
+                        val obj = Signal(data.getInt(JSON_LIGHT_IDX),
+                                data.getInt(JSON_U_IDX),
+                                data.getInt(JSON_CHAT_IDX),
+                                data.getString(JSON_WRITE_TIME),
+                                data.getInt(JSON_OPEN_STATUS),
+                                data.getInt(JSON_ROOM_IDX),
+                                data.getString(JSON_CONTENT),
+                                data.getInt(JSON_ENTIRE_STATUS)
+                        )
+                        if(data.has(JSON_COLOR))
+                            obj.color=data.getString(JSON_COLOR)
 
-                        realm.copyToRealmOrUpdate(obj)
-
+                        datas.add(obj)
                     }
-                    realm.commitTransaction()
                     msgCode = MSG_SUCCESS
 
+                    return datas
                 }
                 else{
                     Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
@@ -72,17 +82,19 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
                 realm.commitTransaction()
         }
 
+        return null
     }
 
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-        extractFeatureFromJson(result!!)
+        val obj = extractFeatureFromJson(result!!)
 
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
+        msg.obj=obj
         Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
 
         val data = Bundle()
