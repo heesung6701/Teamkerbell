@@ -14,6 +14,11 @@ class Utils {
         const val TAB_HOME = 2
 
 
+        const val TAB_UNPERFORMED_NOTICE = 0
+        const val TAB_UNPERFORMED_SIGNAL = 1
+        const val TAB_UNPERFORMED_VOTE = 2
+
+
         const val TAB_RECEIVE = 0
         const val TAB_REQUEST = 1
 

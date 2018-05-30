@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.realm.RealmResults
 import io.realm.Sort
+import io.realm.internal.Util
 import kotlinx.android.synthetic.main.fragment_vote_list.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
@@ -26,9 +27,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_VOTE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_RECEIVER
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_SENDER
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_RECEIVER
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.VoteListTask
@@ -158,7 +156,18 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         private val mFragment: WeakReference<VoteListFragment> = WeakReference<VoteListFragment>(fragment)
 
         override fun handleMessage(msg: Message) {
-            mFragment.get()?.getVoteListFromRealm()
+            when(msg.what){
+                Utils.MSG_SUCCESS->{
+                    val fragment = mFragment.get()
+                    if (fragment == null || fragment.activity == null) return
+                    mFragment.get()?.getVoteListFromRealm()
+
+                }
+                else->{
+
+                }
+
+            }
         }
     }
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:background="@drawable/shape_press_dark"
+
+    android:orientation="horizontal"
+    android:paddingBottom="19dp"
+    android:paddingLeft="22dp"
+    android:paddingRight="22dp"
+    android:paddingTop="19dp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/li_iv_profile"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/icon_profile_default_png"
+        app:civ_border_color="@color/mainColorY"
+        app:civ_border_width="0dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/li_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="13dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="아이도루" />
+
+            <TextView
+                android:id="@+id/li_tv_room_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:lineSpacingExtra="7sp"
+                tools:text="채팅방이름"
+                />
+            <ImageButton
+                android:id="@+id/li_btn_expand"
+                    android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:rotation="90"
+                android:tint="@color/mainColor"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_expand" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/li_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="14sp"
+            tools:text="제가 근무 중인 Bangle에서 QA부분 인턴을 모집하고 있습니다.
+IT업계에서 일하고 싶지만 아직 잘 모르는 분들이 실제 회사에서는 어떻게 일을 하는지 배울 수 있는 기회가 될 것 같아서 공고 올려드려요" />
+
+
+        <TextView
+            android:id="@+id/li_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:maxLines="1"
+            android:layout_gravity="end"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            tools:text="2018.01.05" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
+

@@ -4,10 +4,9 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -22,8 +21,18 @@ data class Vote(
         override var room_idx: Int,
         var title: String?,
         var status: Int?
-) : UserInfoInterface(),ListDataInterface, Parcelable {
+) : RoomInfoInterface(), ListDataInterface, Parcelable {
+    override fun getRoomTitle(): String {
+        return roomName
+    }
 
+    fun setGroupInfo(context: Context){
+        super.setGroupInfo(context,room_idx)
+    }
+
+    fun setGroupInfo(realm: Realm){
+        super.setGroupInfo(realm,room_idx)
+    }
     fun setPhotoInfo(context: Context) {
         super.setPhotoInfo(context, u_idx)
     }

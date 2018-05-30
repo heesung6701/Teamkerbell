@@ -11,6 +11,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
@@ -52,7 +53,8 @@ class MakeRoomTask(context: Context, handler: Handler, token : String?): GetMess
             if(baseJsonResponse.has("data")) {
                 val data = baseJsonResponse.getJSONObject("data")
 
-                room = Room(data.getInt(JSON_ROOM_IDX),
+                room = Room(data.getInt(JSON_G_IDX),
+                        data.getInt(JSON_ROOM_IDX),
                         data.getString(JSON_REAL_NAME),
                         data.getString(JSON_CTRL_NAME))
                 if (data.has(JSON_PHOTO))

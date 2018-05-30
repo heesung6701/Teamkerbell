@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="280dp"
+    android:layout_height="269dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
-    android:layout_marginTop="186dp"
-    android:layout_marginBottom="185dp"
     android:padding="16dp"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_round_default">
+    android:background="@drawable/shape_round_default"
+    >
 
     <TextView
         android:id="@+id/dialog_header"
@@ -22,7 +19,7 @@
         android:layout_marginBottom="24dp"
         />
     <ImageButton
-        android:id="@+id/btn_create"
+        android:id="@+id/btn_add"
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:srcCompat="@drawable/ic_add"

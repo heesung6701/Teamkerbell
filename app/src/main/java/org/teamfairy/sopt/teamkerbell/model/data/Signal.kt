@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -21,7 +22,17 @@ data class Signal(
         var content: String?,
         var entire_status: Int,
         var color: String?
-) : UserInfoInterface(), ListDataInterface, Parcelable {
+) : RoomInfoInterface(), ListDataInterface, Parcelable {
+    override fun getRoomTitle(): String {
+        return roomName
+    }
+
+    fun setGroupInfo(context: Context) {
+        super.setGroupInfo(context,room_idx)
+    }
+    fun setGroupInfo(realm: Realm) {
+        super.setGroupInfo(realm,room_idx)
+    }
 
     fun setPhotoInfo(context: Context) {
         super.setPhotoInfo(context, u_idx)

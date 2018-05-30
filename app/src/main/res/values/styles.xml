@@ -26,12 +26,11 @@
 
     <style name="CustomDialog" parent="android:Theme.Dialog">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="CustomDialog.Card" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/shape_card</item>
-    </style>
 
     <style name="EditText_mainColor">
         <!-- Hint color and label color in FALSE state -->

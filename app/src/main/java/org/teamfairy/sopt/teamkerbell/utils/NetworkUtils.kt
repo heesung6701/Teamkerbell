@@ -1,4 +1,4 @@
-package org.teamfairy.sopt.teamkerbell._utils
+package org.teamfairy.sopt.teamkerbell.utils
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Message
 import android.webkit.URLUtil
 import android.widget.ImageView
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.network.BitmapTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUPLIST
@@ -22,7 +23,6 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref
 import org.teamfairy.sopt.teamkerbell.model.realm.UrlToBytes
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
 import org.teamfairy.sopt.teamkerbell.network.info.*
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.net.*
 
@@ -43,7 +43,7 @@ open class NetworkUtils {
         fun connectGroupList(applicationContext: Context, handler: Handler?,isUpdate : Boolean) {
             if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP)) {
                 Log.d("$LOG_TAG/connect", "update Group List")
-                val task = GroupListTask(applicationContext,HandlerSuccess(applicationContext, PREF_ISUPDATE_GROUP,handler), LoginToken.getToken(applicationContext))
+                val task = GroupListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_GROUP,handler), LoginToken.getToken(applicationContext))
                 task.execute(URL_GROUPLIST)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
@@ -53,19 +53,8 @@ open class NetworkUtils {
         fun connectRoomList(applicationContext: Context, handler: Handler?) = connectRoomList(applicationContext,handler,false)
         fun connectRoomList(applicationContext: Context, handler: Handler?,isUpdate : Boolean) {
             if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM)) {
-                Log.d("$LOG_TAG/connect", "update Room List")
-                val task = RoomListTask(applicationContext,HandlerSuccess(applicationContext, PREF_ISUPDATE_ROOM,handler), LoginToken.getToken(applicationContext))
-                task.execute(URL_ROOMLIST)
-            } else {
-                handler?.sendEmptyMessage(MSG_SUCCESS)
-            }
-        }
-
-        fun connectRoomList(applicationContext: Context, handler: Handler?,isUpdate : Boolean,g_idx : Int) {
-            if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM)) {
-                Log.d("$LOG_TAG/connect", "update Room List")
-                val task = RoomListTask(applicationContext,HandlerSuccess(applicationContext, PREF_ISUPDATE_ROOM,handler), LoginToken.getToken(applicationContext))
-//                task.execute("$URL_ROOMLIST/$g_idx")
+                Log.d("${LOG_TAG}/connect", "update Room List")
+                val task = RoomListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_ROOM,handler), LoginToken.getToken(applicationContext))
                 task.execute(URL_ROOMLIST)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
@@ -76,7 +65,7 @@ open class NetworkUtils {
         fun connectUserList(applicationContext: Context, handler: Handler?,isUpdate :Boolean) {
             if (isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_USER)) {
                 Log.d("$LOG_TAG/connect", "update User List")
-                val task = UserListTask(applicationContext,HandlerSuccess(applicationContext,PREF_ISUPDATE_USER,handler), LoginToken.getToken(applicationContext))
+                val task = UserListTask(applicationContext, HandlerSuccess(applicationContext,PREF_ISUPDATE_USER,handler), LoginToken.getToken(applicationContext))
                 task.execute(USGS_REQUEST_URL.URL_USER)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
@@ -142,7 +131,7 @@ open class NetworkUtils {
                 realm.commitTransaction()
 
                 if (urlToBytes.byteArray == null || !urlToBytes.url.equals(str)) {
-                    Log.d("$LOG_TAG/key", "try to update data:$str")
+                    Log.d("${LOG_TAG}/key", "try to update data:$str")
                     realm.beginTransaction()
                     urlToBytes.url = str
                     realm.commitTransaction()
@@ -158,14 +147,14 @@ open class NetworkUtils {
                     setImageView(bitmap, imageView)
                 }
             } catch (e: MalformedURLException) {
-                Log.d("$LOG_TAG/error", "Photo url is not valid")
+                Log.d("${LOG_TAG}/error", "Photo url is not valid")
 
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 if (realm.isInTransaction) {
                     realm.commitTransaction()
-                    Log.d("RealmTransaction", "commit $LOG_TAG")
+                    Log.d("RealmTransaction", "commit ${LOG_TAG}")
                 }
             }
             return false
@@ -201,7 +190,7 @@ open class NetworkUtils {
                         }
                     }
                     else -> {
-                        Log.d("$LOG_TAG/Error", msg.data.getString("message"))
+                        Log.d("${LOG_TAG}/Error", msg.data.getString("message"))
                     }
                 }
             }

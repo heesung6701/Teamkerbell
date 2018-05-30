@@ -14,5 +14,6 @@ interface ListDataInterface {
     fun getMainTitle() : String
     fun getSubTitle() : String
     fun getTime(): String
+    fun getRoomTitle() : String
 
 }

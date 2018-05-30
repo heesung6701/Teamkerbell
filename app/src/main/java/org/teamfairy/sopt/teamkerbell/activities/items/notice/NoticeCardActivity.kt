@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -14,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_notice_card.*
 import kotlinx.android.synthetic.main.app_bar_filter.*
 import kotlinx.android.synthetic.main.content_notice_card.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.tv_title
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -23,20 +23,28 @@ import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 
-class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivityInterface {
-    override fun changeRoom(room: Room) {
-        this.room=room
+class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivityInterface , SwipeRefreshLayout.OnRefreshListener{
+
+    private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
+    override fun onRefresh() {
         connectNoticeList()
+        mSwipeRefreshLayout.isRefreshing = false
+    }
+    override fun changeRoom(room: Room) {
+        this.room = room
+        updateList()
     }
 
 
@@ -44,12 +52,12 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
     private var adapterList: ListDataAdapter by Delegates.notNull()
     var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
+    var noticeList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
     private var recyclerView: RecyclerView by Delegates.notNull()
 
 
-
     override var group: Team by Delegates.notNull()
-    override var room: Room?=null
+    override var room: Room? = null
 
     private var showCard = true
 
@@ -99,8 +107,11 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         btn_back.setOnClickListener { onBackPressed() }
 
 
-    }
+        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+        mSwipeRefreshLayout.setOnRefreshListener(this)
 
+
+    }
 
 
     private fun changeMode() {
@@ -139,23 +150,39 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
     fun getNoticeList(result: ArrayList<Notice>) {
 
-        dataList.clear()
+        noticeList.clear()
         result.iterator().forEach {
             it.setPhotoInfo(applicationContext)
             it.setGroupInfo(applicationContext)
-            dataList.add(it)
+            noticeList.add(it)
         }
-        adapterCard.notifyDataSetChanged()
+        updateList()
+    }
+    private fun updateList(){
+
+        dataList.clear()
+        noticeList.iterator().forEach {
+            if(room?.room_idx == ARG_ALL_IDX || it.room_idx==room?.room_idx?:it.room_idx)
+                dataList.add(it)
+        }
+
+        if (showCard)
+            adapterCard.notifyDataSetChanged()
+        else
+            adapterList.notifyDataSetChanged()
 
     }
+
 
     private fun connectNoticeList() {
 
         dataList.clear()
-        adapterCard.notifyDataSetChanged()
+        if (showCard)
+            adapterCard.notifyDataSetChanged()
+        else
+            adapterList.notifyDataSetChanged()
 
         val task = NoticeListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.g_idx = group.g_idx
         task.execute(URL_GROUP_NOTICE.plus("/${group.g_idx}"))
 
     }
@@ -164,8 +191,13 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         private val mActivity: WeakReference<NoticeCardActivity> = WeakReference<NoticeCardActivity>(fragment)
 
         override fun handleMessage(msg: Message) {
-            if (msg.obj is ArrayList<*>) {
-                mActivity.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
+            when (msg.what) {
+                Utils.MSG_SUCCESS -> {
+                    mActivity.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
+                }
+                else -> {
+
+                }
             }
         }
     }

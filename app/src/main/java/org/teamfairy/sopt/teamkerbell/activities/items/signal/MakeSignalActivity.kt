@@ -71,6 +71,7 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
 
+    val whoCheck = HashMap<Int,Boolean>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -166,12 +167,16 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
 
         val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(Room.ARG_ROOM_IDX, room!!.room_idx).findAll()
 
+        userList.forEach {
+            whoCheck[it.u_idx]=it.isChecked
+        }
+
         userList.clear()
         joinedRs.iterator().forEach {
             if (it.u_idx != LoginToken.getUserIdx(applicationContext)) {
                 val u = (realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
                         ?: UserR()).toUser()
-                userList.add(u.toUserCheckData(false))
+                userList.add(u.toUserCheckData(whoCheck[it.u_idx]?:false))
             }
         }
         adapter.notifyDataSetChanged()

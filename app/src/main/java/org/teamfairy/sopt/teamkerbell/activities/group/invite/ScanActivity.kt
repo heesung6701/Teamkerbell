@@ -8,8 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.activities.MainActivity
 
 class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 

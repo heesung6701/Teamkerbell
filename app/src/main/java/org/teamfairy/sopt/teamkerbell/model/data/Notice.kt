@@ -4,15 +4,8 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
-import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
-import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInfoInterface
+import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
-import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
-import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
@@ -24,11 +17,12 @@ data class Notice(
         var write_time: String,
         var content: String?,
         override var room_idx: Int,
-        var notice_idx: Int
-) : GroupInfoInterface(), ListDataInterface, Parcelable {
+        var notice_idx: Int,
+        var status : Int
+) : RoomInfoInterface(), ListDataInterface, Parcelable {
 
 
-    constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0)
+    constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0,status = ARG_STATUS_READ)
 
     override fun getMainTitle(): String = content!!
 
@@ -44,11 +38,16 @@ data class Notice(
 
     fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm, u_idx)
 
+    override fun getRoomTitle(): String {
+        return roomName
+    }
+
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readString(),
+            source.readInt(),
             source.readInt(),
             source.readInt()
     )
@@ -62,6 +61,7 @@ data class Notice(
         writeString(content)
         writeInt(room_idx)
         writeInt(notice_idx)
+        writeInt(status)
     }
 
     companion object {
@@ -70,5 +70,12 @@ data class Notice(
             override fun createFromParcel(source: Parcel): Notice = Notice(source)
             override fun newArray(size: Int): Array<Notice?> = arrayOfNulls(size)
         }
+
+
+        var ARG_NOTICE_IDX = "notice_idx"
+        var ARG_STATUS = "status"
+        var ARG_STATUS_READ = 1
+        var ARG_STATUS_NOT_READ = 0
+
     }
 }

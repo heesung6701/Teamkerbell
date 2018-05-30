@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="84dp"
+    android:padding="16dp"
+    android:background="@drawable/shape_press_dark"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_marginBottom="4dp"
+            >
+
+            <TextView
+                android:id="@+id/li_tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="서비스 마케팅" />
+
+            <TextView
+                android:id="@+id/li_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="13sp"
+                tools:text="2018. 02. 18"
+
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/li_tv_sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="15sp"
+            tools:text="저희 조사할 기업 어떤 걸로 할지 투표부탁 드립..." />
+
+
+    </LinearLayout>
+

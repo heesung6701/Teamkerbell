@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/app_bar_commit"/>
+        <include layout="@layout/app_bar_response"/>
 
     </android.support.design.widget.AppBarLayout>
 

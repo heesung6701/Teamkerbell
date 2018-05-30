@@ -4,10 +4,9 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.ChoiceListViewHolder
 import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder

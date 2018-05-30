@@ -6,7 +6,7 @@ import android.view.*
 import android.support.v4.content.ContextCompat
 import org.teamfairy.sopt.teamkerbell.listview.viewholder.ListContentHolder
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
@@ -28,7 +28,7 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
         holder.tvTitle.text = dataList[position].name
         holder.tvContent.text = dataList[position].getMainTitle()
         holder.tvTime.text = dataList[position].getSubTitle()
-
+        holder.tvRoomName.text = dataList[position].getRoomTitle()
 
         if (dataList[position] is Signal) {
 

@@ -6,18 +6,15 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
-import io.realm.RealmResults
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
-import org.teamfairy.sopt.teamkerbell.model.realm.NoticeR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -31,7 +28,6 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
 
     var message: String = "No Message"
     var msgCode = MSG_FAIL
-    var g_idx: Int? = null
 
     fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Notice>?{
 
@@ -58,6 +54,7 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
                         obj.content = data.getString(JSON_CONTENT)
                         obj.room_idx = data.getInt(JSON_ROOM_IDX)
                         obj.notice_idx = data.getInt(JSON_NOTICE_IDX)
+                        obj.status=data.getInt(JSON_STATUS)
 
                         datas.add(obj)
                     }

@@ -23,7 +23,7 @@ import kotlin.properties.Delegates
 /**
  * Created by lumiere on 2018-05-19.
  */
-class FilterFunc(var activity: Activity) {
+class FilterFunc(activity: Activity) {
 
     private var adapter: TextListAdapter by Delegates.notNull()
     var dataList: ArrayList<GroupInterface> = arrayListOf<GroupInterface>()
@@ -37,7 +37,7 @@ class FilterFunc(var activity: Activity) {
     init {
 
         if (mActivity.get() != null) {
-            activity = mActivity.get()!!
+            val activity = mActivity.get()!!
             recyclerView = activity.findViewById(R.id.recyclerView_room)
 
             recyclerView.layoutManager = LinearLayoutManager(activity.applicationContext)

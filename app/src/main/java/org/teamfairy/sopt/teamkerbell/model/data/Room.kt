@@ -10,13 +10,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 class Room(
+        var g_idx: Int, //Foreign Key
         var room_idx: Int, //Primary Key
         override var real_name: String,
         var ctrl_name: String,
         var photo: String?
 ) : GroupInterface, Parcelable{
-    constructor() : this(-1,"","")
-    constructor(room_idx: Int, real_name: String, ctrl_name: String):this(room_idx,real_name,ctrl_name,null)
+    constructor() : this(ARG_NULL_IDX,Room.ARG_ALL_IDX, ARG_ALL,"")
+    constructor(g_idx: Int,room_idx: Int, real_name: String, ctrl_name: String):this(g_idx,room_idx,real_name,ctrl_name,null)
 
     override fun getIdx() =room_idx
 
@@ -36,6 +37,7 @@ class Room(
 
     fun toChatRoomR(): RoomR {
         val chatRoomR= RoomR()
+        chatRoomR.g_idx=g_idx
         chatRoomR.room_idx=room_idx
         chatRoomR.real_name=real_name
         chatRoomR.ctrl_name=ctrl_name
@@ -46,6 +48,7 @@ class Room(
 
     constructor(source: Parcel) : this(
             source.readInt(),
+            source.readInt(),
             source.readString(),
             source.readString(),
             source.readString()
@@ -54,6 +57,7 @@ class Room(
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(g_idx)
         writeInt(room_idx)
         writeString(real_name)
         writeString(ctrl_name)
@@ -72,6 +76,7 @@ class Room(
         var ARG_REAL_NAME = "real_name"
         var ARG_CTRL_NAME = "ctrl_name"
         var ARG_PHOTO = "photo"
+        var ARG_NULL_IDX = -2
         var ARG_ALL_IDX = -1
         var ARG_ALL = "All"
     }

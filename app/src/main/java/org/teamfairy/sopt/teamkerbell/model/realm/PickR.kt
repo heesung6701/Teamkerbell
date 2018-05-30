@@ -17,11 +17,14 @@ open class PickR : RealmObject(){
     var write_time: String?=null
     var content: String?=null
     var g_idx: Int?=null
+    var room_idx: Int?=null
 
     fun toPick(realm : Realm) : Pick {
-        val pick= Pick(u_idx!!, chat_idx!!, write_time!!, content, pick_idx, g_idx!!)
-        pick.setPhotoInfo(realm)
+        val pick= Pick(u_idx!!, chat_idx!!, write_time!!, content, pick_idx, g_idx!!,room_idx!!)
+        pick.setGroupInfo(realm,pick.room_idx)
+        pick.setPhotoInfo(realm,pick.u_idx)
         return pick
     }
+
 
 }

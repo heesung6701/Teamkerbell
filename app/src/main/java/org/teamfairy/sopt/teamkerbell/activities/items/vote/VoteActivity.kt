@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_vote.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ChoiceListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByChoiceListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByMemberListAdapter

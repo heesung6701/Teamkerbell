@@ -30,14 +30,13 @@ import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_CLIENTTOKEN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_ID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.EXIT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
@@ -93,7 +92,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         val dataBaseFireToken: DatabaseReference? = dataBaseReference.child("firebase_tokens").ref
         dataBaseFireToken!!.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(FirebaseInstanceId.getInstance().getToken()!!.toString())
 
-        val intent = Intent(applicationContext, MainActivity::class.java)
+        val intent = Intent(applicationContext, GroupListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
@@ -121,7 +120,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         populateAutoComplete()
 
         easter_egg.setOnClickListener {
-            email.setText("hh@naver.com")
+            email.setText("dd@teamkerbell.tk")
             password.setText("12341234")
         }
 

@@ -16,26 +16,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import io.realm.RealmResults
-import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_signal_list.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
-import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_RECEIVER
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.SignalListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -53,6 +48,11 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
     override fun onRefresh() {
         connectSignalList()
         mSwipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        connectSignalList()
     }
 
     override var group: Team by Delegates.notNull()
@@ -204,6 +204,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         val intent = Intent(activity, SignalActivity::class.java)
         intent.putExtra(INTENT_SIGNAL, signal)
         intent.putExtra(INTENT_GROUP, group)
+        intent.putExtra(INTENT_ROOM, room)
         intent.putExtra(INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_SENDER))
         startActivity(intent)
     }
@@ -228,14 +229,25 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         signalList.clear()
         result.iterator().forEach {
             when (state) {
-                Utils.SIGNAL_ALL ->
+                Utils.SIGNAL_ALL -> {
+                    it.setPhotoInfo(activity.applicationContext)
+                    it.setGroupInfo(activity.applicationContext)
                     signalList.add(it)
-                Utils.SIGNAL_RECEIVER ->
+                }
+                Utils.SIGNAL_RECEIVER -> {
+
+                    it.setPhotoInfo(activity.applicationContext)
+                    it.setGroupInfo(activity.applicationContext)
                     if (it.u_idx != LoginToken.getUserIdx(activity.applicationContext))
                         signalList.add(it)
-                Utils.SIGNAL_SENDER ->
-                    if (it.u_idx == LoginToken.getUserIdx(activity.applicationContext))
+                }
+                Utils.SIGNAL_SENDER -> {
+                    if (it.u_idx == LoginToken.getUserIdx(activity.applicationContext)) {
+                        it.setPhotoInfo(activity.applicationContext)
+                        it.setGroupInfo(activity.applicationContext)
                         signalList.add(it)
+                    }
+                }
             }
         }
         updateList()
@@ -248,6 +260,8 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 Utils.MSG_SUCCESS -> {
+                    val fragment = mFragment.get()
+                    if (fragment == null || fragment.activity == null) return
                     mFragment.get()?.getSignalList(msg.obj as ArrayList<Signal>)
                 }
                 else -> {

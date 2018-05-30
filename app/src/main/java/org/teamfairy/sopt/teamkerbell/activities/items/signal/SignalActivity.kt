@@ -10,11 +10,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import kotlinx.android.synthetic.main.app_bar_commit.*
+import kotlinx.android.synthetic.main.app_bar_response.*
 import kotlinx.android.synthetic.main.content_recyclerview.*
 import kotlinx.android.synthetic.main.content_signal.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
@@ -23,6 +25,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -40,6 +43,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
 
 
     var group: Team by Delegates.notNull()
+    var room: Room by Delegates.notNull()
     var signal : Signal by Delegates.notNull()
     private var responded : Boolean = false
 
@@ -65,17 +69,18 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
 
 
         group = intent.getParcelableExtra(INTENT_GROUP)
+
         signal = intent.getParcelableExtra(INTENT_SIGNAL)
         signal.setPhotoInfo(applicationContext)
+        signal.setGroupInfo(applicationContext)
 
-        when(signal.color){
-            "r"->   updateColor(RED)
-            "y"->   updateColor(YELLOW)
-            "g"->  updateColor(GREEN)
-            else->DEFAULT
-        }
+        room = intent.getParcelableExtra(INTENT_ROOM)?:DatabaseHelpUtils.getRoom(applicationContext,signal.room_idx)
+        if(room.room_idx== Room.ARG_ALL_IDX || room.room_idx== Room.ARG_NULL_IDX )
+            room = DatabaseHelpUtils.getRoom(applicationContext,signal.room_idx)
 
+        selectColor=GREEN
 
+        updateColor(selectColor)
 
         tv_name.text = signal.name
         tv_time.text=Utils.getYearMonthDay(signal.write_time)
@@ -181,7 +186,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
             else -> "a"
         }
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + group.g_idx + "/" + signal.light_idx)
+        task.execute(URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal.light_idx)
     }
 
     fun updateDataList(signalResponseList : ArrayList<SignalResponse>){
@@ -193,7 +198,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
             dataList.add(it)
         }
         val strNot = if(selectColor== RED) "미" else ""
-        tv_count.text="${dataList.size} 명 ${strNot}응답"
+        tv_count.text=("${dataList.size} 명 ${strNot}응답")
 
         when (selectColor) {
             RED ->
@@ -216,8 +221,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener ,SwipeRefreshLa
             val activity = mActivity.get()
 
             if (activity != null) {
-                val list = msg.obj as ArrayList<SignalResponse>
-                activity.updateDataList(list)
+                when(msg.what){
+                    Utils.MSG_SUCCESS->{
+                        val list = msg.obj as ArrayList<SignalResponse>
+                        activity.updateDataList(list)
+                    }
+                    else->{
+
+                    }
+                }
             }
         }
     }

@@ -36,6 +36,7 @@ import kotlin.properties.Delegates
 class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
     override fun changeRoom(room: Room) {
         this.room=room
+        updateList()
     }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -49,6 +50,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
     override var room : Room?=null
 
     private var dataList: ArrayList<Role> = arrayListOf<Role>()
+    private var roleList: ArrayList<Role> = arrayListOf<Role>()
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var adapter: RoleListAdapter by Delegates.notNull()
 
@@ -114,16 +116,26 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute("$URL_ROLE_SHOW/${room?.room_idx?:""}")
     }
+    private fun updateList(){
+        dataList.clear()
+        roleList.forEach {
+            if(it.room_idx==room?.room_idx?:it.room_idx)
+                dataList.add(it)
+        }
+        adapter.notifyDataSetChanged()
+
+    }
+
     private  fun successGetRoleList(msg : Message){
         when (msg.what) {
             MSG_SUCCESS -> {
                 val datas = msg.obj as ArrayList<Role>
-                dataList.clear()
+                roleList.clear()
                 datas.forEach {
 //                    it.setPhotoInfo(applicationContext)
-                    dataList.add(it)
+                    roleList.add(it)
                 }
-                adapter.notifyDataSetChanged()
+                updateList()
             }
             else -> {
             }

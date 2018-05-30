@@ -32,10 +32,10 @@
             android:name=".activities.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.home.HomeActivity"
+            android:name=".activities.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.items.notice.NoticeCardActivity"
@@ -96,7 +96,7 @@
             android:label="@string/title_activity_make_notice"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.home.room.MakeRoomActivity"
+            android:name=".activities.main.room.MakeRoomActivity"
             android:label="@string/title_activity_make_room"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -115,7 +115,16 @@
             android:name=".activities.chat.ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.unperformed.UnperformedNoticeActivity"></activity>
+        <activity android:name=".activities.unperformed.UnperformedActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.items.pick.PickListActivity"
+            android:label="@string/title_activity_pick_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.chat.InviteUserActivity"
+            android:label="@string/title_activity_invite_user"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

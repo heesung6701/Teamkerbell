@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
@@ -16,14 +14,11 @@ import kotlinx.android.synthetic.main.content_make_notice.*
 import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
@@ -60,7 +55,7 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM) ?: null
 
-        NetworkUtils.connectRoomList(applicationContext, null, true, group.g_idx)
+        NetworkUtils.connectRoomList(applicationContext, null, true)
 
         SelectRoomFunc(this)
 

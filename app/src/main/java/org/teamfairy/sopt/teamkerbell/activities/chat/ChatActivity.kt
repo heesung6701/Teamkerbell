@@ -1,7 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.activities.chat
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -31,7 +29,6 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
-import kotlinx.android.synthetic.main.dialog_choose_work.view.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.*
@@ -44,8 +41,9 @@ import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.data
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.dataBaseMessages
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.setDatabaseGroup
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
+import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
 import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
-import org.teamfairy.sopt.teamkerbell.activities.home.HomeActivity
+import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
@@ -71,11 +69,11 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
 import org.teamfairy.sopt.teamkerbell.network.fcm.FcmSendMessageTask
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_CONTENT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PICK_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.ENTIRE_STATUS_ENTIRE
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.OPEN_STATUS_OPEN
@@ -202,7 +200,7 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
         btn_invite.setOnClickListener {
-            val intent = Intent(applicationContext, InviteActivity::class.java)
+            val intent = Intent(applicationContext, InviteUserActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
             startActivity(intent)
@@ -563,7 +561,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    fun addFirebaseListener() {
+    private fun addFirebaseListener() {
         if (!isAddedFirebaseListener) {
             Log.d(LOG_TAG, "addListener")
             dataList.clear()
@@ -576,63 +574,57 @@ class ChatActivity : AppCompatActivity() {
 
 
     fun makeDialog(position: Int) {
-        val builder = AlertDialog.Builder(this, R.style.CustomDialog)
+        val dialog  = ChooseWorkDialog (this)
+        dialog.show()
+        dialog.setOnClickListener(View.OnClickListener { p0 ->
+            when(p0.id){
+                R.id.btn_copy->{
+                    val clipboardManager = applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipData = ClipData.newPlainText(getString(R.string.app_name), dataList[position].content)
+                    clipboardManager.primaryClip = clipData
+                    Toast.makeText(applicationContext, dataList[position].content + "\n가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+                R.id.btn_delete->{
 
-        val dialogView = layoutInflater.inflate(R.layout.dialog_choose_work, null)
-        var dialog: Dialog? = null
+                }
+                R.id.btn_share->{
 
-        dialog = builder.setView(dialogView).show()
+                }
 
-        dialogView.btn_copy.setOnClickListener {
-            val clipboardManager = applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clipData = ClipData.newPlainText(getString(R.string.app_name), dataList[position].content)
-            clipboardManager.primaryClip = clipData
-            Toast.makeText(applicationContext, dataList[position].content + "\n가 복사되었습니다.", Toast.LENGTH_SHORT).show()
-            dialogView.destroyDrawingCache()
-            dialog.dismiss()
-        }
-        dialogView.btn_light.setOnClickListener {
+                R.id.btn_signal->{
+                    makeLights(position)
+                    dialog.dismiss()
+                }
+                R.id.btn_notice->{
+                    makeNotice(position)
+                    dialog.dismiss()
+                }
+                R.id.btn_pick->{
+                    val realm = getRealmDefault(applicationContext)
 
-            makeLights(position)
-            dialog.dismiss()
+                    realm.beginTransaction()
+                    val pickR = realm.createObject(PickR::class.java)
+                    pickR.content = dataList[position].content
+                    pickR.chat_idx = position
+                    pickR.write_time = Utils.getNow()
+                    pickR.u_idx = dataList[position].u_idx
+                    pickR.g_idx = group.g_idx
+                    pickR.room_idx = room.room_idx
+                    realm.commitTransaction()
 
-        }
-        dialogView.btn_notice.setOnClickListener {
+                    dialog.dismiss()
 
-            makeNotice(position)
-            dialog.dismiss()
+                    var txt: String = dataList[position].content!!
+                    if (txt.length > 10) txt = txt.substring(0, 10) + "..."
+                    Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
 
-        }
-        dialogView.btn_vote.setOnClickListener {
-            val intent = Intent(applicationContext, MakeVoteActivity::class.java)
-            intent.putExtra(INTENT_CONTENT, dataList.get(position).content)
-            intent.putExtra(INTENT_GROUP, group)
-            startActivity(intent)
-            dialog.dismiss()
+                }
+                R.id.btn_search->{
 
-        }
-        dialogView.btn_pick.setOnClickListener {
-
-
-            val realm = getRealmDefault(applicationContext)
-
-            realm.beginTransaction()
-            val pickR = realm.createObject(PickR::class.java)
-            pickR.content = dataList[position].content
-            pickR.chat_idx = position
-            pickR.write_time = Utils.getNow()
-            pickR.u_idx = dataList[position].u_idx
-            pickR.g_idx = group.g_idx
-            realm.commitTransaction()
-
-            dialog.dismiss()
-
-            var txt: String = dataList[position].content!!
-            if (txt.length > 10) txt = txt.substring(0, 10) + "..."
-            Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
-
-        }
-
+                }
+            }
+        })
 
     }
 
@@ -719,7 +711,7 @@ class ChatActivity : AppCompatActivity() {
                             activity.sendLeaveMessage()
                         Toast.makeText(activity.applicationContext, "그룹을 나갔습니다.", Toast.LENGTH_SHORT).show()
 
-                        val intent = Intent(activity.applicationContext, HomeActivity::class.java)
+                        val intent = Intent(activity.applicationContext, MainActivity::class.java)
                         intent.putExtra("leave_from_chat", true)
                         activity.startActivity(intent)
                         activity.finish()

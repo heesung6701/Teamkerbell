@@ -13,6 +13,7 @@ import org.teamfairy.sopt.teamkerbell.R
 class ListContentHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     val tvTitle : TextView = itemView.findViewById(R.id.li_tv_title)
     val tvContent : TextView = itemView.findViewById(R.id.li_tv_content)
+    val tvRoomName : TextView = itemView.findViewById(R.id.li_tv_room_name)
     val tvTime : TextView = itemView.findViewById(R.id.li_tv_time)
     val ivProfile : ImageView = itemView.findViewById(R.id.li_iv_profile)
     val ivSign : ImageView = itemView.findViewById(R.id.li_iv_sign)

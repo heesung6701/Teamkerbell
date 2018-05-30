@@ -100,7 +100,6 @@ class SignUpActivity : AppCompatActivity() {
             }
         })
 
-        val idCheckTask = GetMessageTask(applicationContext, HandlerIdCheck(this))
 
         email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -113,12 +112,8 @@ class SignUpActivity : AppCompatActivity() {
                 if (txt!!.isNotEmpty()) {
                     val encodeTxt: String = URLEncoder.encode(txt.toString(), "UTF-8")
                     val str = String(encodeTxt.toByteArray(Charsets.UTF_8))
+                    attemptIdCheck(str)
 
-                    val builtUri = Uri.parse(URL_REGIST_CHECK)
-                            .buildUpon()
-                            .appendQueryParameter(URL_REGIST_CHECK_PARAM_ID, str).build()
-
-                    idCheckTask.execute(builtUri.toString())
                 } else {
                     email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
                 }
@@ -140,6 +135,15 @@ class SignUpActivity : AppCompatActivity() {
     }
 
 
+    fun attemptIdCheck(str : String){
+        val idCheckTask = GetMessageTask(applicationContext, HandlerIdCheck(this))
+
+        val builtUri = Uri.parse(URL_REGIST_CHECK)
+                .buildUpon()
+                .appendQueryParameter(URL_REGIST_CHECK_PARAM_ID, str).build()
+
+        idCheckTask.execute(builtUri.toString())
+    }
     private var doubleBackToExitPressedOnce = false
     override fun onBackPressed() {
 

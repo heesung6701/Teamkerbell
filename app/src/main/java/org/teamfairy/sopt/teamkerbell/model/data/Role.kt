@@ -15,7 +15,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  */
 data class Role(
         var role_idx: Int,
-        var g_idx: Int,
+        var room_idx: Int,
         var title: String?,
         var master_idx: Int,
         var write_time: String?
@@ -40,7 +40,7 @@ data class Role(
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeInt(role_idx)
-        writeInt(g_idx)
+        writeInt(room_idx)
         writeString(title)
         writeInt(master_idx)
         writeString(write_time)

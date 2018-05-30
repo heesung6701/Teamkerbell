@@ -17,7 +17,7 @@ import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.getUserIdx
 import java.lang.ref.WeakReference
 

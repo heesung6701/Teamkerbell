@@ -15,9 +15,11 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_role.*
 import kotlinx.android.synthetic.main.content_signal.*
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.TaskListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.RoleTaskListTask
@@ -40,6 +42,7 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
 
     var group: Team by Delegates.notNull()
     var role : Role by Delegates.notNull()
+    var room : Room by Delegates.notNull()
 
     private var dataList: ArrayList<RoleTask> = arrayListOf<RoleTask>()
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -51,9 +54,10 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
 
         group = intent.getParcelableExtra(INTENT_GROUP)
         role = intent.getParcelableExtra(INTENT_ROLE)
+        room=DatabaseHelpUtils.getRoom(applicationContext,role.room_idx)
 
         supportActionBar!!.title=role.title
-        tv_chat_name.text = "채팅방 이름"
+        tv_chat_name.text = room.real_name
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -85,6 +89,7 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
         val i = Intent(applicationContext,TaskActivity::class.java)
         i.putExtra(INTENT_GROUP, group)
         i.putExtra(INTENT_ROLE, role)
+        i.putExtra(INTENT_ROOM, room)
         i.putExtra(INTENT_TASK, dataList[pos])
         startActivity(i)
     }

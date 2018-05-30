@@ -8,7 +8,9 @@ import android.util.Log
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL_IDX
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -36,6 +38,12 @@ class DatabaseHelpUtils {
             }
             return realm
         }
+        fun getRoom(context: Context, room_idx:Int): Room {
+            val realm = getRealmDefault(context)
+            val roomR = realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX,room_idx).findFirst() ?: RoomR()
+            realm.close()
+            return roomR.toChatRoom()
+        }
         fun getGroup(context: Context, g_idx:Int): Team {
             val realm = getRealmDefault(context)
             val groupR = realm.where(GroupR::class.java).equalTo(Team.ARG_G_IDX,g_idx).findFirst() ?: GroupR()
@@ -61,6 +69,7 @@ class DatabaseHelpUtils {
             joinedRs.iterator().forEach {
                 val userR: UserR = realm.where(UserR::class.java).equalTo(User.ARG_U_IDX, it.u_idx).findFirst()
                         ?: UserR()
+
                 dataListUser.add(userR.toUser())
             }
             adapterUser.notifyDataSetChanged()
@@ -90,12 +99,11 @@ class DatabaseHelpUtils {
             val realm = getRealmDefault(applicationContext)
 
             dataListRoom.clear()
-            if(containAll) dataListRoom.add(Room(ARG_ALL_IDX,ARG_ALL,ARG_ALL))
-            adapterRoom.notifyDataSetChanged()
-            val joinedRoomR = realm.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll()
-            joinedRoomR.iterator().forEach {
-                val roomR = realm.where(RoomR::class.java).equalTo(Room.ARG_ROOM_IDX, it.room_idx).findFirst()?:RoomR()
-                dataListRoom.add(roomR.toChatRoom())
+
+            if(containAll) dataListRoom.add(Room(ARG_ALL_IDX,ARG_ALL_IDX,ARG_ALL,ARG_ALL))
+            val roomRs = realm.where(RoomR::class.java).equalTo(ARG_G_IDX, group.g_idx).findAll()
+            roomRs.iterator().forEach {
+                dataListRoom.add(it.toChatRoom())
             }
 
             adapterRoom.notifyDataSetChanged()

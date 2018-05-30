@@ -1,29 +1,21 @@
 package org.teamfairy.sopt.teamkerbell.activities.group
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.provider.ContactsContract
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_make_group.*
-import kotlinx.android.synthetic.main.content_invite.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
-import org.teamfairy.sopt.teamkerbell.activities.home.HomeActivity
+import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
-import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
-import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.make.MakeGroupTask
@@ -122,7 +114,7 @@ class MakeGroupActivity : AppCompatActivity() {
                     DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
 
 
-                    val i = Intent(application,HomeActivity::class.java)
+                    val i = Intent(application,MainActivity::class.java)
                     i.putExtra(IntentTag.INTENT_GROUP,group)
                     startActivity(i)
 

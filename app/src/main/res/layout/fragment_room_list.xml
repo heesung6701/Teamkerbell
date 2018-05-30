@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.home.room.RoomListFragment">
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.main.room.RoomListFragment">
 
     <include layout="@layout/content_recyclerview"/>
 

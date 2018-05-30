@@ -32,6 +32,12 @@
 
     <string name="title_activity_chat">채팅</string>
 
+
+    <string name="title_activity_invite_user">멤버 초대하기</string>
+
+    <string name="title_activity_pick_list">Pick</string>
+
+
     <!-- Strings related to login -->
     <string name="prompt_name">이름</string>
     <string name="prompt_email">이메일</string>
@@ -108,9 +114,15 @@
     <string name="tab_by_not_voted">미투표</string>
 
 
-
     <string name="menu_all">all</string>
+    <string name="txt_chose_work">작업선택</string>
+    <string name="txt_copy">복사</string>
+    <string name="txt_delete">삭제</string>
+    <string name="txt_share">공유</string>
+    <string name="txt_search">검색</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

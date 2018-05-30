@@ -33,6 +33,7 @@ class TaskActivity : AppCompatActivity(){
     var group: Team by Delegates.notNull()
     var role : Role by Delegates.notNull()
     var roleTask : RoleTask by Delegates.notNull()
+    var room : Room by Delegates.notNull()
 
 
     private var chkUser = HashMap<Int, Boolean>()
@@ -49,6 +50,7 @@ class TaskActivity : AppCompatActivity(){
 
         group = intent.getParcelableExtra(IntentTag.INTENT_GROUP)
         role = intent.getParcelableExtra(IntentTag.INTENT_ROLE)
+        room = intent.getParcelableExtra(IntentTag.INTENT_ROOM)
         roleTask = intent.getParcelableExtra(IntentTag.INTENT_TASK)
         role.setPhotoInfo(applicationContext)
 
@@ -58,7 +60,7 @@ class TaskActivity : AppCompatActivity(){
 
 
 
-        tv_chat_name.text = "채팅방 이름"
+        tv_chat_name.text = room.real_name
 
         tv_task_name.text = roleTask.content
 
@@ -86,6 +88,10 @@ class TaskActivity : AppCompatActivity(){
         }else
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_add))
 
+
+        btn_back.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun getTakeUserArray(){
@@ -162,10 +168,11 @@ class TaskActivity : AppCompatActivity(){
         dataListUser.clear()
         chkUser.clear()
 
+
         val jsonArray = JSONArray(str)
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         for (i in 0 until jsonArray.length()) {
-            val uIdx = jsonArray.get(i).toString().toInt()
+            val uIdx = jsonArray.get(i).toString().toInt() //U_Idx가 없는데?????
             val user: UserR = realm.where(UserR::class.java).equalTo("u_idx", uIdx).findFirst()
                     ?: UserR()
             dataListUser.add(user.toUser())
@@ -175,9 +182,14 @@ class TaskActivity : AppCompatActivity(){
 
 
         if(chkUser[LoginToken.getUserIdx(applicationContext)] == true){
+            if(isMaster) {
+                dataListUser.add(LoginToken.getUser(applicationContext))
+                chkUser[LoginToken.getUserIdx(applicationContext)] = true
+            }
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.icon_floating_minus))
-        }else
-            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_add))
+        }else {
+            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))
+        }
 
         adapterUser.notifyDataSetChanged()
 

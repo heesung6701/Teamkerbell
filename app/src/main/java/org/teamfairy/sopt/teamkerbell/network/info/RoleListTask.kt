@@ -12,6 +12,13 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.realm.RoleR
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MASTER_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROLE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -28,7 +35,6 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
     fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Role>?{
 
         val datas : ArrayList<Role> = ArrayList<Role>()
-        message = "No Message"
 
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
@@ -41,13 +47,12 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
                     for(i in 0 until dataArray.length()){
                         if(dataArray.getJSONObject(i)!=null) {
                             val obj = dataArray.getJSONObject(i)
-                            val roleR = RoleR()
-                            roleR.role_idx = obj.getInt("role_idx")
-                            roleR.g_idx = obj.getInt("g_idx")
-                            roleR.title = obj.getString("title")
-                            roleR.master_idx = obj.getInt("master_idx")
-                            roleR.write_time = obj.getString("write_time")
-                            datas.add(roleR.toRole())
+                            val role = Role(obj.getInt(JSON_ROLE_IDX),
+                                    obj.getInt(JSON_ROOM_IDX),
+                                    obj.getString(JSON_TITLE),
+                                    obj.getInt(JSON_MASTER_IDX),
+                                    obj.getString(JSON_WRITE_TIME))
+                            datas.add(role)
 
                         }
                     }

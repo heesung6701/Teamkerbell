@@ -12,9 +12,11 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getReal
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -45,6 +47,7 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
                         val r = RoomR()
+                        r.g_idx = data.getInt(JSON_G_IDX)
                         r.room_idx = data.getInt(JSON_ROOM_IDX)
                         r.real_name = data.getString(JSON_REAL_NAME)
                         r.ctrl_name = data.getString(JSON_CTRL_NAME)

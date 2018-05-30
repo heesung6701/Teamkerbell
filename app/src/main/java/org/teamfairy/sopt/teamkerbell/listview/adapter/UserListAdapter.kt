@@ -7,7 +7,7 @@ import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder
 import kotlinx.android.synthetic.main.li_user.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 

@@ -112,6 +112,8 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         val intent = Intent(activity.applicationContext, RoleListActivity::class.java)
+                        intent.putExtra(INTENT_GROUP,activity.group)
+                        intent.putExtra(INTENT_ROOM,activity.room)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         activity.startActivity(intent)
 

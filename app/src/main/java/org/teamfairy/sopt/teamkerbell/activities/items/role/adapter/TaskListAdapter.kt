@@ -1,12 +1,11 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role.adapter
 
 import android.content.Context
-import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.TaskListViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
