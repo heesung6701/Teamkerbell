@@ -17,9 +17,13 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.adapter.ContactListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
+import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import kotlin.properties.Delegates
@@ -89,8 +93,12 @@ class InviteUserActivity : AppCompatActivity() {
             whoCheck[it.u_idx]=it.isChecked
         }
         dataList.clear()
+
+        val roomMemberList = ArrayList<Int>()
+        DatabaseHelpUtils.getRoomUIdxListFromRealm(applicationContext,roomMemberList,room)
+
         dataListOrigin.forEach {
-            if(it.name!!.contains(txtSearch)) {
+            if(it.name!!.contains(txtSearch) && !roomMemberList.contains(it.u_idx)) {
                 dataList.add(it.toUserCheckData(whoCheck[it.u_idx]?:false))
             }
         }

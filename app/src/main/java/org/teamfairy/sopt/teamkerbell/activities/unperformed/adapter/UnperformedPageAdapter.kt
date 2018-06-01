@@ -51,16 +51,16 @@ class UnperformedPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(f
     fun updateList(result : HashMap<String,ArrayList<*>>){
         if(result.containsKey(USGS_REQUEST_URL.JSON_NOTICE)) {
             val noticeList = result[USGS_REQUEST_URL.JSON_NOTICE] as ArrayList<Notice>
-            noticeTab.updateDataList(noticeList as ArrayList<ListDataInterface>)
+            noticeTab.updateDataList(noticeList as ArrayList<*>)
         }
         if(result.containsKey(USGS_REQUEST_URL.JSON_VOTE)) {
             val noticeList= result[USGS_REQUEST_URL.JSON_VOTE] as ArrayList<Vote>
-            voteTab.updateDataList(noticeList as ArrayList<ListDataInterface>)
+            voteTab.updateDataList(noticeList as ArrayList<*>)
         }
 
         if(result.containsKey(USGS_REQUEST_URL.JSON_SIGNAL)) {
             val signalList  = result[USGS_REQUEST_URL.JSON_SIGNAL] as ArrayList<Signal>
-            signalTab.updateDataList(signalList as ArrayList<ListDataInterface>)
+            signalTab.updateDataList(signalList as ArrayList<*>)
         }
 
     }

@@ -6,14 +6,13 @@ import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
  * Created by lumiere on 2018-01-01.
  */
 data class Signal(
-        var light_idx: Int, //Primary Key
+        var signal_idx: Int, //Primary Key
         override var u_idx: Int,
         var chat_idx: Int?,
         var write_time: String,
@@ -55,6 +54,10 @@ data class Signal(
         return Utils.getMonthDayTime(write_time)
     }
 
+    override fun getGroupTitle(): String {
+        return groupName
+    }
+
     constructor(light_idx: Int, u_idx: Int, chat_idx: Int?, write_time: String, open_status: Int?, room_idx: Int, content: String?, entire_status: Int) : this(light_idx, u_idx, chat_idx, write_time, open_status, room_idx, content, entire_status, null)
 
 
@@ -73,7 +76,7 @@ data class Signal(
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeInt(light_idx)
+        writeInt(signal_idx)
         writeInt(u_idx)
         writeValue(chat_idx)
         writeString(write_time)

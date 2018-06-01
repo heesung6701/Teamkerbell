@@ -15,9 +15,9 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_LIGHT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -51,7 +51,7 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
                     for( i in 0 until dataArray.length()){
                         val data : JSONObject = dataArray.getJSONObject(i)
 
-                        val obj = Signal(data.getInt(JSON_LIGHT_IDX),
+                        val obj = Signal(data.getInt(JSON_SIGNAL_IDX),
                                 data.getInt(JSON_U_IDX),
                                 data.getInt(JSON_CHAT_IDX),
                                 data.getString(JSON_WRITE_TIME),

@@ -110,7 +110,6 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
     private fun connectVoteList() {
-
         dataList.clear()
         adapter.notifyDataSetChanged()
 

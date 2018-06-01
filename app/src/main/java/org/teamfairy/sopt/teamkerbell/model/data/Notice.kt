@@ -21,7 +21,7 @@ data class Notice(
         var status : Int
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
 
-
+    constructor(u_idx: Int,chat_idx: Int?,write_time: String,content: String?,room_idx: Int,notice_idx: Int) : this(u_idx,chat_idx,write_time,content,room_idx,notice_idx, ARG_STATUS_NOT_READ)
     constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0,status = ARG_STATUS_READ)
 
     override fun getMainTitle(): String = content!!
@@ -40,6 +40,9 @@ data class Notice(
 
     override fun getRoomTitle(): String {
         return roomName
+    }
+    override fun getGroupTitle(): String {
+        return groupName
     }
 
     constructor(source: Parcel) : this(

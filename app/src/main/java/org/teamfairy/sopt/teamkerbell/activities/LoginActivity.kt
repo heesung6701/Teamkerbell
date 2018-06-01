@@ -30,6 +30,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
@@ -92,7 +93,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         val dataBaseFireToken: DatabaseReference? = dataBaseReference.child("firebase_tokens").ref
         dataBaseFireToken!!.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(FirebaseInstanceId.getInstance().getToken()!!.toString())
 
-        val intent = Intent(applicationContext, GroupListActivity::class.java)
+        val intent = Intent(applicationContext, UnperformedActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()

@@ -44,9 +44,8 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        val intent = Intent(applicationContext, UnperformedActivity::class.java)
+        val intent = Intent(applicationContext, MainActivity::class.java)
         intent.putExtra(INTENT_GROUP, groupList[pos])
-        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(intent)
 
     }

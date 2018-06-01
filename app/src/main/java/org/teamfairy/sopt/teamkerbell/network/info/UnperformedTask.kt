@@ -20,7 +20,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_LIGHT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
@@ -77,9 +77,11 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                                     data.getString(JSON_WRITE_TIME),
                                     data.getString(JSON_CONTENT),
                                     data.getInt(JSON_ROOM_IDX),
-                                    data.getInt(JSON_NOTICE_IDX),
-                                    data.getInt(JSON_STATUS)
-                            )
+                                    data.getInt(JSON_NOTICE_IDX))
+
+                            if(data.has(JSON_STATUS))
+                                notice.status = data.getInt(JSON_STATUS)
+
                             noticeList.add(notice)
                         }
                     }
@@ -98,7 +100,7 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                             val data = datas.getJSONObject(j)
 
                             val signal = Signal(
-                                    data.getInt(JSON_LIGHT_IDX),
+                                    data.getInt(JSON_SIGNAL_IDX),
                                     data.getInt(JSON_U_IDX),
                                     data.getInt(JSON_CHAT_IDX),
                                     data.getString(JSON_WRITE_TIME),

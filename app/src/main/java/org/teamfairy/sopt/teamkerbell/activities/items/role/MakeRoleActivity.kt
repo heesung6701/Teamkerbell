@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
@@ -42,7 +44,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
     override var room: Room? = null
 
 
-    var edtTaskList = arrayListOf<EditText>()
+    private var edtViewList = HashMap<ImageButton,ExampleEdit>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,15 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
 
         layout_add_task.setOnClickListener {
             val edtView = layoutInflater.inflate(R.layout.item_vote_example_edt, null, false)
-            edtTaskList.add(edtView.findViewById(R.id.edt_vote_example))
+            val btn = edtView.findViewById<ImageButton>(R.id.btn_minus)
+            val edt = edtView.findViewById<EditText>(R.id.edt_vote_example)
+            btn.setOnClickListener {
+                val thisEdit = edtViewList[it]!!
+                layout_role_tasks.removeView(thisEdit.view)
+                edtViewList.remove(it)
+            }
+            edtViewList[btn]= ExampleEdit(edtView,edt)
+
             layout_role_tasks.addView(edtView)
         }
 
@@ -75,8 +85,9 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_PARAM_ROOM_IDX, room!!.room_idx)
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_PARAM_TITLE, title)
                 val jsonArray = JSONArray()
-                edtTaskList.forEach {
-                    jsonArray.put(it.text.toString())
+                edtViewList.iterator().forEach {
+                    val edt = it.value.edtText
+                    if(edt.text.isNotEmpty()) jsonArray.put(edt.text.toString())
                 }
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_PARAM_TASK_ARRAY, jsonArray)
             } catch (e: Exception) {
@@ -127,5 +138,10 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
             }
         }
     }
+
+    data class ExampleEdit(
+        var view : View,
+        var edtText : EditText
+    )
 
 }

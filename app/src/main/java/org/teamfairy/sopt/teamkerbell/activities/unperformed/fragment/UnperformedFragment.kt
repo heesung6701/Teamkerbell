@@ -1,7 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.support.v4.app.Fragment
@@ -10,16 +9,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_unperformed.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter.UnperformedListAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.Notice
+import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
+import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 
@@ -27,10 +26,10 @@ import kotlin.properties.Delegates
 class UnperformedFragment : Fragment(),View.OnClickListener {
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
-        val i = Intent(activity.applicationContext, VoteActivity::class.java)
-        i.putExtra(INTENT_VOTE,dataList[pos] as Vote)
-//        i.putExtra(INTENT_GROUP,group)
-        startActivity(i)
+        val msg = Message()
+        msg.what= type
+        msg.obj=dataList[pos]
+        onClickData(msg)
     }
 
     var mListener: OnFragmentInteractionListener? = null
@@ -84,10 +83,24 @@ class UnperformedFragment : Fragment(),View.OnClickListener {
     }
 
 
-    fun updateDataList(datas : ArrayList<ListDataInterface>){
+    fun updateDataList(datas: ArrayList<*>){
         dataList.clear()
         datas.forEach {
-                dataList.add(it)
+            when(type){
+                Utils.TAB_UNPERFORMED_NOTICE->{
+                    (it as Notice).setGroupInfo(activity.applicationContext)
+                    (it as Notice).setPhotoInfo(activity.applicationContext)
+                }
+                Utils.TAB_UNPERFORMED_SIGNAL->{
+                    (it as Signal).setGroupInfo(activity.applicationContext)
+                    (it as Signal).setPhotoInfo(activity.applicationContext)
+                }
+                Utils.TAB_UNPERFORMED_VOTE->{
+                    (it as Vote).setGroupInfo(activity.applicationContext)
+                    (it as Vote).setPhotoInfo(activity.applicationContext)
+                }
+            }
+            dataList.add(it as ListDataInterface)
         }
 
         adapter?.notifyDataSetChanged()
@@ -111,7 +124,7 @@ class UnperformedFragment : Fragment(),View.OnClickListener {
 
 
 
-    private fun onRefreshData(msg : Message) {
+    private fun onClickData(msg : Message) {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(msg)
         }
@@ -122,8 +135,4 @@ class UnperformedFragment : Fragment(),View.OnClickListener {
         fun onFragmentInteraction(msg : Message)
     }
 
-    companion object {
-        const val MSG_REFRESH=0
-
-    }
 }

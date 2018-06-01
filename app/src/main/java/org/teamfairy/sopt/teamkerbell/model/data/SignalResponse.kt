@@ -21,6 +21,9 @@ data class SignalResponse(
     override fun getRoomTitle(): String {
         return ""
     }
+    override fun getGroupTitle(): String {
+        return ""
+    }
 
 
     override var room_idx: Int = 0

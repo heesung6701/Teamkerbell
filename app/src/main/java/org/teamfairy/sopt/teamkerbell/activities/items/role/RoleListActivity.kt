@@ -21,7 +21,6 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.RoleListAdap
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_SHOW
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -114,16 +113,18 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
     private fun connectRoleList() {
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute("$URL_ROLE_SHOW/${room?.room_idx?:""}")
+        task.execute(URL_ROLE_SHOW)
+//        var roomIdx = room?.room_idx?:""
+//        if(roomIdx== Room.ARG_ALL_IDX) roomIdx = ""
+//        task.execute("$URL_ROLE_SHOW/$roomIdx")
     }
     private fun updateList(){
         dataList.clear()
         roleList.forEach {
-            if(it.room_idx==room?.room_idx?:it.room_idx)
+            if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
                 dataList.add(it)
         }
         adapter.notifyDataSetChanged()
-
     }
 
     private  fun successGetRoleList(msg : Message){
@@ -146,11 +147,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         private val mActivity: WeakReference<RoleListActivity> = WeakReference<RoleListActivity>(activity)
 
         override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-               activity.successGetRoleList(msg)
-
-            }
+            mActivity.get()?.successGetRoleList(msg)
         }
     }
 }

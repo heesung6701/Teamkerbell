@@ -25,8 +25,8 @@ class UnperformedListAdapter(var dataList: ArrayList<ListDataInterface>) : Recyc
 
     override fun onBindViewHolder(holder: UnperformedListViewHolder, position: Int) {
 
-        holder.tvTitle.text = dataList[position].getMainTitle()
-        holder.tvSubTitle.text = dataList[position].getSubTitle()
+        holder.tvTitle.text = dataList[position].getGroupTitle()
+        holder.tvSubTitle.text = dataList[position].getMainTitle()
         holder.tvTime.text = dataList[position].getTime()
 
     }

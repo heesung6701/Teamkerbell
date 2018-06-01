@@ -10,6 +10,10 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_COLOR
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
@@ -35,11 +39,11 @@ class SignalResponseListTask(context: Context, var handler: Handler, token : Str
 
                     for( i in 0 until dataArray.length()){
                         val data : JSONObject = dataArray.getJSONObject(i)
-                        val obj = SignalResponse(data.getInt("light_idx"),
-                                data.getInt("u_idx"),
-                                data.getString("color"),
-                                data.getString("content"),
-                                data.getString("write_time")
+                        val obj = SignalResponse(data.getInt(USGS_REQUEST_URL.JSON_SIGNAL_IDX),
+                                data.getInt(USGS_REQUEST_URL.JSON_U_IDX),
+                                data.getString(JSON_COLOR),
+                                data.getString(JSON_CONTENT),
+                                data.getString(JSON_WRITE_TIME)
                         )
                         if(obj.content.equals("null")) obj.content=null
                         if(obj.write_time.equals("null")) obj.write_time=null

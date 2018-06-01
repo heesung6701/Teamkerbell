@@ -28,6 +28,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VOTEID
 import org.teamfairy.sopt.teamkerbell.network.info.VoteResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -47,6 +48,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     private var fromList = false
 
     var group: Team by Delegates.notNull()
+    var room: Room by Delegates.notNull()
     var vote: Vote by Delegates.notNull()
     var voteResponse: VoteResponse by Delegates.notNull()
 
@@ -76,8 +78,9 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         recentTap = btn_by_choice
 
 
-        group = intent.getParcelableExtra(INTENT_GROUP)
         vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
+        room = intent.getParcelableExtra(INTENT_ROOM)?:DatabaseHelpUtils.getRoom(applicationContext,vote.room_idx)
+        group = intent.getParcelableExtra(INTENT_GROUP)?:DatabaseHelpUtils.getGroup(applicationContext,room.g_idx)
 
         vote.setPhotoInfo(applicationContext)
 

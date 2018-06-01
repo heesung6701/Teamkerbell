@@ -11,13 +11,23 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import kotlinx.android.synthetic.main.activity_unperformed.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.activities.GroupListActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter.UnperformedPageAdapter
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.UnperformedFragment
+import org.teamfairy.sopt.teamkerbell.model.data.Notice
+import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.UnperformedTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_UNPERFORMED_NOTICE
@@ -41,7 +51,26 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
     override fun onFragmentInteraction(msg: Message) {
         when (msg.what) {
+            TAB_UNPERFORMED_VOTE->{
+                val i = Intent(applicationContext,VoteActivity::class.java)
+                i.putExtra(INTENT_VOTE,msg.obj as Vote)
+                startActivity(i)
+            }
+            TAB_UNPERFORMED_NOTICE->{
 
+                val i = Intent(applicationContext,NoticeActivity::class.java)
+                i.putExtra(INTENT_NOTICE,msg.obj as Notice)
+                startActivity(i)
+
+            }
+
+            TAB_UNPERFORMED_SIGNAL->{
+
+                val i = Intent(applicationContext, SignalActivity::class.java)
+                i.putExtra(INTENT_SIGNAL,msg.obj as Signal)
+                startActivity(i)
+
+            }
         }
     }
 
@@ -49,7 +78,6 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unperformed)
 
-        group=intent.getParcelableExtra(INTENT_GROUP)
 
 
         iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
@@ -94,9 +122,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
         btn_start.setOnClickListener {
 
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-
+            val intent = Intent(applicationContext, GroupListActivity::class.java)
             startActivity(intent)
         }
 

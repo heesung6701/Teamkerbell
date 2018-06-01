@@ -35,6 +35,7 @@ class NoticeActivity : AppCompatActivity() {
         notice.setPhotoInfo(applicationContext)
         notice.setGroupInfo(applicationContext)
 
+
         tv_title.text=notice.getMainTitle()
         tv_content.text=notice.content
         if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"$INTENT_USER/${notice.u_idx}"))

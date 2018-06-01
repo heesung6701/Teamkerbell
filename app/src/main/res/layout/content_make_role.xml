@@ -31,7 +31,9 @@
         android:layout_below="@id/layout_select_room"
         android:orientation="vertical"
         android:paddingEnd="16dp"
-        android:paddingStart="16dp">
+        android:paddingStart="16dp"
+        android:layout_marginTop="32dp"
+        >
 
         <EditText
             android:id="@+id/edt_role_name"

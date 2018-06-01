@@ -12,6 +12,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 
@@ -92,6 +93,27 @@ class DatabaseHelpUtils {
 
             adapterGroup.notifyDataSetChanged()
             realm.close()
+        }
+
+        fun getRoomUIdxListFromRealm(applicationContext: Context, roomMemberList: ArrayList<Int>, room: Room){
+
+            val realm  = DatabaseHelpUtils.getRealmDefault(applicationContext)
+            val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll()
+            joinedRs.iterator().forEach {
+                val user = realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
+                        ?: UserR()
+                roomMemberList.add(user.u_idx)
+            }
+        }
+        fun getRoomUserListFromRealm(applicationContext: Context, roomMemberList: ArrayList<User>, room: Room){
+
+            val realm  = DatabaseHelpUtils.getRealmDefault(applicationContext)
+            val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll()
+            joinedRs.iterator().forEach {
+                val user = realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
+                        ?: UserR()
+                roomMemberList.add(user.toUser())
+            }
         }
 
         fun getRoomListFromRealm(applicationContext: Context, dataListRoom: ArrayList<Room>, adapterRoom: RecyclerView.Adapter<*>, group: Team,containAll : Boolean) {

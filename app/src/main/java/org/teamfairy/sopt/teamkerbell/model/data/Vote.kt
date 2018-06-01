@@ -26,6 +26,10 @@ data class Vote(
         return roomName
     }
 
+    override fun getGroupTitle(): String {
+        return groupName
+    }
+
     fun setGroupInfo(context: Context){
         super.setGroupInfo(context,room_idx)
     }

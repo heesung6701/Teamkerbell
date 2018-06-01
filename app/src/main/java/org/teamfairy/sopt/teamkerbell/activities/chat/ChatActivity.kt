@@ -42,7 +42,6 @@ import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.data
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.setDatabaseGroup
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
 import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
-import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
@@ -288,17 +287,12 @@ class ChatActivity : AppCompatActivity() {
 
     private fun updateUserList() {
 
-        val realm = getRealmDefault(applicationContext)
+
 
         userList.clear()
-        val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll()
-        joinedRs.iterator().forEach {
-            val user = realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
-                    ?: UserR()
 
-            userList.add(user.toUser())
+        DatabaseHelpUtils.getRoomUserListFromRealm(applicationContext,userList,room)
 
-        }
 
         //drawer layout
         listView_user!!.layoutManager = LinearLayoutManager(applicationContext);
@@ -593,7 +587,7 @@ class ChatActivity : AppCompatActivity() {
                 }
 
                 R.id.btn_signal->{
-                    makeLights(position)
+                    makeSignal(position)
                     dialog.dismiss()
                 }
                 R.id.btn_notice->{
@@ -630,7 +624,7 @@ class ChatActivity : AppCompatActivity() {
 
     private var makeContent: String? = null
     private var makeType: Int by Delegates.notNull()
-    private fun makeLights(position: Int) {
+    private fun makeSignal(position: Int) {
 
         makeContent = dataList.get(position).content
         makeType = ChatUtils.TYPE_LIGHT
@@ -655,7 +649,7 @@ class ChatActivity : AppCompatActivity() {
 
         val jsonParam = JSONObject()
 
-        makeContent = dataList.get(position).content
+        makeContent = dataList[position].content
         makeType = ChatUtils.TYPE_NOTICE
         try {
             jsonParam.put(USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_UID, LoginToken.getUserIdx(applicationContext))
@@ -729,10 +723,8 @@ class ChatActivity : AppCompatActivity() {
         private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
 
         override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
             val position = msg.what
-            if (activity != null)
-                activity.makeDialog(position)
+            mActivity.get()?.makeDialog(position)
         }
     }
 
