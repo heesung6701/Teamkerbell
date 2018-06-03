@@ -41,7 +41,7 @@ class InviteUserActivity : AppCompatActivity() {
     var txtSearch : String = ""
 
 
-    val whoCheck = HashMap<Int,Boolean>()
+    private val whoCheck = HashMap<Int,Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_user)

@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.DatePicker
@@ -21,16 +19,12 @@ import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_vote.*
-import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
-import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
@@ -86,7 +80,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
         btn_vote_example_add.setOnClickListener {
 
             cnt_vote_examples++
-            val edtView = layoutInflater.inflate(R.layout.item_vote_example_edt, null, false)
+            val edtView = layoutInflater.inflate(R.layout.item_example_edt, null, false)
             voteExamples.add(edtView.findViewById(R.id.edt_vote_example))
             layout_vote_examples.addView(edtView)
         }

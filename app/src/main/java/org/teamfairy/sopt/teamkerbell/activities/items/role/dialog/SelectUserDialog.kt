@@ -1,4 +1,4 @@
-package org.teamfairy.sopt.teamkerbell.activities.main.dialog
+package org.teamfairy.sopt.teamkerbell.activities.items.role.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -8,47 +8,61 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageButton
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.home.HomeFragment
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
+import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import kotlin.properties.Delegates
 
 
 /**
  * Created by lumiere on 2018-05-20.
  */
-class  SelectUserDialog(context: Context?,var group: Team) : Dialog(context){
+class  SelectUserDialog(context: Context?,var room : Room,var userIdArray : IntArray) : Dialog(context){
 
 
-    private var adapterUser: UserListAdapter by Delegates.notNull()
-    private var dataListUser = ArrayList<User>()
+    private var adapter: UserListAdapter by Delegates.notNull()
+    var dataList = ArrayList<UserCheckData>()
+    private var dataListOrigin = ArrayList<User>()
     private  var recyclerView : RecyclerView by Delegates.notNull()
 
-    private var btnAdd : ImageButton by Delegates.notNull()
+    private var btnComplete : Button by Delegates.notNull()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.dialog_user_list);
+        setContentView(R.layout.dialog_select_user);
 
         recyclerView = findViewById<RecyclerView>(R.id.dialog_recyclerView)
 
         recyclerView.layoutManager = LinearLayoutManager(context.applicationContext)
-        adapterUser = UserListAdapter(dataListUser, context.applicationContext)
-        recyclerView.adapter = adapterUser
+        adapter = UserListAdapter(dataList as ArrayList<User>, context.applicationContext)
+        recyclerView.adapter = adapter
 
-        DatabaseHelpUtils.getUserListFromRealm(context.applicationContext,dataListUser,adapterUser as RecyclerView.Adapter<*>,group)
+        updateUserList()
 
-
-        btnAdd=findViewById(R.id.btn_add)
+        btnComplete=findViewById(R.id.btn_complete)
     }
     fun setOnClickListener(l : View.OnClickListener){
-        btnAdd.setOnClickListener(l)
+        btnComplete.setOnClickListener(l)
+    }
+    private fun updateUserList(){
+        dataList.clear()
+
+        val roomMemberList = ArrayList<User>()
+        DatabaseHelpUtils.getRoomUserListFromRealm(context,roomMemberList,room)
+
+        roomMemberList.forEach {
+            dataList.add(it.toUserCheckData(userIdArray.contains(it.u_idx)))
+        }
+        adapter.notifyDataSetChanged()
     }
 }

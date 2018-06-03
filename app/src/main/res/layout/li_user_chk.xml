@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="8dp"
@@ -31,6 +31,16 @@
         android:textSize="12sp"
         android:textStyle="bold"
         tools:text="사용자1" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/li_user_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="invisible"
+        app:buttonTint="@color/mainColorM" />
 
 
 </LinearLayout>

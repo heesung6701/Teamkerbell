@@ -4,26 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.task.TaskActivity">
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.EditRoleActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/app_bar_back"/>
+        <include layout="@layout/app_bar_commit"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_task" />
+    <include layout="@layout/content_edit_role" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/icon_floating_add" />
 
 
 </android.support.design.widget.CoordinatorLayout>

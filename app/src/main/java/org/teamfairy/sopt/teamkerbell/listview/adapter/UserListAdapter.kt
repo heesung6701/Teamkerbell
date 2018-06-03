@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder
 import kotlinx.android.synthetic.main.li_user.view.*
+import kotlinx.android.synthetic.main.li_user_chk.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
@@ -29,7 +30,7 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
         holder.tvName.text = dataList[position].name
         if (isCheckable && dataList[position] is UserCheckData) {
             val userCheckData = dataList[position] as UserCheckData
-            holder.chk.isChecked = userCheckData.isChecked
+            holder.chk!!.isChecked = userCheckData.isChecked
             holder.chk.setOnCheckedChangeListener { _, p1 -> userCheckData.isChecked = p1 }
         }
         val url = dataList[position].photo
@@ -42,10 +43,10 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UserViewHolder {
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user, parent, false)
+        val mainView: View?
         val viewHolder: UserViewHolder?
-
         if (dataList[viewType] is UserCheckData) {
+            mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user_chk, parent, false)
             isCheckable = true
             val userCheckData = dataList[viewType] as UserCheckData
             mainView.setOnClickListener {
@@ -54,8 +55,8 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
             }
             mainView.li_user_chk.visibility = View.VISIBLE
         } else {
+            mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user, parent, false)
             isCheckable=false
-            mainView.li_user_chk.visibility = View.GONE
         }
         if(mOnClick!=null)
             mainView.setOnClickListener(mOnClick)

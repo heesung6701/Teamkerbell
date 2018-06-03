@@ -9,14 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.android.synthetic.main.activity_role_list.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_role.*
-import kotlinx.android.synthetic.main.content_signal.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.TaskListAdapter
+import org.teamfairy.sopt.teamkerbell.activities.items.role.task.TaskActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.model.data.Room
@@ -74,6 +73,17 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
             finish()
         }
 
+        btn_more.setOnClickListener {
+            val i = Intent(applicationContext, EditRoleActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            i.putExtra(INTENT_GROUP,group)
+            i.putExtra(INTENT_ROOM,room)
+            i.putExtra(INTENT_ROLE,role)
+            i.putExtra(INTENT_TASK,dataList)
+            startActivity(i)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
+
 
 
     }
@@ -86,7 +96,7 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
-        val i = Intent(applicationContext,TaskActivity::class.java)
+        val i = Intent(applicationContext, TaskActivity::class.java)
         i.putExtra(INTENT_GROUP, group)
         i.putExtra(INTENT_ROLE, role)
         i.putExtra(INTENT_ROOM, room)
@@ -100,7 +110,6 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
         adapter.notifyDataSetChanged()
 
         val task = RoleTaskListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-
         task.execute(USGS_REQUEST_URL.URL_ROLE_SHOW_TASK + "/" + role.role_idx)
 
     }

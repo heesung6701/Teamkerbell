@@ -22,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATU
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICES
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
@@ -58,7 +59,7 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                     val dataJson: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
 
 
-                    val noticeGroupArrray: JSONArray = dataJson.getJSONArray(JSON_NOTICE)
+                    val noticeGroupArrray: JSONArray = dataJson.getJSONArray(JSON_NOTICES)
                     val noticeList = ArrayList<Notice>()
                     for (i in 0 until noticeGroupArrray.length()) {
                         val groupJson: JSONObject = noticeGroupArrray.getJSONObject(i)

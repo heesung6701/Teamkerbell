@@ -287,12 +287,8 @@ class ChatActivity : AppCompatActivity() {
 
     private fun updateUserList() {
 
-
-
         userList.clear()
-
         DatabaseHelpUtils.getRoomUserListFromRealm(applicationContext,userList,room)
-
 
         //drawer layout
         listView_user!!.layoutManager = LinearLayoutManager(applicationContext);

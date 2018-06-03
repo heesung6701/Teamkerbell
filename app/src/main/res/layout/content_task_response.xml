@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.task.TaskResponseActivity"
+    tools:showIn="@layout/activity_task_response">
+
+
+    <include layout="@layout/li_task_response"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/edt_commit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="내용을 입력해주세요"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:scrollbars="vertical"
+            android:textSize="12sp"
+            android:theme="@style/EditText_mainColor"
+
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="bottom"
+            >
+            <Button
+                android:id="@+id/btn_commit"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_round_btn_gray"
+                android:text="@string/action_enter"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:theme="@style/FlatButton"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

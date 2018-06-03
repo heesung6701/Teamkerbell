@@ -26,6 +26,7 @@ class IntentTag {
         const val INTENT_NOTICE : String="NOTICE"
         const val INTENT_VOTE : String="VOTE"
         const val INTENT_ROLE : String="ROLE"
+        const val INTENT_TASK_RESPONSE : String="ROLE_TASK_RESPONSE"
         const val INTENT_PICK_IDX : String="PICK_IDX"
 
 

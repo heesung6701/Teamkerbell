@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.MakeRoleActivity"
-    tools:showIn="@layout/activity_make_role">
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.EditRoleActivity"
+    tools:showIn="@layout/activity_edit_role">
 
 
     <include
@@ -35,30 +35,25 @@
         android:paddingStart="16dp"
         >
 
-        <EditText
-            android:id="@+id/edt_role_name"
+        <TextView
+            android:id="@+id/tv_role_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            android:hint="@string/txt_enter_title"
             android:maxLines="1"
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:textSize="15sp"
-            android:theme="@style/EditText_mainColor" />
-
-        <ScrollView
+            tools:text="역할 제목"
+            />
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
-        <LinearLayout
-            android:id="@+id/layout_role_tasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-        </ScrollView>
+            android:layout_height="1dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/gray"
+            />
 
         <LinearLayout
             android:id="@+id/layout_add_task"
@@ -88,6 +83,16 @@
 
 
         </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_role_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </ScrollView>
 
     </LinearLayout>
 </RelativeLayout>

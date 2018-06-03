@@ -24,7 +24,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.pick.PickListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
-import org.teamfairy.sopt.teamkerbell.activities.main.dialog.SelectUserDialog
+import org.teamfairy.sopt.teamkerbell.activities.main.dialog.ShowUserDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -110,7 +110,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
             else openGroupList()
         }
         v.tv_count.setOnClickListener {
-            makeUserDialog()
+            showUserDialog()
         }
         v.layout_parent.setOnClickListener {
             closeGroupList()
@@ -140,9 +140,9 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     }
 
 
-    private fun makeUserDialog() {
+    private fun showUserDialog() {
 
-        val dialog = SelectUserDialog(context,group)
+        val dialog = ShowUserDialog(context,group)
         dialog.show()
 
         dialog.setOnClickListener(View.OnClickListener { p0 ->

@@ -28,6 +28,9 @@
     <string name="title_activity_role">역할분담</string>
     <string name="title_activity_task">역할분담</string>
     <string name="title_activity_make_role">역할분담 만들기</string>
+    <string name="title_activity_edit_role">역할 수정</string>
+    <string name="title_activity_make_task_response">역할 수행</string>
+    <string name="title_activity_task_response">역할 응답</string>
 
 
     <string name="title_activity_chat">채팅</string>
@@ -107,6 +110,7 @@
     <string name="action_register">회원가입</string>
     <string name="action_signal_secret">비밀 신호등 설정</string>
     <string name="action_signal_particular">특정인 선택</string>
+    <string name="action_upload_file">파일 첨부하기</string>
 
 
     <string name="tab_by_choice">항목별</string>
@@ -123,6 +127,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="action_enter">입력</string>
 
 </resources>
