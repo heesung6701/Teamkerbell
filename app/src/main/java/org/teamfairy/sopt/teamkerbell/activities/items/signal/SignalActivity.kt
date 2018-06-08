@@ -46,19 +46,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     override fun onRefresh() {
         connectSignalResponseList()
         mSwipeRefreshLayout.isRefreshing = false
-
     }
-
 
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
     var signal: Signal by Delegates.notNull()
     private var responded: Boolean = false
 
-
     private var adapter: ListDataAdapter by Delegates.notNull()
     private var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
-
 
     companion object {
         const val RED = 1

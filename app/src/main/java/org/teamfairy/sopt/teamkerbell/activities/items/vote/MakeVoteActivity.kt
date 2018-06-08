@@ -80,7 +80,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
         btn_vote_example_add.setOnClickListener {
 
             cnt_vote_examples++
-            val edtView = layoutInflater.inflate(R.layout.item_example_edt, null, false)
+            val edtView = layoutInflater.inflate(R.layout.item_example, null, false)
             voteExamples.add(edtView.findViewById(R.id.edt_vote_example))
             layout_vote_examples.addView(edtView)
         }

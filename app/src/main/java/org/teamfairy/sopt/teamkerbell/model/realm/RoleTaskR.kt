@@ -18,10 +18,10 @@ open class RoleTaskR : RealmObject(){
         if(userIdArrayStr==""){
             return RoleTask(role_idx!!, task_idx!!, content!!, IntArray(0))
         }else {
-            var strs = userIdArrayStr!!.split("/")
+            val strs = userIdArrayStr!!.split("/")
 
-            var userIdArray = IntArray(strs.size)
-            for (i in 0..strs.size - 1) {
+            val userIdArray = IntArray(strs.size)
+            for (i in 0 until strs.size) {
                 userIdArray[i] = strs[i].toInt()
             }
             return RoleTask(role_idx!!, task_idx!!, content!!, userIdArray)

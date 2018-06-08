@@ -24,7 +24,6 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.ResponseListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.role.dialog.SelectUserDialog
-import org.teamfairy.sopt.teamkerbell.activities.main.dialog.ShowUserDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
@@ -214,8 +213,8 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         dataListUser.clear()
         chkUser.clear()
 
-
         val jsonArray = JSONArray(str)
+        roleTask.userIdArray= IntArray(jsonArray.length())
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         for (i in 0 until jsonArray.length()) {
             val uIdx = jsonArray.get(i).toString().toInt()
@@ -223,15 +222,12 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     ?: UserR()
             dataListUser.add(user.toUser())
             chkUser[user.u_idx] = true
+            roleTask.userIdArray[i]=uIdx
         }
         realm.close()
 
 
         if (chkUser[LoginToken.getUserIdx(applicationContext)] == true) {
-            if (isMaster) {
-                dataListUser.add(LoginToken.getUser(applicationContext))
-                chkUser[LoginToken.getUserIdx(applicationContext)] = true
-            }
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.icon_floating_minus))
         } else {
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))

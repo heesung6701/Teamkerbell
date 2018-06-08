@@ -43,7 +43,6 @@ import kotlin.properties.Delegates
  */
 class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
 
-
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
         connectSignalList()
@@ -86,7 +85,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                               savedInstanceState: Bundle?): View? {
 
         val v = inflater.inflate(R.layout.fragment_signal_list, container, false)
-
 
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
@@ -153,7 +151,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
     private fun updateColorFilter(ivFocusRed: ImageView, ivFocusYellow: ImageView, ivFocusGreen: ImageView) {
 
-
         if (signFilter and RED != RED) ivFocusRed.visibility = View.GONE else ivFocusRed.visibility = View.VISIBLE
 
         if (signFilter and YELLOW == YELLOW) ivFocusYellow.visibility = View.VISIBLE else ivFocusYellow.visibility = View.GONE
@@ -176,7 +173,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                 else -> DEFAULT
             }
             if (c and signFilter != 0.toByte()) {
-                if (it.room_idx == (room?.room_idx) ?: it.room_idx)
+                if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
                     dataList.add(it)
             }
         }
@@ -190,7 +187,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                 else -> DEFAULT
             }
             if (c and signFilter == 0.toByte()) {
-                if (it.room_idx == (room?.room_idx) ?: it.room_idx)
+                if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
                     dataList.add(it)
             }
         }
@@ -218,14 +215,11 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         val task = SignalListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
-
         url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
         task.execute("$url/${group.g_idx}")
     }
 
-
     fun getSignalList(result: ArrayList<Signal>) {
-
         signalList.clear()
         result.iterator().forEach {
             when (state) {
@@ -235,7 +229,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                     signalList.add(it)
                 }
                 Utils.SIGNAL_RECEIVER -> {
-
                     it.setPhotoInfo(activity.applicationContext)
                     it.setGroupInfo(activity.applicationContext)
                     if (it.u_idx != LoginToken.getUserIdx(activity.applicationContext))
@@ -265,11 +258,8 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                     mFragment.get()?.getSignalList(msg.obj as ArrayList<Signal>)
                 }
                 else -> {
-
                 }
             }
         }
     }
-
-
 }

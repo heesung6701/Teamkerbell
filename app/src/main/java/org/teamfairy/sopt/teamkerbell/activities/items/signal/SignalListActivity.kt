@@ -2,7 +2,6 @@ package org.teamfairy.sopt.teamkerbell.activities.items.signal
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_signal_list.*
@@ -10,13 +9,10 @@ import kotlinx.android.synthetic.main.app_bar_filter.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.content_signal_list.*
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.adapter.SignalTabAdapter
-import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
@@ -28,13 +24,10 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
     override fun changeRoom(room: Room) {
         this.room=room
         tabAdapter.changeRoom(room)
-
     }
 
     override var group : Team by Delegates.notNull()
     private var tabAdapter : SignalTabAdapter by Delegates.notNull()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +36,7 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
         tv_title.text = supportActionBar!!.title
 
         group = intent.getParcelableExtra(INTENT_GROUP)
-
-
+        room = intent.getParcelableExtra(INTENT_ROOM) ?: Room()
 
         top_tab.addTab(top_tab.newTab().setText("수신"))
         top_tab.addTab(top_tab.newTab().setText("발신"))
@@ -55,8 +47,6 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
 
         top_tab.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(top_tab))
-
-
 
         FilterFunc(this)
 
