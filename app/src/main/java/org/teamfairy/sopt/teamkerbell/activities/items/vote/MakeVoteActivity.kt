@@ -37,6 +37,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PAR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_TITLE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -256,7 +257,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                             val intent = Intent(activity.applicationContext, VoteActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             intent.putExtra(INTENT_GROUP, activity.group)
-                            intent.putExtra("vote_idx", idx.toInt())
+                            intent.putExtra(INTENT_VOTE_IDX, idx.toInt())
                             activity.startActivity(intent)
                             activity.finish()
 

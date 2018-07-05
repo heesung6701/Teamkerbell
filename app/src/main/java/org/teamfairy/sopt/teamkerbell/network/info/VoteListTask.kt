@@ -10,7 +10,20 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FINISHED
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOT_FINISHED
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -25,69 +38,101 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-    fun extractFeatureFromJson(jsonResponse: String) {
+
+    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Vote>? {
 
         message = "No Message"
-        val realm = getRealmDefault(context)
+
+
+        val datas = ArrayList<Vote>()
+
+//        val realm = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse)
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
-                    realm.beginTransaction()
-                    val voteData: JSONObject = baseJsonResponse.getJSONObject("data")
-                    val voteNotFinished: JSONArray = voteData.getJSONArray("NotFinished")
+//                    realm.beginTransaction()
+                    val voteData: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
+                    val voteNotFinished: JSONArray = voteData.getJSONArray(JSON_NOT_FINISHED)
 
                     for (j in 0 until voteNotFinished.length()) {
 
-                        val vote: JSONObject = voteNotFinished.getJSONObject(j)
+                        val obj: JSONObject = voteNotFinished.getJSONObject(j)
 
-                        val obj = VoteR()
+                        val vote = Vote(obj.getInt(JSON_VOTE_IDX),
+                                obj.getInt(JSON_U_IDX),
+                                obj.getString(JSON_WRITE_TIME),
+                                obj.getString(JSON_CONTENT),
+                                obj.getInt(JSON_CHAT_ROOM_IDX),
+                                obj.getString(JSON_TITLE),
+                                obj.getInt(JSON_STATUS))
 
-                        obj.vote_idx = vote.getInt("vote_idx")
-                        obj.u_idx = vote.getInt("u_idx")
-                        obj.write_time = vote.getString("write_time")
-                        obj.content = vote.getString("content")
-                        obj.g_idx = vote.getInt("g_idx")
-                        obj.title = vote.getString("title")
-                        obj.status = vote.getInt("status")
+                        datas.add(vote)
 
-                        realm.copyToRealmOrUpdate(obj)
+//                        val vote: JSONObject = voteNotFinished.getJSONObject(j)
+//
+//                        val obj = VoteR()
+//
+//                        obj.vote_idx = vote.getInt(JSON_VOTE_IDX)
+//                        obj.u_idx = vote.getInt(JSON_U_IDX)
+//                        obj.write_time = vote.getString(JSON_WRITE_TIME)
+//                        obj.content = vote.getString(JSON_CONTENT)
+//                        obj.room_idx = vote.getInt(JSON_ROOM_IDX)
+//                        obj.title = vote.getString(JSON_TITLE)
+//                        obj.status = vote.getInt(JSON_STATUS)
+//
+//                        realm.copyToRealmOrUpdate(obj)
+
                     }
 
-                    val voteFinished: JSONArray = voteData.getJSONArray("Finished")
+                    val voteFinished: JSONArray = voteData.getJSONArray(JSON_FINISHED)
 
                     for (j in 0 until voteFinished.length()) {
 
-                        val vote: JSONObject = voteFinished.getJSONObject(j)
+                        val obj: JSONObject = voteFinished.getJSONObject(j)
 
-                        val obj = VoteR()
+                        val vote = Vote(obj.getInt(JSON_VOTE_IDX),
+                                obj.getInt(JSON_U_IDX),
+                                obj.getString(JSON_WRITE_TIME),
+                                obj.getString(JSON_CONTENT),
+                                obj.getInt(JSON_CHAT_ROOM_IDX),
+                                obj.getString(JSON_TITLE),
+                                obj.getInt(JSON_STATUS))
 
-                        obj.vote_idx = vote.getInt("vote_idx")
-                        obj.u_idx = vote.getInt("u_idx")
-                        obj.write_time = vote.getString("write_time")
-                        obj.content = vote.getString("content")
-                        obj.g_idx = vote.getInt("g_idx")
-                        obj.title = vote.getString("title")
-                        obj.status = vote.getInt("status")
+                        datas.add(vote)
 
-                        realm.copyToRealmOrUpdate(obj)
+//                        val vote: JSONObject = voteFinished.getJSONObject(j)
+//
+//                        val obj = VoteR()
+//                        obj.vote_idx = vote.getInt(JSON_VOTE_IDX)
+//                        obj.u_idx = vote.getInt(JSON_U_IDX)
+//                        obj.write_time = vote.getString(JSON_WRITE_TIME)
+//                        obj.content = vote.getString(JSON_CONTENT)
+//                        obj.room_idx = vote.getInt(JSON_ROOM_IDX)
+//                        obj.title = vote.getString(JSON_TITLE)
+//                        obj.status = vote.getInt(JSON_STATUS)
+//
+//                        realm.copyToRealmOrUpdate(obj)
 
                     }
-                    realm.commitTransaction()
-                    msgCode= MSG_SUCCESS
+//                    realm.commitTransaction()
+                    msgCode = MSG_SUCCESS
 
+                    return datas
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
             }
+
         } catch (e: JSONException) {
             e.printStackTrace()
         } finally {
-            if (realm.isInTransaction) realm.commitTransaction()
+//            if (realm.isInTransaction) realm.commitTransaction()
         }
+        return null
 
     }
 
@@ -96,11 +141,12 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
         super.onPostExecute(result)
 
 
-        extractFeatureFromJson(result!!)
+        val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        msg.obj = obj
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
 
         val data = Bundle()
         data.putString("message", message)

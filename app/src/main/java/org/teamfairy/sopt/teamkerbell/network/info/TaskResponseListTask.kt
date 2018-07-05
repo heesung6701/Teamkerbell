@@ -38,7 +38,9 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
 
                         val files: ArrayList<String> = ArrayList<String>()
                         for (j in 0 until dataFile.length()) {
-                            files.add(dataFile[j].toString())
+                            val dataFilsString  : JSONObject= dataFile.getJSONObject(j)
+                            val fileUrl :String = dataFilsString.getString("file")
+                            files.add(fileUrl)
                         }
 
 

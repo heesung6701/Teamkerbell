@@ -40,6 +40,8 @@ import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 import android.support.v4.app.ActivityCompat
 import android.os.Build
+import android.view.View
+import kotlinx.android.synthetic.main.activity_make_task_response.*
 
 
 class MakeTaskResponseActivity : AppCompatActivity() {
@@ -52,6 +54,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
     var fileArray = ArrayList<File>()
 
     var adapter: FileListAdapter by Delegates.notNull()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_task_response)
@@ -64,15 +67,15 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             finish()
         }
 
-        btn_add_photo.setOnClickListener {
-
-
-            if(checkPermissionREAD_EXTERNAL_STORAGE(this,MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE)){
-                intentImage()
-            }
-
-
-        }
+//        btn_add_photo.setOnClickListener {
+//
+//
+//            if(checkPermissionREAD_EXTERNAL_STORAGE(this,MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE)){
+//                intentImage()
+//            }
+//
+//
+//        }
         btn_add_file.setOnClickListener {
 
             if(checkPermissionREAD_EXTERNAL_STORAGE(this,MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE)){
@@ -81,6 +84,11 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         }
 
         btn_commit.setOnClickListener {
+            if(edt_content.text.isEmpty() && edt_content.text.isBlank()){
+                Toast.makeText(applicationContext,"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            isUploading()
 
             val task = GetMessageTask(applicationContext, HandlerUpload(this), LoginToken.getToken(applicationContext))
 
@@ -104,6 +112,20 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         adapter = FileListAdapter(fileArray)
         recyclerView.adapter = adapter
 
+
+    }
+
+    private fun isUploading(){
+        upload_progress.visibility= View.VISIBLE
+        btn_add_file.isEnabled=false
+        btn_commit.isEnabled=false
+        edt_content.isEnabled=false
+    }
+    private fun isFailed(){
+        upload_progress.visibility= View.GONE
+        btn_add_file.isEnabled=true
+        btn_commit.isEnabled=true
+        edt_content.isEnabled=true
 
     }
 
@@ -145,7 +167,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                         activity.finish()
                     }
                     else -> {
-
+                        activity.isFailed()
                     }
                 }
 

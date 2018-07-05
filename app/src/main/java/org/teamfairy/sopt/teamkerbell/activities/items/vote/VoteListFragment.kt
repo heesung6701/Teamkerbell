@@ -21,10 +21,10 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteListAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.data.Vote
+import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
+import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_RECEIVER
@@ -40,7 +40,7 @@ import kotlin.properties.Delegates
 /**
  * A placeholder fragment containing a simple view.
  */
-class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener ,RoomActivityInterface{
+class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
 
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -50,12 +50,13 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
     override var group: Team by Delegates.notNull()
-    override var room: Room?=null
+    override var room: Room? = null
 
     override fun changeRoom(room: Room) {
-        this.room=room
+        this.room = room
         updateVoteList()
     }
+
     var state = Utils.VOTE_RECEIVER
 
 
@@ -92,8 +93,8 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         connectVoteList()
 
         v.tv_show_finished.setOnClickListener {
-            showFinished=!showFinished
-            v.tv_show_finished.text = if(!showFinished) getString(R.string.action_show_finished) else getString(R.string.action_show_not_finished)
+            showFinished = !showFinished
+            v.tv_show_finished.text = if (!showFinished) getString(R.string.action_show_finished) else getString(R.string.action_show_not_finished)
             updateVoteList()
         }
 
@@ -103,9 +104,9 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
-        val i = Intent(activity.applicationContext,VoteActivity::class.java)
-        i.putExtra(INTENT_VOTE,dataList[pos] as Vote)
-        i.putExtra(INTENT_GROUP,group)
+        val i = Intent(activity.applicationContext, VoteActivity::class.java)
+        i.putExtra(INTENT_VOTE, dataList[pos] as Vote)
+        i.putExtra(INTENT_GROUP, group)
         startActivity(i)
     }
 
@@ -115,20 +116,21 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         val task: NetworkTask = VoteListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
-        val url = if(state==Utils.VOTE_SENDER) URL_GROUP_VOTE_SENDER else URL_GROUP_VOTE_RECEIVER
+        val url = if (state == Utils.VOTE_SENDER) URL_GROUP_VOTE_SENDER else URL_GROUP_VOTE_RECEIVER
         task.execute("$url/${group.g_idx}")
     }
 
-    private fun updateVoteList(){
+    private fun updateVoteList() {
         dataList.clear()
         voteList.forEach {
-            if(it.isFinished() == showFinished) {
-                if(it.room_idx==room?.room_idx?:it.room_idx)
+            if (it.isFinished() == showFinished) {
+                if (it.room_idx == room?.room_idx ?: it.room_idx)
                     dataList.add(it)
             }
         }
         adapter.notifyDataSetChanged()
     }
+
     fun getVoteListFromRealm() {
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
 
@@ -136,11 +138,11 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         var result: RealmResults<VoteR>? = null
         when (state) {
             Utils.VOTE_ALL ->
-                result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).sort("write_time", Sort.DESCENDING).findAll()
+                result = realm.where(VoteR::class.java).equalTo(ARG_G_IDX, group.g_idx).sort(Vote.ARG_WRITETIME, Sort.DESCENDING).findAll()
             Utils.VOTE_RECEIVER ->
-                result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).notEqualTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
+                result = realm.where(VoteR::class.java).equalTo(ARG_G_IDX, group.g_idx).notEqualTo(ARG_U_IDX, LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
             Utils.VOTE_SENDER ->
-                result = realm.where(VoteR::class.java).equalTo("g_idx", group.g_idx).equalTo("u_idx", LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
+                result = realm.where(VoteR::class.java).equalTo(ARG_G_IDX, group.g_idx).equalTo(ARG_U_IDX, LoginToken.getUserIdx(activity.applicationContext)).sort("write_time", Sort.DESCENDING).findAll()
         }
         voteList.clear()
         result!!.iterator().forEach {
@@ -151,18 +153,48 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
 
+    fun getVoteList(result: ArrayList<Vote>) {
+
+        voteList.clear()
+
+        when (state) {
+            Utils.VOTE_ALL ->
+                result.forEach {
+                    it.setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                    voteList.add(it)
+                }
+            Utils.VOTE_RECEIVER ->
+                result.filter { it.u_idx != LoginToken.getUserIdx(activity.applicationContext) }.forEach {
+
+                    it.setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                    voteList.add((it))
+                }
+            Utils.VOTE_SENDER ->
+                result.filter { it.u_idx == LoginToken.getUserIdx(activity.applicationContext) }.forEach {
+
+                    it.setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                    voteList.add((it))
+                }
+        }
+        updateVoteList()
+    }
+
     private class HandlerGet(fragment: VoteListFragment) : Handler() {
         private val mFragment: WeakReference<VoteListFragment> = WeakReference<VoteListFragment>(fragment)
 
         override fun handleMessage(msg: Message) {
-            when(msg.what){
-                Utils.MSG_SUCCESS->{
+            when (msg.what) {
+                Utils.MSG_SUCCESS -> {
                     val fragment = mFragment.get()
                     if (fragment == null || fragment.activity == null) return
-                    mFragment.get()?.getVoteListFromRealm()
+                    mFragment.get()?.getVoteList(msg.obj as ArrayList<Vote>)
+//                    mFragment.get()?.getVoteListFromRealm()
 
                 }
-                else->{
+                else -> {
 
                 }
 

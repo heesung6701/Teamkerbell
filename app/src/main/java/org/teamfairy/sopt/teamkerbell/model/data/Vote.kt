@@ -22,6 +22,7 @@ data class Vote(
         var title: String?,
         var status: Int?
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
+
     override fun getRoomTitle(): String {
         return roomName
     }
@@ -50,7 +51,7 @@ data class Vote(
         voteR.u_idx=u_idx
         voteR.write_time=write_time
         voteR.content=content
-        voteR.g_idx=room_idx
+        voteR.room_idx=room_idx
         voteR.title=title
         voteR.status=status
         return voteR
@@ -99,5 +100,8 @@ data class Vote(
             override fun createFromParcel(source: Parcel): Vote = Vote(source)
             override fun newArray(size: Int): Array<Vote?> = arrayOfNulls(size)
         }
+
+
+        val ARG_WRITETIME = "write_time"
     }
 }

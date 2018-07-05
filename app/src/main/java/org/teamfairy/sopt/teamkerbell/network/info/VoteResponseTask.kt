@@ -12,6 +12,21 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.data.VoteResponse
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHOICE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VALUE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE_CONTENT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import kotlin.properties.Delegates
@@ -36,44 +51,44 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
 
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
 
-                    if (baseJsonResponse.has("vote")) {
-                        val data: JSONObject = baseJsonResponse.getJSONObject("vote")
+                    if (baseJsonResponse.has(JSON_VOTE)) {
+                        val data: JSONObject = baseJsonResponse.getJSONObject(JSON_VOTE)
                         vote = Vote(
-                                data.getInt("vote_idx"),
-                                data.getInt("u_idx"),
-                                data.getString("write_time"),
-                                data.getString("content"),
-                                data.getInt("g_idx"),
-                                data.getString("title"), data.getInt("status")
+                                data.getInt(JSON_VOTE_IDX),
+                                data.getInt(JSON_U_IDX),
+                                data.getString(JSON_WRITE_TIME),
+                                data.getString(JSON_CONTENT),
+                                data.getInt(JSON_CHAT_ROOM_IDX),
+                                data.getString(JSON_TITLE), data.getInt(JSON_STATUS)
                         )
                     }
 
 
-                    if (baseJsonResponse.has("choice")) {
-                        val examplesArray: JSONArray = baseJsonResponse.getJSONArray("choice")
+                    if (baseJsonResponse.has(JSON_CHOICE)) {
+                        val examplesArray: JSONArray = baseJsonResponse.getJSONArray(JSON_CHOICE)
                         for (i in 0 until examplesArray.length()) {
                             val example = examplesArray.getJSONObject(i)
-                            val idx = example.getInt("vote_content_idx")
-                            val choice = example.getString("content")
+                            val idx = example.getInt(JSON_VOTE_CONTENT_IDX)
+                            val choice = example.getString(JSON_CONTENT)
 
                             choices[idx] = choice
                         }
                     }
 
-                    val responseArray: JSONArray = baseJsonResponse.getJSONArray("response")
+                    val responseArray: JSONArray = baseJsonResponse.getJSONArray(JSON_RESPONSE)
 
                     for (i in 0 until responseArray.length()) {
                         val data: JSONObject = responseArray.getJSONObject(i)
 
 
-                        val uIdx = data.getInt("u_idx")
+                        val uIdx = data.getInt(JSON_U_IDX)
                         var value = -1
-                        if (data.has("value") && data.get("value") is Int)
-                            value = data.getInt("value")
+                        if (data.has(JSON_VALUE) && data.get(JSON_VALUE) is Int)
+                            value = data.getInt(JSON_VALUE)
                         responses[uIdx] = value
                     }
 

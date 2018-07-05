@@ -73,7 +73,9 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
     private var signFilter: Byte = ALL
 
+
     companion object {
+
         const val RED: Byte = 1
         const val YELLOW: Byte = 2
         const val GREEN: Byte = 4
@@ -214,7 +216,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         var url = ""
 
         val task = SignalListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
-
         url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
         task.execute("$url/${group.g_idx}")
     }
@@ -245,7 +246,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         }
         updateList()
     }
-
 
     private class HandlerGet(fragment: SignalListFragment) : Handler() {
         private val mFragment: WeakReference<SignalListFragment> = WeakReference<SignalListFragment>(fragment)

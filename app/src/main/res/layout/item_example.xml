@@ -19,12 +19,9 @@
         android:inputType="text"
         android:maxLines="1"
         android:paddingBottom="6dp"
-
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:paddingTop="6dp"
-
         android:textSize="16sp"
         android:theme="@style/EditText_mainColor" />
-
 </LinearLayout>

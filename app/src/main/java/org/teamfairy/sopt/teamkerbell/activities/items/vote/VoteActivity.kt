@@ -31,6 +31,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -40,7 +41,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
-        connectVoteResponse(vote.vote_idx)
+        connectVoteResponse(vote?.vote_idx ?: 1)
         mSwipeRefreshLayout.isRefreshing = false
     }
 
@@ -49,7 +50,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
-    var vote: Vote by Delegates.notNull()
+    var vote: Vote?=null
     var voteResponse: VoteResponse by Delegates.notNull()
 
 
@@ -68,32 +69,11 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private var isShowResult = false
 
-
+    private var voteIdx : Int by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(toolbar)
-
-
-        recentTap = btn_by_choice
-
-
-        vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
-        room = intent.getParcelableExtra(INTENT_ROOM)?:DatabaseHelpUtils.getRoom(applicationContext,vote.room_idx)
-        group = intent.getParcelableExtra(INTENT_GROUP)?:DatabaseHelpUtils.getGroup(applicationContext,room.g_idx)
-
-        vote.setPhotoInfo(applicationContext)
-
-
-        supportActionBar!!.title = vote.title
-        tv_chat_name.text = group.real_name
-
-        tv_content.text = vote.content
-        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "$INTENT_USER/${vote.u_idx}"))
-            iv_profile.setImageResource(R.drawable.icon_profile_default_png)
-        tv_name.text = vote.name
-        tv_time.text = vote.getTime()
-
 
 
 
@@ -111,6 +91,19 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         recyclerResult.adapter = adapterResultC
 
 
+        recentTap = btn_by_choice
+
+
+        if (intent.hasExtra(INTENT_VOTE)) {
+            vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
+            vote!!.setPhotoInfo(applicationContext)
+            setVoteInfo()
+        } else if (intent.hasExtra(INTENT_VOTE_IDX)) {
+            voteIdx=intent.getIntExtra(INTENT_VOTE_IDX,0)
+        } else finish()
+
+
+
         btn_by_choice.setOnClickListener(resultTabOnClickListener)
         btn_by_member.setOnClickListener(resultTabOnClickListener)
         btn_by_not_voted.setOnClickListener(resultTabOnClickListener)
@@ -120,16 +113,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
-        if (vote.isFinished()) {
-            showResult()
-            btn_complete.visibility = View.GONE
-        } else {
-            showChoices()
-            enableCompleteButton()
-            btn_complete.setOnClickListener {
-                updateVoteResponse()
-            }
-        }
+
 
 
         btn_back.setOnClickListener {
@@ -155,7 +139,36 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_GID, group.g_idx)
             task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS, jsonParam.toString())
         }
-        connectVoteResponse(vote.vote_idx)
+
+        connectVoteResponse(vote?.vote_idx ?: voteIdx)
+
+    }
+
+    private fun setVoteInfo() {
+        val vote = this.vote!!
+
+        room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, vote.room_idx)
+        group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)
+
+        supportActionBar!!.title = vote.title
+        tv_chat_name.text = group.real_name
+
+        tv_content.text = vote.content
+        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "$INTENT_USER/${vote.u_idx}"))
+            iv_profile.setImageResource(R.drawable.icon_profile_default_png)
+        tv_name.text = vote.name
+        tv_time.text = vote.getTime()
+
+        if (vote.isFinished()) {
+            showResult()
+            btn_complete.visibility = View.GONE
+        } else {
+            showChoices()
+            enableCompleteButton()
+            btn_complete.setOnClickListener {
+                updateVoteResponse()
+            }
+        }
 
     }
 
@@ -248,7 +261,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     h["u_idx"] = user.u_idx.toString()
                     h["photo"] = user.photo.toString()
                     h["name"] = user.name.toString()
-                    h["content"] = choice ?: "체다치즈 화났음"
+                    h["content"] = choice ?: "투표내용"
                     h["time"] = "투표한 시간도 보내주나??" //상형한테 물어봐야제
 
 
@@ -296,7 +309,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         }
     }
 
-    private fun unableVote(): Boolean = (vote.isFinished() || adapterChoice.selectedId != -1 && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
+    private fun unableVote(): Boolean = (vote!!.isFinished() || adapterChoice.selectedId != -1 && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
             && dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]))
 
     private fun showResult() {
@@ -321,7 +334,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     override fun onClick(p0: View?) {
         val pos = recyclerChoice.getChildAdapterPosition(p0)
-        if (!vote.isFinished()) {
+        if (vote!=null && !vote!!.isFinished()) {
             adapterChoice.selectedId = pos
             adapterChoice.notifyDataSetChanged()
 
@@ -406,7 +419,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private fun connectVoteResponse(vote_idx: Int) {
         val task = VoteResponseTask(applicationContext, HandlerGetVoteResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + group.g_idx + "/" + vote_idx)
+        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + vote_idx)
     }
 
     private class HandlerGetVoteResponse(activity: VoteActivity) : Handler() {
@@ -418,6 +431,10 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.voteResponse = msg.obj as VoteResponse
+                        if (activity.vote == null) {
+                            activity.vote = activity.voteResponse.vote
+                            activity.setVoteInfo()
+                        }
                         if (activity.isShowResult) activity.updateResultList()
                         else activity.updateChoiceList()
                     }

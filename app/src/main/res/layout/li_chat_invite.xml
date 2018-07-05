@@ -12,6 +12,6 @@
         android:id="@+id/list_item_tv_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="안다혜님이 입장하셨습니다."
+        android:text="윤희성님이 입장하셨습니다."
         />
 </LinearLayout>

@@ -10,13 +10,10 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
-import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
@@ -25,14 +22,12 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICES
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNALS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTES
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -87,7 +82,7 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                         }
                     }
 
-                    val lightGroupArrray: JSONArray = dataJson.getJSONArray(JSON_SIGNAL)
+                    val lightGroupArrray: JSONArray = dataJson.getJSONArray(JSON_SIGNALS)
                     val signalList = ArrayList<Signal>()
                     for (i in 0 until lightGroupArrray.length()) {
                         val groupJson: JSONObject = lightGroupArrray.getJSONObject(i)
@@ -115,10 +110,10 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                     }
 
 
-                    val voteGroupArrray: JSONArray = dataJson.getJSONArray(JSON_VOTE)
+                    val voteGroupArrray: JSONArray = dataJson.getJSONArray(JSON_VOTES)
                     val voteList = ArrayList<Vote>()
                     for (i in 0 until voteGroupArrray.length()) {
-                        val groupJson: JSONObject = lightGroupArrray.getJSONObject(i)
+                        val groupJson: JSONObject = voteGroupArrray.getJSONObject(i)
 
                         val gIdx = groupJson.getInt(JSON_G_IDX)
                         val roomIdx = groupJson.getInt(JSON_ROOM_IDX)
@@ -141,8 +136,8 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                     }
 
                     result[JSON_NOTICE]=noticeList
-                    result[JSON_SIGNAL]=signalList
-                    result[JSON_VOTE]=voteList
+                    result[JSON_SIGNALS]=signalList
+                    result[JSON_VOTES]=voteList
                     msgCode = Utils.MSG_SUCCESS
 
                     return result

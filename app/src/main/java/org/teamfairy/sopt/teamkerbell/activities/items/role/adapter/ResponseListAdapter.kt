@@ -26,6 +26,11 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
 
         if (NetworkUtils.getBitmapList(taskResponse.photo, holder.ivProfile, mContext, "user" + taskResponse.u_idx))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+
+        if(taskResponse.fileArray.isNotEmpty())
+            holder.ivFile.visibility=View.VISIBLE
+        else
+            holder.ivFile.visibility=View.GONE
     }
 
 

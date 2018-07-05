@@ -13,8 +13,8 @@ import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -54,7 +54,7 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
                         obj.content = data.getString(JSON_CONTENT)
                         obj.room_idx = data.getInt(JSON_ROOM_IDX)
                         obj.notice_idx = data.getInt(JSON_NOTICE_IDX)
-                        obj.status=data.getInt(JSON_STATUS)
+                        obj.status=data.getInt(JSON_RESPONSE_STATUS)
 
                         datas.add(obj)
                     }

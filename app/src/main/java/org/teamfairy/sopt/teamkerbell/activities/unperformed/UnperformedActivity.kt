@@ -15,7 +15,6 @@ import org.teamfairy.sopt.teamkerbell.activities.GroupListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
-import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter.UnperformedPageAdapter
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.UnperformedFragment
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
@@ -24,7 +23,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.UnperformedTask
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
@@ -137,8 +135,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         result.iterator().forEach {
             when {
                 it.key == USGS_REQUEST_URL.JSON_NOTICE -> cnt += it.value.size
-                it.key == USGS_REQUEST_URL.JSON_SIGNAL -> cnt += it.value.size
-                it.key == USGS_REQUEST_URL.JSON_VOTE -> cnt += it.value.size
+                it.key == USGS_REQUEST_URL.JSON_SIGNALS -> cnt += it.value.size
+                it.key == USGS_REQUEST_URL.JSON_VOTES -> cnt += it.value.size
             }
         }
 

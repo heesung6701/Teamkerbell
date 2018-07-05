@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/shape_press_dark"
     android:orientation="vertical">
 
@@ -22,7 +23,7 @@
             android:layout_marginTop="12dp"
             android:src="@drawable/icon_profile_default_png"
             app:civ_border_color="@color/mainColorY"
-            app:civ_border_width="1dp" />
+            app:civ_border_width="0dp" />
 
 
         <LinearLayout
@@ -38,14 +39,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="안다혜"
+            tools:text="윤희성"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/li_tv_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2018/02/13 오후 12:25 | 31.3MB"
+            tools:text="2018/02/13 오후 12:25 | 31.3MB"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -57,12 +58,14 @@
         android:layout_height="150dp"
         android:scaleType="fitXY"
         android:src="@drawable/tab_file"
+        android:visibility="gone"
         />
     <TextView
         android:id="@+id/li_tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="대여 가능한 면접장소 리스트 정리해 놓았습니다~"
+        tools:text="대여 가능한 면접장소 리스트 정리해 놓았습니다~"
+        android:padding="10dp"
         />
 
     <LinearLayout
@@ -71,7 +74,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="댓글수 "
+        android:text="@string/txt_comment_count"
         />
     <TextView
         android:id="@+id/li_tv_comment_cnt"

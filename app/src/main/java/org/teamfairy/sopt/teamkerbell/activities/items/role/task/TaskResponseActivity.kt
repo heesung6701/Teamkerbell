@@ -1,10 +1,14 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role.task
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.system.Os.read
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -27,7 +31,10 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK_RESP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
+import java.io.*
 import java.lang.ref.WeakReference
+import java.net.URISyntaxException
+import java.net.URL
 import kotlin.properties.Delegates
 
 class TaskResponseActivity : AppCompatActivity() {
@@ -46,6 +53,32 @@ class TaskResponseActivity : AppCompatActivity() {
 
         taskResponse = intent.getParcelableExtra(INTENT_TASK_RESPONSE)
         taskResponse.setPhotoInfo(this)
+        if(taskResponse.fileArray.isNotEmpty()){
+            li_iv_file.visibility= View.VISIBLE
+            li_iv_file.setOnClickListener {
+                try {
+
+//                    파일 다운로드를 mainThread를 안해
+                    val DownloadURL = taskResponse.fileArray.first()
+                    val FileName = "다운로드 파일이름 어떻게 정하냐"
+                    val inputStream = URL(DownloadURL).openStream()
+
+                    val file = File(FileName)
+                    val out = FileOutputStream(file)
+                    writeFile(inputStream, out)
+                    out.close()
+
+//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(taskResponse.fileArray.first()))
+//                    startActivity(intent)
+                }catch (e : URISyntaxException){
+                    Toast.makeText(applicationContext,"올바르지 않은 파일형식입니다.",Toast.LENGTH_SHORT).show()
+                }catch (e : Exception){
+                    Toast.makeText(applicationContext,"잠시 후 다시 시도해주세요.",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
 
 
         role=intent.getParcelableExtra(INTENT_ROLE)
@@ -92,6 +125,17 @@ class TaskResponseActivity : AppCompatActivity() {
         btn_back.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    @Throws(IOException::class)
+    private fun writeFile(inputstream:  InputStream, os: OutputStream) {
+        var c = 0
+        while (true) {
+            c = inputstream.read()
+            if(c==-1) break
+            os.write(c)
+        }
+        os.flush()
     }
 
     override fun onResume() {

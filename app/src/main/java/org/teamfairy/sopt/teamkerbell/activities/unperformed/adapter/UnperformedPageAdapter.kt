@@ -7,7 +7,6 @@ import org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.Unperforme
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
-import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
@@ -26,7 +25,6 @@ class UnperformedPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(f
     init {
         this.noticeTab = UnperformedFragment()
         noticeTab.type= Utils.TAB_UNPERFORMED_NOTICE
-
 
         this.signalTab = UnperformedFragment()
         signalTab.type= Utils.TAB_UNPERFORMED_SIGNAL
@@ -53,13 +51,13 @@ class UnperformedPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(f
             val noticeList = result[USGS_REQUEST_URL.JSON_NOTICE] as ArrayList<Notice>
             noticeTab.updateDataList(noticeList as ArrayList<*>)
         }
-        if(result.containsKey(USGS_REQUEST_URL.JSON_VOTE)) {
-            val noticeList= result[USGS_REQUEST_URL.JSON_VOTE] as ArrayList<Vote>
-            voteTab.updateDataList(noticeList as ArrayList<*>)
+        if(result.containsKey(USGS_REQUEST_URL.JSON_VOTES)) {
+            val voteList= result[USGS_REQUEST_URL.JSON_VOTES] as ArrayList<Vote>
+            voteTab.updateDataList(voteList as ArrayList<*>)
         }
 
-        if(result.containsKey(USGS_REQUEST_URL.JSON_SIGNAL)) {
-            val signalList  = result[USGS_REQUEST_URL.JSON_SIGNAL] as ArrayList<Signal>
+        if(result.containsKey(USGS_REQUEST_URL.JSON_SIGNALS)) {
+            val signalList  = result[USGS_REQUEST_URL.JSON_SIGNALS] as ArrayList<Signal>
             signalTab.updateDataList(signalList as ArrayList<*>)
         }
 
