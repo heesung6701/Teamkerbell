@@ -27,6 +27,8 @@ class FileUtils {
         private val LOG_TAG = this::class.java.simpleName
 
 
+        val PATH_FILE_DOWNLOAD = "Teamkerbell"
+
         private fun checkExinterface(imagePath: String, bitmap: Bitmap): Bitmap {
             // 이미지를 상황에 맞게 회전시킨다
             val exif = ExifInterface(imagePath)
@@ -132,12 +134,13 @@ class FileUtils {
                 setImageView(bitmapRotated, imageView)
             val isBm = ByteArrayInputStream(bitmapToByteArray(bitmapRotated).toByteArray())
 
-            val folder = File(Environment.getExternalStorageDirectory(), "팀플의요정")
+            val folder = File(Environment.getExternalStorageDirectory(),  PATH_FILE_DOWNLOAD)
             if (!folder.exists() || !folder.isDirectory)
                 folder.mkdir()
 
             var fileNew = File(folder.absolutePath + File.separator +  name)
             if (!fileNew.exists()) {
+//                TODO(여기 뭔가 이상한데 )
                 fileNew = File(folder.absolutePath + File.separator +  name)
                 fileNew.createNewFile()
             } else {
