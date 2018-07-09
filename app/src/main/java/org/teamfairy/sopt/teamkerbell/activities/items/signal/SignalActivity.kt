@@ -26,12 +26,14 @@ import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS_PARAM_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS_PARAM_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS_PARAM_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseListTask
+import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
@@ -74,7 +76,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         signal.setGroupInfo(applicationContext)
 
         room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
-        group = intent.getParcelableExtra(INTENT_GROUP)?:DatabaseHelpUtils.getGroup(applicationContext,room.g_idx)
+        group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)
         if (room.room_idx == Room.ARG_ALL_IDX || room.room_idx == Room.ARG_NULL_IDX)
             room = DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
 
@@ -123,7 +125,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             Signal.RED -> iv_focus_red.visibility = View.VISIBLE
         }
 
-        if (responded)
+
+        if(responded)
             connectSignalResponseList()
     }
 
@@ -133,13 +136,13 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val btnMore = findViewById<ImageButton>(R.id.btn_more)
 
         responded = intent.getBooleanExtra(INTENT_RESPONDED, false)
+
         if (responded) {
             recyclerView.layoutManager = LinearLayoutManager(this)
 
             adapter = ListDataAdapter(dataList, applicationContext)
             adapter.setOnItemClick(this)
             recyclerView.adapter = adapter
-
 
             connectSignalResponseList()
 
@@ -185,7 +188,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         if (content.isNotEmpty()) {
             val jsonParam = JSONObject()
 
-            val color =Signal.colorByteToStr(selectColor)
+            val color = Signal.colorByteToStr(selectColor)
 
             try {
                 jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_SIGNAL_IDX, signal.signal_idx)
@@ -202,7 +205,6 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
 
-
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
     }
@@ -215,6 +217,12 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val color = Signal.colorByteToStr(selectColor)
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal.signal_idx)
+    }
+
+
+    private fun connectSignalResponse() {
+        val task = SignalResponseTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
+        task.execute(URL_DETAIL_LIGHTS + "/" + signal.signal_idx)
     }
 
     fun updateDataList(signalResponseList: ArrayList<SignalResponse>) {
@@ -240,6 +248,10 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         }
 
         adapter.notifyDataSetChanged()
+    }
+    fun updateResponseList(signalResponse: SignalResponse){
+        edt_response.setText(signalResponse.content)
+        updateColor(Signal.colorStrToByte(signal.color))
     }
 
     private class HandlerGet(activity: SignalActivity) : Handler() {

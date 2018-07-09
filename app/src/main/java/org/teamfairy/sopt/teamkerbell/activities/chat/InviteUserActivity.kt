@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.activities.chat
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_invite_user.*
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_invite_user.*
 import kotlinx.android.synthetic.main.fragment_contact.view.*
+import org.teamfairy.sopt.teamkerbell.R.id.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.adapter.ContactListAdapter
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
@@ -28,7 +30,15 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import kotlin.properties.Delegates
 
-class InviteUserActivity : AppCompatActivity() {
+class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshListener {
+
+    private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
+    override fun onRefresh() {
+        updateUserList()
+        mSwipeRefreshLayout.isRefreshing = false
+    }
+
+
 
     var group : Team by Delegates.notNull()
     var room : Room by Delegates.notNull()
@@ -54,6 +64,9 @@ class InviteUserActivity : AppCompatActivity() {
         adapter = UserListAdapter(dataList as ArrayList<User>,applicationContext)
         recyclerView.layoutManager= LinearLayoutManager(this)
         recyclerView.adapter=adapter
+
+        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+        mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
         btn_back.setOnClickListener {
@@ -98,7 +111,7 @@ class InviteUserActivity : AppCompatActivity() {
         DatabaseHelpUtils.getRoomUIdxListFromRealm(applicationContext,roomMemberList,room)
 
         dataListOrigin.forEach {
-            if(it.name!!.contains(txtSearch) && !roomMemberList.contains(it.u_idx)) {
+            if(it.name!!.contains(txtSearch) && roomMemberList.contains(it.u_idx)) {
                 dataList.add(it.toUserCheckData(whoCheck[it.u_idx]?:false))
             }
         }

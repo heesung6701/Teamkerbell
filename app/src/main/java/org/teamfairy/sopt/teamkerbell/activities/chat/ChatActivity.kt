@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.chat
 
+import android.app.PendingIntent.getActivity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -7,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.provider.SyncStateContract
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -24,6 +26,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.realm.Realm
+import io.socket.client.Socket
+import io.socket.emitter.Emitter
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -31,6 +35,7 @@ import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.R.id.*
 import org.teamfairy.sopt.teamkerbell._utils.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.ARG_LAST_MESSAGE
@@ -42,17 +47,19 @@ import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.data
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.setDatabaseGroup
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
 import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
+import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
+import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
+import org.teamfairy.sopt.teamkerbell.model.list.ChatListData
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CHAT_IDX
@@ -60,6 +67,8 @@ import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR.Companion.ARG_WHAT
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CONTENT
@@ -82,8 +91,7 @@ import kotlin.properties.Delegates
 class ChatActivity : AppCompatActivity() {
 
 
-    private val LOG_TAG = ChatActivity::class.java.name
-
+    private val LOG_TAG = ChatActivity::class.java.simpleName
 
     private var isAddedFirebaseListener: Boolean = false
 
@@ -111,12 +119,14 @@ class ChatActivity : AppCompatActivity() {
     var positionNow = -1
 
 
-
+    private var mSocket: Socket by Delegates.notNull()
+    private var isConnected: Boolean = false
 
 
     private var lastChatIdxListener: ValueEventListener = object : ValueEventListener {
-        override fun onDataChange(dataSnapShot: DataSnapshot?) {
-            if (dataSnapShot!!.value != null && !dataSnapShot.value!!.equals("null")) {
+
+        override fun onDataChange(dataSnapShot: DataSnapshot) {
+            if (dataSnapShot.value != null && !dataSnapShot.value!!.equals("null")) {
                 lastChatIdx = dataSnapShot.value.toString().toInt()
                 Log.d("$LOG_TAG/lastChatIdx", lastChatIdx.toString())
 
@@ -135,7 +145,7 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        override fun onCancelled(p0: DatabaseError?) {
+        override fun onCancelled(p0: DatabaseError) {
 
         }
     }
@@ -159,13 +169,13 @@ class ChatActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         listView_chat.layoutManager = layoutManager
-        adapter_chat = ChatViewAdapter(dataList, applicationContext, group,room)
+        adapter_chat = ChatViewAdapter(dataList, applicationContext, group, room)
         adapter_chat.setOnLongClickHandler(HandlerLongClick(this))
         listView_chat.adapter = adapter_chat
 
 
-        setDatabaseGroup(group,room)
-        FirebaseMessageUtils.getLastChatIdx(group, room,HandlerGetLastMsg(this))
+        setDatabaseGroup(group, room)
+        FirebaseMessageUtils.getLastChatIdx(group, room, HandlerGetLastMsg(this))
 
 
 
@@ -215,7 +225,7 @@ class ChatActivity : AppCompatActivity() {
             }
         }
         btn_board.setOnClickListener {
-//            val intent = Intent(this, BoardActivity::class.java)
+            //            val intent = Intent(this, BoardActivity::class.java)
 //            intent.putExtra("group", group)
 //            startActivity(intent)
             drawer_layout.closeDrawer(Gravity.END)
@@ -265,10 +275,35 @@ class ChatActivity : AppCompatActivity() {
             if (edt.text.isNotEmpty()) {
                 val txt = edt.text.toString()
                 edt.setText("")
-                sendMessage(txt)
+//                sendMessage(txt)
+                sendMessageSocket(txt)
+
+            } else {
+                edt.requestFocus()
             }
         }
 
+
+        val socket =  ChatApplication.getSocket()
+        if(socket==null) finish()
+        mSocket =socket!!
+        mSocket.on(Socket.EVENT_CONNECT, onConnect)
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        mSocket.on(Constants.updatechat, onUpdateChat)
+        mSocket.connect()
+
+
+    }
+
+    private fun sendMessageSocket(txt: String) {
+        val jsonObj : JSONObject = JSONObject()
+        jsonObj.put(Constants.u_idx,LoginToken.getUserIdx(applicationContext))
+        jsonObj.put(Constants.chatroom_idx,room.room_idx)
+        jsonObj.put(Constants.content, txt)
+        jsonObj.put(Constants.JSON_TYPE,0)
+        mSocket.emit(Constants.sendchat, jsonObj.toString())
     }
 
     private fun hideKeyboard() {
@@ -288,7 +323,7 @@ class ChatActivity : AppCompatActivity() {
     private fun updateUserList() {
 
         userList.clear()
-        DatabaseHelpUtils.getRoomUserListFromRealm(applicationContext,userList,room)
+        DatabaseHelpUtils.getRoomUserListFromRealm(applicationContext, userList, room)
 
         //drawer layout
         listView_user!!.layoutManager = LinearLayoutManager(applicationContext);
@@ -330,19 +365,19 @@ class ChatActivity : AppCompatActivity() {
             val uIdx = it.u_idx
             if (uIdx != LoginToken.getUserIdx(applicationContext)) {
                 dataBaseFireToken.child(uIdx.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError?) {
+                    override fun onCancelled(p0: DatabaseError) {
                     }
 
-                    override fun onDataChange(dataSnapShot: DataSnapshot?) {
+                    override fun onDataChange(dataSnapShot: DataSnapshot) {
 
-                        val key: String = dataSnapShot!!.key
+                        val key: String = dataSnapShot.key!!
                         val value: String? = dataSnapShot.value.toString()
 
                         Log.d("$LOG_TAG/token_key", key)
                         Log.d("$LOG_TAG/token_value", value)
 
                         if (value != null && value != "null") {
-                            val json = FcmSendMessageTask.makeNotificationMessage(value, group.real_name, LoginToken.getUser(applicationContext).name.toString() + ":" + txt, group.g_idx,room.room_idx)
+                            val json = FcmSendMessageTask.makeNotificationMessage(value, group.real_name, LoginToken.getUser(applicationContext).name.toString() + ":" + txt, group.g_idx, room.room_idx)
                             val task = FcmSendMessageTask()
                             task.execute(json)
                         }
@@ -476,8 +511,8 @@ class ChatActivity : AppCompatActivity() {
         updateUserList()
         Log.d(LOG_TAG, "onResume")
 
-        addFirebaseListener()
-        addChangeJoinedListener()
+//        addFirebaseListener()
+//        addChangeJoinedListener()
     }
 
 
@@ -487,15 +522,28 @@ class ChatActivity : AppCompatActivity() {
 
         if (lastChatIdx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
             DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, lastChatIdx)
-        removeFirebaseListener()
+//        removeFirebaseListener()
         isUpdateJoined.removeAllChangeListeners()
+
+
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mSocket.disconnect()
+
+        mSocket.off(Socket.EVENT_CONNECT, onConnect)
+        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        mSocket.off(Constants.updatechat, onUpdateChat)
+    }
+
     var mEndPointListener = object : ValueEventListener {
-        override fun onDataChange(dataSnapShot: DataSnapshot?) {
+        override fun onDataChange(dataSnapShot: DataSnapshot) {
             Log.d(LOG_TAG, "endPoint onDataChanged")
-            val ep = dataSnapShot!!.children
+            val ep = dataSnapShot.children
 
             var max = 0
             ep.iterator().forEach {
@@ -513,31 +561,31 @@ class ChatActivity : AppCompatActivity() {
             updateReadCount()
         }
 
-        override fun onCancelled(p0: DatabaseError?) {
+        override fun onCancelled(p0: DatabaseError) {
         }
 
 
     }
 
     private var mMessageAddListener = object : ChildEventListener {
-        override fun onChildChanged(dataSnapShot: DataSnapshot?, p1: String?) {
+        override fun onChildChanged(dataSnapShot: DataSnapshot, p1: String?) {
             Log.d(LOG_TAG, "message onChildChanged")
         }
 
-        override fun onCancelled(p0: DatabaseError?) {
+        override fun onCancelled(p0: DatabaseError) {
         }
 
-        override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
         }
 
-        override fun onChildAdded(dataSnapshot: DataSnapshot?, p1: String?) {
+        override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
             Log.d(LOG_TAG, "message onChildAdded")
-            addMessage(dataSnapshot!!)
+            addMessage(dataSnapshot)
 
         }
 
 
-        override fun onChildRemoved(p0: DataSnapshot?) {
+        override fun onChildRemoved(p0: DataSnapshot) {
         }
     }
 
@@ -564,33 +612,33 @@ class ChatActivity : AppCompatActivity() {
 
 
     fun makeDialog(position: Int) {
-        val dialog  = ChooseWorkDialog (this)
+        val dialog = ChooseWorkDialog(this)
         dialog.show()
         dialog.setOnClickListener(View.OnClickListener { p0 ->
-            when(p0.id){
-                R.id.btn_copy->{
+            when (p0.id) {
+                R.id.btn_copy -> {
                     val clipboardManager = applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                     val clipData = ClipData.newPlainText(getString(R.string.app_name), dataList[position].content)
                     clipboardManager.primaryClip = clipData
                     Toast.makeText(applicationContext, dataList[position].content + "\n가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
-                R.id.btn_delete->{
+                R.id.btn_delete -> {
 
                 }
-                R.id.btn_share->{
+                R.id.btn_share -> {
 
                 }
 
-                R.id.btn_signal->{
+                R.id.btn_signal -> {
                     makeSignal(position)
                     dialog.dismiss()
                 }
-                R.id.btn_notice->{
+                R.id.btn_notice -> {
                     makeNotice(position)
                     dialog.dismiss()
                 }
-                R.id.btn_pick->{
+                R.id.btn_pick -> {
                     val realm = getRealmDefault(applicationContext)
 
                     realm.beginTransaction()
@@ -610,7 +658,7 @@ class ChatActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
 
                 }
-                R.id.btn_search->{
+                R.id.btn_search -> {
 
                 }
             }
@@ -735,7 +783,7 @@ class ChatActivity : AppCompatActivity() {
                     Utils.MSG_SUCCESS -> {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
-                        FirebaseMessageUtils.sendMessage(activity.makeType, idx, activity.makeContent!!, activity.group, activity.room,LoginToken.getUserIdx(activity.applicationContext),activity)
+                        FirebaseMessageUtils.sendMessage(activity.makeType, idx, activity.makeContent!!, activity.group, activity.room, LoginToken.getUserIdx(activity.applicationContext), activity)
                     }
                     else -> {
                         val result = msg.data.getString("message")
@@ -774,6 +822,58 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+
+    private val onConnect = Emitter.Listener {
+
+        this.runOnUiThread(Runnable {
+            if (!isConnected) {
+
+                mSocket.emit("adduser", "희성")
+                Toast.makeText(applicationContext,
+                        R.string.connect, Toast.LENGTH_LONG).show()
+                Log.i(LOG_TAG+"/Socket", "connected")
+                isConnected = true
+            }
+        })
+    }
+
+    private val onDisconnect = Emitter.Listener {
+        this.runOnUiThread(Runnable {
+            Log.i(LOG_TAG+"/Socket", "disconnected")
+            isConnected = false
+            Toast.makeText(applicationContext,
+                    R.string.disconnect, Toast.LENGTH_LONG).show()
+        })
+    }
+
+    private val onConnectError = Emitter.Listener {
+        this.runOnUiThread(Runnable {
+            Log.e(LOG_TAG+"/Socket", "Error connecting")
+            Toast.makeText(applicationContext,
+                    R.string.error_connect, Toast.LENGTH_LONG).show()
+        })
+    }
+
+
+    private val onUpdateChat = Emitter.Listener { args ->
+        this.runOnUiThread(Runnable {
+
+            Toast.makeText(applicationContext, args[0].toString(), Toast.LENGTH_SHORT).show()
+
+            Log.d(LOG_TAG+"/Socket", args[0].toString())
+            val data : JSONObject  =  JSONObject(args[0].toString())
+            val username: String
+            val message: String = data.getString(JSON_CONTENT)
+            val u_idx = data.getInt(JSON_U_IDX)
+            val type = data.getInt(Constants.JSON_TYPE)
+
+            val chatData = ChatMessage(0,type,u_idx,message,"2018-07-10 03:09:00")
+            dataList.add(chatData)
+            adapter_chat.notifyDataSetChanged()
+
+//            removeTyping(username)
+        })
+    }
 
     fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
         recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)

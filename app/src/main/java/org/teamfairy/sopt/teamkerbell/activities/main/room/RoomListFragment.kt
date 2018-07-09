@@ -220,14 +220,14 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         val dataBaseGroup = dataBaseReference.child(ARG_GROUPS).child(group.ctrl_name).child(room.ctrl_name)
 
-        val dataBaseLastMessage = dataBaseGroup!!.child(ARG_LAST_MESSAGE)
+        val dataBaseLastMessage = dataBaseGroup.child(ARG_LAST_MESSAGE)
         val lastMsgListener = object : ValueEventListenerByPosition(position,room.room_idx) {
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
             }
 
-            override fun onDataChange(dataSnapShot: DataSnapshot?) {
+            override fun onDataChange(dataSnapShot: DataSnapshot) {
 
-                val message = dataSnapShot!!.child(ARG_CONTENT).value.toString()
+                val message = dataSnapShot.child(ARG_CONTENT).value.toString()
                 val date = dataSnapShot.child(ARG_DATE).value.toString()
 
                 if (message != "null" && date != "null") {
@@ -246,7 +246,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
                 }
             }
         }
-        dataBaseLastMessage!!.addValueEventListener(lastMsgListener)
+        dataBaseLastMessage.addValueEventListener(lastMsgListener)
         lastMsgListeners[room] = lastMsgListener
     }
 
@@ -254,7 +254,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     private fun removelastMsgListeners() {
         lastMsgListeners.forEach {
             val dataBaseGroup = dataBaseReference.child(ARG_GROUPS).child(it.key.ctrl_name)
-            val dataBaseLastMessage = dataBaseGroup!!.child(ARG_LAST_MESSAGE)
+            val dataBaseLastMessage = dataBaseGroup.child(ARG_LAST_MESSAGE)
             dataBaseLastMessage.removeEventListener(it.value)
         }
     }

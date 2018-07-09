@@ -44,7 +44,7 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
 
     fun extractFeatureFromJson(jsonResponse: String): HashMap<String, ArrayList<*>>? {
 
-        val result= HashMap<String,ArrayList<*>>()
+        val result = HashMap<String, ArrayList<*>>()
         message = "No Message"
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
@@ -54,90 +54,67 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                     val dataJson: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
 
 
-                    val noticeGroupArrray: JSONArray = dataJson.getJSONArray(JSON_NOTICES)
+                    val datasNotice: JSONArray = dataJson.getJSONArray(JSON_NOTICES)
                     val noticeList = ArrayList<Notice>()
-                    for (i in 0 until noticeGroupArrray.length()) {
-                        val groupJson: JSONObject = noticeGroupArrray.getJSONObject(i)
 
-                        val gIdx = groupJson.getInt(JSON_G_IDX)
-                        val roomIdx = groupJson.getInt(JSON_ROOM_IDX)
+                    for (j in 0 until datasNotice.length()) {
+                        val data = datasNotice.getJSONObject(j)
 
-                        val datas: JSONArray = groupJson.getJSONArray(JSON_DATA)
+                        val notice = Notice(
+                                data.getInt(JSON_U_IDX),
+                                data.getInt(JSON_CHAT_IDX),
+                                data.getString(JSON_WRITE_TIME),
+                                data.getString(JSON_CONTENT),
+                                data.getInt(JSON_ROOM_IDX),
+                                data.getInt(JSON_NOTICE_IDX))
 
-                        for (j in 0 until datas.length()) {
-                            val data = datas.getJSONObject(j)
+                        if (data.has(JSON_STATUS))
+                            notice.status = data.getInt(JSON_STATUS)
 
-                            val notice = Notice(
-                                    data.getInt(JSON_U_IDX),
-                                    data.getInt(JSON_CHAT_IDX),
-                                    data.getString(JSON_WRITE_TIME),
-                                    data.getString(JSON_CONTENT),
-                                    data.getInt(JSON_ROOM_IDX),
-                                    data.getInt(JSON_NOTICE_IDX))
-
-                            if(data.has(JSON_STATUS))
-                                notice.status = data.getInt(JSON_STATUS)
-
-                            noticeList.add(notice)
-                        }
+                        noticeList.add(notice)
                     }
 
-                    val lightGroupArrray: JSONArray = dataJson.getJSONArray(JSON_SIGNALS)
+                    val datasSignal: JSONArray = dataJson.getJSONArray(JSON_SIGNALS)
                     val signalList = ArrayList<Signal>()
-                    for (i in 0 until lightGroupArrray.length()) {
-                        val groupJson: JSONObject = lightGroupArrray.getJSONObject(i)
+                    for (j in 0 until datasSignal.length()) {
+                        val data = datasSignal.getJSONObject(j)
 
-                        val gIdx = groupJson.getInt(JSON_G_IDX)
-                        val roomIdx = groupJson.getInt(JSON_ROOM_IDX)
-
-                        val datas: JSONArray = groupJson.getJSONArray(JSON_DATA)
-
-                        for (j in 0 until datas.length()) {
-                            val data = datas.getJSONObject(j)
-
-                            val signal = Signal(
-                                    data.getInt(JSON_SIGNAL_IDX),
-                                    data.getInt(JSON_U_IDX),
-                                    data.getInt(JSON_CHAT_IDX),
-                                    data.getString(JSON_WRITE_TIME),
-                                    data.getInt(JSON_OPEN_STATUS),
-                                    data.getInt(JSON_ROOM_IDX),
-                                    data.getString(JSON_CONTENT),
-                                    data.getInt(JSON_ENTIRE_STATUS)
-                            )
-                            signalList.add(signal)
-                        }
+                        val signal = Signal(
+                                data.getInt(JSON_SIGNAL_IDX),
+                                data.getInt(JSON_U_IDX),
+                                data.getInt(JSON_CHAT_IDX),
+                                data.getString(JSON_WRITE_TIME),
+                                data.getInt(JSON_OPEN_STATUS),
+                                data.getInt(JSON_ROOM_IDX),
+                                data.getString(JSON_CONTENT),
+                                data.getInt(JSON_ENTIRE_STATUS)
+                        )
+                        signalList.add(signal)
                     }
 
 
-                    val voteGroupArrray: JSONArray = dataJson.getJSONArray(JSON_VOTES)
+                    val datasVote: JSONArray = dataJson.getJSONArray(JSON_VOTES)
                     val voteList = ArrayList<Vote>()
-                    for (i in 0 until voteGroupArrray.length()) {
-                        val groupJson: JSONObject = voteGroupArrray.getJSONObject(i)
 
-                        val gIdx = groupJson.getInt(JSON_G_IDX)
-                        val roomIdx = groupJson.getInt(JSON_ROOM_IDX)
-                        val datas: JSONArray = groupJson.getJSONArray(JSON_DATA)
 
-                        for (j in 0 until datas.length()) {
-                            val data = datas.getJSONObject(j)
+                    for (j in 0 until datasVote.length()) {
+                        val data = datasVote.getJSONObject(j)
 
-                            val vote = Vote(
-                                    data.getInt(JSON_VOTE_IDX),
-                                    data.getInt(JSON_U_IDX),
-                                    data.getString(JSON_WRITE_TIME),
-                                    data.getString(JSON_CONTENT),
-                                    data.getInt(JSON_ROOM_IDX),
-                                    data.getString(JSON_TITLE),
-                                    data.getInt(JSON_STATUS)
-                            )
-                            voteList.add(vote)
-                        }
+                        val vote = Vote(
+                                data.getInt(JSON_VOTE_IDX),
+                                data.getInt(JSON_U_IDX),
+                                data.getString(JSON_WRITE_TIME),
+                                data.getString(JSON_CONTENT),
+                                data.getInt(JSON_ROOM_IDX),
+                                data.getString(JSON_TITLE),
+                                data.getInt(JSON_STATUS)
+                        )
+                        voteList.add(vote)
                     }
 
-                    result[JSON_NOTICE]=noticeList
-                    result[JSON_SIGNALS]=signalList
-                    result[JSON_VOTES]=voteList
+                    result[JSON_NOTICE] = noticeList
+                    result[JSON_SIGNALS] = signalList
+                    result[JSON_VOTES] = voteList
                     msgCode = Utils.MSG_SUCCESS
 
                     return result
