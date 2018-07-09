@@ -131,7 +131,10 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 
     private fun intentFile() {
 
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+
+//       구글 드라이브 등에서 가져오는기 막음
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.type = "*/*"
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 

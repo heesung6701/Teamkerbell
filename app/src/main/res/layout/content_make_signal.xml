@@ -50,9 +50,10 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/shape_round_gray_light"
                     android:gravity="top|start"
-                    android:inputType="textMultiLine"
+                    android:inputType="none"
                     android:textSize="14sp"
                     android:minHeight="250dp"
+                    android:scrollHorizontally="false"
                     android:hint="@string/txt_enter_content"
                     android:padding="16dp"
                     android:theme="@style/EditText_mainColor" />

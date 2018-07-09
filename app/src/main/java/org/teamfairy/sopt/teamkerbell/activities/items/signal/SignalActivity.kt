@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.signal
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -57,13 +58,9 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     private var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
 
     companion object {
-        const val RED = 1
-        const val YELLOW = 2
-        const val GREEN = 4
-        const val DEFAULT = 8
     }
 
-    private var selectColor = DEFAULT
+    private var selectColor = Signal.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +79,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             room = DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
 
 
-        updateColor(GREEN)
+        updateColor(Signal.colorStrToByte(signal.color))
 
         tv_name.text = signal.name
         tv_time.text = Utils.getYearMonthDay(signal.write_time)
@@ -91,13 +88,13 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         updateUI()
 
         btn_red.setOnClickListener {
-            updateColor(RED)
+            updateColor(Signal.RED)
         }
         btn_yellow.setOnClickListener {
-            updateColor(YELLOW)
+            updateColor(Signal.YELLOW)
         }
         btn_green.setOnClickListener {
-            updateColor(GREEN)
+            updateColor(Signal.GREEN)
         }
 
 
@@ -110,20 +107,20 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
     }
 
-    private fun updateColor(c: Int) {
-        if (selectColor != DEFAULT && selectColor == c) return
+    private fun updateColor(c: Byte) {
+        if (selectColor != Signal.DEFAULT && selectColor == c) return
         when (selectColor) {
-            GREEN -> iv_focus_green.visibility = View.INVISIBLE
-            YELLOW -> iv_focus_yellow.visibility = View.INVISIBLE
-            RED -> iv_focus_red.visibility = View.INVISIBLE
+            Signal.GREEN -> iv_focus_green.visibility = View.INVISIBLE
+            Signal.YELLOW -> iv_focus_yellow.visibility = View.INVISIBLE
+            Signal.RED -> iv_focus_red.visibility = View.INVISIBLE
         }
 
         selectColor = c
 
         when (selectColor) {
-            GREEN -> iv_focus_green.visibility = View.VISIBLE
-            YELLOW -> iv_focus_yellow.visibility = View.VISIBLE
-            RED -> iv_focus_red.visibility = View.VISIBLE
+            Signal.GREEN -> iv_focus_green.visibility = View.VISIBLE
+            Signal.YELLOW -> iv_focus_yellow.visibility = View.VISIBLE
+            Signal.RED -> iv_focus_red.visibility = View.VISIBLE
         }
 
         if (responded)
@@ -154,23 +151,18 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
 
             when (selectColor) {
-                RED ->
+                Signal.RED ->
                     iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.red))
-                GREEN ->
+                Signal.GREEN ->
                     iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green))
-                YELLOW ->
+                Signal.YELLOW ->
                     iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
                 else ->
                     iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
             }
 
         } else {
-            when (signal.color) {
-                "r" -> updateColor(RED)
-                "g" -> updateColor(GREEN)
-                "y" -> updateColor(YELLOW)
-                "a" -> updateColor(RED)
-            }
+            updateColor(Signal.colorStrToByte(signal.color))
 
 
             btnCommit.visibility = View.VISIBLE
@@ -193,12 +185,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         if (content.isNotEmpty()) {
             val jsonParam = JSONObject()
 
-            val color = when (selectColor) {
-                RED -> "r"
-                GREEN -> "g"
-                YELLOW -> "y"
-                else -> "a"
-            }
+            val color =Signal.colorByteToStr(selectColor)
 
             try {
                 jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_SIGNAL_IDX, signal.signal_idx)
@@ -215,6 +202,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
 
+
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
     }
@@ -224,12 +212,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         dataList.clear()
         adapter.notifyDataSetChanged()
 
-        val color = when (selectColor) {
-            RED -> "r"
-            GREEN -> "g"
-            YELLOW -> "y"
-            else -> "a"
-        }
+        val color = Signal.colorByteToStr(selectColor)
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal.signal_idx)
     }
@@ -242,15 +225,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             it.setPhotoInfo(applicationContext)
             dataList.add(it)
         }
-        val strNot = if (selectColor == RED) "미" else ""
+        val strNot = if (selectColor == Signal.RED) "미" else ""
         tv_count.text = ("${dataList.size} 명 ${strNot}응답")
 
         when (selectColor) {
-            RED ->
+            Signal.RED ->
                 iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.red))
-            GREEN ->
+            Signal.GREEN ->
                 iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green))
-            YELLOW ->
+            Signal.YELLOW ->
                 iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
             else ->
                 iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))

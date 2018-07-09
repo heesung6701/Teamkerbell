@@ -31,7 +31,8 @@
         android:background="@drawable/shape_round_gray_light"
         android:gravity="top|start"
         android:hint="@string/txt_enter_content"
-        android:inputType="textMultiLine"
+        android:inputType="none"
+        android:scrollHorizontally="false"
         android:padding="16dp" />
 
     <LinearLayout

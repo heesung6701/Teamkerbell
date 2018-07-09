@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
+import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
+import kotlin.experimental.or
 
 /**
  * Created by lumiere on 2018-01-01.
@@ -58,6 +60,9 @@ data class Signal(
         return groupName
     }
 
+
+
+
     constructor(light_idx: Int, u_idx: Int, chat_idx: Int?, write_time: String, open_status: Int?, room_idx: Int, content: String?, entire_status: Int) : this(light_idx, u_idx, chat_idx, write_time, open_status, room_idx, content, entire_status, null)
 
 
@@ -93,5 +98,39 @@ data class Signal(
             override fun createFromParcel(source: Parcel): Signal = Signal(source)
             override fun newArray(size: Int): Array<Signal?> = arrayOfNulls(size)
         }
+
+        fun colorStrToInt(color : String?) : Int{
+            return when(color) {
+                "r" -> RED.toInt()
+                "g" -> GREEN.toInt()
+                "y" -> YELLOW.toInt()
+                "a" -> RED.toInt()
+                else -> RED.toInt()
+            }
+        }
+
+        fun colorStrToByte(color : String?) : Byte{
+            return when(color) {
+                "r" -> RED
+                "g" -> GREEN
+                "y" -> YELLOW
+                "a" -> RED
+                else -> RED
+            }
+        }
+        fun colorByteToStr(selectColor : Byte?) : String{
+            return when (selectColor) {
+                RED -> "r"
+                GREEN -> "g"
+                YELLOW -> "y"
+                else -> "a"
+            }
+        }
+
+        const val RED: Byte = 1
+        const val YELLOW: Byte = 2
+        const val GREEN: Byte = 4
+        val ALL: Byte = RED or YELLOW or GREEN
+        const val DEFAULT: Byte = 8
     }
 }

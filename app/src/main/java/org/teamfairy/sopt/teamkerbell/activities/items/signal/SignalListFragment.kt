@@ -71,17 +71,9 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var adapter: ListDataAdapter by Delegates.notNull()
 
-    private var signFilter: Byte = ALL
+    private var signFilter: Byte = Signal.ALL
 
 
-    companion object {
-
-        const val RED: Byte = 1
-        const val YELLOW: Byte = 2
-        const val GREEN: Byte = 4
-        val ALL: Byte = RED or YELLOW or GREEN
-        const val DEFAULT: Byte = 8
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -127,23 +119,23 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         val signGreen: RelativeLayout = v.findViewById(R.id.btn_green)
 
         signRed.setOnClickListener {
-            signFilter = if (signFilter == RED) DEFAULT
-            else RED
+            signFilter = if (signFilter == Signal.RED) Signal.DEFAULT
+            else Signal.RED
             updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
         }
 
         signYellow.setOnClickListener {
-            signFilter = if (signFilter == YELLOW) DEFAULT
-            else YELLOW
+            signFilter = if (signFilter == Signal.YELLOW) Signal.DEFAULT
+            else Signal.YELLOW
             updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
 
         }
 
         signGreen.setOnClickListener {
-            signFilter = if (signFilter == GREEN) DEFAULT
-            else GREEN
+            signFilter = if (signFilter == Signal.GREEN) Signal.DEFAULT
+            else Signal.GREEN
 
             updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
@@ -153,11 +145,11 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
     private fun updateColorFilter(ivFocusRed: ImageView, ivFocusYellow: ImageView, ivFocusGreen: ImageView) {
 
-        if (signFilter and RED != RED) ivFocusRed.visibility = View.GONE else ivFocusRed.visibility = View.VISIBLE
+        if (signFilter and Signal.RED != Signal.RED) ivFocusRed.visibility = View.GONE else ivFocusRed.visibility = View.VISIBLE
 
-        if (signFilter and YELLOW == YELLOW) ivFocusYellow.visibility = View.VISIBLE else ivFocusYellow.visibility = View.GONE
+        if (signFilter and Signal.YELLOW == Signal.YELLOW) ivFocusYellow.visibility = View.VISIBLE else ivFocusYellow.visibility = View.GONE
 
-        if (signFilter and GREEN == GREEN) ivFocusGreen.visibility = View.VISIBLE else ivFocusGreen.visibility = View.GONE
+        if (signFilter and Signal.GREEN == Signal.GREEN) ivFocusGreen.visibility = View.VISIBLE else ivFocusGreen.visibility = View.GONE
 
         if (dataList.size > 0)
             recyclerView.scrollToPosition(0)
@@ -167,13 +159,8 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
     private fun updateList() {
         dataList.clear()
         signalList.forEach {
-            val c: Byte = when (it.color) {
-                "r" -> RED
-                "g" -> GREEN
-                "y" -> YELLOW
-                "a" -> ALL
-                else -> DEFAULT
-            }
+            val c: Byte = Signal.colorStrToByte(it.color)
+
             if (c and signFilter != 0.toByte()) {
                 if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
                     dataList.add(it)
@@ -181,13 +168,8 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         }
 
         signalList.forEach {
-            val c: Byte = when (it.color) {
-                "r" -> RED
-                "g" -> GREEN
-                "y" -> YELLOW
-                "a" -> ALL
-                else -> DEFAULT
-            }
+            val c: Byte = Signal.colorStrToByte(it.color)
+
             if (c and signFilter == 0.toByte()) {
                 if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
                     dataList.add(it)

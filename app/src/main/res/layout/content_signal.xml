@@ -183,7 +183,9 @@
         android:gravity="top"
         android:padding="4dp"
         android:hint="@string/txt_enter_content"
-        android:inputType="text" />
+        android:inputType="none"
+        android:scrollHorizontally="false"
+        />
 
     <LinearLayout
         android:id="@+id/layout_response_list"

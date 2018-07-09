@@ -86,9 +86,10 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="24dp"
                     android:gravity="top|start"
-                    android:inputType="textMultiLine"
+                    android:inputType="none"
                     android:padding="16dp"
                     android:hint="@string/txt_enter_content"
+                    android:scrollHorizontally="false"
                     android:theme="@style/EditText_mainColor" />
 
                 <LinearLayout
