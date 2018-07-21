@@ -55,6 +55,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
             val edt = edtView.findViewById<EditText>(R.id.edt_vote_example)
             edtViewList.add(ExampleEdit(edtView,edt))
             layout_role_tasks.addView(edtView)
+            edt.requestFocus()
         }
 
         btn_commit.setOnClickListener {
@@ -81,7 +82,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 e.printStackTrace()
             }
             val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-            task.execute(USGS_REQUEST_URL.URL_ROLE_REGISTER, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_POST, jsonParam.toString())
 
 
         }

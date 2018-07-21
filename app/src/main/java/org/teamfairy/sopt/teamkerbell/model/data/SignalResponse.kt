@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
+import org.teamfairy.sopt.teamkerbell.R.color.red
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -12,40 +13,33 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 data class SignalResponse(
-        var light_idx: Int,
+        var signal_idx: Int,
         override var u_idx: Int,
-        var color: String?,
         var content: String?,
-        var write_time: String?
-) : UserInfoInterface(), ListDataInterface,Parcelable {
-    override fun getRoomTitle(): String {
-        return ""
-    }
-    override fun getGroupTitle(): String {
-        return ""
-    }
+        var write_time: String?,
+        var color: String?
+) : UserInfoInterface(), ListDataInterface, Parcelable {
+    override fun getRoomTitle(): String  =""
+
+    override fun getGroupTitle(): String =""
 
 
     override var room_idx: Int = 0
 
-    fun setPhotoInfo(context: Context) =super.setPhotoInfo(context,u_idx)
+    fun setPhotoInfo(context: Context) = super.setPhotoInfo(context, u_idx)
 
 
-    fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm,u_idx)
+    fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm, u_idx)
 
     override fun getMainTitle(): String {
-        if (content.isNullOrEmpty()) content = ""
-        return content!!
+        if (!content.isNullOrBlank()) return content!!
+        return if (Signal.colorStrToByte(color ?: "a") == Signal.RED) "아직 응답하지 않았습니다." else ""
     }
 
-    override fun getSubTitle(): String {
-        if (write_time.isNullOrEmpty()) write_time = "아직 답변하지 않았습니다."
-        return write_time!!
-    }
-    override fun getTime(): String {
-        return Utils.getMonthDayTime(write_time!!)
-    }
+    override fun getSubTitle(): String = getTime()
 
+
+    override fun getTime(): String =if(write_time.isNullOrBlank()) "" else  Utils.getMonthDayTime(write_time!!)
 
 
     constructor(source: Parcel) : this(
@@ -59,11 +53,11 @@ data class SignalResponse(
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeInt(light_idx)
+        writeInt(signal_idx)
         writeInt(u_idx)
-        writeString(color)
         writeString(content)
         writeString(write_time)
+        writeString(color)
     }
 
     companion object {

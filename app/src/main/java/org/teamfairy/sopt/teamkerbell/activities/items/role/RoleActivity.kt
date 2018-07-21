@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
@@ -27,10 +28,11 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -40,8 +42,8 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
 
 
     var group: Team by Delegates.notNull()
-    var role : Role by Delegates.notNull()
-    var room : Room by Delegates.notNull()
+    var role: Role by Delegates.notNull()
+    var room: Room by Delegates.notNull()
 
     private var dataList: ArrayList<RoleTask> = arrayListOf<RoleTask>()
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -53,15 +55,15 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
 
         group = intent.getParcelableExtra(INTENT_GROUP)
         role = intent.getParcelableExtra(INTENT_ROLE)
-        room=DatabaseHelpUtils.getRoom(applicationContext,role.room_idx)
+        room = DatabaseHelpUtils.getRoom(applicationContext, role.room_idx)
 
-        supportActionBar!!.title=role.title
+        supportActionBar!!.title = role.title
         tv_chat_name.text = room.real_name
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = TaskListAdapter(dataList,applicationContext)
+        adapter = TaskListAdapter(dataList, applicationContext)
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 
@@ -76,14 +78,13 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
         btn_more.setOnClickListener {
             val i = Intent(applicationContext, EditRoleActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            i.putExtra(INTENT_GROUP,group)
-            i.putExtra(INTENT_ROOM,room)
-            i.putExtra(INTENT_ROLE,role)
-            i.putExtra(INTENT_TASK,dataList)
+            i.putExtra(INTENT_GROUP, group)
+            i.putExtra(INTENT_ROOM, room)
+            i.putExtra(INTENT_ROLE, role)
+            i.putExtra(INTENT_TASK, dataList)
             startActivity(i)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
-
 
 
     }
@@ -110,22 +111,32 @@ class RoleActivity : AppCompatActivity() , View.OnClickListener, SwipeRefreshLay
         adapter.notifyDataSetChanged()
 
         val task = RoleTaskListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_ROLE_SHOW_TASK + "/" + role.role_idx)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_TASK_GET + "/" + role.role_idx)
 
     }
+
+    fun connectedTaskList(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                val datas = msg.obj as ArrayList<RoleTask>
+                dataList.clear()
+                datas.forEach {
+                    dataList.add(it)
+                }
+                adapter.notifyDataSetChanged()
+            }
+            else -> {
+                Toast.makeText(applicationContext,"잠시 후 시도 해주세요.",Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
     private class HandlerGet(activity: RoleActivity) : Handler() {
         private val mActivity: WeakReference<RoleActivity> = WeakReference<RoleActivity>(activity)
 
         override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-                val datas=msg.obj as ArrayList<RoleTask>
-                activity.dataList.clear()
-                datas.forEach {
-                    activity.dataList.add(it)
-                }
-                activity.adapter.notifyDataSetChanged()
-            }
+            mActivity.get()?.connectedTaskList(msg)
         }
     }
 

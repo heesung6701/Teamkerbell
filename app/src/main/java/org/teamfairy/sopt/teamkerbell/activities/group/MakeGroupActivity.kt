@@ -30,7 +30,7 @@ class MakeGroupActivity : AppCompatActivity() {
 
     var user: User by Delegates.notNull()
 
-    var file : File?= null
+    var filePhoto : File?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_group)
@@ -82,7 +82,7 @@ class MakeGroupActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val makeGroupTask = MakeGroupTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext))
-        if (file != null) makeGroupTask.file = file!!
+        if (filePhoto != null) makeGroupTask.photo = filePhoto!!
         makeGroupTask.execute(URL_MAKE_GROUP, jsonParam.toString())
     }
 

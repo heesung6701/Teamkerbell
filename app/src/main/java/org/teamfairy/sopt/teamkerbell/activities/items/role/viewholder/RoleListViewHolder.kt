@@ -11,7 +11,7 @@ import org.teamfairy.sopt.teamkerbell.R
 open class RoleListViewHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
     var tvTitle = itemView.findViewById<TextView>(R.id.li_tv_title)
     var tvTime = itemView.findViewById<TextView>(R.id.li_tv_time)
-    var tvChat = itemView.findViewById<TextView>(R.id.li_tv_chat_name)
+    var tvRoom = itemView.findViewById<TextView>(R.id.li_tv_chat_name)
     var tvName = itemView.findViewById<TextView>(R.id.li_tv_user_name)
 
 }

@@ -94,9 +94,9 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 
             val jsonParam = JSONObject()
             try {
-                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_RESULT_PARAM_ROLE_IDX, roleTask.role_idx)
-                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_RESULT_PARAM_ROLE_TASK_IDX, roleTask.task_idx)
-                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_RESULT_PARAM_RESPONSE_CONTENT, edt_content.text.toString())
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_IDX, roleTask.role_idx)
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_TASK_IDX, roleTask.task_idx)
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_RESPONSE_CONTENT, edt_content.text.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -105,7 +105,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             }
             Log.d("NetworkTask", jsonParam.toString())
 
-            task.execute(USGS_REQUEST_URL.URL_ROLE_RESULT_REGISTER, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE_POST, jsonParam.toString())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

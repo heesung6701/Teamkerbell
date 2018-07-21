@@ -9,14 +9,11 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.data.VoteResponse
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHOICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
@@ -62,7 +59,7 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
                                 data.getInt(JSON_U_IDX),
                                 data.getString(JSON_WRITE_TIME),
                                 data.getString(JSON_CONTENT),
-                                data.getInt(JSON_CHAT_ROOM_IDX),
+                                data.getInt(JSON_ROOM_IDX),
                                 data.getString(JSON_TITLE), data.getInt(JSON_STATUS)
                         )
                     }

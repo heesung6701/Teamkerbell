@@ -9,6 +9,7 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
+import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 
 
@@ -35,7 +36,7 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
             val signal = dataList[position] as Signal
             holder.ivSign.visibility = View.VISIBLE
 
-            when (signal.color) {
+            when (signal.responseColor) {
                 "r" ->
                     holder.ivSign.setColorFilter(ContextCompat.getColor(mContext, R.color.red))
                 "g" ->
@@ -46,14 +47,19 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
                     holder.ivSign.visibility = View.GONE
             }
 
-        }
-        else {
+        } else {
             holder.ivSign.visibility = View.GONE
         }
 
 
+        if (dataList[position] is SignalResponse){
+            val sig = dataList[position] as SignalResponse
+            holder.itemView.isClickable =  (Signal.colorStrToByte(sig.color) != Signal.RED) || sig.content?.isNotBlank() ?: false
+        }else
+            holder.itemView.isClickable=true
+
         val url = dataList[position].photo
-        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext,"$INTENT_USER/${dataList.get(position).u_idx}"))
+        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "$INTENT_USER/${dataList.get(position).u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 
     }
@@ -67,7 +73,10 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
 
         val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.list_item, parent, false)
 
+
+
         mainView.setOnClickListener(mOnClick)
+
 
         return ListContentHolder(mainView)
     }

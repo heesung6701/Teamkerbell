@@ -1,8 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role.adapter
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.RoleListViewHolder
 
@@ -10,7 +12,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.RoleListV
 /**
  * Created by lumiere on 2017-12-30.
  */
-class RoleListAdapter(var dataList: ArrayList<Role>) : RecyclerView.Adapter<RoleListViewHolder>() {
+class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : RecyclerView.Adapter<RoleListViewHolder>() {
 
     private var mOnClick: View.OnClickListener? = null
 
@@ -22,7 +24,9 @@ class RoleListAdapter(var dataList: ArrayList<Role>) : RecyclerView.Adapter<Role
         holder.tvTitle.text = dataList[position].title
         holder.tvTime.text = dataList[position].getTime()
         holder.tvName.text = dataList[position].name
-        holder.tvChat.text= "채팅방 이름"
+
+
+        holder.tvRoom.text=DatabaseHelpUtils.getRoom(mContext,dataList[position].room_idx).real_name
     }
 
 

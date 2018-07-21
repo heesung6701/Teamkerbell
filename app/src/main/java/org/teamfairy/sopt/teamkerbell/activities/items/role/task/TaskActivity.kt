@@ -31,7 +31,6 @@ import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_SHOW_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.info.TaskResponseListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -47,6 +46,7 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.os.Build
 import android.content.DialogInterface
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE_GET
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
@@ -201,11 +201,11 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         val task = GetMessageTask(applicationContext, HandlerUpdateUser(this), LoginToken.getToken(applicationContext))
 
         val jsonParam = JSONObject()
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_ROLE_IDX, roleTask.role_idx)
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
-        task.execute(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER, jsonParam.toString())
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_ROLE_IDX, roleTask.role_idx)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER_PUT, jsonParam.toString())
 
     }
 
@@ -250,24 +250,24 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         val jsonParam = JSONObject()
 
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_ROLE_IDX, roleTask.role_idx)
-        jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_ROLE_IDX, roleTask.role_idx)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
         if (isMaster) {
             when (status) {
                 1 -> {
                     val plusArrayJson = JSONArray()
                     plusArrayJson.put(LoginToken.getUserIdx(applicationContext))
-                    jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
                 }
                 -1 -> {
                     val minusArrayJson = JSONArray()
                     minusArrayJson.put(LoginToken.getUserIdx(applicationContext))
-                    jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
                 }
             }
 
-        } else jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_ROLE_STATUS, status)
-        task.execute(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER, jsonParam.toString())
+        } else jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_ROLE_STATUS, status)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER_PUT, jsonParam.toString())
 
     }
 
@@ -294,7 +294,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun connectResponseList() {
         val task = TaskResponseListTask(applicationContext, HandlerGetResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_ROLE_SHOW_RESPONSE + "/" + roleTask.task_idx)
+        task.execute(URL_ROLE_RESPONSE_GET + "/" + roleTask.task_idx)
     }
 
     private class HandlerGetResponse(activity: TaskActivity) : Handler() {

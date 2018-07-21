@@ -96,7 +96,7 @@ class EditRoleActivity : AppCompatActivity() {
         btn_commit.setOnClickListener {
             val jsonParam = JSONObject()
             try {
-                jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_TASK_PARAM_ROLE_IDX, role.role_idx)
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_TASK_PARAM_ROLE_IDX, role.role_idx)
 
                 val plusArray = JSONArray()
 
@@ -106,13 +106,13 @@ class EditRoleActivity : AppCompatActivity() {
                         plusArray.put(example.edtText.text.toString())
                 }
 
-                jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_PLUS_ARRAY,plusArray)
-                jsonParam.put(USGS_REQUEST_URL.URL_MODIFY_ROLE_USER_PARAM_MINUS_ARRAY,minusArray)
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_TASK_PARAM_PLUS_ARRAY,plusArray)
+                jsonParam.put(USGS_REQUEST_URL.URL_ROLE_TASK_PARAM_MINUS_ARRAY,minusArray)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-            task.execute(USGS_REQUEST_URL.URL_MODIFY_TASK, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_TASK_PUT, jsonParam.toString())
 
 
         }

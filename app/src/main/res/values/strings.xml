@@ -40,6 +40,8 @@
 
     <string name="title_activity_pick_list">Pick</string>
 
+    <string name="title_activity_profile">프로필 관리</string>
+
 
     <!-- Strings related to login -->
     <string name="prompt_name">이름</string>
@@ -69,7 +71,7 @@
     <string name="txt_team_add">팀 추가하기</string>
     <string name="txt_project_member">프로젝트 멤버</string>
     <string name="txt_enter_team_name">팀 이름을 입력해주세요.</string>
-    <string name="txt_enter_room_name">그룹 이름을 입력해주세요.</string>
+    <string name="txt_enter_room_name">채팅방 이름을 입력해주세요.</string>
     <string name="txt_invite_qr">QR코드로 추가하기</string>
     <string name="txt_invite_phone">연락처로 추가하기</string>
     <string name="txt_invite_email">초대 메일 보내기</string>
@@ -87,6 +89,16 @@
     <string name="txt_unperformed">리스트</string>
     <string name="txt_sender">보냄</string>
     <string name="txt_receiver">받음</string>
+    <string name="txt_name">이름</string>
+    <string name="txt_bio">상태 메세지</string>
+    <string name="txt_phone">연락처</string>
+    <string name="txt_email">이메일</string>
+    <string name="txt_chose_work">작업선택</string>
+    <string name="txt_copy">복사</string>
+    <string name="txt_delete">삭제</string>
+    <string name="txt_share">공유</string>
+    <string name="txt_search">검색</string>
+    <string name="txt_comment_count">댓글수</string>
 
 
     <string name="action_notice">공지</string>
@@ -112,6 +124,7 @@
     <string name="action_signal_secret">비밀 신호등 설정</string>
     <string name="action_signal_particular">특정인 선택</string>
     <string name="action_upload_file">파일 첨부하기</string>
+    <string name="action_enter">입력</string>
 
 
     <string name="tab_by_choice">항목별</string>
@@ -120,17 +133,10 @@
 
 
     <string name="menu_all">all</string>
-    <string name="txt_chose_work">작업선택</string>
-    <string name="txt_copy">복사</string>
-    <string name="txt_delete">삭제</string>
-    <string name="txt_share">공유</string>
-    <string name="txt_search">검색</string>
-    <string name="txt_comment_count">댓글수</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_enter">입력</string>
-    <string name="disconnect">\"소켓 연결 해제\"</string>
+
+    <string name="disconnect">소켓 연결 해제</string>
     <string name="error_connect">소켓 연결 에러</string>
     <string name="connect">소켓 연결</string>
 

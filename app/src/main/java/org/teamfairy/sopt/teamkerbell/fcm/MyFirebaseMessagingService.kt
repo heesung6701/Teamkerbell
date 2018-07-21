@@ -139,17 +139,38 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.joinedRoomChange ->
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
 
-            StatusCode.groupJoinedUserChange -> {
+            StatusCode.roomWithjoinedRoomChange-> {
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
+            }
+
+            StatusCode.joinedGroupWithJoinedRoom-> {
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
+
+            }
+
+            StatusCode.userWithJoinedGroupChange-> {
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
+            }
+            StatusCode.allChange-> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
             }
             StatusCode.votePush ->
                 sendNotification(title!!, content!!, null)
-            StatusCode.makeLights ->
+            StatusCode.makeSignal ->
                 sendNotification(title!!, content!!, null)
             StatusCode.makeNotice ->
                 sendNotification(title!!, content!!, null)
+            StatusCode.makeVote ->
+                sendNotification(title!!, content!!, null)
+            StatusCode.makeRole ->
+                sendNotification(title!!, content!!, null)
+
+
             StatusCode.chatMessage ->
                 sendNotification(title!!, content!!, g_idx)
 

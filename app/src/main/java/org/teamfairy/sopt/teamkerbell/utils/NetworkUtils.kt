@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.webkit.URLUtil
 import android.widget.ImageView
@@ -98,7 +99,7 @@ open class NetworkUtils {
 
         }
 
-        private class HandlerSuccess(var applicationContext: Context, var pref_key : String,var handler : Handler?) : Handler(){
+        private class HandlerSuccess(var applicationContext: Context, var pref_key : String,var handler : Handler?) : Handler(Looper.getMainLooper()){
             override fun handleMessage(msg: Message) {
                 if (msg.what == MSG_SUCCESS) {
                     handler?.sendEmptyMessage(MSG_SUCCESS)

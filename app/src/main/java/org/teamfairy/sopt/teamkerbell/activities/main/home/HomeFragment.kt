@@ -46,10 +46,6 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     private var ivDropDown : ImageView by Delegates.notNull()
     private var tvTeamName : TextView by Delegates.notNull()
     var tvCount : TextView by Delegates.notNull()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -136,7 +132,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     }
     override fun onResume() {
         super.onResume()
-
+        showGroupInfo()
     }
 
 

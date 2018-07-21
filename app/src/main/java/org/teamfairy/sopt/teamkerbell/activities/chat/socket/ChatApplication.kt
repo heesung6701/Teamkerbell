@@ -15,11 +15,11 @@ class ChatApplication {
 
         fun getSocket(): Socket? {
 
-            var mSocket: Socket? = null
+            val mSocket: Socket?
             try {
                 val opts: IO.Options = IO.Options()
                 val port: Int = USGS_REQUEST_URL.URL_SOCKET.substringAfterLast(':').toInt()
-                opts.port = port;
+                opts.port = port
 
                 Log.d(ChatActivity::class.java.simpleName+"/Socket", "포트 번호 : $port")
                 Log.d(ChatActivity::class.java.simpleName+"/Socket", "URL : ${USGS_REQUEST_URL.URL_SOCKET}")

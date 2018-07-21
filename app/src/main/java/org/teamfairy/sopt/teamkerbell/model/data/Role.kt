@@ -20,12 +20,13 @@ data class Role(
         var master_idx: Int,
         var write_time: String?
 ) : UserInfoInterface(), Parcelable {
+
     fun setPhotoInfo(context: Context) = super.setPhotoInfo(context, master_idx)
 
     fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm, master_idx)
 
     fun getTime(): String {
-        return Utils.getMonthDayTime(write_time!!) ?: ""
+        return Utils.getMonthDayTime(write_time!!)
     }
 
     constructor(source: Parcel) : this(

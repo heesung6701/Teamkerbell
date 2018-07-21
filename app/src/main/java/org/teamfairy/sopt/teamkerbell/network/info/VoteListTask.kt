@@ -9,16 +9,13 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
-import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FINISHED
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOT_FINISHED
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
@@ -64,25 +61,12 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
                                 obj.getInt(JSON_U_IDX),
                                 obj.getString(JSON_WRITE_TIME),
                                 obj.getString(JSON_CONTENT),
-                                obj.getInt(JSON_CHAT_ROOM_IDX),
+                                obj.getInt(JSON_ROOM_IDX),
                                 obj.getString(JSON_TITLE),
                                 obj.getInt(JSON_STATUS))
 
                         datas.add(vote)
 
-//                        val vote: JSONObject = voteNotFinished.getJSONObject(j)
-//
-//                        val obj = VoteR()
-//
-//                        obj.vote_idx = vote.getInt(JSON_VOTE_IDX)
-//                        obj.u_idx = vote.getInt(JSON_U_IDX)
-//                        obj.write_time = vote.getString(JSON_WRITE_TIME)
-//                        obj.content = vote.getString(JSON_CONTENT)
-//                        obj.room_idx = vote.getInt(JSON_ROOM_IDX)
-//                        obj.title = vote.getString(JSON_TITLE)
-//                        obj.status = vote.getInt(JSON_STATUS)
-//
-//                        realm.copyToRealmOrUpdate(obj)
 
                     }
 
@@ -96,7 +80,7 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
                                 obj.getInt(JSON_U_IDX),
                                 obj.getString(JSON_WRITE_TIME),
                                 obj.getString(JSON_CONTENT),
-                                obj.getInt(JSON_CHAT_ROOM_IDX),
+                                obj.getInt(JSON_ROOM_IDX),
                                 obj.getString(JSON_TITLE),
                                 obj.getInt(JSON_STATUS))
 

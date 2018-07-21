@@ -26,6 +26,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         val user = dataList[position]
 
         holder!!.tvName.text = user.name
+        holder.tvEmail.text = user.id
         if(NetworkUtils.getBitmapList(user.photo, holder.ivProfile,mContext, "$INTENT_USER/$user.u_idx"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
 

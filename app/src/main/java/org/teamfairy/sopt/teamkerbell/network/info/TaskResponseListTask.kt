@@ -53,7 +53,7 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
                                 dataResponse.getString("content"),
                                 dataResponse.getString("write_time"),
                                 files,
-                                data.getInt("count") ?: 0)
+                                data.getInt("count"))
 
                         result.add(response)
                     }

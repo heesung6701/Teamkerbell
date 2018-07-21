@@ -9,16 +9,27 @@
     android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.main.room.MakeRoomActivity"
-    tools:showIn="@layout/activity_make_room">
+    tools:showIn="@layout/activity_make_room"
+    >
+
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:id="@+id/img_profile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+
+        android:src="@drawable/icon_addgroup_profile_png"/>
+        <!--app:civ_border_color="@color/mainColor"-->
+        <!--app:civ_border_width="0dp" -->
+        <!--/>-->
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="45dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center_horizontal"
         android:text="@string/txt_enter_room_name"
         android:textSize="14sp" />

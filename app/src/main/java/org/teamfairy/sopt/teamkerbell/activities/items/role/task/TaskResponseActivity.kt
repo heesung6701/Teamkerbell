@@ -118,9 +118,9 @@ class TaskResponseActivity : AppCompatActivity() {
             val txt = edt_commit.text.toString()
             val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
             val jsonParam = JSONObject()
-            jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
-            jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_FEEDBACK_PARAM_CONTENT, txt)
-            task.execute(USGS_REQUEST_URL.URL_ROLE_REGISTER_FEEDBACK, jsonParam.toString())
+            jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
+            jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_CONTENT, txt)
+            task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_POST, jsonParam.toString())
 
             edt_commit.setText("")
         }
@@ -141,7 +141,7 @@ class TaskResponseActivity : AppCompatActivity() {
     private fun connectFeedBackList() {
         val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
 
-        task.execute(USGS_REQUEST_URL.URL_ROLE_SHOW_FEEDBACK + "/" + taskResponse.response_idx)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_GET + "/" + taskResponse.response_idx)
     }
 
 

@@ -86,7 +86,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
             layout_vote_examples.addView(edtView)
         }
 
-        chk_end_time.setOnCheckedChangeListener { compoundButton, b ->
+        chk_end_time.setOnCheckedChangeListener { _, b ->
             if (b) {
                 layout_end_time.visibility = View.VISIBLE
             } else {

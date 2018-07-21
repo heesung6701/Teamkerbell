@@ -1,6 +1,7 @@
 package org.teamfairy.sopt.teamkerbell.activities.main.contact
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -11,6 +12,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_contact.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
@@ -48,27 +51,25 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
     var recyclerView: RecyclerView by Delegates.notNull()
 
     var txtSearch : String = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+
+    private var tvName : TextView by Delegates.notNull()
+    private var ivPhoto : ImageView by Delegates.notNull()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v= inflater!!.inflate(R.layout.fragment_contact, container, false)
-        val u = LoginToken.getUser(activity.applicationContext)
-        v.tv_user_name.text= u.name
-        if(NetworkUtils.getBitmapList(u.photo, v.tv_user_profile,activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
-            v.tv_user_profile.setImageResource(R.drawable.icon_profile_default_png)
+
+        tvName = v.findViewById(R.id.tv_user_name)
+        ivPhoto = v.findViewById(R.id.iv_user_profile)
+
 
         recyclerView = v.findViewById(R.id.recyclerView)
         adapter = ContactListAdapter(dataList,activity.applicationContext)
         recyclerView.layoutManager=LinearLayoutManager(activity)
         recyclerView.adapter=adapter
 
-
         mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
 
         v.edt_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -83,7 +84,10 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
             }
 
         })
-
+        v.layout_profile.setOnClickListener {
+            val intent = Intent(activity.applicationContext,  ProfileActivity::class.java)
+            startActivity(intent)
+        }
         return v
     }
 
@@ -91,13 +95,20 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
     override fun onResume() {
         super.onResume()
         getUserList()
+        setMyProfile(LoginToken.getUser(activity.applicationContext))
+
+    }
+    private fun setMyProfile(u : User){
+        tvName.text= u.name
+        if(NetworkUtils.getBitmapList(u.photo, ivPhoto,activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
+            ivPhoto.setImageResource(R.drawable.icon_profile_default_png)
     }
     fun getUserList(){
         DatabaseHelpUtils.getUserListFromRealm(activity.applicationContext,dataListOrigin,adapter as RecyclerView.Adapter<*>,group,true)
         updateUserList()
 
     }
-    fun updateUserList(){
+    private fun updateUserList(){
         dataList.clear()
         dataListOrigin.forEach {
             if(it.name!!.contains(txtSearch))

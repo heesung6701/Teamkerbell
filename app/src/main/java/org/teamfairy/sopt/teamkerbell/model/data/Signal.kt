@@ -22,8 +22,14 @@ data class Signal(
         override var room_idx: Int, //Foreign Key
         var content: String?,
         var entire_status: Int,
-        var color: String?
+        var responseColor : String?,
+        var responseContent : String?
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
+
+
+
+    constructor(signal_idx: Int,u_idx: Int,chat_idx: Int?,write_time: String,open_status: Int?,room_idx: Int,content: String?,entire_status: Int)
+            : this(signal_idx,u_idx,chat_idx,write_time,open_status,room_idx,content,entire_status,"a",null)
     override fun getRoomTitle(): String {
         return roomName
     }
@@ -63,9 +69,6 @@ data class Signal(
 
 
 
-    constructor(light_idx: Int, u_idx: Int, chat_idx: Int?, write_time: String, open_status: Int?, room_idx: Int, content: String?, entire_status: Int) : this(light_idx, u_idx, chat_idx, write_time, open_status, room_idx, content, entire_status, null)
-
-
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
@@ -75,6 +78,7 @@ data class Signal(
             source.readInt(),
             source.readString(),
             source.readInt(),
+            source.readString(),
             source.readString()
     )
 
@@ -89,7 +93,8 @@ data class Signal(
         writeInt(room_idx)
         writeString(content)
         writeInt(entire_status)
-        writeString(color)
+        writeString(responseColor)
+        writeString(responseContent)
     }
 
     companion object {

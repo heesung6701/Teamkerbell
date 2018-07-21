@@ -159,7 +159,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
     private fun updateList() {
         dataList.clear()
         signalList.forEach {
-            val c: Byte = Signal.colorStrToByte(it.color)
+            val c: Byte = Signal.colorStrToByte(it.responseColor)
 
             if (c and signFilter != 0.toByte()) {
                 if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
@@ -168,7 +168,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         }
 
         signalList.forEach {
-            val c: Byte = Signal.colorStrToByte(it.color)
+            val c: Byte = Signal.colorStrToByte(it.responseColor)
 
             if (c and signFilter == 0.toByte()) {
                 if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
@@ -186,7 +186,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         intent.putExtra(INTENT_SIGNAL, signal)
         intent.putExtra(INTENT_GROUP, group)
         intent.putExtra(INTENT_ROOM, room)
-        intent.putExtra(INTENT_RESPONDED, (signal!!.color.equals("g") || state == Utils.SIGNAL_SENDER))
+        intent.putExtra(INTENT_RESPONDED, (signal!!.responseColor.equals("g") || state == Utils.SIGNAL_SENDER))
         startActivity(intent)
     }
 

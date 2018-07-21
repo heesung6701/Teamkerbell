@@ -21,7 +21,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.RoleListAdap
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_SHOW
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_GET
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
@@ -66,7 +66,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = RoleListAdapter(dataList)
+        adapter = RoleListAdapter(dataList,applicationContext)
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 
@@ -113,10 +113,13 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
     private fun connectRoleList() {
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_ROLE_SHOW)
-//        var roomIdx = room?.room_idx?:""
-//        if(roomIdx== Room.ARG_ALL_IDX) roomIdx = ""
-//        task.execute("$URL_ROLE_SHOW/$roomIdx")
+        val roomIdx = room?.room_idx?:""
+        if(roomIdx== Room.ARG_ALL_IDX || roomIdx==""){
+            task.execute("$URL_ROLE_GET/g/${group.g_idx}")
+        }else{
+            task.execute("$URL_ROLE_GET/c/$roomIdx")
+        }
+
     }
     private fun updateList(){
         dataList.clear()

@@ -12,10 +12,9 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
-import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL

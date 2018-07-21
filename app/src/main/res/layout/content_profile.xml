@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingLeft="80dp"
+    android:paddingRight="80dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.main.contact.ProfileActivity"
+    tools:showIn="@layout/activity_profile">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+
+        android:src="@drawable/icon_addgroup_profile_png"
+        app:civ_border_color="@color/mainColor"
+        app:civ_border_width="0dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="18dp"
+        tools:text="아이도루"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:textSize="12sp"
+        android:text="@string/txt_email"
+        />
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text="teamkerbell@gmail.com"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color92992"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginTop="15dp"
+        android:text="@string/txt_phone"
+        />
+    <TextView
+        android:id="@+id/tv_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text="010-2081-3818"
+
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="10dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color92992"
+        />
+</LinearLayout>
+

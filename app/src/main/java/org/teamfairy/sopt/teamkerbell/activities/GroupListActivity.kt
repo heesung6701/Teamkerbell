@@ -122,7 +122,6 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         groupList.clear()
 
         adapter.notifyDataSetChanged()
-        var i = 0
         val groupR = realm.where(GroupR::class.java).findAll()
         groupR.forEach {
             val h = HashMap<String, String>()

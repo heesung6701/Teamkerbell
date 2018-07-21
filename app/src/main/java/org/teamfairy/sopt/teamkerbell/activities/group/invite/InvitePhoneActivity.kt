@@ -134,7 +134,7 @@ class InvitePhoneActivity : AppCompatActivity() {
     }
 
     private fun sendInviteMessage(name: String?, u_idx: Int?) {
-        val dataBaseGroup = dataBaseReference.child("groups_test").child(group!!.ctrl_name)
+        val dataBaseGroup = dataBaseReference.child("groups_test").child(group.ctrl_name)
         val dataBaseMessages = dataBaseGroup!!.child("messages").ref
 
         dataBaseGroup.child("LastMessage").addListenerForSingleValueEvent(object : ValueEventListener {

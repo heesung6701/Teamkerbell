@@ -8,32 +8,37 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MODIFY_ROLE_USER
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MODIFY_TASK
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_PROFILE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_PRESS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_REGISTER
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_REGISTER_FEEDBACK
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESULT_REGISTER
 import java.io.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BIO
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FILE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHONE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROLE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TASK_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_USER_ARRAY
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
-import org.teamfairy.sopt.teamkerbell.utils.Utils
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_FEEDBACK_POST
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_POST
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE_POST
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE_PUT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_TASK_PUT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_USER_PUT
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL_STR
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
 import java.net.*
@@ -50,6 +55,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
     var files : ArrayList<File> = ArrayList<File>()
     var file : File?=null
+    var photo : File?=null
     internal var token: String? = null
     internal var context: Context
 
@@ -65,7 +71,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
     override fun doInBackground(vararg params: String): String? {
         var jsonResponse: String? = null
         if (NetworkState.getWhatKindOfNetwork(context) === NetworkState.NONE_STATE) {
-            return "{\"message\":\"${MSG_NO_INTERNET_STR}\"}"
+            return "{\"message\":\"$MSG_NO_INTERNET_STR\"}"
         }
         try {
             if (params[0] == URL_REGIST ||
@@ -78,14 +84,14 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                     params[0] == URL_RESPONSE_LIGHTS ||
                     params[0] == URL_RESPONSE_PRESS ||
                     params[0] == URL_RESPONSE_NOTICE ||
-                    params[0]==URL_ROLE_REGISTER ||
-                    params[0]== URL_ROLE_REGISTER_FEEDBACK)
+                    params[0]==URL_ROLE_POST ||
+                    params[0]== URL_ROLE_FEEDBACK_POST)
              {
                  method="POST"
                 jsonResponse = makeHttpRequestPost(*params)
             }else if( params[0] == URL_RESPONSE_VOTE ||
-                params[0]== URL_MODIFY_TASK ||
-                    params[0]== URL_MODIFY_ROLE_USER ){
+                params[0]== URL_ROLE_TASK_PUT ||
+                    params[0]== URL_ROLE_USER_PUT){
                 method="PUT"
                 jsonResponse = makeHttpRequestPost(*params)
             }else if (params[0] == URL_LEAVE_GROUP ||
@@ -93,34 +99,34 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                     ) {
                 jsonResponse = makeHttpRequestDelete(*params)
 
-            } else if (params[0] == URL_PROFILE) {
+            } else if (params[0] == URL_PROFILE ||
+                    params[0]== URL_ROLE_RESPONSE_PUT) {
                 method="PUT"
                 jsonResponse = makeHttpRequestFormData(*params)
             } else if (params[0] == URL_MAKE_GROUP ||
                     params[0] == URL_MAKE_ROOM ||
-                    params[0]==URL_ROLE_RESULT_REGISTER ) {
+                    params[0]== URL_ROLE_RESPONSE_POST) {
                 method="POST"
                 jsonResponse = makeHttpRequestFormData(*params)
             } else {//get method
                 method="GET"
                 jsonResponse = makeHttpRequestGet(*params)
-                //URL_GROUP_NOTICE
-                //URL_GROUPLIST
-                //URL_ROOMLIST
-                // URL_JOINED_GROUP
-                // URL_JOINED_ROOM
-
-                //URL_REGIST_CHECK
-                //URL_USERLIST_LIGHT
-                //URL_GROUP_PICK
-                //URL_DETAIL_LIGHTS_RESPONSE
-                //URL_UNPERFORMED
-                //URL_DETAIL_VOTE_RESPONSE
-                // URL_USER
-                //URL_ROLE_SHOW_TASK
-                //URL_ROLE_SHOW_RESPONSE
-                //URL_ROLE_SHOW_USER
-                //URL_NEWINFO
+//                URL_GROUP_NOTICE
+//                URL_GROUPLIST
+//                URL_ROOMLIST
+//                URL_JOINED_GROUP
+//                URL_JOINED_ROOM
+//                URL_REGIST_CHECK
+//                URL_DETAIL_LIGHTS_RESPONSE
+//                URL_UNPERFORMED
+//                URL_DETAIL_VOTE_RESPONSE
+//                URL_USER
+//                URL_DETAIL_SINGLE_LIGHT
+//                URL_ROLE_GET
+//                URL_ROLE_GET
+//                URL_ROLE_TASK_GET
+//                URL_ROLE_RESPONSE_GET
+//                URL_ROLE_FEEDBACK_GET
 
             }
         } catch (e: IOException) {
@@ -440,41 +446,45 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
 
             //프로필, 그룹 추가
-            if(jsonObj.has("name")){
-                addFormField(request,"name",jsonObj.getString("name"))
-                Log.d(LOG_TAG,"name/"+jsonObj.getString("name"))
+            if(jsonObj.has(JSON_NAME)){
+                addFormField(request, JSON_NAME,jsonObj.getString(JSON_NAME))
+                Log.d(LOG_TAG,"$JSON_NAME/"+jsonObj.getString(JSON_NAME))
             }
-            if(jsonObj.has("bio")){
-                addFormField(request,"bio",jsonObj.getString("bio"))
-                Log.d(LOG_TAG,"bio/"+jsonObj.getString("bio"))
+            if(jsonObj.has(JSON_BIO)){
+                addFormField(request, JSON_BIO,jsonObj.getString(JSON_BIO))
+                Log.d(LOG_TAG,"$JSON_BIO/"+jsonObj.getString(JSON_BIO))
             }
-            if(jsonObj.has("phone")){
-                addFormField(request,"phone",jsonObj.getString("phone"))
-                Log.d(LOG_TAG,"phone/"+jsonObj.getString("phone"))
+            if(jsonObj.has(JSON_PHONE)){
+                addFormField(request, JSON_PHONE,jsonObj.getString(JSON_PHONE))
+                Log.d(LOG_TAG,"$JSON_PHONE/"+jsonObj.getString(JSON_PHONE))
             }
 
+            if(photo!=null){
+                addFilePart(request,os,JSON_PHOTO,photo!!)
+                Log.d(LOG_TAG,"$JSON_PHOTO/"+photo.toString())
+            }
             if(file!=null){
-                addFilePart(request,os,JSON_PHOTO,file!!)
-                Log.d(LOG_TAG,"file/"+file.toString())
+                addFilePart(request,os,JSON_FILE,file!!)
+                Log.d(LOG_TAG,"$JSON_FILE/"+file.toString())
             }
 
             //역할추가
-            if (jsonObj.has("role_idx")){
-                addFormField(request, "role_idx", jsonObj.getString("role_idx"))
-                Log.d(LOG_TAG, "role_idx/" + jsonObj.getString("role_idx"))
+            if (jsonObj.has(JSON_ROLE_IDX)){
+                addFormField(request, JSON_ROLE_IDX, jsonObj.getString(JSON_ROLE_IDX))
+                Log.d(LOG_TAG, "$JSON_ROLE_IDX/" + jsonObj.getString(JSON_ROLE_IDX))
             }
-            if(jsonObj.has("role_task_idx")){
-                addFormField(request, "role_task_idx", jsonObj.getString("role_task_idx"))
-                Log.d(LOG_TAG, "role_task_idx/" + jsonObj.getString("role_task_idx"))
+            if(jsonObj.has(JSON_TASK_IDX)){
+                addFormField(request, JSON_TASK_IDX, jsonObj.getString(JSON_TASK_IDX))
+                Log.d(LOG_TAG, "$JSON_TASK_IDX/" + jsonObj.getString(JSON_TASK_IDX))
             }
-            if (jsonObj.has("response_content")){
-                addFormField(request, "response_content", jsonObj.getString("response_content"))
-                Log.d(LOG_TAG, "content/" + jsonObj.getString("response_content"))
+            if (jsonObj.has(JSON_RESPONSE_CONTENT)){
+                addFormField(request, JSON_RESPONSE_CONTENT, jsonObj.getString(JSON_RESPONSE_CONTENT))
+                Log.d(LOG_TAG, "$JSON_RESPONSE_CONTENT/" + jsonObj.getString(JSON_RESPONSE_CONTENT))
             }
             if(files.size>0){
                 files.forEach {
-                    Log.d(LOG_TAG, "file/" + it.toString())
-                    addFilePart(request, os, "file", it)
+                    Log.d(LOG_TAG, "$JSON_FILE/" + it.toString())
+                    addFilePart(request, os, JSON_FILE, it)
                 }
 
             }
@@ -492,7 +502,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(LOG_TAG + "/HTTP_ERROR", "")
+                Log.d("$LOG_TAG/HTTP_ERROR", "")
                 urlConnection.errorStream
             }
 

@@ -59,15 +59,17 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     receiveHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
                     receiveHolder.tvTime.text = Utils.getNowToTime(data.date!!)
 
-                    if (isShowProfileImage(position)) {
+                    if (isHideProfileImage(position)) {
                         receiveHolder.ivProfile.visibility = View.INVISIBLE
                         receiveHolder.tvName.visibility = View.GONE
+
                     } else {
                         receiveHolder.ivProfile.visibility = View.VISIBLE
                         receiveHolder.tvName.visibility = View.VISIBLE
 
                         if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList.get(position).u_idx}"))
                             receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+
                     }
                     receiveHolder.tvContent.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
                         override fun onLongClick(p0: View?): Boolean {
@@ -101,7 +103,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
                     receiveHolder.tvName.text = data.name
-                    if (isShowProfileImage(position)) {
+                    if (isHideProfileImage(position)) {
                         receiveHolder.ivProfile.visibility = View.INVISIBLE
                         receiveHolder.tvName.visibility = View.GONE
                     } else {
@@ -136,7 +138,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
                     receiveHolder.tvName.text = data.name
-                    if (isShowProfileImage(position)) {
+                    if (isHideProfileImage(position)) {
                         receiveHolder.ivProfile.visibility = View.INVISIBLE
                         receiveHolder.tvName.visibility = View.GONE
                     } else {
@@ -167,14 +169,15 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
                     receiveHolder.tvName.text = data.name
-                    if (isShowProfileImage(position)) {
+                    if (isHideProfileImage(position)) {
                         receiveHolder.ivProfile.visibility = View.INVISIBLE
                         receiveHolder.tvName.visibility = View.GONE
                     } else {
                         receiveHolder.ivProfile.visibility = View.VISIBLE
+                        receiveHolder.tvName.visibility = View.VISIBLE
+
                         if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
                             receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
-                        receiveHolder.tvName.visibility = View.VISIBLE
                     }
                 }
             }
@@ -293,7 +296,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
 
     }
 
-    private fun isShowProfileImage(position: Int): Boolean = position > 0 && dataList[position].u_idx == dataList[position - 1].u_idx && dataList[position - 1].type == ChatUtils.TYPE_MESSAGE
+    private fun isHideProfileImage(position: Int): Boolean = position > 0 && dataList[position].u_idx == dataList[position - 1].u_idx && dataList[position - 1].type == ChatUtils.TYPE_MESSAGE
 
 
     override fun getItemCount(): Int = dataList.size

@@ -11,7 +11,9 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
@@ -26,17 +28,16 @@ import kotlin.properties.Delegates
  */
 
 
-class MakeRoomTask(context: Context, handler: Handler, token : String?): GetMessageTask(context,handler,token) {
+class MakeRoomTask(context: Context, handler: Handler, token : String?,var g_idx : Int): GetMessageTask(context,handler,token) {
 
-    override  fun extractFeatureFromJson(jsonResponse: String) : Any? {
-        var room : Room by Delegates.notNull()
+    override  fun extractFeatureFromJson(jsonResponse: String) : Room? {
         try {
 
             val baseJsonResponse = JSONObject(jsonResponse)
 
 
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success") || message.contains("success"))
                     msgCode= MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {
@@ -50,17 +51,17 @@ class MakeRoomTask(context: Context, handler: Handler, token : String?): GetMess
             }
 
 
-            if(baseJsonResponse.has("data")) {
-                val data = baseJsonResponse.getJSONObject("data")
+            if(baseJsonResponse.has(JSON_DATA)) {
+                val data = baseJsonResponse.getJSONObject(JSON_DATA)
 
-                room = Room(data.getInt(JSON_G_IDX),
+                val room = Room(g_idx,
                         data.getInt(JSON_ROOM_IDX),
                         data.getString(JSON_REAL_NAME),
                         data.getString(JSON_CTRL_NAME))
                 if (data.has(JSON_PHOTO))
                     room.photo = data.getString(JSON_PHOTO)
 
-                return room as Any
+                return room
             }
 
         } catch (e: JSONException) {

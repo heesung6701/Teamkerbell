@@ -1,6 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.activities.chat
 
-import android.app.PendingIntent.getActivity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -8,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.provider.SyncStateContract
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -34,8 +32,8 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.*
 import org.teamfairy.sopt.teamkerbell._utils.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.ARG_LAST_MESSAGE
@@ -55,11 +53,11 @@ import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
-import org.teamfairy.sopt.teamkerbell.model.list.ChatListData
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CHAT_IDX
@@ -69,6 +67,7 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CONTENT
@@ -76,7 +75,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_OPENSTATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
-import org.teamfairy.sopt.teamkerbell.network.fcm.FcmSendMessageTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PICK_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
@@ -84,6 +82,7 @@ import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.ENTIRE_STATUS_ENTIRE
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.OPEN_STATUS_OPEN
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
@@ -121,6 +120,8 @@ class ChatActivity : AppCompatActivity() {
 
     private var mSocket: Socket by Delegates.notNull()
     private var isConnected: Boolean = false
+
+    private var isConnectedRoom = false
 
 
     private var lastChatIdxListener: ValueEventListener = object : ValueEventListener {
@@ -209,10 +210,12 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
         btn_invite.setOnClickListener {
+
             val intent = Intent(applicationContext, InviteUserActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
             drawer_layout.closeDrawer(Gravity.END)
         }
         btn_draw_menu.setOnClickListener {
@@ -230,11 +233,12 @@ class ChatActivity : AppCompatActivity() {
 //            startActivity(intent)
             drawer_layout.closeDrawer(Gravity.END)
         }
+        btn_leave.setOnClickListener {
+            attemptLeave()
 
-
+        }
 
         btn_camera.setOnClickListener {
-
             //카메라 버튼을 눌렀을 때
         }
         btn_gallery.setOnClickListener {
@@ -271,6 +275,10 @@ class ChatActivity : AppCompatActivity() {
 
 
         btn_sendMessage.setOnClickListener {
+            if (!isConnectedRoom) {
+                Toast.makeText(applicationContext, "현재 채팅방에 연결할수 없습니다", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val edt: EditText = edt_sendmessage
             if (edt.text.isNotEmpty()) {
                 val txt = edt.text.toString()
@@ -284,27 +292,11 @@ class ChatActivity : AppCompatActivity() {
         }
 
 
-        val socket =  ChatApplication.getSocket()
-        if(socket==null) finish()
-        mSocket =socket!!
-        mSocket.on(Socket.EVENT_CONNECT, onConnect)
-        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
-        mSocket.on(Constants.updatechat, onUpdateChat)
-        mSocket.connect()
+        connectSocket()
 
 
     }
 
-    private fun sendMessageSocket(txt: String) {
-        val jsonObj : JSONObject = JSONObject()
-        jsonObj.put(Constants.u_idx,LoginToken.getUserIdx(applicationContext))
-        jsonObj.put(Constants.chatroom_idx,room.room_idx)
-        jsonObj.put(Constants.content, txt)
-        jsonObj.put(Constants.JSON_TYPE,0)
-        mSocket.emit(Constants.sendchat, jsonObj.toString())
-    }
 
     private fun hideKeyboard() {
         edt_sendmessage.clearFocus()
@@ -313,6 +305,56 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
+        recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
+        recyclerView.layoutManager.offsetChildrenVertical(0)
+        recyclerView.scrollToPosition(position)
+    }
+
+    private fun attemptLeave() {
+        val task = GetMessageTask(applicationContext, HandlerLeave(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        try {
+            jsonParam.put(URL_LEAVE_ROOM_PARAM_ROOM_IDX, room.room_idx)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, jsonParam.toString())
+    }
+
+    private fun leavedRoom(msg: Message) {
+        when (msg.what) {
+            MSG_SUCCESS -> {
+
+                val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
+                realm.beginTransaction()
+                realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).equalTo(ARG_U_IDX, LoginToken.getUserIdx(applicationContext)).findAll().deleteAllFromRealm()
+                realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll().deleteAllFromRealm()
+
+                val isUpdateR
+                        : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
+                        ?: makeUpdateR(realm, StatusCode.joinedRoomChange)
+                isUpdateR.isUpdate = true
+
+                realm.commitTransaction()
+
+                finish()
+            }
+            else ->
+                Toast.makeText(applicationContext, "잠시 후 시도해주세요", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private class HandlerLeave(activity: ChatActivity) : Handler() {
+        private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            activity?.leavedRoom(msg)
+        }
+    }
 
     private fun getUserList() {
 
@@ -377,9 +419,9 @@ class ChatActivity : AppCompatActivity() {
                         Log.d("$LOG_TAG/token_value", value)
 
                         if (value != null && value != "null") {
-                            val json = FcmSendMessageTask.makeNotificationMessage(value, group.real_name, LoginToken.getUser(applicationContext).name.toString() + ":" + txt, group.g_idx, room.room_idx)
-                            val task = FcmSendMessageTask()
-                            task.execute(json)
+//                            val json = FcmSendMessageTask.makeNotificationMessage(value, group.real_name, LoginToken.getUser(applicationContext).name.toString() + ":" + txt, group.g_idx, room.room_idx)
+//                            val task = FcmSendMessageTask()
+//                            task.execute(json)
                         }
 
                     }
@@ -523,7 +565,7 @@ class ChatActivity : AppCompatActivity() {
         if (lastChatIdx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
             DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, lastChatIdx)
 //        removeFirebaseListener()
-        isUpdateJoined.removeAllChangeListeners()
+//        isUpdateJoined.removeAllChangeListeners()
 
 
     }
@@ -531,14 +573,10 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mSocket.disconnect()
-
-        mSocket.off(Socket.EVENT_CONNECT, onConnect)
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
-        mSocket.off(Constants.updatechat, onUpdateChat)
+        leaveRoomSocket()
+        disconnectSocket()
     }
+
 
     var mEndPointListener = object : ValueEventListener {
         override fun onDataChange(dataSnapShot: DataSnapshot) {
@@ -670,7 +708,7 @@ class ChatActivity : AppCompatActivity() {
     private var makeType: Int by Delegates.notNull()
     private fun makeSignal(position: Int) {
 
-        makeContent = dataList.get(position).content
+        makeContent = dataList[position].content
         makeType = ChatUtils.TYPE_LIGHT
         val jsonParam = JSONObject()
         try {
@@ -708,7 +746,7 @@ class ChatActivity : AppCompatActivity() {
         task.execute(USGS_REQUEST_URL.URL_MAKE_NOTICE, jsonParam.toString())
     }
 
-    private class HandlerLeave(activity: ChatActivity) : Handler() {
+    private class HandlerLeaveFirebase(activity: ChatActivity) : Handler() {
         private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
 
         override fun handleMessage(msg: Message) {
@@ -823,23 +861,83 @@ class ChatActivity : AppCompatActivity() {
     }
 
 
+    /* 소켓 관련 함수 */
+
+    private fun connectSocket() {
+        val socket = ChatApplication.getSocket()
+        if (socket == null) finish()
+
+        mSocket = socket!!
+        mSocket.on(Socket.EVENT_CONNECT, onConnect)
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        mSocket.on(Constants.UPDATE_CHAT, onUpdateChat)
+        mSocket.on(Constants.ENTER_RESULT, onEnterResult)
+        mSocket.on(Constants.LEAVE_RESULT, onLeaveResult)
+        mSocket.connect()
+
+    }
+
+    private fun disconnectSocket() {
+        mSocket.disconnect()
+
+        mSocket.off(Socket.EVENT_CONNECT, onConnect)
+        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
+        mSocket.off(Constants.ENTER_RESULT, onEnterResult)
+        mSocket.off(Constants.LEAVE_RESULT, onLeaveResult)
+    }
+
+
+    private fun enterRoomSocket() {
+        val jsonObj = JSONObject()
+        jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
+        jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
+        mSocket.emit(Constants.ENTER_ROOM, jsonObj.toString())
+
+        Log.d("$LOG_TAG/Socket", "try enterRoom with $jsonObj")
+
+    }
+
+    private fun leaveRoomSocket() {
+        val jsonObj = JSONObject()
+        jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
+        jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
+        mSocket.emit(Constants.LEAVE_ROOM, jsonObj.toString())
+        Log.d("$LOG_TAG/Socket", "try leaveRoom with $jsonObj")
+    }
+
+
+    private fun sendMessageSocket(txt: String) {
+        val jsonObj = JSONObject()
+        jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
+        jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
+        jsonObj.put(Constants.JSON_CONTENT, txt)
+        jsonObj.put(Constants.JSON_TYPE, ChatUtils.TYPE_MESSAGE)
+        mSocket.emit(Constants.SEND_CHAT, jsonObj.toString())
+        Log.d("$LOG_TAG/Socket", "try sendMessage with $jsonObj")
+    }
+
+
     private val onConnect = Emitter.Listener {
 
         this.runOnUiThread(Runnable {
             if (!isConnected) {
 
-                mSocket.emit("adduser", "희성")
-                Toast.makeText(applicationContext,
-                        R.string.connect, Toast.LENGTH_LONG).show()
-                Log.i(LOG_TAG+"/Socket", "connected")
+                enterRoomSocket()
+                Log.i(LOG_TAG + "/Socket onConnect/", "connected")
                 isConnected = true
+
             }
         })
     }
 
     private val onDisconnect = Emitter.Listener {
         this.runOnUiThread(Runnable {
-            Log.i(LOG_TAG+"/Socket", "disconnected")
+            Log.i(LOG_TAG + "/Socket onDisconnect", "disconnected")
             isConnected = false
             Toast.makeText(applicationContext,
                     R.string.disconnect, Toast.LENGTH_LONG).show()
@@ -848,37 +946,67 @@ class ChatActivity : AppCompatActivity() {
 
     private val onConnectError = Emitter.Listener {
         this.runOnUiThread(Runnable {
-            Log.e(LOG_TAG+"/Socket", "Error connecting")
+            Log.e(LOG_TAG + "/Socket ConnectError", "Error connecting")
             Toast.makeText(applicationContext,
                     R.string.error_connect, Toast.LENGTH_LONG).show()
         })
     }
 
+    private val onEnterResult = Emitter.Listener { args ->
+        this.runOnUiThread(Runnable {
 
-    private val onUpdateChat = Emitter.Listener { args ->
+//            Toast.makeText(applicationContext, args[0].toString(), Toast.LENGTH_SHORT).show()
+
+            Log.d("$LOG_TAG/Socket onEnterResult", args[0].toString())
+
+            val dataArray: JSONArray = JSONArray(args[0].toString())
+
+
+            for (i in 0 until dataArray.length()) {
+                val data = dataArray.getJSONObject(i)
+
+                val chatData = ChatMessage(data.getInt(Constants.JSON_CHAT_IDX),
+                        data.getInt(Constants.JSON_TYPE),
+                        data.getInt(Constants.JSON_U_IDX),
+                        data.getString(Constants.JSON_CONTENT),
+                        data.getString(Constants.JSON_WRITE_TIME))
+                chatData.setPhotoInfo(applicationContext)
+                dataList.add(0, chatData)
+                chatData.setPhotoInfo(applicationContext)
+            }
+
+            adapter_chat.notifyDataSetChanged()
+            isConnectedRoom = true
+        })
+    }
+
+    private val onLeaveResult = Emitter.Listener { args ->
         this.runOnUiThread(Runnable {
 
             Toast.makeText(applicationContext, args[0].toString(), Toast.LENGTH_SHORT).show()
 
-            Log.d(LOG_TAG+"/Socket", args[0].toString())
-            val data : JSONObject  =  JSONObject(args[0].toString())
-            val username: String
+            Log.d("$LOG_TAG/Socket onLeaveResult", args[0].toString())
+            if (args[0].toString() == "true")
+                finish()
+            else
+                Toast.makeText(applicationContext, "잠시 후 다시 도전해주세요", Toast.LENGTH_SHORT).show()
+        })
+    }
+    private val onUpdateChat = Emitter.Listener { args ->
+        this.runOnUiThread(Runnable {
+
+//            Log.d("$LOG_TAG/Socket onUpdateChat", args[0].toString())
+            val data: JSONObject = JSONObject(args[0].toString())
             val message: String = data.getString(JSON_CONTENT)
             val u_idx = data.getInt(JSON_U_IDX)
             val type = data.getInt(Constants.JSON_TYPE)
 
-            val chatData = ChatMessage(0,type,u_idx,message,"2018-07-10 03:09:00")
+            val chatData = ChatMessage(0, type, u_idx, message, "2018-07-10 03:09:00")
+            chatData.setPhotoInfo(applicationContext)
             dataList.add(chatData)
             adapter_chat.notifyDataSetChanged()
 
-//            removeTyping(username)
         })
-    }
-
-    fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
-        recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
-        recyclerView.layoutManager.offsetChildrenVertical(0)
-        recyclerView.scrollToPosition(position)
     }
 
 

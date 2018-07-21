@@ -67,6 +67,8 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         NetworkUtils.connectRoomList(activity.applicationContext, null, true)
         NetworkUtils.connectJoinedRoomList(activity.applicationContext, null, true)
         mSwipeRefreshLayout.isRefreshing = false
+        if ( fab.visibility == View.GONE)
+            fab.show()
     }
 
 
@@ -84,9 +86,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
 
     var fab : FloatingActionButton by Delegates.notNull()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -97,7 +97,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         dataList = arrayListOf<Room>()
         adapter = RoomListAdapter(dataList, activity.applicationContext)
         adapter.setOnItemClickListener(this)
-        adapter.setOnLongClickHandler(HandlerDelete(this))
         recyclerView.adapter = adapter
 
         fab = activity.findViewById<FloatingActionButton>(R.id.fab)
@@ -183,17 +182,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     }
 
-    private fun deleteRoom(room: Room) {
-        val task = GetMessageTask(activity.applicationContext, HandlerDeleteSuccess(this, room), LoginToken.getToken(activity.applicationContext))
-
-        val jsonParam = JSONObject()
-        try {
-            jsonParam.put(URL_LEAVE_ROOM_PARAM_ROOM_IDX, room.room_idx)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, jsonParam.toString())
-    }
 
     private fun updateRoomList() {
 
@@ -265,69 +253,12 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         NetworkUtils.connectRoomList(activity.applicationContext, HandlerGet(this), b)
     }
 
-    fun successDelete(room: Room) {
-        Toast.makeText(activity.applicationContext, "채팅방이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        realm.executeTransactionAsync {
-            it.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).equalTo(Room.ARG_ROOM_IDX, room.room_idx).findFirst()?.deleteFromRealm()
-        }
-        Log.d("$TAG/firebaseDB", "remove endpoint of " + LoginToken.getUser(activity.applicationContext).name)
-
-//        val endPoints = FirebaseMessageUtils.getLastChatIdx()
-//        Log.d("$TAG/endPoint", endPoints.size.toString() + "," + endPoints.toString())
-//        if (endPoints.size == 1 && endPoints.containsKey(LoginToken.getUserIdx(activity.applicationContext))) {
-//            Log.d("$TAG/firebaseDB", "remove group(" + group.real_name + ")")
-//            dataBaseGroup.removeValue()
-//        } else
-//            sendLeaveMessage()
-        Toast.makeText(activity.applicationContext, "그룹을 나갔습니다.", Toast.LENGTH_SHORT).show()
-
-
-
-        connectRoomList(true)
-    }
-
-
-//    fun sendLeaveMessage() {
-//        val chatIdx: Int = lastChatIdx
-//        val chatMessageF = ChatMessageF(chatIdx + 1, ChatUtils.TYPE_LEAVE,  LoginToken.getUser(activity.applicationContext), Utils.getNowForFirebase())
-//        dataBaseMessages.push().setValue(chatMessageF)
-//        dataBaseGroup.child("LastMessage").child("chat_idx").setValue(chatIdx + 1)
-//    }
 
     private class HandlerGet(fragment: RoomListFragment) : Handler() {
         private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
 
         override fun handleMessage(msg: Message) {
             mFragment.get()?.updateRoomList()
-        }
-    }
-
-    private class HandlerDelete(fragment: RoomListFragment) : Handler() {
-        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
-
-        override fun handleMessage(msg: Message) {
-            val fragment = mFragment.get()
-            fragment?.deleteRoom(fragment.dataList[msg.what])
-        }
-    }
-
-    private class HandlerDeleteSuccess(fragment: RoomListFragment, var room: Room) : Handler() {
-        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
-
-        override fun handleMessage(msg: Message) {
-            val fragment = mFragment.get()
-            if (fragment != null) {
-                val activity = fragment.activity
-                when (msg.what) {
-                    Utils.MSG_SUCCESS -> {
-                        fragment.successDelete(room)
-                    }
-                    else -> {
-                        Toast.makeText(activity.applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
         }
     }
 
@@ -338,8 +269,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     }
 
-
     abstract class ValueEventListenerByPosition(var position: Int,var room_idx:Int) : ValueEventListener
 
 
-}// Required empty public constructor
+}
