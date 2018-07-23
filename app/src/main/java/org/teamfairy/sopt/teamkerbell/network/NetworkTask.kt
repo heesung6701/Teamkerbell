@@ -257,7 +257,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(LOG_TAG + "/HTTP_ERROR", urlConnection.responseCode.toString() + "")
+                Log.d("$LOG_TAG/HTTP_ERROR", urlConnection.responseCode.toString() + "")
                 urlConnection.errorStream
             }
 

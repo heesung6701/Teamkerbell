@@ -99,6 +99,7 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_notice"
                     android:layout_marginTop="9dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign" />
 
                 <TextView
@@ -133,6 +134,7 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_pick"
                     android:layout_marginTop="9dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign" />
 
                 <TextView
@@ -167,6 +169,7 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_vote"
                     android:layout_marginTop="9dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign" />
 
                 <TextView
@@ -201,6 +204,7 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_signal"
                     android:layout_marginTop="9dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign" />
 
                 <TextView
@@ -235,6 +239,7 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_role"
                     android:layout_marginTop="9dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign" />
 
                 <TextView

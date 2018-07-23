@@ -63,7 +63,7 @@ class MakeRoomActivity : AppCompatActivity() {
         val spFilter = InputFilter { source, start, end, dest, dstart, dend ->
 
             var r: CharSequence? = null
-            for (i in start..end - 1) {
+            for (i in start until end) {
                 if (!Character.isLetterOrDigit(source[i])) {
                     r = ""
                 }

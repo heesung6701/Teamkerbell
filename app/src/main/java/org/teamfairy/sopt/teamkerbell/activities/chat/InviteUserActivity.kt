@@ -148,7 +148,7 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
         val jsonParam = JSONObject()
 
         try {
-            jsonParam.put(URL_INVITE_ROOM_PARAM_G_IDX, room.room_idx)
+            jsonParam.put(URL_INVITE_ROOM_PARAM_G_IDX, room.g_idx)
             jsonParam.put(URL_INVITE_ROOM_PARAM_ROOM_IDX, room.room_idx)
             val jsonArray = JSONArray()
             userCheckArray.forEach {

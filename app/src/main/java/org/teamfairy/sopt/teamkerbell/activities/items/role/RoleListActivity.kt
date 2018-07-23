@@ -114,7 +114,8 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
     private fun connectRoleList() {
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         val roomIdx = room?.room_idx?:""
-        if(roomIdx== Room.ARG_ALL_IDX || roomIdx==""){
+//        내 알고리즘상 채팅룸에 해당하는 정보를 받아오지 않는다..?
+        if(true || roomIdx== Room.ARG_ALL_IDX || roomIdx==""){
             task.execute("$URL_ROLE_GET/g/${group.g_idx}")
         }else{
             task.execute("$URL_ROLE_GET/c/$roomIdx")

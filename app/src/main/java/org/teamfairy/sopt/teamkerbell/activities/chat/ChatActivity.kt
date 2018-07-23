@@ -49,8 +49,13 @@ import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.pick.PickListActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
@@ -174,6 +179,8 @@ class ChatActivity : AppCompatActivity() {
         adapter_chat.setOnLongClickHandler(HandlerLongClick(this))
         listView_chat.adapter = adapter_chat
 
+        tv_nav_room_name.text = room.real_name
+
 
         setDatabaseGroup(group, room)
         FirebaseMessageUtils.getLastChatIdx(group, room, HandlerGetLastMsg(this))
@@ -187,11 +194,12 @@ class ChatActivity : AppCompatActivity() {
                     layout_expanded_menu.visibility = View.GONE
                     btn_expand.background = VectorDrawableCompat.create(resources, R.drawable.icon_chat_expand, null)
                 }
-                edt_sendmessage.requestFocus()
+
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
-            }
 
+                scrollToPosition(listView_chat, dataList.size - 1)
+            }
         }
         btn_expand.setOnClickListener {
             isExpanded = !isExpanded
@@ -292,6 +300,47 @@ class ChatActivity : AppCompatActivity() {
         }
 
 
+        btn_nav_notice.setOnClickListener {
+            val intent = Intent(this, NoticeCardActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
+        btn_nav_pick.setOnClickListener {
+            val intent = Intent(this, PickListActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+
+        }
+        btn_nav_role.setOnClickListener {
+            val intent = Intent(this, RoleListActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
+        btn_nav_signal.setOnClickListener {
+            val intent = Intent(this, SignalListActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
+        btn_nav_vote.setOnClickListener {
+            val intent = Intent(this, VoteListActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
         connectSocket()
 
 
@@ -550,6 +599,7 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        getUserList()
         updateUserList()
         Log.d(LOG_TAG, "onResume")
 
@@ -855,7 +905,6 @@ class ChatActivity : AppCompatActivity() {
             val activity = mActivity.get()
             if (activity != null) {
                 NetworkUtils.connectJoinedRoomList(activity.applicationContext, null)
-
             }
         }
     }
@@ -881,7 +930,6 @@ class ChatActivity : AppCompatActivity() {
 
     private fun disconnectSocket() {
         mSocket.disconnect()
-
         mSocket.off(Socket.EVENT_CONNECT, onConnect)
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
@@ -971,11 +1019,13 @@ class ChatActivity : AppCompatActivity() {
                         data.getString(Constants.JSON_CONTENT),
                         data.getString(Constants.JSON_WRITE_TIME))
                 chatData.setPhotoInfo(applicationContext)
-                dataList.add(0, chatData)
+                dataList.add(chatData)
                 chatData.setPhotoInfo(applicationContext)
             }
 
             adapter_chat.notifyDataSetChanged()
+            if(pick_idx ==-1)
+                scrollToPosition(listView_chat, dataList.size - 1)
             isConnectedRoom = true
         })
     }
@@ -997,13 +1047,17 @@ class ChatActivity : AppCompatActivity() {
 
 //            Log.d("$LOG_TAG/Socket onUpdateChat", args[0].toString())
             val data: JSONObject = JSONObject(args[0].toString())
+            val chatIdx = data.getInt(Constants.JSON_CHAT_IDX)
             val message: String = data.getString(JSON_CONTENT)
             val u_idx = data.getInt(JSON_U_IDX)
             val type = data.getInt(Constants.JSON_TYPE)
+            val writeTime = data.getString(Constants.JSON_WRITE_TIME)
 
-            val chatData = ChatMessage(0, type, u_idx, message, "2018-07-10 03:09:00")
+            val chatData = ChatMessage(chatIdx, type, u_idx, message, writeTime)
             chatData.setPhotoInfo(applicationContext)
             dataList.add(chatData)
+            if(pick_idx ==-1)
+                scrollToPosition(listView_chat, dataList.size - 1)
             adapter_chat.notifyDataSetChanged()
 
         })

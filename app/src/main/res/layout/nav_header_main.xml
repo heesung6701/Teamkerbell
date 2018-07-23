@@ -1,40 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <View
+        android:id="@+id/btn_board"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_size"
+        android:background="@color/mainColor"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
         android:orientation="vertical">
-        <LinearLayout
-            android:id="@+id/btn_board"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/action_bar_size"
-            android:background="@color/mainColor">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:text="게시판"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                />
 
-            <ImageView
-                android:layout_width="wrap_content"
+
+        <TextView
+            android:id="@+id/tv_nav_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="12dp"
+            android:text="채팅방 이름"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:tint="@color/white"
-                app:srcCompat="@drawable/ic_next"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                />
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btn_nav_notice"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/icon_list_noticedefault" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_nav_notice"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/action_notice" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btn_nav_pick"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/icon_list_pickdefault" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_nav_pick"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/action_pick" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btn_nav_vote"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/icon_list_votedefault" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_nav_vote"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/action_vote" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btn_nav_signal"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/icon_list_signaldefault" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_nav_signal"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/action_signal" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_nav_role"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/icon_list_noticedefault" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_nav_role"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/action_role" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:text="@string/txt_google_drive_link"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_settings"
+                />
+            
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            tools:text="https://drive.google.com/drive/u/0/my-…"
+            />
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -64,47 +220,43 @@
             android:id="@+id/listView_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             />
-        <Button
-            android:id="@+id/btn_invite"
-            android:layout_width="match_parent"
-            android:theme="@style/FlatButton"
-            android:layout_height="40dp"
-            android:text="팀원초대"
-            android:textSize="14sp"
-            android:background="@drawable/shape_action_bar"
-            />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:background="@color/mainColor">
-            <ImageButton
-                android:id="@+id/btn_leave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_out"
-                android:layout_marginStart="16dp"
-                android:tint="@color/white"
-                android:layout_alignParentStart="true"
-                android:background="@android:color/transparent"/>
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_settings"
-                android:layout_marginEnd="16dp"
-                android:tint="@color/white"
-                android:layout_alignParentEnd="true"
-                android:background="@android:color/transparent"/>
-
-        </RelativeLayout>
-
-
 
 
 
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingStart="29dp"
+        android:paddingEnd="21dp"
+        >
+        <ImageView
+            android:id="@+id/btn_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_add"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:text="@string/txt_invite_member"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/btn_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_out"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
+</LinearLayout>
