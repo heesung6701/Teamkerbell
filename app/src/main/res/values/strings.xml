@@ -125,6 +125,7 @@
     <string name="action_signal_particular">특정인 선택</string>
     <string name="action_upload_file">파일 첨부하기</string>
     <string name="action_enter">입력</string>
+    <string name="action_edit">수정</string>
 
 
     <string name="tab_by_choice">항목별</string>
@@ -139,7 +140,8 @@
     <string name="disconnect">소켓 연결 해제</string>
     <string name="error_connect">소켓 연결 에러</string>
     <string name="connect">소켓 연결</string>
-    <string name="txt_google_drive_link">구글 드라이브 링크</string>
+    <string name="txt_cloud_drive_link">구글 드라이브 링크</string>
     <string name="txt_invite_member">멤버 초대하기</string>
+    <string name="txt_enter_cloud_link">클라우드 url를 입력해주세요</string>
 
 </resources>

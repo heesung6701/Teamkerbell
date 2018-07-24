@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.URLUtil
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.database.ChildEventListener
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.*
@@ -341,6 +343,29 @@ class ChatActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
+
+        btn_nav_cloud_drive.setOnClickListener {
+            if(tv_nav_cloud_link.visibility == View.VISIBLE){
+                tv_nav_cloud_link.visibility=View.GONE
+                edt_nav_cloud_link.visibility=View.VISIBLE
+
+                btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor))
+            }else{
+                if(!edt_nav_cloud_link.text.isNullOrBlank()){
+                    if(URLUtil.isValidUrl( edt_nav_cloud_link.text.toString()))
+                        tv_nav_cloud_link.text=edt_nav_cloud_link.text.toString()
+                    else
+                        Toast.makeText(applicationContext,"유효하지 않는 URL 입니다.",Toast.LENGTH_SHORT).show()
+                }
+                tv_nav_cloud_link.visibility=View.VISIBLE
+                edt_nav_cloud_link.visibility=View.GONE
+
+                btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+            }
+        }
+
+
+
         connectSocket()
 
 

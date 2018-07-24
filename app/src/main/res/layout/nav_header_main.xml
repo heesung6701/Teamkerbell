@@ -26,12 +26,13 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:paddingBottom="12dp"
-            android:text="채팅방 이름"
+            tools:text="채팅방 이름"
             />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -44,7 +45,8 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_noticedefault" />
+                    app:srcCompat="@drawable/icon_list_noticedefault"
+                    android:contentDescription="@string/action_notice" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +71,8 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_pickdefault" />
+                    app:srcCompat="@drawable/icon_list_pickdefault"
+                    android:contentDescription="@string/action_pick" />
 
 
                 <TextView
@@ -95,7 +98,8 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_votedefault" />
+                    app:srcCompat="@drawable/icon_list_votedefault"
+                    android:contentDescription="@string/action_vote" />
 
 
                 <TextView
@@ -121,7 +125,8 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_signaldefault" />
+                    app:srcCompat="@drawable/icon_list_signaldefault"
+                    android:contentDescription="@string/action_signal" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -147,7 +152,8 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_noticedefault" />
+                    app:srcCompat="@drawable/icon_list_noticedefault"
+                    android:contentDescription="@string/action_role"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -167,29 +173,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
-            android:gravity="center_vertical"
-            >
+            android:gravity="center_vertical">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"
-                android:text="@string/txt_google_drive_link"/>
+                android:text="@string/txt_cloud_drive_link"/>
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_settings"
-                />
-            
+                android:id="@+id/btn_nav_cloud_drive"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_edit"
+                android:contentDescription="@string/action_edit" />
+
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_nav_cloud_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
-            tools:text="https://drive.google.com/drive/u/0/my-…"
+            android:autoLink="web"
+            android:text="@string/txt_enter_cloud_link"
             />
+        <EditText
+            android:id="@+id/edt_nav_cloud_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            android:visibility="gone"
+            android:hint="@string/txt_enter_cloud_link"
+            android:inputType="textUri"/>
 
 
         <LinearLayout
