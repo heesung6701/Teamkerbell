@@ -21,6 +21,8 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.RoleListAdap
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_GET
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -116,9 +118,9 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         val roomIdx = room?.room_idx?:""
 //        내 알고리즘상 채팅룸에 해당하는 정보를 받아오지 않는다..?
         if(true || roomIdx== Room.ARG_ALL_IDX || roomIdx==""){
-            task.execute("$URL_ROLE_GET/g/${group.g_idx}")
+            task.execute("$URL_ROLE/g/${group.g_idx}", METHOD_GET)
         }else{
-            task.execute("$URL_ROLE_GET/c/$roomIdx")
+            task.execute("$URL_ROLE/c/$roomIdx", METHOD_GET)
         }
 
     }

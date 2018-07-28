@@ -25,6 +25,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_RECEIVER
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_LIGHT_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.SignalListTask
@@ -199,7 +200,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         val task = SignalListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
         url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
-        task.execute("$url/${group.g_idx}")
+        task.execute("$url/${group.g_idx}", NetworkTask.METHOD_GET)
     }
 
     fun getSignalList(result: ArrayList<Signal>) {

@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.*
@@ -71,6 +70,8 @@ import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CHAT
 import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR.Companion.ARG_WHAT
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
@@ -394,7 +395,7 @@ class ChatActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, METHOD_DELETE, jsonParam.toString())
     }
 
     private fun leavedRoom(msg: Message) {
@@ -799,7 +800,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_MAKE_SIGNAL, jsonParam.toString())
+        task.execute(URL_MAKE_SIGNAL, METHOD_POST, jsonParam.toString())
     }
 
     private fun makeNotice(position: Int) {
@@ -818,7 +819,7 @@ class ChatActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_MAKE_NOTICE, jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_MAKE_NOTICE,METHOD_POST , jsonParam.toString())
     }
 
     private class HandlerLeaveFirebase(activity: ChatActivity) : Handler() {
@@ -1038,14 +1039,7 @@ class ChatActivity : AppCompatActivity() {
             for (i in 0 until dataArray.length()) {
                 val data = dataArray.getJSONObject(i)
 
-                val chatData = ChatMessage(data.getInt(Constants.JSON_CHAT_IDX),
-                        data.getInt(Constants.JSON_TYPE),
-                        data.getInt(Constants.JSON_U_IDX),
-                        data.getString(Constants.JSON_CONTENT),
-                        data.getString(Constants.JSON_WRITE_TIME))
-                chatData.setPhotoInfo(applicationContext)
-                dataList.add(chatData)
-                chatData.setPhotoInfo(applicationContext)
+                addChatFromJSON(data)
             }
 
             adapter_chat.notifyDataSetChanged()
@@ -1070,22 +1064,29 @@ class ChatActivity : AppCompatActivity() {
     private val onUpdateChat = Emitter.Listener { args ->
         this.runOnUiThread(Runnable {
 
-//            Log.d("$LOG_TAG/Socket onUpdateChat", args[0].toString())
-            val data: JSONObject = JSONObject(args[0].toString())
-            val chatIdx = data.getInt(Constants.JSON_CHAT_IDX)
-            val message: String = data.getString(JSON_CONTENT)
-            val u_idx = data.getInt(JSON_U_IDX)
-            val type = data.getInt(Constants.JSON_TYPE)
-            val writeTime = data.getString(Constants.JSON_WRITE_TIME)
+            Log.d("$LOG_TAG/Socket onUpdateChat", args[0].toString())
+           addChatFromJSON(org.json.JSONObject(args[0].toString()))
 
-            val chatData = ChatMessage(chatIdx, type, u_idx, message, writeTime)
-            chatData.setPhotoInfo(applicationContext)
-            dataList.add(chatData)
             if(pick_idx ==-1)
                 scrollToPosition(listView_chat, dataList.size - 1)
             adapter_chat.notifyDataSetChanged()
 
         })
+    }
+
+    private fun addChatFromJSON(data : JSONObject){
+
+        val chatIdx = data.getInt(Constants.JSON_CHAT_IDX)
+        val message: String = data.getString(JSON_CONTENT)
+        val uIdx = data.getInt(JSON_U_IDX)
+        val type = data.getInt(Constants.JSON_TYPE)
+        val writeTime = data.getString(Constants.JSON_WRITE_TIME)
+        val count : Int =data.getInt(Constants.JSON_COUNT)
+
+        val chatData = ChatMessage(chatIdx, type, uIdx, message, writeTime)
+        chatData.count=count
+        chatData.setPhotoInfo(applicationContext)
+        dataList.add(chatData)
     }
 
 

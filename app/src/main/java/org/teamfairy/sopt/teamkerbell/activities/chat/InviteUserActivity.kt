@@ -23,6 +23,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_ROOM_PARAM_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_ROOM_PARAM_ROOM_IDX
@@ -160,7 +161,7 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        task.execute(USGS_REQUEST_URL.URL_INVITE_ROOM,jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_INVITE_ROOM,METHOD_POST, jsonParam.toString())
 
     }
 

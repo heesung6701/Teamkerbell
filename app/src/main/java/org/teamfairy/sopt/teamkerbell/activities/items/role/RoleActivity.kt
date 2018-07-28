@@ -21,6 +21,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.RoleTaskListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -111,7 +112,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         adapter.notifyDataSetChanged()
 
         val task = RoleTaskListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_ROLE_TASK_GET + "/" + role.role_idx)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_TASK + "/" + role.role_idx, METHOD_GET)
 
     }
 

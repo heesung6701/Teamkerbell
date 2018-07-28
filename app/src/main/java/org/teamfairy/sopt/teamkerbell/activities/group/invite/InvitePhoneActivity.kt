@@ -25,6 +25,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_NAME
@@ -92,7 +93,7 @@ class InvitePhoneActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val inviteTask = GetMessageTask(applicationContext, HandlerInvite(this))
-        inviteTask.execute(URL_INVITE_GROUP, jsonParam.toString())
+        inviteTask.execute(URL_INVITE_GROUP,METHOD_POST, jsonParam.toString())
     }
 
     fun invite(msg: Message) {

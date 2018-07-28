@@ -21,6 +21,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.UnperformedTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
@@ -155,7 +156,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
     private fun connectUnperformed() {
         val task = UnperformedTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_UNPERFORMED)
+        task.execute(USGS_REQUEST_URL.URL_UNPERFORMED,METHOD_GET)
     }
 
 

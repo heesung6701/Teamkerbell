@@ -23,6 +23,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
@@ -108,8 +109,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        if(filePhoto!=null) task.file = filePhoto!!
-        task.execute(USGS_REQUEST_URL.URL_PROFILE, jsonParam.toString())
+        if(filePhoto!=null) task.photo = filePhoto!!
+        task.execute(USGS_REQUEST_URL.URL_PROFILE, METHOD_PUT, jsonParam.toString())
     }
 
 

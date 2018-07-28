@@ -30,6 +30,8 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.*
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 
 
 class TaskResponseActivity : AppCompatActivity() {
@@ -120,7 +122,7 @@ class TaskResponseActivity : AppCompatActivity() {
             val jsonParam = JSONObject()
             jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
             jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_CONTENT, txt)
-            task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_POST, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK,METHOD_POST, jsonParam.toString())
 
             edt_commit.setText("")
         }
@@ -141,7 +143,7 @@ class TaskResponseActivity : AppCompatActivity() {
     private fun connectFeedBackList() {
         val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
 
-        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_GET + "/" + taskResponse.response_idx)
+        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
     }
 
 

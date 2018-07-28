@@ -15,6 +15,7 @@ import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Notice.Companion.ARG_STATUS_READ
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_NOTICE_PARAM_NOTICEID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
@@ -64,7 +65,7 @@ class NoticeActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val task = GetMessageTask(applicationContext, HandlerNoticeResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_RESPONSE_NOTICE, jsonParam.toString())
+        task.execute(URL_RESPONSE_NOTICE,METHOD_POST, jsonParam.toString())
     }
 
     private class HandlerNoticeResponse(activity: NoticeActivity) : Handler() {

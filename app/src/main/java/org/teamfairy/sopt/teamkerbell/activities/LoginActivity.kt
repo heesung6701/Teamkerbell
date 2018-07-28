@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
@@ -225,7 +226,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             e.printStackTrace()
         }
         mAuthTask = LoginTask(applicationContext, mHandlerLogin)
-        mAuthTask!!.execute(URL_LOGIN, jsonParam.toString())
+        mAuthTask!!.execute(URL_LOGIN, METHOD_POST , jsonParam.toString())
     }
 
 

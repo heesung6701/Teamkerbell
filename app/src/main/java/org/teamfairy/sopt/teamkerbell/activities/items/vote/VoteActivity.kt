@@ -23,6 +23,9 @@ import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByChoi
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByMemberListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VALUE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VOTEID
@@ -137,7 +140,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             val jsonParam = JSONObject()
             jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_VOTEID, voteResponse.vote.vote_idx)
             jsonParam.put(USGS_REQUEST_URL.URL_RESPONSE_PRESS_GID, group.g_idx)
-            task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_RESPONSE_PRESS, METHOD_POST, jsonParam.toString())
         }
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
@@ -398,7 +401,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     e.printStackTrace()
                 }
 
-                task.execute(USGS_REQUEST_URL.URL_RESPONSE_VOTE, jsonParam.toString())
+                task.execute(USGS_REQUEST_URL.URL_RESPONSE_VOTE, METHOD_PUT, jsonParam.toString())
             }
 
         } else {
@@ -419,7 +422,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private fun connectVoteResponse(vote_idx: Int) {
         val task = VoteResponseTask(applicationContext, HandlerGetVoteResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + vote_idx)
+        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + vote_idx,METHOD_GET)
     }
 
     private class HandlerGetVoteResponse(activity: VoteActivity) : Handler() {

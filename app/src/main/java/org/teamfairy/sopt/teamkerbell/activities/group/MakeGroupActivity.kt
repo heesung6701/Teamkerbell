@@ -16,6 +16,7 @@ import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.make.MakeGroupTask
@@ -83,7 +84,7 @@ class MakeGroupActivity : AppCompatActivity() {
         }
         val makeGroupTask = MakeGroupTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext))
         if (filePhoto != null) makeGroupTask.photo = filePhoto!!
-        makeGroupTask.execute(URL_MAKE_GROUP, jsonParam.toString())
+        makeGroupTask.execute(URL_MAKE_GROUP,METHOD_POST, jsonParam.toString())
     }
 
     fun createSuccess(msg : Message){

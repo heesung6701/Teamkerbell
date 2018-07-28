@@ -21,6 +21,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
@@ -68,6 +69,7 @@ class EditRoleActivity : AppCompatActivity() {
             val btn = edtView.findViewById<ImageButton>(R.id.btn_minus)
             val edt = edtView.findViewById<EditText>(R.id.edt_vote_example)
             edt.setText(it.content)
+            edt.isEnabled =false
             btn.setOnClickListener {
                 val thisEdit = edtViewList[it]!!
                 layout_role_tasks.removeView(thisEdit.view)
@@ -112,7 +114,7 @@ class EditRoleActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
             val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-            task.execute(USGS_REQUEST_URL.URL_ROLE_TASK_PUT, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_TASK, METHOD_PUT, jsonParam.toString())
 
 
         }

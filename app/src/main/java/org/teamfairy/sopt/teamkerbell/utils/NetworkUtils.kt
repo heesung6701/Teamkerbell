@@ -22,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getPref
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell.model.realm.UrlToBytes
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROOMLIST
 import org.teamfairy.sopt.teamkerbell.network.info.*
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -45,7 +46,7 @@ open class NetworkUtils {
             if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP)) {
                 Log.d("$LOG_TAG/connect", "update Group List")
                 val task = GroupListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_GROUP,handler), LoginToken.getToken(applicationContext))
-                task.execute(URL_GROUPLIST)
+                task.execute(URL_GROUPLIST,METHOD_GET)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
             }
@@ -56,7 +57,7 @@ open class NetworkUtils {
             if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM)) {
                 Log.d("${LOG_TAG}/connect", "update Room List")
                 val task = RoomListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_ROOM,handler), LoginToken.getToken(applicationContext))
-                task.execute(URL_ROOMLIST)
+                task.execute(URL_ROOMLIST, METHOD_GET)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
             }
@@ -67,7 +68,7 @@ open class NetworkUtils {
             if (isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_USER)) {
                 Log.d("$LOG_TAG/connect", "update User List")
                 val task = UserListTask(applicationContext, HandlerSuccess(applicationContext,PREF_ISUPDATE_USER,handler), LoginToken.getToken(applicationContext))
-                task.execute(USGS_REQUEST_URL.URL_USER)
+                task.execute(USGS_REQUEST_URL.URL_USER, METHOD_GET)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
             }
@@ -80,7 +81,7 @@ open class NetworkUtils {
             if (isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP)) {
                 Log.d("$LOG_TAG/connect", "update Joined Group List")
                 val task = JoinedGroupListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_JOINED_GROUP,handler), LoginToken.getToken(applicationContext))
-                task.execute(USGS_REQUEST_URL.URL_JOINED_GROUP)
+                task.execute(USGS_REQUEST_URL.URL_JOINED_GROUP,METHOD_GET)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
             }
@@ -92,7 +93,7 @@ open class NetworkUtils {
             if (isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM)) {
                 Log.d("$LOG_TAG/connect", "update Joined Room List")
                 val task = JoinedRoomListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_JOINED_ROOM,handler), LoginToken.getToken(applicationContext))
-                task.execute(USGS_REQUEST_URL.URL_JOINED_ROOM)
+                task.execute(USGS_REQUEST_URL.URL_JOINED_ROOM, METHOD_GET)
             } else {
                 handler?.sendEmptyMessage(MSG_SUCCESS)
             }

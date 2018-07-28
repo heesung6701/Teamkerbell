@@ -29,6 +29,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
@@ -137,7 +138,7 @@ class MakeRoomActivity : AppCompatActivity() {
         }
         val makeRoomTask = MakeRoomTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext),group.g_idx)
         if (filePhoto != null) makeRoomTask.file = filePhoto!!
-        makeRoomTask.execute(URL_MAKE_ROOM, jsonParam.toString())
+        makeRoomTask.execute(URL_MAKE_ROOM, METHOD_POST, jsonParam.toString())
     }
 
 

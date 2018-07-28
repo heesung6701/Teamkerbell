@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK_PARAM_ID
@@ -33,6 +34,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import java.net.URLEncoder
+import javax.xml.transform.OutputKeys.METHOD
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -142,7 +144,7 @@ class SignUpActivity : AppCompatActivity() {
                 .buildUpon()
                 .appendQueryParameter(URL_REGIST_CHECK_PARAM_ID, str).build()
 
-        idCheckTask.execute(builtUri.toString())
+        idCheckTask.execute(builtUri.toString(), NetworkTask.METHOD_GET)
     }
     private var doubleBackToExitPressedOnce = false
     override fun onBackPressed() {
@@ -235,7 +237,7 @@ class SignUpActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
             mSignUpTask = GetMessageTask(applicationContext, HandlerSignUp(this))
-            mSignUpTask!!.execute(URL_REGIST, jsonParam.toString())
+            mSignUpTask!!.execute(URL_REGIST, NetworkTask.METHOD_POST, jsonParam.toString())
         }
     }
 

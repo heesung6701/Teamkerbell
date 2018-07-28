@@ -26,7 +26,7 @@ open class GetMessageTask(context: Context, var handler: Handler?,token : String
     constructor(context: Context,handler : Handler) : this(context,handler,null)
 
     var message: String = "No Message"
-    var msgCode = 0
+    var msgCode = MSG_FAIL
 
     open fun extractFeatureFromJson(jsonResponse: String) : Any?{
         val data : String?

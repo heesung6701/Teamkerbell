@@ -24,6 +24,8 @@ import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_SINGLE_LIGHT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS
@@ -230,7 +232,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            task.execute(URL_RESPONSE_LIGHTS, jsonParam.toString())
+            task.execute(URL_RESPONSE_LIGHTS,METHOD_POST, jsonParam.toString())
         } else {
             Toast.makeText(applicationContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
         }
@@ -257,14 +259,14 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
 
         val url = URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal.signal_idx
-        task.execute(url)
+        task.execute(url, METHOD_GET)
     }
     private fun connectSignalResponse(signal_idx : Int) {
 
         val task = SignalResponseTask(applicationContext, HandlerGetSingle(this), LoginToken.getToken(applicationContext))
 
-        val url = URL_DETAIL_SINGLE_LIGHT + "/"+ signal_idx
-        task.execute(url)
+        val url = "$URL_DETAIL_SINGLE_LIGHT/$signal_idx"
+        task.execute(url, METHOD_GET)
     }
     private fun connectSignalResponse() = connectSignalResponse(signal.signal_idx)
 

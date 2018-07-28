@@ -21,6 +21,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomAct
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CONTENT
@@ -100,7 +101,7 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
 
                 val registTask = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
                 isConnecting = true
-                registTask.execute(URL_MAKE_NOTICE, jsonParam.toString())
+                registTask.execute(URL_MAKE_NOTICE,METHOD_POST, jsonParam.toString())
             } else
                 Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
         } else

@@ -28,6 +28,7 @@ import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_CONTENT
@@ -137,7 +138,7 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
 
                         val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
                         isConnecting = true
-                        task.execute(URL_MAKE_SIGNAL, jsonParam.toString())
+                        task.execute(URL_MAKE_SIGNAL,METHOD_POST, jsonParam.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
 

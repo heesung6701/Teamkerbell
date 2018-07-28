@@ -23,6 +23,7 @@ class Constants{
         const val JSON_CONTENT = USGS_REQUEST_URL.JSON_CONTENT
         const val JSON_WRITE_TIME = USGS_REQUEST_URL.JSON_WRITE_TIME
         const val JSON_TYPE = "type"
+        const val JSON_COUNT = "count"
 
     }
 }

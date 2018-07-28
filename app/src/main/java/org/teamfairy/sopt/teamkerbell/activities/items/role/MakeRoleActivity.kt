@@ -21,6 +21,7 @@ import org.teamfairy.sopt.teamkerbell.model.assist.ExampleEdit
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
@@ -82,7 +83,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 e.printStackTrace()
             }
             val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-            task.execute(USGS_REQUEST_URL.URL_ROLE_POST, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_POST, METHOD_POST, jsonParam.toString())
 
 
         }

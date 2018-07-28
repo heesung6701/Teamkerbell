@@ -25,6 +25,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
@@ -183,7 +184,7 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
             adapterList.notifyDataSetChanged()
 
         val task = NoticeListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_GROUP_NOTICE.plus("/${group.g_idx}"))
+        task.execute(URL_GROUP_NOTICE.plus("/${group.g_idx}"), METHOD_GET)
 
     }
 

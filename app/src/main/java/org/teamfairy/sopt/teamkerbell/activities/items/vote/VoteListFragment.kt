@@ -27,6 +27,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_RECEIVER
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_GROUP_VOTE_SENDER
 import org.teamfairy.sopt.teamkerbell.network.info.VoteListTask
@@ -117,7 +118,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         val task: NetworkTask = VoteListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
 
         val url = if (state == Utils.VOTE_SENDER) URL_GROUP_VOTE_SENDER else URL_GROUP_VOTE_RECEIVER
-        task.execute("$url/${group.g_idx}")
+        task.execute("$url/${group.g_idx}", METHOD_GET)
     }
 
     private fun updateVoteList() {

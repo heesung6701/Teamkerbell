@@ -27,6 +27,7 @@ import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
@@ -107,7 +108,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        task.execute(USGS_REQUEST_URL.URL_LEAVE_GROUP, jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_LEAVE_GROUP,METHOD_DELETE, jsonParam.toString())
     }
 
     private fun connectGroupList(b: Boolean) {

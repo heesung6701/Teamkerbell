@@ -28,6 +28,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomAct
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_CHOICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_CONTENT
@@ -143,7 +144,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                             val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
                             isConnecting = true
 
-                            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE, jsonParam.toString())
+                            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE,METHOD_POST, jsonParam.toString())
                         } else
                             Toast.makeText(applicationContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                     } else

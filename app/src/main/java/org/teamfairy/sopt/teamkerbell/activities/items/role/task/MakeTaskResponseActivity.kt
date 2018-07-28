@@ -42,6 +42,7 @@ import android.support.v4.app.ActivityCompat
 import android.os.Build
 import android.view.View
 import kotlinx.android.synthetic.main.activity_make_task_response.*
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 
 
 class MakeTaskResponseActivity : AppCompatActivity() {
@@ -105,7 +106,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             }
             Log.d("NetworkTask", jsonParam.toString())
 
-            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE_POST, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE,NetworkTask.METHOD_POST, jsonParam.toString())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

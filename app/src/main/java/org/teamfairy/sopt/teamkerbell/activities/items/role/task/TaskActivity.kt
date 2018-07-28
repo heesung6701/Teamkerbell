@@ -46,7 +46,9 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.os.Build
 import android.content.DialogInterface
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE_GET
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
@@ -205,7 +207,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
-        task.execute(USGS_REQUEST_URL.URL_ROLE_USER_PUT, jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER,METHOD_PUT, jsonParam.toString())
 
     }
 
@@ -267,7 +269,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             }
 
         } else jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_ROLE_STATUS, status)
-        task.execute(USGS_REQUEST_URL.URL_ROLE_USER_PUT, jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER,METHOD_PUT, jsonParam.toString())
 
     }
 
@@ -294,7 +296,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun connectResponseList() {
         val task = TaskResponseListTask(applicationContext, HandlerGetResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_ROLE_RESPONSE_GET + "/" + roleTask.task_idx)
+        task.execute(URL_ROLE_RESPONSE + "/" + roleTask.task_idx, METHOD_GET)
     }
 
     private class HandlerGetResponse(activity: TaskActivity) : Handler() {
