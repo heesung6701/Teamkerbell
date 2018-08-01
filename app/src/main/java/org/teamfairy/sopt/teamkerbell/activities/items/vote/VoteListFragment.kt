@@ -91,7 +91,6 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
-        connectVoteList()
 
         v.tv_show_finished.setOnClickListener {
             showFinished = !showFinished
@@ -130,6 +129,12 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             }
         }
         adapter.notifyDataSetChanged()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        connectVoteList()
     }
 
     fun getVoteListFromRealm() {

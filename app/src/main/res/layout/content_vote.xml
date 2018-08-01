@@ -258,7 +258,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:textStyle="bold"
-                android:text="피자먹고싶어요"
+                tools:text="피자먹고싶어요"
 
                 />
 

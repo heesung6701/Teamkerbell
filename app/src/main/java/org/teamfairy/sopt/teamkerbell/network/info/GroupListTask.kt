@@ -10,8 +10,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -32,14 +35,14 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
 
 
             val baseJsonResponse = JSONObject(jsonResponse.toString())
-            if (baseJsonResponse.has("message")) {
-                val message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                val message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
 
 
                     realm.beginTransaction()
                     realm.where(GroupR::class.java).findAll().deleteAllFromRealm()
-                    val dataArray: JSONArray = baseJsonResponse.getJSONArray("data")
+                    val dataArray: JSONArray = baseJsonResponse.getJSONArray(JSON_DATA)
 
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
@@ -52,7 +55,19 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
                         realm.copyToRealmOrUpdate(g)
                     }
                     msgCode = MSG_SUCCESS
+
+                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_GROUP).findFirst() ?: realm.createObject(IsUpdateR::class.java,IsUpdateR.WHAT_GROUP)
+                    if(!isUpdateR.isUpdate) {
+                        isUpdateR.isUpdate = true
+                        Log.d(LOG_TAG,"Group Info is updated")
+                    }
+
+
                     realm.commitTransaction()
+
+
+
+
 
 
                 } else {

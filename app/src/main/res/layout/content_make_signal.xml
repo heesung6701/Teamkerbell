@@ -18,7 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/content_select_room" android:id="@+id/layout_select_room"/>
+            <include layout="@layout/content_select_room_gray" android:id="@+id/layout_select_room"/>
+
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:overScrollMode="never"
@@ -27,6 +29,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/filter_overwrap_height"
                 android:layout_alignStart="@id/layout_select_room"
                 android:layout_alignEnd="@id/layout_select_room"
                 android:layout_below="@id/layout_select_room"

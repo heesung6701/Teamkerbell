@@ -208,7 +208,6 @@ class ChatActivity : AppCompatActivity() {
             isExpanded = !isExpanded
             if (isExpanded) {
                 hideKeyboard()
-
                 layout_expanded_menu.visibility = View.VISIBLE
                 btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expandclose, null))
             } else {
@@ -939,7 +938,7 @@ class ChatActivity : AppCompatActivity() {
     /* 소켓 관련 함수 */
 
     private fun connectSocket() {
-        val socket = ChatApplication.getSocket()
+        val socket = ChatApplication.getSocket(group.g_idx)
         if (socket == null) finish()
 
         mSocket = socket!!

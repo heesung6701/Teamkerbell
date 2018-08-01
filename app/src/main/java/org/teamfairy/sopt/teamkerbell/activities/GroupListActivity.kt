@@ -60,8 +60,8 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var adapter: TeamListAdapter by Delegates.notNull()
 
-    var isUpdateJoined: IsUpdateR? = null
 
+    var isUpdateRs: HashMap<Int, IsUpdateR> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,12 +91,15 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         connectGroupList(false)
-        addChangeJoinedGroupListener()
+        addChangeListener(IsUpdateR.WHAT_GROUP)
+        addChangeListener(IsUpdateR.WHAT_JOINED_GROUP)
     }
 
     override fun onPause() {
         super.onPause()
-        isUpdateJoined?.removeAllChangeListeners()
+        isUpdateRs.forEach {
+            it.value.removeAllChangeListeners()
+        }
     }
 
     private fun deleteGroup(group: Team) {
@@ -137,33 +140,35 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun addChangeJoinedGroupListener() {
+    private fun addChangeListener(what : Int) {
+        val LOG_TAG = "$TAG /isUpdateR : User"
+
+        Log.d(LOG_TAG, "add ChangeListener what : $what")
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
-        isUpdateJoined = realm.where(IsUpdateR::class.java).equalTo("what", StatusCode.joinedGroupChange).findFirst()
-        if (isUpdateJoined == null) {
-            realm.beginTransaction()
-            isUpdateJoined = realm.createObject(IsUpdateR::class.java, StatusCode.joinedGroupChange)
-            isUpdateJoined!!.isUpdate = false
-            realm.commitTransaction()
-        } else {
-            if (isUpdateJoined?.isUpdate == true) {
-                realm.beginTransaction()
-                updateGroupList()
-                isUpdateJoined!!.isUpdate = false
-                realm.commitTransaction()
+        val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
+                ?: realm.createObject(IsUpdateR::class.java, what)
+
+        if (isUpdateR.isUpdate) {
+            Log.d(LOG_TAG, "was true")
+            updateGroupList()
+
+            realm.executeTransaction {
+                isUpdateR.isUpdate = false
+                Log.d(LOG_TAG, "become false")
             }
         }
-        isUpdateJoined!!.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
+        isUpdateR.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
             if (t.isUpdate) {
-                Log.d("$TAG/isUpdateJoinedGroup", "is ${t.isUpdate}")
+                Log.d(LOG_TAG, "is ${t.isUpdate} on addChangeListener")
                 updateGroupList()
                 realm.executeTransaction {
                     t.isUpdate = false
+                    Log.d(LOG_TAG, "is updated on addChangeListener")
                 }
             }
         }
-
+        isUpdateRs[what]= isUpdateR
     }
 
     private class HandlerGet(activity: GroupListActivity) : Handler() {

@@ -54,6 +54,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
                 val i = Intent(applicationContext,VoteActivity::class.java)
                 i.putExtra(INTENT_VOTE,msg.obj as Vote)
                 startActivity(i)
+
             }
             TAB_UNPERFORMED_NOTICE->{
 
@@ -79,9 +80,9 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
 
 
-        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
-        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
+        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
+        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
 
         adapter = UnperformedPageAdapter(supportFragmentManager)
 
@@ -100,19 +101,19 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
             override fun onPageSelected(position: Int) {
                 when (position) {
                     TAB_UNPERFORMED_NOTICE -> {
-                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
                     }
                     TAB_UNPERFORMED_SIGNAL -> {
-                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
                     }
                     TAB_UNPERFORMED_VOTE -> {
-                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
-                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+                        iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
+                        iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
                     }
                 }
             }
@@ -123,6 +124,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
             val intent = Intent(applicationContext, GroupListActivity::class.java)
             startActivity(intent)
+
+            finish()
         }
 
 

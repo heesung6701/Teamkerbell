@@ -93,7 +93,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         updateUI()
 
         btn_red.setOnClickListener {
-            updateColor(Signal.RED)
+            if(responded)
+                updateColor(Signal.RED)
         }
         btn_yellow.setOnClickListener {
             updateColor(Signal.YELLOW)
@@ -136,6 +137,16 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
         if(responded)
             connectSignalResponseList()
+        else{
+            if(selectColor==Signal.RED || selectColor==Signal.DEFAULT){
+                edt_response.setText(getString(R.string.txt_wait_response))
+                edt_response.isEnabled=false
+            }
+            else {
+                edt_response.setText("")
+                edt_response.isEnabled=true
+            }
+        }
     }
 
     private fun updateUI() {
@@ -156,6 +167,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             edt_response.setText(readSignalContent)
 
             enableSignButton(false)
+
 
             btn_commit.visibility = View.GONE
 
@@ -195,7 +207,6 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
             btnCommit.visibility = View.VISIBLE
             edt_response.visibility = View.VISIBLE
-            edt_response.isEnabled=true
 
             btnMore.visibility = View.GONE
             layout_response_list.visibility = View.GONE
@@ -219,6 +230,10 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val task = GetMessageTask(applicationContext, HandlerResponse(this), LoginToken.getToken(applicationContext))
 
         val content = edt_response.text!!.toString()
+        if(selectColor==Signal.RED || selectColor==Signal.DEFAULT){
+            Toast.makeText(applicationContext, "신호등을 초록 또는 노랑을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
         if (content.isNotEmpty()) {
             val jsonParam = JSONObject()
 
@@ -295,7 +310,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         adapter.notifyDataSetChanged()
     }
     fun updateSignal(signal: Signal){
-        edt_response.setText(signal.responseContent)
+        if(Signal.colorStrToByte(signal.responseColor)!= Signal.RED && Signal.colorStrToByte(signal.responseColor)!=Signal.DEFAULT)
+            edt_response.setText(signal.responseContent)
         updateColor(Signal.colorStrToByte(signal.responseColor))
     }
 

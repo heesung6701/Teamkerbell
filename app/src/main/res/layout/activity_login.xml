@@ -71,10 +71,10 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:hint="@string/prompt_password"
                     android:text="asdfghjk"
                     />
 
@@ -94,6 +94,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/action_register_info"
+                    android:textSize="15sp"
+                    android:textColor="@color/grayDark"
                     android:layout_marginEnd="4dp"
                     />
                 <TextView
@@ -102,7 +104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/action_register"
-                    android:textColor="@color/mainColorP"
+                    android:textSize="15sp"
+                    android:textColor="@color/mainColorM"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -115,10 +118,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="56dp"
-                android:background="@drawable/shape_round_btn_gray"
+                android:background="@drawable/shape_round_btn"
                 android:padding="12dp"
                 android:text="@string/action_sign_in"
-                android:textColor="@color/mainColorP"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="16sp" />
 

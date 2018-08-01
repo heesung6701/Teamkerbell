@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.EditRoleActivity"
+    android:background="@color/white"
     tools:showIn="@layout/activity_edit_role">
 
 
     <include
         android:id="@+id/layout_select_room"
-        layout="@layout/content_select_room" />
+        layout="@layout/content_select_room_gray" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -20,6 +21,7 @@
         android:layout_alignEnd="@id/layout_select_room"
         android:layout_alignStart="@id/layout_select_room"
         android:layout_below="@id/layout_select_room"
+        android:layout_marginTop="@dimen/filter_overwrap_height"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
         android:overScrollMode="never"
@@ -62,10 +64,10 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="3dp"
             android:layout_marginStart="3dp"
-            android:background="@drawable/shape_border_shadow"
-            android:elevation="4dp"
             android:gravity="center_vertical"
             android:padding="8dp">
+            <!--android:background="@drawable/shape_border_shadow"-->
+            <!--android:elevation="4dp"-->
 
             <ImageView
                 android:layout_width="wrap_content"

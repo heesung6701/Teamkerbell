@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
@@ -28,24 +31,27 @@ import org.teamfairy.sopt.teamkerbell.activities.main.dialog.ShowUserDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import kotlin.properties.Delegates
 
 
-class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
+class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
+
+    val TAG = this::class.java.simpleName
 
     private var adapterGroup: TextListAdapter by Delegates.notNull()
     private var dataListGroup = ArrayList<GroupInterface>()
-    private  var recyclerView : RecyclerView by Delegates.notNull()
+    private var recyclerView: RecyclerView by Delegates.notNull()
 
 
-    override  var group: Team by Delegates.notNull()
+    override var group: Team by Delegates.notNull()
 
 
-    private var ivDropDown : ImageView by Delegates.notNull()
-    private var tvTeamName : TextView by Delegates.notNull()
-    var tvCount : TextView by Delegates.notNull()
+    private var ivDropDown: ImageView by Delegates.notNull()
+    private var tvTeamName: TextView by Delegates.notNull()
+    var tvCount: TextView by Delegates.notNull()
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -93,9 +99,9 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
 
         adapterGroup = TextListAdapter(dataListGroup, activity.applicationContext)
         adapterGroup.setOnItemClickListener(this)
-        adapterGroup.currentIdx=group.g_idx
+        adapterGroup.currentIdx = group.g_idx
 
-        recyclerView=v.findViewById(R.id.recyclerView)
+        recyclerView = v.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapterGroup
 
@@ -118,34 +124,34 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     private fun showGroupInfo() {
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
         tvTeamName.text = group.real_name
-        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll().size }명")
+        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll().size}명")
         realm.close()
     }
 
 
     override fun changeGroup(g: Team) {
-        group=g
+        group = g
         showGroupInfo()
 
         adapterGroup.currentIdx = group.g_idx
         adapterGroup.notifyDataSetChanged()
     }
+
     override fun onResume() {
         super.onResume()
         showGroupInfo()
     }
 
-
     private fun showUserDialog() {
 
-        val dialog = ShowUserDialog(context,group)
+        val dialog = ShowUserDialog(context, group)
         dialog.show()
 
         dialog.setOnClickListener(View.OnClickListener { p0 ->
-            when(p0.id){
-                R.id.btn_add->{
+            when (p0.id) {
+                R.id.btn_add -> {
                     val i = Intent(activity.applicationContext, InviteActivity::class.java)
-                    i.putExtra(INTENT_GROUP,group)
+                    i.putExtra(INTENT_GROUP, group)
                     startActivity(i)
                     dialog.dismiss()
                 }
@@ -154,9 +160,8 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
     }
 
 
-
     private fun closeGroupList() {
-        if(recyclerView.visibility != View.GONE) {
+        if (recyclerView.visibility != View.GONE) {
             recyclerView.visibility = View.GONE
             ivDropDown.rotation = 0.0f
         }
@@ -165,7 +170,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
 
     private fun openGroupList() {
 
-        if(recyclerView.visibility != View.VISIBLE) {
+        if (recyclerView.visibility != View.VISIBLE) {
             recyclerView.visibility = View.VISIBLE
             ivDropDown.rotation = 180.0f
 
@@ -179,7 +184,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
 
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
         tvTeamName.text = group.real_name
-        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll().size}명")
+        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll().size}명")
         realm.close()
 
         adapterGroup.currentIdx = group.g_idx
@@ -189,11 +194,7 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
         activity.changeGroup(group)
 
 
-
     }
-
-
-
 
 
     override fun onClick(p0: View?) {
@@ -208,14 +209,13 @@ class HomeFragment : Fragment() , View.OnClickListener, HasGroupFragment{
         super.onAttach(context)
 
 
-        NetworkUtils.connectGroupList(activity.applicationContext,null)
-        NetworkUtils.connectUserList(activity.applicationContext,null)
+        NetworkUtils.connectGroupList(activity.applicationContext, null)
+        NetworkUtils.connectUserList(activity.applicationContext, null)
     }
 
     override fun onDetach() {
         super.onDetach()
     }
-
 
 
 }

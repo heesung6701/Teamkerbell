@@ -63,10 +63,14 @@ class JoinedRoomListTask(context: Context, var handler: Handler?, token: String?
 
 
                     }
-                    val isUpdateR = IsUpdateR()
-                    isUpdateR.what= StatusCode.joinedRoomChange
-                    isUpdateR.isUpdate=true
-                    realm.copyToRealmOrUpdate(isUpdateR)
+
+
+                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_JOINED_ROOM).findFirst()
+                            ?: realm.createObject(IsUpdateR::class.java,IsUpdateR.WHAT_JOINED_ROOM)
+                    if(!isUpdateR.isUpdate) {
+                        isUpdateR.isUpdate = true
+                        Log.d(LOG_TAG,"Joined Room Info is updated")
+                    }
 
                     realm.commitTransaction()
                     msgCode = MSG_SUCCESS

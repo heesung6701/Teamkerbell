@@ -8,7 +8,7 @@
     android:paddingBottom="7dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_round_white"
+    android:background="@drawable/shape_round_btn_gray_light"
     android:orientation="horizontal"
     android:focusable="true"
     android:clickable="true"

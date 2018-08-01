@@ -10,6 +10,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
@@ -55,6 +56,15 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                         realm.copyToRealmOrUpdate(r)
                     }
                     msgCode = MSG_SUCCESS
+
+
+                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_ROOM).findFirst()
+                            ?: realm.createObject(IsUpdateR::class.java, IsUpdateR.WHAT_ROOM)
+                    if(!isUpdateR.isUpdate) {
+                        isUpdateR.isUpdate = true
+                        Log.d(LOG_TAG,"Room Info is updated")
+                    }
+
 
                     realm.commitTransaction()
 

@@ -9,20 +9,24 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import io.realm.kotlin.createObject
 import kotlinx.android.synthetic.main.fragment_contact.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell._utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.adapter.ContactListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.main.interfaces.HasGroupFragment
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import kotlin.properties.Delegates
@@ -33,7 +37,7 @@ import kotlin.properties.Delegates
  * Use the [ContactFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefreshListener{
+class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefreshListener {
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
 
@@ -41,6 +45,8 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
         getUserList()
         mSwipeRefreshLayout.isRefreshing = false
     }
+
+    val TAG = this::class.java.simpleName
 
     override var group: Team by Delegates.notNull()
 
@@ -50,23 +56,26 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
     var dataListOrigin: ArrayList<User> = arrayListOf<User>()
     var recyclerView: RecyclerView by Delegates.notNull()
 
-    var txtSearch : String = ""
+    var txtSearch: String = ""
 
-    private var tvName : TextView by Delegates.notNull()
-    private var ivPhoto : ImageView by Delegates.notNull()
+    private var tvName: TextView by Delegates.notNull()
+    private var ivPhoto: ImageView by Delegates.notNull()
+
+
+    var isUpdateRs: HashMap<Int, IsUpdateR> = HashMap()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v= inflater!!.inflate(R.layout.fragment_contact, container, false)
+        val v = inflater!!.inflate(R.layout.fragment_contact, container, false)
 
         tvName = v.findViewById(R.id.tv_user_name)
         ivPhoto = v.findViewById(R.id.iv_user_profile)
 
 
         recyclerView = v.findViewById(R.id.recyclerView)
-        adapter = ContactListAdapter(dataList,activity.applicationContext)
-        recyclerView.layoutManager=LinearLayoutManager(activity)
-        recyclerView.adapter=adapter
+        adapter = ContactListAdapter(dataList, activity.applicationContext)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = adapter
 
         mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
@@ -85,7 +94,7 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
 
         })
         v.layout_profile.setOnClickListener {
-            val intent = Intent(activity.applicationContext,  ProfileActivity::class.java)
+            val intent = Intent(activity.applicationContext, ProfileActivity::class.java)
             startActivity(intent)
         }
         return v
@@ -97,30 +106,73 @@ class ContactFragment : Fragment() ,HasGroupFragment, SwipeRefreshLayout.OnRefre
         getUserList()
         setMyProfile(LoginToken.getUser(activity.applicationContext))
 
+        addChangeListener(IsUpdateR.WHAT_USER)
+        addChangeListener(IsUpdateR.WHAT_JOINED_GROUP)
     }
-    private fun setMyProfile(u : User){
-        tvName.text= u.name
-        if(NetworkUtils.getBitmapList(u.photo, ivPhoto,activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
+
+    override fun onStop() {
+        super.onStop()
+
+        isUpdateRs.forEach {
+            it.value.removeAllChangeListeners()
+        }
+    }
+
+    private fun addChangeListener(what : Int) {
+        val LOG_TAG = "$TAG /isUpdateR : User"
+
+        Log.d(LOG_TAG, "add ChangeListener what : ${what}")
+
+        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+        val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
+                ?: realm.createObject(IsUpdateR::class.java, what)
+
+        if (isUpdateR.isUpdate) {
+            Log.d(LOG_TAG, "was true")
+            getUserList()
+
+            realm.executeTransaction {
+                isUpdateR.isUpdate = false
+                Log.d(LOG_TAG, "become false")
+            }
+        }
+        isUpdateR.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
+            if (t.isUpdate) {
+                Log.d(LOG_TAG, "is ${t.isUpdate} on addChangeListener")
+                getUserList()
+                realm.executeTransaction {
+                    t.isUpdate = false
+                    Log.d(LOG_TAG, "is updated on addChangeListener")
+                }
+            }
+        }
+        isUpdateRs[what]= isUpdateR
+    }
+
+
+    private fun setMyProfile(u: User) {
+        tvName.text = u.name
+        if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
             ivPhoto.setImageResource(R.drawable.icon_profile_default_png)
     }
-    fun getUserList(){
-        DatabaseHelpUtils.getUserListFromRealm(activity.applicationContext,dataListOrigin,adapter as RecyclerView.Adapter<*>,group,true)
-        updateUserList()
 
+    fun getUserList() {
+        DatabaseHelpUtils.getUserListFromRealm(activity.applicationContext, dataListOrigin, adapter as RecyclerView.Adapter<*>, group, true)
+        updateUserList()
     }
-    private fun updateUserList(){
+
+    private fun updateUserList() {
         dataList.clear()
         dataListOrigin.forEach {
-            if(it.name!!.contains(txtSearch))
+            if (it.name!!.contains(txtSearch))
                 dataList.add(it)
         }
         adapter.notifyDataSetChanged()
     }
 
     override fun changeGroup(g: Team) {
-        group=g
+        group = g
     }
-
 
 
 }// Required empty public constructor

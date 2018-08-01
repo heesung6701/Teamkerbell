@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="84dp"
-    android:padding="16dp"
     android:background="@drawable/shape_press_dark"
     android:gravity="center_vertical"
     android:orientation="vertical">
@@ -46,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="3"
             android:textSize="15sp"
             tools:text="저희 조사할 기업 어떤 걸로 할지 투표부탁 드립..." />
 

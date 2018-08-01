@@ -104,7 +104,7 @@ class EditRoleActivity : AppCompatActivity() {
 
                 edtViewList.iterator().forEach {
                     val example = it.value
-                    if(example.id==-1)
+                    if(example.id==-1 && example.edtText.text.isNotBlank())
                         plusArray.put(example.edtText.text.toString())
                 }
 

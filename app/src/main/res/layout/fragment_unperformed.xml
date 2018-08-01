@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.unpearformed.fragment.UnperformedSignalFragment">
+    tools:context="org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.UnperformedFragment">
 
     <TextView
         android:id="@+id/tv_item_name"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         tools:text="신호등" />
     <FrameLayout
         android:layout_width="match_parent"

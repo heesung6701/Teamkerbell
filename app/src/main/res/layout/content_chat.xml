@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
 
-        android:background="@color/chatColor">
+        android:background="@color/gray">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -89,7 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:orientation="vertical"
-        android:background="@color/chatContentColor"
+        android:background="@color/grayLight"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:visibility="gone"

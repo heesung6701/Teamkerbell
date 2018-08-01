@@ -10,6 +10,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -60,7 +61,17 @@ class UserListTask(context: Context, var handler: Handler?, token: String?) : Ne
                         realm.copyToRealmOrUpdate(user)
                     }
 
+
+                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_USER).findFirst()
+                            ?: realm.createObject(IsUpdateR::class.java,IsUpdateR.WHAT_USER)
+                    if(!isUpdateR.isUpdate) {
+                        isUpdateR.isUpdate = true
+                        Log.d(LOG_TAG,"User Info is updated")
+                    }
+
                     msgCode = MSG_SUCCESS
+
+                    realm.commitTransaction()
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }

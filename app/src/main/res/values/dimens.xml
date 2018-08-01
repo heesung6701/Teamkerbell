@@ -15,5 +15,7 @@
 
     <dimen name="listview_divide_line_height">1dp</dimen>
 
+    <dimen name="filter_overwrap_height">-15dp</dimen>
+
 
 </resources>
