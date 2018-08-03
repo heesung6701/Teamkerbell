@@ -6,26 +6,33 @@ package org.teamfairy.sopt.teamkerbell._utils
 class ChatUtils {
     companion object {
         const val TYPE_MESSAGE = 0
-        //content가  String
-        const val TYPE_LEAVE:Int=1
-        //content가  idx/이름
-        const val TYPE_PHOTO:Int=2
-        //content가 URL
-        const val TYPE_VIDEO:Int=3
-        //content가 URL
-        const val TYPE_FILE:Int=4
-        //content가 URL
-        const val TYPE_READLINE: Int = 5
-        //content가  null
-        const val TYPE_NOTICE:Int=6
-        // idx값 / 내용
-        const val TYPE_LIGHT:Int=7
-        // idx값 / 내용
-        const val TYPE_VOTE:Int=8
-        // idx값 / 내용
-        const val TYPE_ROLE:Int=9
-        // idx값 / 내용
+
+        const val TYPE_PHOTO:Int=1
+
+        const val TYPE_PHOTOS:Int=2
+
+        const val TYPE_FILE:Int=3
+
+        const val TYPE_VIDEO:Int=4
+
+        const val TYPE_NOTICE:Int=5
+
+        const val TYPE_SIGNAL:Int=6
+    //{"chat_idx":2,"content":"12\/신호등","write_time":"2018-08-03 19:25:11","count":0,"u_idx":27,"type":6}]
+
+        const val TYPE_VOTE:Int=7
+
+        const val TYPE_ROLE:Int=8
+
+
+        const val TYPE_ENTER_GROUP:Int=9
+
         const val TYPE_INVITE:Int=10
-        //content가 이름
+
+        const val TYPE_GROUP_LEAVE:Int=11
+
+        const val TYPE_LEAVE:Int=12
+
+        const val TYPE_READLINE: Int = 50
     }
 }

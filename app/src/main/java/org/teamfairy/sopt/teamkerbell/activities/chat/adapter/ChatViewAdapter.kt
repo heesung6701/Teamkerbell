@@ -15,9 +15,15 @@ import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_MODE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.viewholder.chat.*
 
@@ -92,9 +98,13 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                 itemHolder.title.text = "공지가 등록되었습니다."
                 itemHolder.content.text = data.getItemContent()
                 holder.content.setOnClickListener {
+
+                    val nIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
+
                     val intent = Intent(mContext.applicationContext, NoticeActivity::class.java)
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
+                    intent.putExtra(INTENT_NOTICE_IDX, nIdx)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     mContext.startActivity(intent)
                 }
@@ -114,7 +124,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     }
                 }
             }
-            ChatUtils.TYPE_LIGHT -> {
+            ChatUtils.TYPE_SIGNAL -> {
                 val itemHolder = holder as ItemHolder
 
                 itemHolder.tvTime.text = Utils.getNowToTime(data.date!!)
@@ -123,13 +133,14 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                 itemHolder.title.text = "신호등이 등록되었습니다."
                 itemHolder.content.text = data.getItemContent()
                 holder.content.setOnClickListener {
+
+                    val sIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
+
                     val intent = Intent(mContext.applicationContext, SignalActivity::class.java)
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
-                    if (data.isSender(mContext))
-                        intent.putExtra("mode", Utils.SIGNAL_SENDER)
-                    else
-                        intent.putExtra("mode", Utils.SIGNAL_RECEIVER)
+                    intent.putExtra(INTENT_SIGNAL_IDX, sIdx)
+                    intent.putExtra(IntentTag.INTENT_RESPONDED, false)//(signal!!.responseColor.equals("g") || state == Utils.SIGNAL_SENDER))
 
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     mContext.startActivity(intent)
@@ -158,9 +169,14 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                 itemHolder.title.text = "투표가 등록되었습니다."
                 itemHolder.content.text = data.getItemContent()
                 holder.content.setOnClickListener {
+                    if(data.content.isNullOrBlank()) return@setOnClickListener
+
+                    val vIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
+
                     val intent = Intent(mContext.applicationContext, VoteActivity::class.java)
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
+                    intent.putExtra(INTENT_VOTE_IDX, vIdx)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     mContext.startActivity(intent)
                 }
@@ -188,6 +204,11 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                 val name = dataList[position].content!!
                 val leaveHolder: LeaveHolder = holder as LeaveHolder
                 leaveHolder.tv.text = (name + "님이 퇴장하셨습니다.")
+            }
+            ChatUtils.TYPE_ENTER_GROUP->{
+                val name = dataList[position].content!!
+                val inviteHolder = holder as InviteHolder
+                inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
             }
             ChatUtils.TYPE_INVITE -> {
                 val name = dataList[position].content!!
@@ -248,7 +269,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_item_l, parent, false)
                     viewHolder = ItemLHolder(mainView)
                 }
-            ChatUtils.TYPE_LIGHT ->
+            ChatUtils.TYPE_SIGNAL ->
                 if (data.isSender(mContext)) {
                     mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_item_r, parent, false)
                     viewHolder = ItemHolder(mainView)
@@ -281,6 +302,10 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
             }
             ChatUtils.TYPE_VIDEO -> {
 
+            }
+            ChatUtils.TYPE_ENTER_GROUP->{
+                mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_invite, parent, false)
+                viewHolder = InviteHolder(mainView)
             }
             ChatUtils.TYPE_INVITE -> {
                 mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_invite, parent, false)

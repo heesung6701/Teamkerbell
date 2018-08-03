@@ -203,7 +203,7 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_LIGHT, idx, activity.content, activity.group, activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
+                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_SIGNAL, idx, activity.content, activity.group, activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
 
                         Handler().postDelayed(Runnable {
                             activity.finish()

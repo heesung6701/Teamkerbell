@@ -53,7 +53,10 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
+
     var vote: Vote?=null
+    private var voteIdx : Int by Delegates.notNull()
+
     var voteResponse: VoteResponse by Delegates.notNull()
 
 
@@ -72,7 +75,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private var isShowResult = false
 
-    private var voteIdx : Int by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
@@ -145,6 +147,12 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(vote !=null)
+            setVoteInfo()
     }
 
     private fun setVoteInfo() {
@@ -322,7 +330,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         layout_choices.visibility = View.GONE
         layout_result.visibility = View.VISIBLE
-
     }
 
     private fun showChoices() {
@@ -436,6 +443,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                         activity.voteResponse = msg.obj as VoteResponse
                         if (activity.vote == null) {
                             activity.vote = activity.voteResponse.vote
+                            activity.vote!!.setPhotoInfo(activity.applicationContext)
                             activity.setVoteInfo()
                         }
                         if (activity.isShowResult) activity.updateResultList()

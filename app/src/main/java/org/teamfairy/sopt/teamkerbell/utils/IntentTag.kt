@@ -23,7 +23,9 @@ class IntentTag {
         const val INTENT_PWD : String="PWD"
 
         const val INTENT_SIGNAL : String="SIGNAL"
+        const val INTENT_SIGNAL_IDX : String="SIGNAL_IDX"
         const val INTENT_NOTICE : String="NOTICE"
+        const val INTENT_NOTICE_IDX : String="NOTICE_IDX"
         const val INTENT_VOTE : String="VOTE"
         const val INTENT_VOTE_IDX : String="VOTE_IDX"
         const val INTENT_ROLE : String="ROLE"

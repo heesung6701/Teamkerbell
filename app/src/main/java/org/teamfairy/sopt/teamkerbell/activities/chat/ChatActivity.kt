@@ -517,7 +517,7 @@ class ChatActivity : AppCompatActivity() {
         if (chatData.type == ChatUtils.TYPE_MESSAGE
                 || chatData.type == ChatUtils.TYPE_NOTICE
                 || chatData.type == ChatUtils.TYPE_VOTE
-                || chatData.type == ChatUtils.TYPE_LIGHT
+                || chatData.type == ChatUtils.TYPE_SIGNAL
                 || chatData.type == ChatUtils.TYPE_ROLE) {
             chatData.setPhotoInfo(realm)
 
@@ -784,7 +784,7 @@ class ChatActivity : AppCompatActivity() {
     private fun makeSignal(position: Int) {
 
         makeContent = dataList[position].content
-        makeType = ChatUtils.TYPE_LIGHT
+        makeType = ChatUtils.TYPE_SIGNAL
         val jsonParam = JSONObject()
         try {
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_UID, LoginToken.getUserIdx(applicationContext))

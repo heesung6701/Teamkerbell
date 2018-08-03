@@ -76,7 +76,7 @@ class FirebaseMessageUtils {
                 dataBaseMessages.push().setValue(chatMessage)
                 dataBaseLastMessage!!.child(ARG_CHAT_IDX).setValue(lastChatIdx + 1)
                 val txt = when (type) {
-                    ChatUtils.TYPE_LIGHT -> "신호등"
+                    ChatUtils.TYPE_SIGNAL -> "신호등"
                     ChatUtils.TYPE_NOTICE -> "공지"
                     ChatUtils.TYPE_VOTE -> "투포"
                     else -> "무언가"

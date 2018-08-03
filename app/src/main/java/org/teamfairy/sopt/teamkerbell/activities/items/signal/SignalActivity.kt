@@ -18,11 +18,8 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
-import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
+import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Signal
-import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
@@ -35,9 +32,12 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGH
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseListTask
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -53,7 +53,9 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
-    var signal: Signal by Delegates.notNull()
+    var signal: Signal?  = null
+    var signalIdx : Int by Delegates.notNull()
+
     private var responded: Boolean = false
 
     private var adapter: ListDataAdapter by Delegates.notNull()
@@ -74,21 +76,19 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
 
 
-        signal = intent.getParcelableExtra(INTENT_SIGNAL)
-        signal.setPhotoInfo(applicationContext)
-        signal.setGroupInfo(applicationContext)
 
-        room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
-        group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)
-        if (room.room_idx == Room.ARG_ALL_IDX || room.room_idx == Room.ARG_NULL_IDX)
-            room = DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
+        if (intent.hasExtra(INTENT_SIGNAL)) {
+            signal = intent.getParcelableExtra(INTENT_SIGNAL)
+            signal!!.setPhotoInfo(applicationContext)
+            signal!!.setGroupInfo(applicationContext)
+            setSignalInfo()
+            connectSignalResponse()
 
+        } else if (intent.hasExtra(INTENT_SIGNAL_IDX)) {
+            signalIdx=intent.getIntExtra(INTENT_SIGNAL_IDX,0)
+            connectSignalResponse(signalIdx)
 
-        updateColor(Signal.colorStrToByte(signal.responseColor))
-
-        tv_name.text = signal.name
-        tv_time.text = Utils.getYearMonthDay(signal.write_time)
-        tv_content.text = signal.content
+        }
 
         updateUI()
 
@@ -117,7 +117,21 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
     }
+    private fun setSignalInfo(){
+        val signal = this.signal!!
+        room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
+        group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)
+        if (room.room_idx == Room.ARG_ALL_IDX || room.room_idx == Room.ARG_NULL_IDX)
+            room = DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
 
+
+        updateColor(Signal.colorStrToByte(signal.responseColor))
+
+        tv_name.text = signal.name
+        tv_time.text = Utils.getYearMonthDay(signal.write_time)
+        tv_content.text = signal.content
+
+    }
     private fun updateColor(c: Byte) {
         if (selectColor != Signal.DEFAULT && selectColor == c) return
         when (selectColor) {
@@ -202,7 +216,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             enableSignButton(true)
 
         } else {
-            updateColor(Signal.colorStrToByte(signal.responseColor))
+            if(signal !=null)
+                updateColor(Signal.colorStrToByte(signal!!.responseColor))
 
 
             btnCommit.visibility = View.VISIBLE
@@ -217,7 +232,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
         }
         btn_commit.setOnClickListener {
-            attemptCommit()
+            if(signal!=null)
+                attemptCommit()
         }
     }
     private fun enableSignButton(b : Boolean){
@@ -240,7 +256,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             val color = Signal.colorByteToStr(selectColor)
 
             try {
-                jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_SIGNAL_IDX, signal.signal_idx)
+                jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_SIGNAL_IDX, signal!!.signal_idx)
                 jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_COLOR, color)
                 jsonParam.put(URL_RESPONSE_LIGHTS_PARAM_CONTENT, content)
 
@@ -273,7 +289,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val color = Signal.colorByteToStr(selectColor)
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
 
-        val url = URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal.signal_idx
+        val url = URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal!!.signal_idx
         task.execute(url, METHOD_GET)
     }
     private fun connectSignalResponse(signal_idx : Int) {
@@ -283,7 +299,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val url = "$URL_DETAIL_SINGLE_LIGHT/$signal_idx"
         task.execute(url, METHOD_GET)
     }
-    private fun connectSignalResponse() = connectSignalResponse(signal.signal_idx)
+    private fun connectSignalResponse() = connectSignalResponse(signal?.signal_idx ?: signalIdx)
 
     fun updateDataList(signalResponseList: ArrayList<SignalResponse>) {
 
@@ -310,6 +326,11 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         adapter.notifyDataSetChanged()
     }
     fun updateSignal(signal: Signal){
+
+        if(this.signal==null) {
+            this.signal=signal
+            setSignalInfo()
+        }
         if(Signal.colorStrToByte(signal.responseColor)!= Signal.RED && Signal.colorStrToByte(signal.responseColor)!=Signal.DEFAULT)
             edt_response.setText(signal.responseContent)
         updateColor(Signal.colorStrToByte(signal.responseColor))
