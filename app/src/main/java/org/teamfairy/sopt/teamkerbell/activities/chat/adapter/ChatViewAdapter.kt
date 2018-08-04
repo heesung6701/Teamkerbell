@@ -140,7 +140,6 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
                     intent.putExtra(INTENT_SIGNAL_IDX, sIdx)
-                    intent.putExtra(IntentTag.INTENT_RESPONDED, false)//(signal!!.responseColor.equals("g") || state == Utils.SIGNAL_SENDER))
 
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     mContext.startActivity(intent)

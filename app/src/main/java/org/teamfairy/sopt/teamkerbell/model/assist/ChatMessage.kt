@@ -27,6 +27,17 @@ data class ChatMessage(
         val delmi = content!!.indexOf('/')
         return content!!.substring(delmi + 1)
     }
+    fun update(
+                type: Int,
+                u_idx: Int?,
+                content: String?,
+                date: String?){
+        this.type=type
+        this.u_idx=u_idx
+        this.content=content
+        this.date=date
+
+    }
 
     fun toChatMessageR(): ChatMessageR {
         val chatMessageR = ChatMessageR()

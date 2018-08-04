@@ -8,7 +8,6 @@ import io.realm.annotations.PrimaryKey
  * Created by lumiere on 2018-01-01.
  */
 open class ChatMessageR : RealmObject(){
-
     @PrimaryKey
     var chat_idx : Int?=null
 

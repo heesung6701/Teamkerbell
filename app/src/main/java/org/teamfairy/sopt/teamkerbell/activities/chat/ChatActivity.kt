@@ -1082,10 +1082,18 @@ class ChatActivity : AppCompatActivity() {
         val writeTime = data.getString(Constants.JSON_WRITE_TIME)
         val count : Int =data.getInt(Constants.JSON_COUNT)
 
-        val chatData = ChatMessage(chatIdx, type, uIdx, message, writeTime)
+        val chatList = dataList.filter {   it.chat_idx==chatIdx   }
+
+        val chatData : ChatMessage= if(chatList.isEmpty())
+            ChatMessage(chatIdx, type, uIdx, message, writeTime)
+        else chatList[0]
+
+        if(chatList.isEmpty()) dataList.add(chatData)
+        else  chatData.update(type,uIdx,message,writeTime)
+
         chatData.count=count
         chatData.setPhotoInfo(applicationContext)
-        dataList.add(chatData)
+
     }
 
 

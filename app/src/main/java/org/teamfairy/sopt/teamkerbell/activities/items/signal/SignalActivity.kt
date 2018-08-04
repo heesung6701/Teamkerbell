@@ -32,8 +32,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGH
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseListTask
 import org.teamfairy.sopt.teamkerbell.network.info.SignalResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_RESPONDED
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
@@ -51,10 +49,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         mSwipeRefreshLayout.isRefreshing = false
     }
 
+
+    var btnCommit : TextView by Delegates.notNull()
+    var btnMore : ImageButton by Delegates.notNull()
+
+
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
-    var signal: Signal?  = null
-    var signalIdx : Int by Delegates.notNull()
+    var signal: Signal? = null
+    var signalIdx: Int by Delegates.notNull()
 
     private var responded: Boolean = false
 
@@ -62,7 +65,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     private var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
 
     private var isReadMode = false
-    private var readSignalContent : String= ""
+    private var readSignalContent: String = ""
 
     companion object {
     }
@@ -75,7 +78,10 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         setSupportActionBar(toolbar)
 
 
+        btnCommit = findViewById<TextView>(R.id.btn_commit)
+        btnMore = findViewById<ImageButton>(R.id.btn_more)
 
+        setUI()
 
         if (intent.hasExtra(INTENT_SIGNAL)) {
             signal = intent.getParcelableExtra(INTENT_SIGNAL)
@@ -83,17 +89,15 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             signal!!.setGroupInfo(applicationContext)
             setSignalInfo()
             connectSignalResponse()
-
         } else if (intent.hasExtra(INTENT_SIGNAL_IDX)) {
-            signalIdx=intent.getIntExtra(INTENT_SIGNAL_IDX,0)
+            signalIdx = intent.getIntExtra(INTENT_SIGNAL_IDX, 0)
             connectSignalResponse(signalIdx)
-
         }
 
         updateUI()
 
         btn_red.setOnClickListener {
-            if(responded)
+            if (responded)
                 updateColor(Signal.RED)
         }
         btn_yellow.setOnClickListener {
@@ -105,25 +109,24 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
 
         btn_back.setOnClickListener {
-            if(isReadMode){
-                isReadMode=false
-                readSignalContent=""
+            if (isReadMode) {
+                isReadMode = false
+                readSignalContent = ""
                 updateUI()
-            }
-            else finish()
+            } else finish()
         }
 
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
     }
-    private fun setSignalInfo(){
+
+    private fun setSignalInfo() {
         val signal = this.signal!!
         room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
         group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)
         if (room.room_idx == Room.ARG_ALL_IDX || room.room_idx == Room.ARG_NULL_IDX)
             room = DatabaseHelpUtils.getRoom(applicationContext, signal.room_idx)
-
 
         updateColor(Signal.colorStrToByte(signal.responseColor))
 
@@ -132,6 +135,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         tv_content.text = signal.content
 
     }
+
     private fun updateColor(c: Byte) {
         if (selectColor != Signal.DEFAULT && selectColor == c) return
         when (selectColor) {
@@ -148,32 +152,42 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             Signal.RED -> iv_focus_red.visibility = View.VISIBLE
         }
 
-
-        if(responded)
-            connectSignalResponseList()
-        else{
-            if(selectColor==Signal.RED || selectColor==Signal.DEFAULT){
+        if (responded)
+            updateUI()
+        else
+            if (selectColor == Signal.RED || selectColor == Signal.DEFAULT) {
                 edt_response.setText(getString(R.string.txt_wait_response))
-                edt_response.isEnabled=false
-            }
-            else {
+                edt_response.isEnabled = false
+            } else {
                 edt_response.setText("")
-                edt_response.isEnabled=true
+                edt_response.isEnabled = true
             }
+    }
+
+
+    private fun setUI() {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter = ListDataAdapter(dataList, applicationContext)
+        adapter.setOnItemClick(this)
+        recyclerView.adapter = adapter
+
+
+        btn_commit.setOnClickListener {
+            if (signal != null)
+                attemptCommit()
         }
     }
 
     private fun updateUI() {
 
-        val btnCommit = findViewById<TextView>(R.id.btn_commit)
-        val btnMore = findViewById<ImageButton>(R.id.btn_more)
 
-        responded = intent.getBooleanExtra(INTENT_RESPONDED, false)
+        responded = intent.getBooleanExtra(INTENT_RESPONDED, responded)
 
-        if(isReadMode ){
+        if (isReadMode) {
             btnCommit.visibility = View.VISIBLE
             edt_response.visibility = View.VISIBLE
-            edt_response.isEnabled=false
+            edt_response.isEnabled = false
 
             btnMore.visibility = View.VISIBLE
             layout_response_list.visibility = View.GONE
@@ -185,13 +199,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
             btn_commit.visibility = View.GONE
 
-        }
-        else if (responded) {
-            recyclerView.layoutManager = LinearLayoutManager(this)
-
-            adapter = ListDataAdapter(dataList, applicationContext)
-            adapter.setOnItemClick(this)
-            recyclerView.adapter = adapter
+        } else if (responded) {
 
             connectSignalResponseList()
 
@@ -216,9 +224,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             enableSignButton(true)
 
         } else {
-            if(signal !=null)
+            if (signal != null)
                 updateColor(Signal.colorStrToByte(signal!!.responseColor))
-
 
             btnCommit.visibility = View.VISIBLE
             edt_response.visibility = View.VISIBLE
@@ -226,27 +233,22 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             btnMore.visibility = View.GONE
             layout_response_list.visibility = View.GONE
 
-            connectSignalResponse()
-
             enableSignButton(true)
 
         }
-        btn_commit.setOnClickListener {
-            if(signal!=null)
-                attemptCommit()
-        }
     }
-    private fun enableSignButton(b : Boolean){
-        btn_red.isEnabled=b
-        btn_yellow.isEnabled=b
-        btn_green.isEnabled=b
+
+    private fun enableSignButton(b: Boolean) {
+        btn_red.isEnabled = b
+        btn_yellow.isEnabled = b
+        btn_green.isEnabled = b
     }
 
     private fun attemptCommit() {
         val task = GetMessageTask(applicationContext, HandlerResponse(this), LoginToken.getToken(applicationContext))
 
         val content = edt_response.text!!.toString()
-        if(selectColor==Signal.RED || selectColor==Signal.DEFAULT){
+        if (selectColor == Signal.RED || selectColor == Signal.DEFAULT) {
             Toast.makeText(applicationContext, "신호등을 초록 또는 노랑을 선택해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -263,7 +265,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            task.execute(URL_RESPONSE_LIGHTS,METHOD_POST, jsonParam.toString())
+            task.execute(URL_RESPONSE_LIGHTS, METHOD_POST, jsonParam.toString())
         } else {
             Toast.makeText(applicationContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
         }
@@ -275,9 +277,9 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val pos = recyclerView.getChildAdapterPosition(p0)
         val signalResponse = dataList[pos] as SignalResponse
 
-        if(selectColor==Signal.RED && signalResponse.content.isNullOrBlank()) return
-        readSignalContent =signalResponse.content!!
-        isReadMode= true
+        if (selectColor == Signal.RED && signalResponse.content.isNullOrBlank()) return
+        readSignalContent = signalResponse.content!!
+        isReadMode = true
         updateUI()
     }
 
@@ -289,16 +291,19 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         val color = Signal.colorByteToStr(selectColor)
         val task = SignalResponseListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
 
-        val url = URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + signal!!.signal_idx
+        val url = URL_DETAIL_LIGHTS_RESPONSE + "/" + color + "/" + room.room_idx + "/" + (signal?.signal_idx
+                ?: signalIdx)
         task.execute(url, METHOD_GET)
     }
-    private fun connectSignalResponse(signal_idx : Int) {
+
+    private fun connectSignalResponse(signal_idx: Int) {
 
         val task = SignalResponseTask(applicationContext, HandlerGetSingle(this), LoginToken.getToken(applicationContext))
 
         val url = "$URL_DETAIL_SINGLE_LIGHT/$signal_idx"
         task.execute(url, METHOD_GET)
     }
+
     private fun connectSignalResponse() = connectSignalResponse(signal?.signal_idx ?: signalIdx)
 
     fun updateDataList(signalResponseList: ArrayList<SignalResponse>) {
@@ -325,13 +330,23 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
         adapter.notifyDataSetChanged()
     }
-    fun updateSignal(signal: Signal){
 
-        if(this.signal==null) {
-            this.signal=signal
-            setSignalInfo()
+    fun updateSignal(signal: Signal) {
+
+        if (this.signal == null) {
+            this.signal = signal
+            if (signal.responseColor.equals(Signal.STR_GREEN) || signal.u_idx == LoginToken.getUserIdx(applicationContext)) {
+                responded = true
+
+                this.signal!!.setPhotoInfo(applicationContext)
+                setSignalInfo()
+                updateUI()
+                connectSignalResponseList()
+            } else {
+                setSignalInfo()
+            }
         }
-        if(Signal.colorStrToByte(signal.responseColor)!= Signal.RED && Signal.colorStrToByte(signal.responseColor)!=Signal.DEFAULT)
+        if (Signal.colorStrToByte(signal.responseColor) != Signal.RED && Signal.colorStrToByte(signal.responseColor) != Signal.DEFAULT)
             edt_response.setText(signal.responseContent)
         updateColor(Signal.colorStrToByte(signal.responseColor))
     }
@@ -356,6 +371,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         }
 
     }
+
     private class HandlerGetSingle(activity: SignalActivity) : Handler() {
         private val mActivity: WeakReference<SignalActivity> = WeakReference<SignalActivity>(activity)
 

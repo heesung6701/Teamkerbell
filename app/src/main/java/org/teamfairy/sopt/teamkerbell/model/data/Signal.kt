@@ -106,29 +106,29 @@ data class Signal(
 
         fun colorStrToInt(color : String?) : Int{
             return when(color) {
-                "r" -> RED.toInt()
-                "g" -> GREEN.toInt()
-                "y" -> YELLOW.toInt()
-                "a" -> RED.toInt()
+                STR_RED -> RED.toInt()
+                STR_GREEN -> GREEN.toInt()
+                STR_YELLOW -> YELLOW.toInt()
+                STR_DEFAULT -> RED.toInt()
                 else -> RED.toInt()
             }
         }
 
         fun colorStrToByte(color : String?) : Byte{
             return when(color) {
-                "r" -> RED
-                "g" -> GREEN
-                "y" -> YELLOW
-                "a" -> RED
+                STR_RED -> RED
+                STR_GREEN -> GREEN
+                STR_YELLOW -> YELLOW
+                STR_DEFAULT -> RED
                 else -> RED
             }
         }
         fun colorByteToStr(selectColor : Byte?) : String{
             return when (selectColor) {
-                RED -> "r"
-                GREEN -> "g"
-                YELLOW -> "y"
-                else -> "a"
+                RED -> STR_RED
+                GREEN -> STR_GREEN
+                YELLOW -> STR_YELLOW
+                else -> STR_DEFAULT
             }
         }
 
@@ -137,5 +137,10 @@ data class Signal(
         const val GREEN: Byte = 4
         val ALL: Byte = RED or YELLOW or GREEN
         const val DEFAULT: Byte = 8
+
+        const val STR_RED="r"
+        const val STR_GREEN="g"
+        const val STR_YELLOW="y"
+        const val STR_DEFAULT="a"
     }
 }
