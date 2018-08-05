@@ -49,19 +49,19 @@ class FirebaseMessageUtils {
 
         fun getLastChatIdx(group: Team, room: Room, handler: Handler) {
             if (dataBaseLastMessage == null) setDatabaseGroup(group, room)
-            dataBaseLastMessage!!.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError?) {
-                }
-
-                override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                    var lastChatIdx = 0
-                    if (dataSnapshot!!.hasChild(ARG_CHAT_IDX))
-                        lastChatIdx = dataSnapshot.child(ARG_CHAT_IDX).value.toString().toInt()
-
-                    handler.sendEmptyMessage(lastChatIdx)
-
-                }
-            })
+//            dataBaseLastMessage!!.addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError?) {
+//                }
+//
+//                override fun onDataChange(dataSnapshot: DataSnapshot?) {
+//                    var lastChatIdx = 0
+//                    if (dataSnapshot!!.hasChild(ARG_CHAT_IDX))
+//                        lastChatIdx = dataSnapshot.child(ARG_CHAT_IDX).value.toString().toInt()
+//
+//                    handler.sendEmptyMessage(lastChatIdx)
+//
+//                }
+//            })
         }
     }
 

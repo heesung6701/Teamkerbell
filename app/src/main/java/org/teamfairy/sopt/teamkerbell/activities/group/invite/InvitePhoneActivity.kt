@@ -138,20 +138,20 @@ class InvitePhoneActivity : AppCompatActivity() {
         val dataBaseGroup = dataBaseReference.child("groups_test").child(group.ctrl_name)
         val dataBaseMessages = dataBaseGroup!!.child("messages").ref
 
-        dataBaseGroup.child("LastMessage").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot?) {
-
-                var last_chat_idx = 0
-                if (dataSnapshot!!.hasChild("chat_idx"))
-                    last_chat_idx = dataSnapshot.child("chat_idx").value.toString().toInt()
-                val chatMessageF = ChatMessageF(last_chat_idx + 1, ChatUtils.TYPE_INVITE, u_idx, name, Utils.getNowForFirebase())
-                dataBaseMessages!!.push().setValue(chatMessageF)
-                dataBaseGroup.child("LastMessage").child("chat_idx").setValue(last_chat_idx + 1)
-            }
-        })
+//        dataBaseGroup.child("LastMessage").addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError?) {
+//            }
+//
+//            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+//
+//                var last_chat_idx = 0
+//                if (dataSnapshot!!.hasChild("chat_idx"))
+//                    last_chat_idx = dataSnapshot.child("chat_idx").value.toString().toInt()
+//                val chatMessageF = ChatMessageF(last_chat_idx + 1, ChatUtils.TYPE_INVITE, u_idx, name, Utils.getNowForFirebase())
+//                dataBaseMessages!!.push().setValue(chatMessageF)
+//                dataBaseGroup.child("LastMessage").child("chat_idx").setValue(last_chat_idx + 1)
+//            }
+//        })
     }
 
 }

@@ -7,7 +7,6 @@ import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.*
-import com.google.android.gms.internal.tv
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_commit.*

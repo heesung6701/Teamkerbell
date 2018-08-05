@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import io.realm.*
 import org.json.JSONObject
 
 import org.teamfairy.sopt.teamkerbell.R
@@ -35,9 +36,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CONTENT
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_DATE
-import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
-import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
-import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
+import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_ROOM_PARAM_ROOM_IDX
@@ -85,9 +84,12 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     var lastMsgListeners: HashMap<Room, ValueEventListener> = HashMap()
 
 
+    private var lastMsgs : RealmResults<LastMsgR>?=null
     var fab : FloatingActionButton by Delegates.notNull()
 
 
+    var qqq=0
+    var ttt=0
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v = inflater!!.inflate(R.layout.fragment_room_list, container, false)
@@ -101,10 +103,26 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         fab = activity.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            val i = Intent(activity.applicationContext, MakeRoomActivity::class.java)
-            i.putExtra(IntentTag.INTENT_GROUP, group)
-            startActivity(i)
-            activity.overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+
+            val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+            realm.beginTransaction()
+
+            val l = realm.where(LastMsgR::class.java).equalTo(Room.ARG_ROOM_IDX,dataList[qqq].room_idx ).findFirst() ?: realm.createObject(LastMsgR::class.java, dataList[qqq].room_idx)
+            l.content="더미데이터${ttt++}"
+            l.u_idx=LoginToken.getUserIdx(activity.applicationContext)
+            l.type=0
+            l.date="2018-08-28"
+
+            l.g_idx=group.g_idx
+            l.cnt=l.cnt + 1
+            realm.commitTransaction()
+            qqq++
+            if(qqq>dataList.lastIndex) qqq=0
+
+//            val i = Intent(activity.applicationContext, MakeRoomActivity::class.java)
+//            i.putExtra(IntentTag.INTENT_GROUP, group)
+//            startActivity(i)
+//            activity.overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
 
 
@@ -140,7 +158,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     override fun onStop() {
         super.onStop()
         isUpdateJoined?.removeAllChangeListeners()
-        removelastMsgListeners()
+        removeLastMsgListenr()
     }
 
 
@@ -163,8 +181,8 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             realm.commitTransaction()
         } else {
             if (isUpdateJoined?.isUpdate == true) {
-                realm.beginTransaction()
                 updateRoomList()
+                realm.beginTransaction()
                 isUpdateJoined!!.isUpdate = false
                 realm.commitTransaction()
             }
@@ -196,14 +214,45 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
                     ?: RoomR()
 
             dataList.add(roomR.toChatRoom())
-            updateRecentMessage(roomR.toChatRoom(), i)
+//            updateRecentMessage(roomR.toChatRoom(), i)
             i++
         }
+        removeLastMsgListenr()
+        addLastMsgListener()
         adapter.notifyDataSetChanged()
     }
 
 
-    private fun updateRecentMessage(room: Room, position: Int) {
+    private fun addLastMsgListener() {
+
+
+        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+        lastMsgs   = realm.where(LastMsgR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll()
+
+        dataList.forEach {
+            val rIdx = it.room_idx
+            val lastMsgR : LastMsgR = lastMsgs!!.firstOrNull(){ it.room_idx== rIdx} ?: return@forEach
+            it.setLastMsg(lastMsgR.content, lastMsgR.date,lastMsgR.cnt)
+        }
+        if(lastMsgs!!.size==0){
+            lastMsgs=null
+            return
+        }
+        lastMsgs!!.addChangeListener {t, changeSet ->
+            t.forEach {
+                val rId : Int = it.room_idx?:-1
+                val data : Room? = dataList.first { it.room_idx  == rId }
+                data?.setLastMsg(it.content,it.date,it.cnt)
+            }
+            adapter.notifyDataSetChanged()
+        }
+
+    }
+    private fun removeLastMsgListenr(){
+        lastMsgs?.removeAllChangeListeners()
+    }
+
+    private fun updateRecentMessageFire(room: Room, position: Int) {
         Log.d("Firebase_grouplist", "updateRecent")
 
         val dataBaseGroup = dataBaseReference.child(ARG_GROUPS).child(group.ctrl_name).child(room.ctrl_name)
@@ -239,7 +288,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     }
 
 
-    private fun removelastMsgListeners() {
+    private fun removelastMsgListenersFire() {
         lastMsgListeners.forEach {
             val dataBaseGroup = dataBaseReference.child(ARG_GROUPS).child(it.key.ctrl_name)
             val dataBaseLastMessage = dataBaseGroup.child(ARG_LAST_MESSAGE)

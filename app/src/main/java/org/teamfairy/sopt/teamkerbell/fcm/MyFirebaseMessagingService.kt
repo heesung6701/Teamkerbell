@@ -60,7 +60,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            Log.d(TAG, "Message Notification Title: " + remoteMessage.notification!!.title!!)
+            Log.d(TAG, "Message Notification Title: " + remoteMessage.notification!!.title)
             Log.d(TAG, "Message Notification Body: " + remoteMessage.notification!!.body!!)
             sendNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!, null)
         } else {
@@ -160,15 +160,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
             }
             StatusCode.votePush ->
-                sendNotification(title!!, content!!, null)
+                sendNotification("팀커벨", "공지가 만들어졌습니다.", null)
             StatusCode.makeSignal ->
-                sendNotification(title!!, content!!, null)
+                sendNotification("팀커벨", "신호등이 만들어졌습니다.", null)
             StatusCode.makeNotice ->
-                sendNotification(title!!, content!!, null)
+                sendNotification("팀커벨", "공지가 만들어 졌습니다", null)
             StatusCode.makeVote ->
-                sendNotification(title!!, content!!, null)
+                sendNotification("팀커벨", "투표가 등록되었습니다", null)
             StatusCode.makeRole ->
-                sendNotification(title!!, content!!, null)
+                sendNotification("팀커벨", "역할분담이 등록되었습니다.", null)
 
 
             StatusCode.chatMessage ->
@@ -235,6 +235,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private val TAG = this::class.java.name
+        private val TAG = "FCM"
     }
 }

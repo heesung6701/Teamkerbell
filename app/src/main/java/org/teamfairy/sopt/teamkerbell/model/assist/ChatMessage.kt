@@ -43,9 +43,9 @@ data class ChatMessage(
         val chatMessageR = ChatMessageR()
         chatMessageR.chat_idx = chat_idx
         chatMessageR.type = type
-        chatMessageR.u_idx = u_idx
-        chatMessageR.content = content
-        chatMessageR.date = date
+        chatMessageR.u_idx = u_idx?:-1
+        chatMessageR.content = content?:""
+        chatMessageR.date = date?:""
         return chatMessageR
     }
 
