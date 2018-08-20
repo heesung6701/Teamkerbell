@@ -27,7 +27,6 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
     override fun onClick(p0: View?) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         changeRoom(dataList[pos] as Room)
-
     }
 
     private val mActivity: WeakReference<Activity> = WeakReference<Activity>(activity)
@@ -43,7 +42,6 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
     private var tvRoomName : TextView by Delegates.notNull()
 
     init {
-
         if (mActivity.get() != null) {
             activity = mActivity.get()!!
             recyclerView = activity.findViewById(R.id.recyclerView)

@@ -10,24 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/splash_background"/>
-
-    <ImageView
-        android:src="@drawable/splash_jobeol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:id="@+id/jobyeli"
-        />
-
-    <ImageView
-        android:src="@drawable/splash_logo"
-        android:layout_width="match_parent"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:paddingBottom="200dp"
-        />
+        android:src="@drawable/img_splash"/>
 
 </android.support.design.widget.CoordinatorLayout>

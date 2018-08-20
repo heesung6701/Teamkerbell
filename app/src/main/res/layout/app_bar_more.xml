@@ -42,6 +42,7 @@
         android:background="@android:color/transparent"
         android:layout_margin="16dp"
         android:layout_gravity="center"
+        android:visibility="gone"
         />
 
 </LinearLayout>

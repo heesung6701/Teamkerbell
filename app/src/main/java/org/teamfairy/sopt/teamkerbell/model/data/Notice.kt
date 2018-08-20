@@ -13,7 +13,6 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  */
 data class Notice(
         override var u_idx: Int,
-        var chat_idx: Int?,
         var write_time: String,
         var content: String?,
         override var room_idx: Int,
@@ -21,8 +20,8 @@ data class Notice(
         var status : Int
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
 
-    constructor(u_idx: Int,chat_idx: Int?,write_time: String,content: String?,room_idx: Int,notice_idx: Int) : this(u_idx,chat_idx,write_time,content,room_idx,notice_idx, ARG_STATUS_NOT_READ)
-    constructor() : this(u_idx = 0, chat_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0,status = ARG_STATUS_READ)
+    constructor(u_idx: Int,write_time: String,content: String?,room_idx: Int,notice_idx: Int) : this(u_idx,write_time,content,room_idx,notice_idx, ARG_STATUS_NOT_READ)
+    constructor() : this(u_idx = 0,  write_time = "", content = "", room_idx = 0, notice_idx = 0,status = ARG_STATUS_READ)
 
     override fun getMainTitle(): String = content!!
 
@@ -47,7 +46,6 @@ data class Notice(
 
     constructor(source: Parcel) : this(
             source.readInt(),
-            source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readString(),
             source.readInt(),
@@ -59,7 +57,6 @@ data class Notice(
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeInt(u_idx)
-        writeValue(chat_idx)
         writeString(write_time)
         writeString(content)
         writeInt(room_idx)

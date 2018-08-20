@@ -11,7 +11,7 @@ class StatusCode {
         const val roomChange = 104
         const val joinedRoomChange = 105
         const val userWithJoinedGroupChange = 106
-        const val roomWithjoinedRoomChange = 107
+        const val roomWithJoinedRoomChange = 107
         const val joinedGroupWithJoinedRoom = 108
         const val allChange = 109
 

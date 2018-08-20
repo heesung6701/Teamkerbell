@@ -15,7 +15,9 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_CONTENT
@@ -44,11 +46,11 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
         val realm  = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if(message.contains("Success")){
 
-                    val dataArray : JSONArray = baseJsonResponse.getJSONArray("data")
+                    val dataArray : JSONArray = baseJsonResponse.getJSONArray(JSON_DATA)
 
                     realm.beginTransaction()
                     for( i in 0 until dataArray.length()){
@@ -56,7 +58,6 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
 
                         val obj = Signal(data.getInt(JSON_SIGNAL_IDX),
                                 data.getInt(JSON_U_IDX),
-                                data.getInt(JSON_CHAT_IDX),
                                 data.getString(JSON_WRITE_TIME),
                                 data.getInt(JSON_OPEN_STATUS),
                                 data.getInt(JSON_ROOM_IDX),

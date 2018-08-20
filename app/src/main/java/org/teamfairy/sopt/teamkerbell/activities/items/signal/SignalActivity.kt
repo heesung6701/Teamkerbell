@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.content_signal.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
@@ -42,7 +44,15 @@ import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 
-class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, MenuActionInterface {
+    override fun menuEdit() {
+        attemptEdit()
+    }
+
+    override fun menuDelete() {
+        attemptDelete()
+    }
+
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
         connectSignalResponseList()
@@ -50,8 +60,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
 
-    var btnCommit : TextView by Delegates.notNull()
-    var btnMore : ImageButton by Delegates.notNull()
+    private var btnCommit : TextView by Delegates.notNull()
+    private var btnMore : ImageButton by Delegates.notNull()
 
 
     var group: Team by Delegates.notNull()
@@ -78,8 +88,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         setSupportActionBar(toolbar)
 
 
-        btnCommit = findViewById<TextView>(R.id.btn_commit)
-        btnMore = findViewById<ImageButton>(R.id.btn_more)
+        btnCommit = findViewById(R.id.btn_commit)
+        btnMore = findViewById(R.id.btn_more)
 
         setUI()
 
@@ -115,6 +125,9 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
                 updateUI()
             } else finish()
         }
+
+
+        MenuFunc(this)
 
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
@@ -185,11 +198,12 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         responded = intent.getBooleanExtra(INTENT_RESPONDED, responded)
 
         if (isReadMode) {
-            btnCommit.visibility = View.VISIBLE
+            btnCommit.visibility = View.GONE
             edt_response.visibility = View.VISIBLE
             edt_response.isEnabled = false
 
-            btnMore.visibility = View.VISIBLE
+            if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
+                btnMore.visibility = View.VISIBLE
             layout_response_list.visibility = View.GONE
 
             edt_response.setText(readSignalContent)
@@ -206,7 +220,8 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
             btnCommit.visibility = View.GONE
             edt_response.visibility = View.GONE
 
-            btnMore.visibility = View.VISIBLE
+            if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
+                btnMore.visibility = View.VISIBLE
             layout_response_list.visibility = View.VISIBLE
 
 
@@ -242,6 +257,13 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         btn_red.isEnabled = b
         btn_yellow.isEnabled = b
         btn_green.isEnabled = b
+    }
+
+    private fun attemptDelete(){
+
+    }
+    private  fun attemptEdit(){
+
     }
 
     private fun attemptCommit() {

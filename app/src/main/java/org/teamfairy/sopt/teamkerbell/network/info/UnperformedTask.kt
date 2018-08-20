@@ -17,6 +17,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICES
@@ -48,8 +49,8 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
         message = "No Message"
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
                     val dataJson: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
 
@@ -62,7 +63,6 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
 
                         val notice = Notice(
                                 data.getInt(JSON_U_IDX),
-                                data.getInt(JSON_CHAT_IDX),
                                 data.getString(JSON_WRITE_TIME),
                                 data.getString(JSON_CONTENT),
                                 data.getInt(JSON_ROOM_IDX),
@@ -82,7 +82,6 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                         val signal = Signal(
                                 data.getInt(JSON_SIGNAL_IDX),
                                 data.getInt(JSON_U_IDX),
-                                data.getInt(JSON_CHAT_IDX),
                                 data.getString(JSON_WRITE_TIME),
                                 data.getInt(JSON_OPEN_STATUS),
                                 data.getInt(JSON_ROOM_IDX),

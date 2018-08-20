@@ -18,7 +18,7 @@
 
     <include layout="@layout/content_notice_card" />
 
-    <include layout="@layout/content_option_menu"
+    <include layout="@layout/content_option_list"
         android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton

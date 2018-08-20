@@ -196,8 +196,10 @@
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
             android:autoLink="web"
-            android:text="@string/txt_enter_cloud_link"
+            android:text="https://docs.google.com/document/d/1TWTWiakvywszqRTUUjdHBFMMBgOSxlrmwyDi5miEFjE/edit"
+
             />
+        <!--android:text="@string/txt_enter_cloud_link"-->
         <EditText
             android:id="@+id/edt_nav_cloud_link"
             android:layout_width="match_parent"

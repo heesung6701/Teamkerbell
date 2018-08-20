@@ -16,6 +16,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_signal" />
+    <include layout="@layout/content_option_menu"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

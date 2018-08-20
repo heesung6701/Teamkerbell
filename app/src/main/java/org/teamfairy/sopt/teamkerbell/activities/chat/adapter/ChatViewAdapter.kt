@@ -7,7 +7,9 @@ import android.os.Message
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.R.id.name
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
@@ -200,17 +202,23 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
             }
 
             ChatUtils.TYPE_LEAVE -> {
-                val name = dataList[position].content!!
+                val uId = Integer.parseInt(dataList[position].content)
+                val name = DatabaseHelpUtils.getUser(mContext,uId).name
+
                 val leaveHolder: LeaveHolder = holder as LeaveHolder
                 leaveHolder.tv.text = (name + "님이 퇴장하셨습니다.")
             }
             ChatUtils.TYPE_ENTER_GROUP->{
-                val name = dataList[position].content!!
+
+                val name = dataList[position].content
+//                val uId = Integer.parseInt(dataList[position].content)
+//                val name = DatabaseHelpUtils.getUser(mContext,uId).name
                 val inviteHolder = holder as InviteHolder
                 inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
             }
             ChatUtils.TYPE_INVITE -> {
-                val name = dataList[position].content!!
+                val uId = Integer.parseInt(dataList[position].content)
+                val name = DatabaseHelpUtils.getUser(mContext,uId).name
                 val inviteHolder = holder as InviteHolder
                 inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
             }

@@ -22,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP_PA
 import org.teamfairy.sopt.teamkerbell.network.make.MakeGroupTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.lang.ref.WeakReference
@@ -31,7 +32,7 @@ class MakeGroupActivity : AppCompatActivity() {
 
     var user: User by Delegates.notNull()
 
-    var filePhoto : File?= null
+    private var filePhoto : File?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_group)
@@ -113,6 +114,8 @@ class MakeGroupActivity : AppCompatActivity() {
 
                     DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
                     DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
+                    NetworkUtils.connectRoomList(applicationContext,null)
+                    NetworkUtils.connectJoinedRoomList(applicationContext,null)
 
 
                     val i = Intent(application,MainActivity::class.java)

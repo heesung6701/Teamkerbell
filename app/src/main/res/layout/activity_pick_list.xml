@@ -17,7 +17,7 @@
 
     <include layout="@layout/content_pick_list" />
 
-    <include layout="@layout/content_option_menu" android:visibility="gone"/>
+    <include layout="@layout/content_option_list" android:visibility="gone"/>
 
 
 

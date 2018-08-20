@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:id="@+id/recyclerView_room"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_menu"
     android:layout_width="157dp"
     android:layout_height="wrap_content"
     android:layout_gravity="end|top"
@@ -10,7 +9,31 @@
     android:background="@drawable/shape_border_shadow"
     android:elevation="4dp"
     android:overScrollMode="never"
-    android:paddingBottom="17dp"
-    android:paddingLeft="13dp"
-    android:paddingRight="13dp"
-    android:paddingTop="17dp" />
+    android:orientation="vertical"
+    android:visibility="gone"
+    >
+    <TextView
+        android:id="@+id/tv_menu_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_edit"
+        android:textSize="14sp"
+        android:padding="5dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/tv_menu_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_delete"
+        android:textSize="14sp"
+        android:padding="5dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:visibility="gone"
+        />
+
+</LinearLayout>
+

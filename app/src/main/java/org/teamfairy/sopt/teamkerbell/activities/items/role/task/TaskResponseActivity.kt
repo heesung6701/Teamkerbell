@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.app_bar_back.*
+import kotlinx.android.synthetic.main.app_bar_more.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.content_task_response.*
@@ -30,11 +30,22 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.*
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 
 
-class TaskResponseActivity : AppCompatActivity() {
+class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
+    override fun menuEdit() {
+         attemptEdit()
+    }
+
+    override fun menuDelete() {
+        attemptDelete()
+    }
 
 
     var adapter: FeedbackListAdapter by Delegates.notNull()
@@ -47,8 +58,11 @@ class TaskResponseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task_response)
         setSupportActionBar(toolbar)
 
+
         taskResponse = intent.getParcelableExtra(INTENT_TASK_RESPONSE)
+
         taskResponse.setPhotoInfo(this)
+
         if (taskResponse.fileArray.isNotEmpty()) {
             li_iv_file.visibility = View.VISIBLE
             li_iv_file.setOnClickListener {
@@ -130,6 +144,9 @@ class TaskResponseActivity : AppCompatActivity() {
         btn_back.setOnClickListener {
             onBackPressed()
         }
+
+
+        MenuFunc(this)
     }
 
 
@@ -137,6 +154,18 @@ class TaskResponseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         connectFeedBackList()
+    }
+
+    private fun attemptEdit(){
+
+//        val task = GetMessageTask(applicationContext, HandlerEdit(this), LoginToken.getToken(applicationContext))
+//
+//        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
+    }
+    private fun attemptDelete(){
+        val task = FeedBackTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
+
+        task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE + "/" + taskResponse.response_idx, METHOD_DELETE)
     }
 
 
@@ -147,6 +176,26 @@ class TaskResponseActivity : AppCompatActivity() {
     }
 
 
+    private class HandlerDelete(activity: TaskResponseActivity) : Handler() {
+        private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            if (activity != null) {
+                when (msg.what) {
+                    Utils.MSG_SUCCESS -> {
+                                    //TODO SOMETHING
+                    }
+                    else -> {
+                        val message = msg.data.getString("message");
+                        Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+            }
+        }
+    }
 
     private class HandlerGetFeedback(activity: TaskResponseActivity) : Handler() {
         private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)

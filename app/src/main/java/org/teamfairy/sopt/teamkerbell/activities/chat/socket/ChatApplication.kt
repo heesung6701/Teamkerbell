@@ -14,9 +14,14 @@ class ChatApplication {
 
     companion object {
 
+
+        var mSocket : Socket? = null
+        var recentGIdx = 0
         fun getSocket(g_idx : Int): Socket? {
 
-            val mSocket: Socket?
+            if(mSocket?.connected() == true && recentGIdx == g_idx){
+                return mSocket
+            }
             try {
                 val opts: IO.Options = IO.Options()
                 val port: Int = USGS_REQUEST_URL.URL_SOCKET.substringAfterLast(':').toInt()
@@ -25,10 +30,16 @@ class ChatApplication {
 
 
 //                val url :String = "${USGS_REQUEST_URL.URL_SOCKET}?ns=$g_idx"
-                val url :String = USGS_REQUEST_URL.URL_SOCKET
+                val url :String = USGS_REQUEST_URL.URL_SOCKET+"/"+g_idx
 
                 Log.d(ChatActivity::class.java.simpleName+"/Socket", "포트 번호 : $port")
                 Log.d(ChatActivity::class.java.simpleName+"/Socket", "URL : $url")
+                if(recentGIdx!=g_idx) {
+                    mSocket?.disconnect()
+                    mSocket?.off()
+                    mSocket?.close()
+                    recentGIdx= g_idx
+                }
                 mSocket = IO.socket(url, opts)
 
 
@@ -38,5 +49,7 @@ class ChatApplication {
             Log.d(ChatActivity::class.java.simpleName+"/Socket", "연결 성공")
             return mSocket
         }
+
+
     }
 }

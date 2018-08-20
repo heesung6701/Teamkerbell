@@ -30,12 +30,9 @@ class FilterFunc(activity: Activity) {
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var btnFilter: ImageButton by Delegates.notNull()
 
-
-
     private val mActivity: WeakReference<Activity> = WeakReference<Activity>(activity)
 
     init {
-
         if (mActivity.get() != null) {
             val activity = mActivity.get()!!
             recyclerView = activity.findViewById(R.id.recyclerView_room)

@@ -46,7 +46,6 @@ class SignalResponseTask(context: Context, var handler: Handler, token: String?)
 
                     val obj = Signal(data.getInt(JSON_SIGNAL_IDX),
                             data.getInt(JSON_U_IDX),
-                            data.getInt(JSON_CHAT_IDX),
                             data.getString(JSON_WRITE_TIME),
                             data.getInt(JSON_OPEN_STATUS),
                             data.getInt(JSON_ROOM_IDX),

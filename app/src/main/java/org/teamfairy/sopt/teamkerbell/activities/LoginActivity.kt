@@ -32,6 +32,7 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
@@ -62,7 +63,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 activity.mAuthTask = null
                 activity.showProgress(false)
 
-                val result = msg.data.getString("message")
+                val result = msg.data.getString(JSON_MESSAGE)
 
                 when {
                     result.contains("Success") -> {
@@ -89,10 +90,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         NetworkUtils.connectRoomList(applicationContext,null,true)
 
 
-        val dataBase: FirebaseDatabase = FirebaseDatabase.getInstance()
-        val dataBaseReference: DatabaseReference = dataBase.reference
-        val dataBaseFireToken: DatabaseReference? = dataBaseReference.child("firebase_tokens").ref
-        dataBaseFireToken!!.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(FirebaseInstanceId.getInstance().getToken()!!.toString())
+//        val dataBase: FirebaseDatabase = FirebaseDatabase.getInstance()
+//        val dataBaseReference: DatabaseReference = dataBase.reference
+//        val dataBaseFireToken: DatabaseReference? = dataBaseReference.child("firebase_tokens").ref
+//        dataBaseFireToken!!.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(FirebaseInstanceId.getInstance().getToken()!!.toString())
 
         val intent = Intent(applicationContext, UnperformedActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

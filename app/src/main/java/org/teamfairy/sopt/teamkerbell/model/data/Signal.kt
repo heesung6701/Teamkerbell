@@ -16,7 +16,6 @@ import kotlin.experimental.or
 data class Signal(
         var signal_idx: Int, //Primary Key
         override var u_idx: Int,
-        var chat_idx: Int?,
         var write_time: String,
         var open_status: Int?,
         override var room_idx: Int, //Foreign Key
@@ -28,8 +27,8 @@ data class Signal(
 
 
 
-    constructor(signal_idx: Int,u_idx: Int,chat_idx: Int?,write_time: String,open_status: Int?,room_idx: Int,content: String?,entire_status: Int)
-            : this(signal_idx,u_idx,chat_idx,write_time,open_status,room_idx,content,entire_status,"a",null)
+    constructor(signal_idx: Int,u_idx: Int,write_time: String,open_status: Int?,room_idx: Int,content: String?,entire_status: Int)
+            : this(signal_idx,u_idx,write_time,open_status,room_idx,content,entire_status,"a",null)
     override fun getRoomTitle(): String {
         return roomName
     }
@@ -72,7 +71,6 @@ data class Signal(
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
-            source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readValue(Int::class.java.classLoader) as Int?,
             source.readInt(),
@@ -87,7 +85,6 @@ data class Signal(
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeInt(signal_idx)
         writeInt(u_idx)
-        writeValue(chat_idx)
         writeString(write_time)
         writeValue(open_status)
         writeInt(room_idx)

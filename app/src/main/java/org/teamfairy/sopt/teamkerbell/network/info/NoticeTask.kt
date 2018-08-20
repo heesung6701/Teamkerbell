@@ -47,7 +47,6 @@ class NoticeTask(context: Context, var handler: Handler, token: String?) : Netwo
                     val obj = Notice()
 
                     obj.u_idx = data.getInt(JSON_U_IDX)
-                    obj.chat_idx = data.getInt(JSON_CHAT_IDX)
                     obj.write_time = data.getString(JSON_WRITE_TIME)
                     obj.content = data.getString(JSON_CONTENT)
                     obj.room_idx = data.getInt(JSON_ROOM_IDX)

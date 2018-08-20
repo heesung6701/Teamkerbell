@@ -19,8 +19,11 @@ import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_close.*
 import kotlinx.android.synthetic.main.content_make_room.*
+import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
+import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
@@ -38,6 +41,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PAR
 import org.teamfairy.sopt.teamkerbell.network.make.MakeRoomTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.io.IOException
@@ -132,7 +136,7 @@ class MakeRoomActivity : AppCompatActivity() {
         try {
             jsonParam.put(URL_MAKE_ROOM_PARAM_NAME,roomName )
             jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX,group.g_idx)
-            jsonParam.put(URL_MAKE_ROOM_PARAM_USERARRAY,"[]")
+            jsonParam.put(URL_MAKE_ROOM_PARAM_USERARRAY,JSONArray())
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -185,16 +189,12 @@ class MakeRoomActivity : AppCompatActivity() {
                     realm.copyToRealmOrUpdate(room.toChatRoomR())
                     Log.d("RealmDB/added", room.toString())
 
-
                     val isUpdateJoined = IsUpdateR()
                     isUpdateJoined.what=StatusCode.joinedRoomChange
                     isUpdateJoined.isUpdate = true
                     realm.copyToRealmOrUpdate(isUpdateJoined)
 
                     realm.commitTransaction()
-
-                    FirebaseMessageUtils.setDatabaseGroup(group,room)
-                    FirebaseMessageUtils.dataBaseEndpoints.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(0)
 
                     finish()
 

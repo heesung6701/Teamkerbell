@@ -72,7 +72,7 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
 
-    val whoCheck = HashMap<Int,Boolean>()
+    private val whoCheck = HashMap<Int,Boolean>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

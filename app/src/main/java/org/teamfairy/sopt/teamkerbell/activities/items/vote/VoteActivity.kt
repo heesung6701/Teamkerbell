@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_vote.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ChoiceListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByChoiceListAdapter
@@ -40,7 +42,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , MenuActionInterface{
+    override fun menuEdit() {
+        attemptEdit()
+    }
+
+    override fun menuDelete() {
+        attemptDelete()
+    }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -120,7 +129,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
 
 
-
         btn_back.setOnClickListener {
             finish()
         }
@@ -147,6 +155,8 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
 
+        MenuFunc(this)
+
     }
 
     override fun onResume() {
@@ -155,8 +165,19 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             setVoteInfo()
     }
 
+    private fun attemptEdit(){
+
+    }
+    private fun attemptDelete(){
+
+    }
+
     private fun setVoteInfo() {
         val vote = this.vote!!
+
+
+        if(vote.u_idx==LoginToken.getUserIdx(applicationContext))
+            MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
 
         room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, vote.room_idx)
         group = intent.getParcelableExtra(INTENT_GROUP) ?: DatabaseHelpUtils.getGroup(applicationContext, room.g_idx)

@@ -96,6 +96,7 @@
     <string name="txt_chose_work">작업선택</string>
     <string name="txt_copy">복사</string>
     <string name="txt_delete">삭제</string>
+    <string name="txt_edit">수정</string>
     <string name="txt_share">공유</string>
     <string name="txt_search">검색</string>
     <string name="txt_comment_count">댓글수</string>

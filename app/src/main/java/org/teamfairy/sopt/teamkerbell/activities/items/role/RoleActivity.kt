@@ -15,6 +15,8 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_role.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.TaskListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.role.task.TaskActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Role
@@ -33,7 +35,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, MenuActionInterface {
+    override fun menuEdit() {
+        attemptEdit()
+    }
+
+    override fun menuDelete() {
+        attemptDelete()
+    }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -76,16 +85,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             finish()
         }
 
-        btn_more.setOnClickListener {
-            val i = Intent(applicationContext, EditRoleActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            i.putExtra(INTENT_GROUP, group)
-            i.putExtra(INTENT_ROOM, room)
-            i.putExtra(INTENT_ROLE, role)
-            i.putExtra(INTENT_TASK, dataList)
-            startActivity(i)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-        }
+        MenuFunc(this)
 
 
     }
@@ -94,6 +94,21 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         super.onResume()
 
         connectTaskList()
+    }
+
+    private fun attemptEdit(){
+        val i = Intent(applicationContext, EditRoleActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+        i.putExtra(INTENT_GROUP, group)
+        i.putExtra(INTENT_ROOM, room)
+        i.putExtra(INTENT_ROLE, role)
+        i.putExtra(INTENT_TASK, dataList)
+        startActivity(i)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+    }
+
+    private fun attemptDelete(){
+        //삭제하기
     }
 
     override fun onClick(p0: View?) {

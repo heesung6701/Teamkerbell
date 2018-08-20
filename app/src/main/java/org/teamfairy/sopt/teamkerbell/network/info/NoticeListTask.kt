@@ -12,6 +12,8 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
@@ -36,11 +38,11 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
 
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
 
-                    val dataArray: JSONArray = baseJsonResponse.getJSONArray("data")
+                    val dataArray: JSONArray = baseJsonResponse.getJSONArray(JSON_DATA)
 
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
@@ -49,7 +51,6 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
                         val obj = Notice()
 
                         obj.u_idx = data.getInt(JSON_U_IDX)
-                        obj.chat_idx = data.getInt(JSON_CHAT_IDX)
                         obj.write_time = data.getString(JSON_WRITE_TIME)
                         obj.content = data.getString(JSON_CONTENT)
                         obj.room_idx = data.getInt(JSON_ROOM_IDX)

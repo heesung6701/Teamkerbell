@@ -11,11 +11,12 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/app_bar_back"/>
+        <include layout="@layout/app_bar_more"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_notice" />
+    <include layout="@layout/content_option_menu"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

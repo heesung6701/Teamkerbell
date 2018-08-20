@@ -52,7 +52,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage!!.from!!)
 
@@ -139,7 +138,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.joinedRoomChange ->
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
 
-            StatusCode.roomWithjoinedRoomChange-> {
+            StatusCode.roomWithJoinedRoomChange-> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
@@ -147,7 +146,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.joinedGroupWithJoinedRoom-> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
-
             }
 
             StatusCode.userWithJoinedGroupChange-> {
@@ -156,8 +154,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
             StatusCode.allChange-> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
+                setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
             StatusCode.votePush ->
                 sendNotification("팀커벨", "공지가 만들어졌습니다.", null)

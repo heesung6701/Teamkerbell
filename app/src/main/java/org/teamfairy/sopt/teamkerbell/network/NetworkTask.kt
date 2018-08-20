@@ -362,6 +362,8 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             urlConnection.doOutput = true
             urlConnection.requestMethod = params[1]
+            urlConnection.connectTimeout = 3000
+            urlConnection.readTimeout = 5000
 
             urlConnection.doInput = true
 
@@ -496,12 +498,8 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             Log.d("$LOG_TAG/Error", e.toString())
             e.printStackTrace()
         } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect()
-            }
-            if (inputStream != null) {
-                inputStream.close()
-            }
+            urlConnection?.disconnect()
+            inputStream?.close()
         }
 
         return jsonResponse
