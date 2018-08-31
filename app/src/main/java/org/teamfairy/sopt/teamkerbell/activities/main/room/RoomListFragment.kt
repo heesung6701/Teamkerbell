@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import io.realm.*
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import org.json.JSONArray
@@ -35,9 +34,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.viewholder.chat.InviteHolder
-import java.io.File
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -54,22 +51,17 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     var adapter: RoomListAdapter by Delegates.notNull()
     var dataList: ArrayList<Room> = arrayListOf<Room>()
+
     var recyclerView: RecyclerView by Delegates.notNull()
 
-    var file: File? = null
-
     var isUpdateJoined: IsUpdateR? = null
-
-    private var lastMsgs : RealmResults<LastMsgR>?=null
-
+    var lastChatListResult : String?=null
 
     private var mSocket: Socket by Delegates.notNull()
 
     private var isConnectedRoomList = false
 
-
     var fab : FloatingActionButton by Delegates.notNull()
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v = inflater!!.inflate(R.layout.fragment_room_list, container, false)
@@ -83,22 +75,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         fab = activity.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-
-//            val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-//            realm.beginTransaction()
-//
-//            val l = realm.where(LastMsgR::class.java).equalTo(Room.ARG_ROOM_IDX,dataList[qqq].room_idx ).findFirst() ?: realm.createObject(LastMsgR::class.java, dataList[qqq].room_idx)
-//            l.content="더미데이터${ttt++}"
-//            l.u_idx=LoginToken.getUserIdx(activity.applicationContext)
-//            l.type=0
-//            l.date="2018-08-28"
-//
-//            l.g_idx=group.g_idx
-//            l.cnt=l.cnt + 1
-//            realm.commitTransaction()
-//            qqq++
-//            if(qqq>dataList.lastIndex) qqq=0
-
             val i = Intent(activity.applicationContext, MakeRoomActivity::class.java)
             i.putExtra(IntentTag.INTENT_GROUP, group)
             startActivity(i)
@@ -117,9 +93,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             }
         })
 
-
         updateRoomList()
-
         connectSocket()
 
         return v
@@ -128,15 +102,16 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     override fun onResume() {
         super.onResume()
 
-        attachSocket()
+//        attachSocket()
         enterChatListSocket()
+
 
         addChangeJoinedRoomListener()
     }
 
     override fun onStop() {
         super.onStop()
-        detachSocket()
+//        detachSocket()
         isUpdateJoined?.removeAllChangeListeners()
 //        removeLastMsgListenr()
 
@@ -151,12 +126,14 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     override fun onClick(p0: View?) {
 
         val pos = recyclerView.getChildAdapterPosition(p0)
+
+        dataList[pos].newMsgCnt=0
+
         val i = Intent(activity.applicationContext, ChatActivity::class.java)
         i.putExtra(INTENT_GROUP,group)
         i.putExtra(INTENT_ROOM, dataList[pos])
         startActivity(i)
-        detachSocket()
-        dataList[pos].newMsgCnt=0
+//        detachSocket()
     }
 
     private fun addChangeJoinedRoomListener() {
@@ -200,59 +177,21 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         groupR.forEach {
             val roomR = realm.where(RoomR::class.java).equalTo(Room.ARG_ROOM_IDX, it.room_idx).findFirst()
                     ?: RoomR()
-
             dataList.add(roomR.toChatRoom())
             i++
         }
-//        removeLastMsgListenr()
-//        addLastMsgListener()
+
+        if(lastChatListResult!=null) updateListFromJSON(JSONObject(lastChatListResult))
         adapter.notifyDataSetChanged()
     }
 
-
-    private fun addLastMsgListener() {
-
-
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        lastMsgs   = realm.where(LastMsgR::class.java).equalTo(Team.ARG_G_IDX,group.g_idx).findAll()
-
-        dataList.forEach {
-            val rIdx = it.room_idx
-            val lastMsgR : LastMsgR = lastMsgs!!.firstOrNull(){ it.room_idx== rIdx} ?: return@forEach
-            it.setLastMsg(lastMsgR.content, lastMsgR.date,lastMsgR.cnt)
-        }
-        if(lastMsgs!!.size==0){
-            lastMsgs=null
-            return
-        }
-        lastMsgs!!.addChangeListener {t, changeSet ->
-            t.forEach {
-                val rId : Int = it.room_idx?:-1
-                val data : Room? = dataList.first { it.room_idx  == rId }
-                data?.setLastMsg(it.content,it.date,it.cnt)
-            }
-            adapter.notifyDataSetChanged()
-        }
-
-    }
-    private fun removeLastMsgListenr(){
-       lastMsgs?.removeAllChangeListeners()
-    }
-
-
-    private class HandlerGet(fragment: RoomListFragment) : Handler() {
-        private val mFragment: WeakReference<RoomListFragment> = WeakReference<RoomListFragment>(fragment)
-
-        override fun handleMessage(msg: Message) {
-            mFragment.get()?.updateRoomList()
-        }
-    }
 
 
     override fun changeGroup(g: Team) {
 
         Log.i("$LOG_TAG/Change Group", "${group.g_idx}->${g.g_idx}")
         group = g
+        lastChatListResult=null
         updateRoomList()
 
         connectSocket()
@@ -270,20 +209,19 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        attachSocket()
         mSocket.connect()
-
-
 
     }
     private fun attachSocket(){
-        Log.d(LOG_TAG, "attach socket listener")
-        mSocket.on(Constants.UPDATE_CHAT, onUpdateChat)
+//        Log.d(LOG_TAG, "attach socket listener")
         mSocket.on(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
+        mSocket.on(Constants.UPDATE_CHAT_LIST, onUpdateChat)
     }
     private fun detachSocket(){
         Log.d(LOG_TAG, "detach socket listener")
-        mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.off(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
+        mSocket.off(Constants.UPDATE_CHAT_LIST, onUpdateChat)
     }
     private fun disconnectSocket(){
         mSocket.disconnect()
@@ -291,7 +229,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
         mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
-        mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
+        mSocket.off(Constants.UPDATE_CHAT_LIST, onUpdateChat)
         mSocket.off(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
         mSocket.close()
     }
@@ -311,10 +249,9 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private val onConnect = Emitter.Listener {
 
         activity.runOnUiThread(Runnable {
-
-                Log.i("$LOG_TAG/Socket onConnect/", "connected")
-                enterChatListSocket()
-
+            Log.i("$LOG_TAG/Socket onConnect/", "connected")
+//            attachSocket()
+            enterChatListSocket()
         })
     }
 
@@ -335,9 +272,15 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     private val onEnterRoomListResult = Emitter.Listener { args ->
 
-        if(args[0]==null) return@Listener
+
+        if(args[0]==null  || args[0]==0){
+            Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_LIST_RESULT}", "nothing")
+            return@Listener
+        }
 
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_LIST_RESULT}", args[0].toString())
+
+
         activity.runOnUiThread(Runnable {
 
 
@@ -350,9 +293,43 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 val rIdx = data.get(Constants.JSON_ROOM_IDX)
                 val r : Room =(dataList.firstOrNull { it.room_idx ==  rIdx}) ?: Room()
 
+                val type  = data.getInt(Constants.JSON_TYPE)
+                when(type){
+                    ChatUtils.TYPE_INVITE, ChatUtils.TYPE_GROUP_LEAVE, ChatUtils.TYPE_ENTER_GROUP->{
+                        val d  = data.getString(Constants.JSON_CONTENT)
+                        val uIds = d.split('/')
+                        var name: String = ""
+                        uIds.forEach {
+                            val uId = Integer.parseInt(it)
+                            if(name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
+                            else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                        }
+
+                        r.lastMsgStr=(name + "님이 입장하셨습니다.")
+                    }
+                    ChatUtils.TYPE_GROUP_LEAVE->{
+
+                    }
+                    ChatUtils.TYPE_ENTER_GROUP->{
+
+                    }
+                    ChatUtils.TYPE_NOTICE->{
+                        r.lastMsgStr  = "공지가 등록되었습니다."
+                    }
+
+                    ChatUtils.TYPE_VOTE->{
+                        r.lastMsgStr  = "투표가 등록되었습니다."
+                    }
+                    ChatUtils.TYPE_SIGNAL->{
+                        r.lastMsgStr  = "신호등이 등록되었습니다."
+
+                    }
+                    ChatUtils.TYPE_MESSAGE->{
+                        r.lastMsgStr  = data.getString(Constants.JSON_CONTENT)
+                    }
+                }
                 r.lastMsgTime= data.getString(Constants.JSON_WRITE_TIME)
                 r.newMsgCnt = data.getInt(Constants.JSON_UN_READ_COUNT)
-                r.lastMsgStr  = data.getString(Constants.JSON_CONTENT)
 
             }
             adapter.notifyDataSetChanged()
@@ -364,15 +341,21 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
 
     private val onUpdateChat = Emitter.Listener { args ->
-        if(args[0]==null) return@Listener
+        if(args[0]==null){
+            Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT_LIST}", "nothing")
+            return@Listener
+        }
 
-        Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT}", args[0].toString())
+        Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT_LIST}", args[0].toString())
+
         activity.runOnUiThread(Runnable {
-            updateListFromJSON(org.json.JSONObject(args[0].toString()))
+            lastChatListResult = args[0].toString()
+            updateListFromJSON(JSONObject(args[0].toString()))
+            adapter.notifyDataSetChanged()
         })
     }
 
-    private fun updateListFromJSON(data : JSONObject){
+    private fun updateListFromJSON(data : JSONObject): Room{
 
         val rIdx = data.getInt(Constants.JSON_ROOM_IDX)
         val message: String = data.getString(Constants.JSON_CONTENT)
@@ -397,13 +380,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 r.newMsgCnt+=1
             }
         }
-
-
-        adapter.notifyDataSetChanged()
-
-
-
-
+        return r
     }
 
 }

@@ -133,7 +133,7 @@ open class NetworkUtils {
                 realm.commitTransaction()
 
                 if (urlToBytes.byteArray == null || !urlToBytes.url.equals(str)) {
-                    Log.d("${LOG_TAG}/key", "try to update data:$str")
+                    Log.d("$LOG_TAG/key", "try to update data:$str")
                     realm.beginTransaction()
                     urlToBytes.url = str
                     realm.commitTransaction()
@@ -149,8 +149,7 @@ open class NetworkUtils {
                     setImageView(bitmap, imageView)
                 }
             } catch (e: MalformedURLException) {
-                Log.d("${LOG_TAG}/error", "Photo url is not valid")
-
+                Log.d("$LOG_TAG/error", "Photo url is not valid")
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -192,7 +191,7 @@ open class NetworkUtils {
                         }
                     }
                     else -> {
-                        Log.d("${LOG_TAG}/Error", msg.data.getString("message"))
+                            Log.d("$LOG_TAG/Error", msg.obj?.toString() ?: "error")
                     }
                 }
             }

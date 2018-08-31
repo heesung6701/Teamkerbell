@@ -25,6 +25,8 @@ class Constants{
         const val SEND_CHAT  = "sendchat"
 //        채팅방 메세지 받기/업데이트
         const val UPDATE_CHAT = "updatechat"
+//        채팅방에서 메세지 받기/업데이트
+        const val UPDATE_CHAT_LIST = "updatechatlist"
 
 
         const val JSON_CHAT_IDX = USGS_REQUEST_URL.JSON_CHAT_IDX

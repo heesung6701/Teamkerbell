@@ -41,7 +41,7 @@ class CurrentGroup {
 
         }
 
-        fun setPref(context: Context) {
+        private fun setPref(context: Context) {
 
             if (team == null) return
 

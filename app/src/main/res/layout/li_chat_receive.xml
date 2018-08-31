@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
@@ -13,11 +14,13 @@
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/list_item_iv_profile"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:id="@+id/li_iv_profile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
 
-            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/icon_profile_default_png"
             app:civ_border_color="@color/mainColorY"
             app:civ_border_width="0dp" />
@@ -30,11 +33,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/list_item_tv_name"
+                android:id="@+id/li_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLength="30"
-                android:text="sopt"
+                tools:text="sopt"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -44,31 +47,30 @@
 
 
                 <TextView
-                    android:id="@+id/list_item_tv_content"
+                    android:id="@+id/li_tv_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_round_btn_chat"
-                    android:backgroundTint="@color/white"
                     android:maxWidth="200dp"
                     android:padding="10dp"
-                    android:text="채팅내용x`입니다. 얼마나 일거질지 나도 궁금하답니다."
+                    tools:text="채팅내용x`입니다. 얼마나 일거질지 나도 궁금하답니다."
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/list_item_tv_count"
+                    android:id="@+id/li_tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:padding="5dp"
-                    android:text="1"/>
+                    tools:text="1"/>
 
                 <TextView
-                    android:id="@+id/list_item_tv_time"
+                    android:id="@+id/li_tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="오후 3.27"
-                    android:textSize="8sp" />
+                    tools:text="오후 3.27"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.os.AsyncTask
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import android.webkit.URLUtil
 import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -27,7 +28,10 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
         for (i in 1..3) {
             try {
                 inputStream = url.openStream() as InputStream
-                msgCode=MSG_SUCCESS
+                msgCode = if(URLUtil.isValidUrl(inputStream.readBytes().toString()))
+                    MSG_SUCCESS
+                else
+                    MSG_FAIL
                 break
             } catch (e: Exception) {
                 Log.d(LOG_TAG.plus("_ERROR"), e.toString())
@@ -35,7 +39,7 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
             }
         }
 
-        return inputStream!!.readBytes()
+        return inputStream?.readBytes()
     }
 
 
@@ -46,7 +50,7 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
         val msg = Message()
         msg.obj = obj
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName,"get Bitmap Message"+if(msgCode== MSG_SUCCESS) "Success" else " failed")
 
         handler.sendMessage(msg)
     }

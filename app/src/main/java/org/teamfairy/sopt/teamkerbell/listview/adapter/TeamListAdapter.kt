@@ -5,11 +5,8 @@ import android.os.Message
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.sendMessage
-import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.viewholder.EmptyViewHolder
 import org.teamfairy.sopt.teamkerbell.viewholder.TeamViewHolder
-import kotlin.properties.Delegates
 
 /**
  * Created by lumiere on 2017-12-30.

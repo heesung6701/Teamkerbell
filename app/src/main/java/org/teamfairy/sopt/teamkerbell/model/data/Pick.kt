@@ -11,7 +11,6 @@ data class Pick(
         var chat_idx: Int?,
         var write_time: String,
         var content: String?,
-        var pick_idx: Int?,
         var g_idx: Int,
         var room_idx: Int
 ) : RoomInfoInterface(){

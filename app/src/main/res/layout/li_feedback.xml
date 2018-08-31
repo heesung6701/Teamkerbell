@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/list_item_layout"
+        android:id="@+id/li_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -35,7 +36,7 @@
                 android:id="@+id/li_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="윤희성"
+                tools:text="윤희성"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -43,7 +44,7 @@
                 android:id="@+id/li_tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="내용"
+                tools:text="내용"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -51,7 +52,7 @@
                 android:id="@+id/li_tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="시간"
+                tools:text="시간"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 

@@ -39,14 +39,14 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
 
         val pRoom : Room= DatabaseHelpUtils.getRoom(applicationContext,pick.room_idx)
         if(pRoom.room_idx== ARG_NULL_IDX){
-            Toast.makeText(applicationContext,"해당 채팅방은 나간상태입니다.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,"해당 채팅방은 존재하지 않습니다.",Toast.LENGTH_SHORT).show()
             return
         }
 
         val intent = Intent(applicationContext, ChatActivity::class.java)
         intent.putExtra(INTENT_GROUP, group)
         intent.putExtra(INTENT_ROOM, pRoom)
-        intent.putExtra(INTENT_PICK_IDX, pick.pick_idx)
+        intent.putExtra(INTENT_PICK_IDX, pick.chat_idx)
         startActivity(intent)
     }
 

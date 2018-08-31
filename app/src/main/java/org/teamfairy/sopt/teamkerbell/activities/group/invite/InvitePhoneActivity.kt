@@ -20,7 +20,6 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_IS
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.dataBaseReference
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
@@ -109,7 +108,7 @@ class InvitePhoneActivity : AppCompatActivity() {
                     setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
 
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
-                sendInviteMessage(name, uIdx)
+
                 Toast.makeText(applicationContext, name + "님을 초대했습니다.", Toast.LENGTH_SHORT).show()
                 finish()
 
@@ -134,24 +133,6 @@ class InvitePhoneActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendInviteMessage(name: String?, u_idx: Int?) {
-        val dataBaseGroup = dataBaseReference.child("groups_test").child(group.ctrl_name)
-        val dataBaseMessages = dataBaseGroup!!.child("messages").ref
 
-//        dataBaseGroup.child("LastMessage").addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError?) {
-//            }
-//
-//            override fun onDataChange(dataSnapshot: DataSnapshot?) {
-//
-//                var last_chat_idx = 0
-//                if (dataSnapshot!!.hasChild("chat_idx"))
-//                    last_chat_idx = dataSnapshot.child("chat_idx").value.toString().toInt()
-//                val chatMessageF = ChatMessageF(last_chat_idx + 1, ChatUtils.TYPE_INVITE, u_idx, name, Utils.getNowForFirebase())
-//                dataBaseMessages!!.push().setValue(chatMessageF)
-//                dataBaseGroup.child("LastMessage").child("chat_idx").setValue(last_chat_idx + 1)
-//            }
-//        })
-    }
 
 }

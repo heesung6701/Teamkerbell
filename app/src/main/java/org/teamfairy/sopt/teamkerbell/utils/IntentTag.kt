@@ -31,6 +31,7 @@ class IntentTag {
         const val INTENT_ROLE : String="ROLE"
         const val INTENT_TASK_RESPONSE : String="ROLE_TASK_RESPONSE"
         const val INTENT_PICK_IDX : String="PICK_IDX"
+        const val INTENT_CHAT_IDX : String="CHAT_IDX"
 
 
         const val INTENT_RESPONDED : String="RESPONDED"
@@ -38,6 +39,8 @@ class IntentTag {
 
 
         const val INTENT_TAB : String="TAB"
+
+        const val INTENT_FROM_CHAT : String ="FROM_CHAT"
 
     }
 }

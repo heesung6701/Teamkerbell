@@ -21,8 +21,6 @@ import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_vote.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Room
@@ -36,6 +34,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PAR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_VOTE_PARAM_TITLE
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
@@ -252,14 +251,14 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_VOTE, idx.toInt(), activity.edt_content.text.toString(), activity.group,activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
-
                         Handler().postDelayed(Runnable {
-                            val intent = Intent(activity.applicationContext, VoteActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            intent.putExtra(INTENT_GROUP, activity.group)
-                            intent.putExtra(INTENT_VOTE_IDX, idx.toInt())
-                            activity.startActivity(intent)
+                            if(!activity.intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                                val intent = Intent(activity.applicationContext, VoteActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                intent.putExtra(INTENT_GROUP, activity.group)
+                                intent.putExtra(INTENT_VOTE_IDX, idx.toInt())
+                                activity.startActivity(intent)
+                            }
                             activity.finish()
 
                         }, 500)

@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="10dp"
     android:orientation="horizontal">
     <TextView
-        android:id="@+id/list_item_tv_count"
+        android:id="@+id/li_tv_count"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -16,37 +17,51 @@
         android:text="1"/>
 
     <TextView
-        android:id="@+id/list_item_tv_time"
+        android:id="@+id/li_tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="end"
-        android:text="오후 3.27"
+        tools:text="오후 3.27"
         android:textSize="12sp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:background="@color/mainColor"
+        android:background="@drawable/shape_round_white"
         android:orientation="vertical"
         >
-    <TextView
-        android:id="@+id/list_item_tv_title"
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/mainColorDark"
-        android:padding="10dp"
-        android:text="신호등이 등록되었습니다"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        />
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/li_iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/icon_list_notice"
+            />
     <TextView
-        android:id="@+id/list_item_tv_content"
-        android:layout_width="220dp"
+        android:id="@+id/li_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="신호등"
+        android:layout_marginStart="6dp"
+        android:textSize="14sp"
+        android:textColor="@color/main_yellow"
+        />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/li_tv_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="3"
         android:padding="10dp"
-        android:text="내용
+        tools:text="내용
         엊쩌구
             저쩌구"
         /></LinearLayout>

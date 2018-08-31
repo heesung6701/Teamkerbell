@@ -26,7 +26,6 @@ import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_IS
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
 import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell._utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -117,15 +116,12 @@ class MakeRoomActivity : AppCompatActivity() {
 
         var cancel = false
 
-        // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(roomName)) {
             room_name.error = getString(R.string.error_field_required)
             cancel = true
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             room_name.requestFocus()
         } else {
             makeRoom(roomName)
@@ -136,7 +132,7 @@ class MakeRoomActivity : AppCompatActivity() {
         try {
             jsonParam.put(URL_MAKE_ROOM_PARAM_NAME,roomName )
             jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX,group.g_idx)
-            jsonParam.put(URL_MAKE_ROOM_PARAM_USERARRAY,JSONArray())
+//            jsonParam.put(URL_MAKE_ROOM_PARAM_USERARRAY,JSONArray())
         } catch (e: Exception) {
             e.printStackTrace()
         }

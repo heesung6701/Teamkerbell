@@ -33,8 +33,8 @@ open class GetMessageTask(context: Context, var handler: Handler?,token : String
         try {
 
             val baseJsonResponse = JSONObject(jsonResponse)
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(USGS_REQUEST_URL.JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(USGS_REQUEST_URL.JSON_MESSAGE)
                 if (message.contains("Success") || message.contains("success"))
                     msgCode= MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {

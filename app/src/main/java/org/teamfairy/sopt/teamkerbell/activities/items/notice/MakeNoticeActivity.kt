@@ -13,11 +13,10 @@ import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_notice.*
 import kotlinx.android.synthetic.main.content_select_room.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
+import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
@@ -26,8 +25,11 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CHATID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -117,16 +119,18 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
 
                 val obj = msg.obj as String
                 val idx = obj.toInt()
-                val group = group
 
-                FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_NOTICE, idx, edt_response.text.toString(), group, room!!, LoginToken.getUserIdx(applicationContext), this)
+                Handler().postDelayed(Runnable {
+                    if(!intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                        val intent = Intent(applicationContext, NoticeActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        intent.putExtra(INTENT_GROUP, group)
+                        intent.putExtra(INTENT_NOTICE_IDX, idx.toInt())
+                        startActivity(intent)
+                    }
+                    finish()
+                }, 500)
 
-                val intent = Intent(applicationContext, NoticeCardActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                intent.putExtra(INTENT_GROUP, group)
-                startActivity(intent)
-
-                finish()
             }
             else -> {
 

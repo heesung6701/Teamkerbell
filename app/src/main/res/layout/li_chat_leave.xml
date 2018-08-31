@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
     android:background="@color/red_off"
     android:orientation="vertical">
 
 
     <TextView
-        android:id="@+id/list_item_tv_leave"
+        android:id="@+id/li_tv_leave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="윤희성님이 퇴장하셨습니다."
+        tools:text="윤희성님이 퇴장하셨습니다."
         />
 </LinearLayout>

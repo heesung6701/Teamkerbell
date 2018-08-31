@@ -104,6 +104,7 @@
     <string name="txt_invite_member">멤버 초대하기</string>
     <string name="txt_enter_cloud_link">클라우드 url를 입력해주세요</string>
     <string name="txt_wait_response">메세지 확인 대기중입니다.</string>
+    <string name="txt_readline">여기까지 읽으셨습니다</string>
 
 
     <string name="action_notice">공지</string>

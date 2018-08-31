@@ -16,4 +16,7 @@ class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     val layoutContactInfo : LinearLayout = itemView.findViewById(R.id.li_layout_contact_info)
     val tvEmail : TextView= itemView.findViewById(R.id.li_tv_email)
     val tvPhone : TextView= itemView.findViewById(R.id.li_tv_phone)
+    val layoutInfo : LinearLayout= itemView.findViewById(R.id.li_layout_info)
+    val layoutEmail : LinearLayout= itemView.findViewById(R.id.li_layout_email)
+    val layoutPhone : LinearLayout= itemView.findViewById(R.id.li_layout_phone)
 }

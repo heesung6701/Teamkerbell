@@ -71,49 +71,6 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-//        this.contactTab = ContactFragment.newInstance(group)
-//        this.roomListTab = RoomListFragment.newInstance(group)
-//        this.homeTab = HomeFragment.newInstance(group)
-//
-//        main_tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//
-//                if (tab!!.position == Utils.TAB_HOME) {
-//                    group = homeTab.group
-//                }
-//
-//            }
-//
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//
-//
-//                val fragment: HasGroupFragment? = when (tab!!.position) {
-//                    Utils.TAB_HOME -> homeTab
-//                    Utils.TAB_ROOM -> roomListTab
-//                    Utils.TAB_CONTACT -> contactTab
-//                    else -> null
-//                }
-//
-//
-//                val f = fragment as Fragment
-//                val args = Bundle()
-//                args.putParcelable(ARG_GROUP, group)
-//                fragment.arguments = args
-//
-//
-//                val fragmentManager = supportFragmentManager
-//                val fragmentTransaction = fragmentManager.beginTransaction()
-//                fragmentTransaction.replace(R.id.fragment_content, fragment as Fragment)
-//                fragmentTransaction.commit()
-//
-//            }
-//
-//
-//        })
-//        main_tab.getTabAt(Utils.TAB_HOME)?.select()
     }
 
     fun changeGroup(g: Team){

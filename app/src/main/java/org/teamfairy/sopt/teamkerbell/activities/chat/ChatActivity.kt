@@ -34,16 +34,13 @@ import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.R.id.listView_chat
 import org.teamfairy.sopt.teamkerbell._utils.*
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.ARG_LAST_MESSAGE
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.dataBaseFireToken
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.dataBaseGroup
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.dataBaseMessages
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils.Companion.setDatabaseGroup
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
 import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
+import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication.Companion.mSocket
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
@@ -79,6 +76,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_OPENSTATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PICK_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
@@ -110,9 +108,8 @@ class ChatActivity : AppCompatActivity() {
 
     private var userList = ArrayList<User>()
 
-    var pick_idx = -1
-    var recentChatIdx = -1
     var lastChatIdx = 0
+    var lastChatPos = -1
     var isShowReadLine = false
 
     private var mSocket: Socket by Delegates.notNull()
@@ -130,8 +127,9 @@ class ChatActivity : AppCompatActivity() {
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM)
 
-        pick_idx = intent.getIntExtra(INTENT_PICK_IDX, -1)
 
+        lastChatIdx = DatabaseHelpUtils.getRecentChatIdx(applicationContext,room.room_idx)
+        Log.d("$LOG_TAG/lastChatIdx", lastChatIdx.toString())
         supportActionBar!!.title = room.real_name
 
         val layoutManager = LinearLayoutManager(this)
@@ -140,12 +138,40 @@ class ChatActivity : AppCompatActivity() {
         adapter_chat.setOnLongClickHandler(HandlerLongClick(this))
         listView_chat.adapter = adapter_chat
 
+        adapter_chat.setPick(intent.getIntExtra(INTENT_PICK_IDX, -1))
+
+        listView_chat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState== RecyclerView.SCROLL_STATE_DRAGGING)
+                {
+//                    Log.d(LOG_TAG,"scroll dragging")
+                    if(adapter_chat.isFixedScroll)
+                        adapter_chat.setFixed(false)
+                    if(adapter_chat.pick_idx!=-1) {
+                        adapter_chat.setPick(-1)
+                        adapter_chat.notifyDataSetChanged()
+                    }
+                    if(lastChatPos!=-1) {
+                        dataList.removeAt(lastChatPos)
+                        listView_chat.adapter=adapter_chat
+                        adapter_chat.notifyDataSetChanged()
+                        scrollToPosition(listView_chat,lastChatPos-1)
+
+//                        adapter_chat.notifyItemRangeChanged(lastChatPos,dataList.size)
+                        lastChatPos=-1
+                        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
+                    }
+                }
+            }
+        })
+
+        if(adapter_chat.pick_idx!=-1)
+            adapter_chat.setFixed(true)
+
         tv_nav_room_name.text = room.real_name
-
-
-        setDatabaseGroup(group, room)
-
-
 
         edt_sendmessage.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -158,7 +184,7 @@ class ChatActivity : AppCompatActivity() {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
 
-                scrollToPosition(listView_chat, dataList.size - 1)
+                scrollToPosition(listView_chat, dataList.lastIndex)
             }
         }
         btn_expand.setOnClickListener {
@@ -219,6 +245,7 @@ class ChatActivity : AppCompatActivity() {
             val intent = Intent(this, MakeNoticeActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
+            intent.putExtra(INTENT_FROM_CHAT,true)
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
@@ -227,6 +254,7 @@ class ChatActivity : AppCompatActivity() {
             val intent = Intent(this, MakeSignalActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
+            intent.putExtra(INTENT_FROM_CHAT,true)
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
@@ -235,6 +263,7 @@ class ChatActivity : AppCompatActivity() {
             val intent = Intent(this, MakeVoteActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
+            intent.putExtra(INTENT_FROM_CHAT,true)
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
@@ -252,7 +281,6 @@ class ChatActivity : AppCompatActivity() {
             if (edt.text.isNotEmpty()) {
                 val txt = edt.text.toString()
                 edt.setText("")
-//                sendMessage(txt)
                 sendMessageSocket(txt)
 
             } else {
@@ -265,43 +293,40 @@ class ChatActivity : AppCompatActivity() {
             val intent = Intent(this, NoticeCardActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            drawer_layout.closeDrawer(Gravity.END)
         }
         btn_nav_pick.setOnClickListener {
 
             val intent = Intent(this, PickListActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+
+            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            drawer_layout.closeDrawer(Gravity.END)
 
         }
         btn_nav_role.setOnClickListener {
             val intent = Intent(this, RoleListActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            drawer_layout.closeDrawer(Gravity.END)
         }
         btn_nav_signal.setOnClickListener {
             val intent = Intent(this, SignalListActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            drawer_layout.closeDrawer(Gravity.END)
         }
         btn_nav_vote.setOnClickListener {
             val intent = Intent(this, VoteListActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            drawer_layout.closeDrawer(Gravity.END)
         }
 
         btn_nav_cloud_drive.setOnClickListener {
@@ -341,9 +366,12 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
-        recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
-        recyclerView.layoutManager.offsetChildrenVertical(0)
-        recyclerView.scrollToPosition(position)
+        if(position<0) return
+        if( adapter_chat.pick_idx==dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pick_idx==-1 )) {
+            recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
+            recyclerView.layoutManager.offsetChildrenVertical(0)
+            recyclerView.scrollToPosition(position)
+        }
     }
 
     private fun attemptLeave() {
@@ -385,6 +413,7 @@ class ChatActivity : AppCompatActivity() {
     private class HandlerLeave(activity: ChatActivity) : Handler() {
         private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
 
+
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
             activity?.leavedRoom(msg)
@@ -392,9 +421,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun getUserList() {
-
         NetworkUtils.connectUserList(applicationContext, HandlerGet(this))
-
     }
 
     private fun updateUserList() {
@@ -412,9 +439,7 @@ class ChatActivity : AppCompatActivity() {
         )
         divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
         listView_user.addItemDecoration(divider)
-
         tv_numberOfUser.text = if (userList.size > 0) "(" + userList.size.toString() + ")" else ""
-
     }
 
 
@@ -434,17 +459,14 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun makeUpdateR(realm: Realm, code: Int): IsUpdateR {
-
         realm.beginTransaction()
         val isUpdate = realm.createObject(IsUpdateR::class.java, code)
         isUpdate.isUpdate = false
         realm.commitTransaction()
         return isUpdate
-
     }
 
     override fun onResume() {
@@ -452,7 +474,10 @@ class ChatActivity : AppCompatActivity() {
         getUserList()
         updateUserList()
         Log.d(LOG_TAG, "onResume")
-
+        if(mSocket.connected())
+            enterRoomSocket()
+        else
+            connectSocket()
         addChangeJoinedListener()
     }
 
@@ -461,18 +486,20 @@ class ChatActivity : AppCompatActivity() {
         super.onPause()
         Log.d(LOG_TAG, "onPause")
 
-        if (lastChatIdx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
-            DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, lastChatIdx)
+        if (dataList.last().chat_idx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
+            DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, dataList.last().chat_idx)
 
         isUpdateJoined.removeAllChangeListeners()
-
-
     }
 
 
     override fun onBackPressed() {
 
-        if(isConnectedRoom)
+        if(!mSocket.connected()) {
+            detachSocket()
+            finish()
+        }
+        else if(isConnectedRoom)
             leaveRoomSocket()
         else {
             if(isConnected)
@@ -520,7 +547,7 @@ class ChatActivity : AppCompatActivity() {
                     realm.beginTransaction()
                     val pickR = realm.createObject(PickR::class.java)
                     pickR.content = dataList[position].content
-                    pickR.chat_idx = position
+                    pickR.chat_idx = dataList[position].chat_idx
                     pickR.write_time = Utils.getNow()
                     pickR.u_idx = dataList[position].u_idx
                     pickR.g_idx = group.g_idx
@@ -551,9 +578,9 @@ class ChatActivity : AppCompatActivity() {
         val jsonParam = JSONObject()
         try {
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_UID, LoginToken.getUserIdx(applicationContext))
-            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CHATID, dataList.get(position).chat_idx)
+            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CHATID, dataList[position].chat_idx)
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_ROOM_IDX, room.room_idx)
-            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, dataList.get(position).content)
+            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, dataList[position].content)
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_OPENSTATUS, OPEN_STATUS_OPEN)
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS, ENTIRE_STATUS_ENTIRE)
 
@@ -604,29 +631,13 @@ class ChatActivity : AppCompatActivity() {
                     Utils.MSG_SUCCESS -> {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
-//                        FirebaseMessageUtils.sendMessage(activity.makeType, idx, activity.makeContent!!, activity.group, activity.room, LoginToken.getUserIdx(activity.applicationContext), activity)
+                        activity.enterRoomSocket()
                     }
                     else -> {
                         val result = msg.data.getString(JSON_MESSAGE)
                         Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
-        }
-    }
-
-
-    private class HandlerGetLastMsg(activity: ChatActivity) : Handler() {
-        private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
-
-        override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-                val lastChatIdx = msg.what
-
-                activity.isShowReadLine = lastChatIdx > activity.recentChatIdx
-                Log.d("$activity.LOG_TAG/isShowReadLine", activity.isShowReadLine.toString())
-
             }
         }
     }
@@ -721,6 +732,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun sendMessageSocket(txt: String) {
+        lastChatIdx=-1
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
         jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
@@ -736,10 +748,8 @@ class ChatActivity : AppCompatActivity() {
         Log.i("$LOG_TAG/Socket onConnect/", "connected")
         this.runOnUiThread(Runnable {
             if (!isConnected) {
-
                 enterRoomSocket()
                 isConnected = true
-
             }
         })
     }
@@ -762,12 +772,13 @@ class ChatActivity : AppCompatActivity() {
 
     private val onEnterResult = Emitter.Listener { args ->
 
-        if(args[0]==null) return@Listener
+        if(args[0]==null || args[0]==0) return@Listener
 
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_RESULT}", args[0].toString())
         this.runOnUiThread(Runnable {
             val dataArray: JSONArray = JSONArray(args[0].toString())
 
+            val firstTime = dataList.size==0
             for (i in 0 until dataArray.length()) {
                 val data = dataArray.getJSONObject(i)
 
@@ -775,8 +786,8 @@ class ChatActivity : AppCompatActivity() {
             }
 
             adapter_chat.notifyDataSetChanged()
-            if(pick_idx ==-1)
-                scrollToPosition(listView_chat, dataList.size - 1)
+
+            if(firstTime ) scrollToPosition(listView_chat, dataList.lastIndex)
             isConnectedRoom = true
         })
     }
@@ -801,8 +812,7 @@ class ChatActivity : AppCompatActivity() {
 
             addChatFromJSON(org.json.JSONObject(args[0].toString()))
 
-            if(pick_idx ==-1)
-                scrollToPosition(listView_chat, dataList.size - 1)
+            scrollToPosition(listView_chat, dataList.lastIndex)
             adapter_chat.notifyDataSetChanged()
 
         })
@@ -823,14 +833,27 @@ class ChatActivity : AppCompatActivity() {
             ChatMessage(chatIdx, type, uIdx, message, writeTime)
         else chatList[0]
 
-        if(chatList.isEmpty()) dataList.add(chatData)
+        if(lastChatIdx==chatData.chat_idx-1) {
+//            Log.d("$LOG_TAG/lastChatIdx==chat_idx", chatData.chat_idx.toString())
+            val readChat = ChatMessage(0, ChatUtils.TYPE_READLINE, 0, "", "")
+            dataList.add(readChat)
+            lastChatPos=dataList.indexOf(readChat)
+//            Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
+            lastChatIdx=-1
+        }
+
+        if(chatList.isEmpty())
+            dataList.add(chatData)
         else  chatData.update(type,uIdx,message,writeTime)
+
+        if (chatData.chat_idx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
+                DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, chatData.chat_idx)
 
         chatData.count=count
         chatData.setPhotoInfo(applicationContext)
 
+        if(chatIdx==adapter_chat.pick_idx){
+            scrollToPosition(listView_chat,dataList.indexOf(chatData))
+        }
     }
-
-
-
 }

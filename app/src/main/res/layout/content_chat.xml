@@ -64,7 +64,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="bottom"
                 >
                 <Button
@@ -76,7 +75,7 @@
                     android:theme="@style/FlatButton"
                     android:textSize="14sp"
                     android:layout_margin="5dp"
-                    android:text="전송"
+                    android:text="@string/action_send"
                     />
             </LinearLayout>
 
@@ -200,7 +199,7 @@
                     app:srcCompat="@drawable/icon_chat_notice"
                     />
                 <TextView
-                    android:text="공지"
+                    android:text="@string/action_notice"
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -225,7 +224,7 @@
                     app:srcCompat="@drawable/icon_chat_light"
                     />
                 <TextView
-                    android:text="신호등"
+                    android:text="@string/action_signal"
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -250,7 +249,7 @@
                     app:srcCompat="@drawable/icon_chat_vote"
                     />
                 <TextView
-                    android:text="투표"
+                    android:text="@string/action_vote"
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

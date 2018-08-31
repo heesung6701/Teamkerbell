@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:visibility="gone"
         >
     <TextView
         android:layout_width="0dp"
@@ -43,6 +44,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="27dp"
         tools:text="https://www.teamkerbell.com/landing/#/seed/xUDdiimw"
+        android:visibility="gone"
         />
 
     <TextView
@@ -78,6 +80,7 @@
         android:textSize="18sp"
         android:layout_marginBottom="21dp"
         android:text="@string/txt_invite_qr"
+        android:visibility="gone"
         />
     
     <ImageView
@@ -87,5 +90,6 @@
         android:src="@color/gray"
         android:scaleType="fitXY"
         android:layout_gravity="center"
+        android:visibility="gone"
         />
 </LinearLayout>

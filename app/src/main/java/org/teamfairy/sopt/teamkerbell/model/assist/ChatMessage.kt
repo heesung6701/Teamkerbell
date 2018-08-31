@@ -39,18 +39,6 @@ data class ChatMessage(
 
     }
 
-    fun toChatMessageR(): ChatMessageR {
-        val chatMessageR = ChatMessageR()
-        chatMessageR.chat_idx = chat_idx
-        chatMessageR.type = type
-        chatMessageR.u_idx = u_idx?:-1
-        chatMessageR.content = content?:""
-        chatMessageR.date = date?:""
-        return chatMessageR
-    }
-
-    fun toChatMessageF(): ChatMessageF = ChatMessageF(chat_idx, type, u_idx, content, date)
-
     fun isSender(context: Context): Boolean {
         return u_idx == LoginToken.getUserIdx(context)
     }

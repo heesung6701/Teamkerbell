@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.signal
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -16,9 +17,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell._utils.FirebaseMessageUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
+import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -37,8 +38,11 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_USERARRAY
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.ENTIRE_STATUS_CHOSE
@@ -203,9 +207,15 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-                        FirebaseMessageUtils.sendMessage(ChatUtils.TYPE_SIGNAL, idx, activity.content, activity.group, activity.room!!, LoginToken.getUserIdx(activity.applicationContext), activity)
 
                         Handler().postDelayed(Runnable {
+                            if(!activity.intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                                val intent = Intent(activity.applicationContext, SignalActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                intent.putExtra(INTENT_GROUP, activity.group)
+                                intent.putExtra(INTENT_SIGNAL_IDX, idx.toInt())
+                                activity.startActivity(intent)
+                            }
                             activity.finish()
 
                         }, 500)

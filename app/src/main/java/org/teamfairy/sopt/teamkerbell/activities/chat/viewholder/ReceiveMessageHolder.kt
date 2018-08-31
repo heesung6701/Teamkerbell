@@ -10,9 +10,9 @@ import org.teamfairy.sopt.teamkerbell.R
  * Created by lumiere on 2017-12-30.
  */
 class ReceiveMessageHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
-    val tvName : TextView = itemView.findViewById(R.id.list_item_tv_name)
-    val tvContent : TextView = itemView.findViewById(R.id.list_item_tv_content)
-    val ivProfile : ImageView = itemView.findViewById(R.id.list_item_iv_profile)
-    val tvCount : TextView = itemView.findViewById(R.id.list_item_tv_count)
-    val tvTime : TextView = itemView.findViewById(R.id.list_item_tv_time)
+    val name : TextView = itemView.findViewById(R.id.li_tv_name)
+    val content : TextView = itemView.findViewById(R.id.li_tv_content)
+    val profile : ImageView = itemView.findViewById(R.id.li_iv_profile)
+    val count : TextView = itemView.findViewById(R.id.li_tv_count)
+    val time : TextView = itemView.findViewById(R.id.li_tv_time)
 }

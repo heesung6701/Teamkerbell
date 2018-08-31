@@ -2,12 +2,14 @@ package org.teamfairy.sopt.teamkerbell.activities.chat.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.name
 import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
 import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
@@ -17,10 +19,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_MODE
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
@@ -35,56 +34,69 @@ import org.teamfairy.sopt.teamkerbell.viewholder.chat.*
 class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Context, var group: Team,var room : Room) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
+    private val LOG_TAG = this::class.java.simpleName
+
     private var onLongClickHandler: Handler? = null
 
     fun setOnLongClickHandler(I: Handler) {
         onLongClickHandler = I
     }
 
+    var isFixedScroll = false
+    var pick_idx = -1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, pos: Int) {
 
         val position = holder!!.adapterPosition
-        val data = dataList.get(position)
+        val data = dataList[position]
         when (data.type) {
             ChatUtils.TYPE_MESSAGE -> {
                 if (data.isSender(mContext)) {
                     val requestHolder: RequestMessageHolder = holder as RequestMessageHolder
-                    requestHolder.tvContent.text = data.content
-                    requestHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
-                    requestHolder.tvTime.text = Utils.getNowToTime(data.date!!)
+                    requestHolder.content.text = data.content
+                    requestHolder.count.text = if (data.count == 0) "" else data.count.toString()
+                    requestHolder.time.text = Utils.getNowToTime(data.date!!)
 
-                    requestHolder.tvContent.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
+                    requestHolder.content.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
                         override fun onLongClick(p0: View?): Boolean {
                             sendMessage(position)
                             return true
                         }
                     })
+                    if(data.chat_idx==pick_idx)
+                        requestHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat_pick)
+                    else
+                        requestHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat)
+
                 } else {
                     val receiveHolder: ReceiveMessageHolder = holder as ReceiveMessageHolder
-                    receiveHolder.tvName.text = data.name
-                    receiveHolder.tvContent.text = data.content
-                    receiveHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
-                    receiveHolder.tvTime.text = Utils.getNowToTime(data.date!!)
+                    receiveHolder.name.text = data.name
+                    receiveHolder.content.text = data.content
+                    receiveHolder.count.text = if (data.count == 0) "" else data.count.toString()
+                    receiveHolder.time.text = Utils.getNowToTime(data.date!!)
 
                     if (isHideProfileImage(position)) {
-                        receiveHolder.ivProfile.visibility = View.INVISIBLE
-                        receiveHolder.tvName.visibility = View.GONE
+                        receiveHolder.profile.visibility = View.INVISIBLE
+                        receiveHolder.name.visibility = View.GONE
 
                     } else {
-                        receiveHolder.ivProfile.visibility = View.VISIBLE
-                        receiveHolder.tvName.visibility = View.VISIBLE
+                        receiveHolder.profile.visibility = View.VISIBLE
+                        receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList.get(position).u_idx}"))
-                            receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList.get(position).u_idx}"))
+                            receiveHolder.profile.setImageResource(R.drawable.icon_profile_default_png)
 
                     }
-                    receiveHolder.tvContent.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
+                    receiveHolder.content.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
                         override fun onLongClick(p0: View?): Boolean {
                             sendMessage(position)
                             return true
                         }
                     })
+                    if(data.chat_idx==pick_idx)
+                        receiveHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat_pick)
+                    else
+                        receiveHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat)
                 }
 
             }
@@ -94,12 +106,13 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
             ChatUtils.TYPE_NOTICE -> {
                 val itemHolder = holder as ItemHolder
 
-                itemHolder.tvTime.text = Utils.getNowToTime(data.date!!)
-                itemHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
+                itemHolder.time.text = Utils.getNowToTime(data.date!!)
+                itemHolder.count.text = if (data.count == 0) "" else data.count.toString()
 
-                itemHolder.title.text = "공지가 등록되었습니다."
+                itemHolder.icon.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.icon_list_notice))
+                itemHolder.title.text = mContext.getString(R.string.action_notice)
                 itemHolder.content.text = data.getItemContent()
-                holder.content.setOnClickListener {
+                holder.itemView.setOnClickListener {
 
                     val nIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
 
@@ -108,33 +121,41 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     intent.putExtra(INTENT_ROOM, room)
                     intent.putExtra(INTENT_NOTICE_IDX, nIdx)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    setFixed(true)
+
+
                     mContext.startActivity(intent)
                 }
 
                 if (!data.isSender(mContext)) {
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
-                    receiveHolder.tvName.text = data.name
+                    receiveHolder.name.text = data.name
                     if (isHideProfileImage(position)) {
-                        receiveHolder.ivProfile.visibility = View.INVISIBLE
-                        receiveHolder.tvName.visibility = View.GONE
+                        receiveHolder.profile.visibility = View.INVISIBLE
+                        receiveHolder.name.visibility = View.GONE
                     } else {
-                        receiveHolder.ivProfile.visibility = View.VISIBLE
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
-                            receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
-                        receiveHolder.tvName.visibility = View.VISIBLE
+                        receiveHolder.profile.visibility = View.VISIBLE
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                            receiveHolder.profile.setImageResource(R.drawable.icon_profile_default_png)
+                        receiveHolder.name.visibility = View.VISIBLE
                     }
                 }
             }
             ChatUtils.TYPE_SIGNAL -> {
                 val itemHolder = holder as ItemHolder
 
-                itemHolder.tvTime.text = Utils.getNowToTime(data.date!!)
-                itemHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
+                itemHolder.time.text = Utils.getNowToTime(data.date!!)
+                itemHolder.count.text = if (data.count == 0) "" else data.count.toString()
 
-                itemHolder.title.text = "신호등이 등록되었습니다."
+                itemHolder.icon.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.icon_list_signal))
+                itemHolder.title.text = mContext.getString(R.string.action_signal)
                 itemHolder.content.text = data.getItemContent()
-                holder.content.setOnClickListener {
+
+
+
+                holder.itemView.setOnClickListener {
 
                     val sIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
 
@@ -142,34 +163,37 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     intent.putExtra(INTENT_GROUP, group)
                     intent.putExtra(INTENT_ROOM, room)
                     intent.putExtra(INTENT_SIGNAL_IDX, sIdx)
-
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    setFixed(true)
+
                     mContext.startActivity(intent)
                 }
                 if (!data.isSender(mContext)) {
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
-                    receiveHolder.tvName.text = data.name
+                    receiveHolder.name.text = data.name
                     if (isHideProfileImage(position)) {
-                        receiveHolder.ivProfile.visibility = View.INVISIBLE
-                        receiveHolder.tvName.visibility = View.GONE
+                        receiveHolder.profile.visibility = View.INVISIBLE
+                        receiveHolder.name.visibility = View.GONE
                     } else {
-                        receiveHolder.ivProfile.visibility = View.VISIBLE
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
-                            receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
-                        receiveHolder.tvName.visibility = View.VISIBLE
+                        receiveHolder.profile.visibility = View.VISIBLE
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                            receiveHolder.profile.setImageResource(R.drawable.icon_profile_default_png)
+                        receiveHolder.name.visibility = View.VISIBLE
                     }
                 }
             }
             ChatUtils.TYPE_VOTE -> {
                 val itemHolder = holder as ItemHolder
 
-                itemHolder.tvTime.text = Utils.getNowToTime(data.date!!)
-                itemHolder.tvCount.text = if (data.count == 0) "" else data.count.toString()
+                itemHolder.time.text = Utils.getNowToTime(data.date!!)
+                itemHolder.count.text = if (data.count == 0) "" else data.count.toString()
 
-                itemHolder.title.text = "투표가 등록되었습니다."
+                itemHolder.icon.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.icon_list_vote))
+                itemHolder.title.text = mContext.getString(R.string.action_vote)
                 itemHolder.content.text = data.getItemContent()
-                holder.content.setOnClickListener {
+                holder.itemView.setOnClickListener {
                     if(data.content.isNullOrBlank()) return@setOnClickListener
 
                     val vIdx : Int =Integer.parseInt(data.content!!.substringBefore("/"))
@@ -179,22 +203,25 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     intent.putExtra(INTENT_ROOM, room)
                     intent.putExtra(INTENT_VOTE_IDX, vIdx)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    setFixed(true)
+
                     mContext.startActivity(intent)
                 }
 
                 if (!data.isSender(mContext)) {
                     val receiveHolder = holder as ItemLHolder
                     data.setPhotoInfo(mContext)
-                    receiveHolder.tvName.text = data.name
+                    receiveHolder.name.text = data.name
                     if (isHideProfileImage(position)) {
-                        receiveHolder.ivProfile.visibility = View.INVISIBLE
-                        receiveHolder.tvName.visibility = View.GONE
+                        receiveHolder.profile.visibility = View.INVISIBLE
+                        receiveHolder.name.visibility = View.GONE
                     } else {
-                        receiveHolder.ivProfile.visibility = View.VISIBLE
-                        receiveHolder.tvName.visibility = View.VISIBLE
+                        receiveHolder.profile.visibility = View.VISIBLE
+                        receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
-                            receiveHolder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                            receiveHolder.profile.setImageResource(R.drawable.icon_profile_default_png)
                     }
                 }
             }
@@ -210,9 +237,23 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
             }
             ChatUtils.TYPE_ENTER_GROUP->{
 
-                val name = dataList[position].content
-//                val uId = Integer.parseInt(dataList[position].content)
-//                val name = DatabaseHelpUtils.getUser(mContext,uId).name
+                if(dataList[position].content.isNullOrEmpty()){
+
+                    val inviteHolder = holder as InviteHolder
+
+                    val name: String = dataList[position].content!!
+                    inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
+                    return
+                }
+                val d  = dataList[position].content!!
+                val uIds = d.split('/')
+                var name: String = ""
+                uIds.forEach {
+                    val uId = Integer.parseInt(it)
+                    if(name.isEmpty()) name = DatabaseHelpUtils.getUser(mContext, uId).name.toString()
+                    else name += ",${DatabaseHelpUtils.getUser(mContext, uId).name}"
+                }
+
                 val inviteHolder = holder as InviteHolder
                 inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
             }
@@ -335,4 +376,13 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
 
 
     abstract class OnLongClickListenerByPosition(var position: Int) : View.OnLongClickListener
+
+    fun setFixed(b : Boolean){
+        isFixedScroll=b
+        Log.d("LOG_TAG/pick_idx","isFixedScroll be $b")
+    }
+    fun setPick(i : Int){
+        pick_idx = i
+        Log.d("LOG_TAG/pick_idx","pick_idx is $i")
+    }
 }
