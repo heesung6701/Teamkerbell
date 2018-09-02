@@ -2,8 +2,7 @@ package org.teamfairy.sopt.teamkerbell.model.interfaces
 
 import android.content.Context
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell.R.id.name
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 

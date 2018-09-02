@@ -18,20 +18,21 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipe_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:paddingTop="48dp"
             android:overScrollMode="never" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     <FrameLayout
         android:layout_width="match_parent"

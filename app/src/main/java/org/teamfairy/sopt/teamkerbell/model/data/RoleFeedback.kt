@@ -2,9 +2,7 @@ package org.teamfairy.sopt.teamkerbell.model.data
 
 import android.content.Context
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 
 
 /**

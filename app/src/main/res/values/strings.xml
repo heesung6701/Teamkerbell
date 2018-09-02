@@ -82,10 +82,12 @@
     <string name="txt_enter_vote_title">투표 제목을 입력해주세요</string>
     <string name="txt_enter_vote_example">항목을 입력해주세요</string>
     <string name="txt_select_room">채팅방을 선택해주세요.</string>
+    <string name="txt_minimum_example_is_two">"최소 답변은 2개 이상입니다"</string>
     <string name="txt_end_time">마감 시간</string>
     <string name="txt_enter_title">제목을 입력해주세요</string>
     <string name="txt_add_task">항목 추가하기</string>
-    <string name="txt_my_profile">내프로필</string>
+    <string name="txt_my_profile">내 프로필</string>
+    <string name="txt_profile">프로필</string>
     <string name="txt_unperformed">리스트</string>
     <string name="txt_sender">보냄</string>
     <string name="txt_receiver">받음</string>
@@ -105,6 +107,10 @@
     <string name="txt_enter_cloud_link">클라우드 url를 입력해주세요</string>
     <string name="txt_wait_response">메세지 확인 대기중입니다.</string>
     <string name="txt_readline">여기까지 읽으셨습니다</string>
+    <string name="txt_message_fail">잠시 후 다시 시도해주세요.</string>
+    <string name="txt_confirm_delete">정말로 삭제 하시겠습니까?</string>
+    <string name="txt_deleted_item">삭제 된 글입니다.</string>
+    <string name="txt_delete_success">삭제 했습니다.</string>
 
 
     <string name="action_notice">공지</string>
@@ -120,7 +126,7 @@
     <string name="action_commit">확인</string>
     <string name="action_cancel">취소</string>
     <string name="action_start">시작하기</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_setting">설정</string>
     <string name="action_add">추가</string>
     <string name="action_send">전송</string>
     <string name="action_send_notification">푸시알림 보내기</string>
@@ -132,6 +138,9 @@
     <string name="action_upload_file">파일 첨부하기</string>
     <string name="action_enter">입력</string>
     <string name="action_edit">수정</string>
+    <string name="action_gallery">사진</string>
+    <string name="action_video">비디오</string>
+    <string name="action_file">파일</string>
 
 
     <string name="tab_by_choice">항목별</string>
@@ -146,5 +155,7 @@
     <string name="disconnect">소켓 연결 해제</string>
     <string name="error_connect">소켓 연결 에러</string>
     <string name="connect">소켓 연결</string>
+    <string name="descript_open_menu">메뉴 열기</string>
+    <string name="txt_usergroup">대화상대</string>
 
 </resources>

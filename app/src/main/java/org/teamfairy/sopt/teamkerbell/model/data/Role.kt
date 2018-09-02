@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 

@@ -19,14 +19,11 @@ import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_close.*
 import kotlinx.android.synthetic.main.content_make_room.*
-import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
+import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
@@ -36,11 +33,9 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_NAME
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_USERARRAY
 import org.teamfairy.sopt.teamkerbell.network.make.MakeRoomTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.io.IOException

@@ -22,20 +22,11 @@ class Utils {
         const val TAB_RECEIVE = 0
         const val TAB_REQUEST = 1
 
-        const val TAB_NOTICE = 0
-        const val TAB_LIGHT = 1
-        const val TAB_PICK = 2
-        const val TAB_VOTE = 3
-
-
         const val TAB_GREEN = 0
         const val TAB_YELLOW = 1
         const val TAB_RED = 2
 
 
-        const val TAB_BYEXAMPLE = 0
-        const val TAB_BYMEMBER = 1
-        const val TAB_NOTYET = 2
 
         const val SIGNAL_RECEIVER = 1
         const val SIGNAL_SENDER = 2
@@ -55,11 +46,6 @@ class Utils {
         const val MSG_FAIL_STR = "CONNECT FAIL"
 
 
-        const val RESPONSE_RECEIVE = 0
-        const val RESPONSE_REQUEST = 1
-        const val RESPONSE_MAKE = 2
-        const val RESPONSE_READONLY = 3
-        const val RESPONSE_FOR_CHECK = 4
 
         const val OPEN_STATUS_SECRET: Int = 0
         const val OPEN_STATUS_OPEN: Int = 1
@@ -79,16 +65,6 @@ class Utils {
             return sdfNow.format(date)
         }
 
-        fun getNowForFirebase(): String {
-
-            val now = System.currentTimeMillis()
-            val date = Date(now)
-
-
-            val sdfNow = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-
-            return sdfNow.format(date)
-        }
 
         fun getNowToTime(txt: String): String {
 

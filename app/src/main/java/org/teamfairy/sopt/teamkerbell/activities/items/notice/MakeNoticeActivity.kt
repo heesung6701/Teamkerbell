@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -84,30 +85,35 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
 
 
     private fun attemptMake() {
-        if (!isConnecting) {
-            val content = edt_response!!.text.toString()
-
-            if (content.isNotEmpty()) {
-
-                val jsonParam = JSONObject()
-
-                try {
-                    jsonParam.put(URL_MAKE_NOTICE_PARAM_CHATID, group.g_idx)
-                    jsonParam.put(URL_MAKE_NOTICE_PARAM_ROOM_IDX, room!!.room_idx)
-                    jsonParam.put(URL_MAKE_NOTICE_PARAM_CONTENT, content)
-
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-                val registTask = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-                isConnecting = true
-                registTask.execute(URL_MAKE_NOTICE,METHOD_POST, jsonParam.toString())
-            } else
-                Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
-        } else
+        if (isConnecting) return
+        if(room==null || room!!.room_idx<0){
             Toast.makeText(applicationContext, getText(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
+            return
+        }
+        val content = edt_response!!.text.toString()
+
+        if (content.isEmpty()) {
+            Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
+            edt_response.requestFocus()
+            return
+        }
+
+        val jsonParam = JSONObject()
+
+        try {
+            jsonParam.put(URL_MAKE_NOTICE_PARAM_CHATID, group.g_idx)
+            jsonParam.put(URL_MAKE_NOTICE_PARAM_ROOM_IDX, room!!.room_idx)
+            jsonParam.put(URL_MAKE_NOTICE_PARAM_CONTENT, content)
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        val registTask = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
+        isConnecting = true
+        registTask.execute(URL_MAKE_NOTICE,METHOD_POST, jsonParam.toString())
+
     }
 
 
@@ -120,16 +126,15 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
                 val obj = msg.obj as String
                 val idx = obj.toInt()
 
-                Handler().postDelayed(Runnable {
-                    if(!intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
-                        val intent = Intent(applicationContext, NoticeActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        intent.putExtra(INTENT_GROUP, group)
-                        intent.putExtra(INTENT_NOTICE_IDX, idx.toInt())
-                        startActivity(intent)
-                    }
-                    finish()
-                }, 500)
+                if(!intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                    val intent = Intent(applicationContext, NoticeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    intent.putExtra(INTENT_GROUP, group)
+                    intent.putExtra(INTENT_NOTICE_IDX, idx.toInt())
+                    startActivity(intent)
+                }
+                finish()
+
 
             }
             else -> {

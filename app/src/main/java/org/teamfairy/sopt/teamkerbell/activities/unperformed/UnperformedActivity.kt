@@ -35,12 +35,12 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_UNPERFORMED_VOTE
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentInteractionListener, SwipeRefreshLayout.OnRefreshListener {
+class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentInteractionListener{ //, SwipeRefreshLayout.OnRefreshListener {
 
-    override fun onRefresh() {
-        connectUnperformed()
-        mSwipeRefreshLayout.isRefreshing = false
-    }
+//    override fun onRefresh() {
+//        connectUnperformed()
+//        mSwipeRefreshLayout.isRefreshing = false
+//    }
 
     var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
 
@@ -129,8 +129,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         }
 
 
-        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
-        mSwipeRefreshLayout.setOnRefreshListener(this)
+//        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+//        mSwipeRefreshLayout.setOnRefreshListener(this)
     }
 
 

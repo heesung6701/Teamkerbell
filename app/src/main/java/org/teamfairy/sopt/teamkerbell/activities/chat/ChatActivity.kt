@@ -20,9 +20,6 @@ import android.view.inputmethod.InputMethodManager
 import android.webkit.URLUtil
 import android.widget.EditText
 import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import io.realm.Realm
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -34,13 +31,11 @@ import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.listView_chat
-import org.teamfairy.sopt.teamkerbell._utils.*
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.*
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
 import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
-import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication.Companion.mSocket
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
@@ -57,8 +52,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
-import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
-import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF.Companion.ARG_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.*
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR.Companion.ARG_WHAT
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
@@ -76,6 +69,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_OPENSTATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PICK_IDX
@@ -178,7 +172,7 @@ class ChatActivity : AppCompatActivity() {
                 if (isExpanded) {
                     isExpanded = false
                     layout_expanded_menu.visibility = View.GONE
-                    btn_expand.background = VectorDrawableCompat.create(resources, R.drawable.icon_chat_expand, null)
+                    btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expand, null))
                 }
 
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -250,7 +244,7 @@ class ChatActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
-        btn_light.setOnClickListener {
+        btn_signal.setOnClickListener {
             val intent = Intent(this, MakeSignalActivity::class.java)
             intent.putExtra(INTENT_GROUP, group)
             intent.putExtra(INTENT_ROOM, room)
@@ -282,7 +276,7 @@ class ChatActivity : AppCompatActivity() {
                 val txt = edt.text.toString()
                 edt.setText("")
                 sendMessageSocket(txt)
-
+                hideKeyboard()
             } else {
                 edt.requestFocus()
             }
@@ -405,7 +399,7 @@ class ChatActivity : AppCompatActivity() {
                 finish()
             }
             else ->
-                Toast.makeText(applicationContext, "잠시 후 시도해주세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -630,7 +624,6 @@ class ChatActivity : AppCompatActivity() {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         val obj = msg.obj as String
-                        val idx = obj.toInt()
                         activity.enterRoomSocket()
                     }
                     else -> {
@@ -802,7 +795,7 @@ class ChatActivity : AppCompatActivity() {
                 finish()
             }
             else
-                Toast.makeText(applicationContext, "잠시 후 다시 도전해주세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         })
     }
     private val onUpdateChat = Emitter.Listener { args ->

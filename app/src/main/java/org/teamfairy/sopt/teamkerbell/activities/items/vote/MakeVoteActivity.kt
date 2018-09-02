@@ -62,7 +62,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
     override var room: Room? = null
 
 
-    var cnt_vote_examples = 2
+    private var cnt_vote_examples = 2
     var voteExamples = arrayListOf<EditText>()
 
 
@@ -96,61 +96,66 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
 
         btn_commit.setOnClickListener {
 
-            if (!isConnecting) {
-                val title: String
-                val content: String
+            if(isConnecting) return@setOnClickListener
 
-                val voteExampleList = ArrayList<String>()
-
-                voteExamples.iterator().forEach {
-                    val str = it.text.toString()
-                    if (str.isNotBlank())
-                        voteExampleList.add(str.trim())
-
-                }
-                if (voteExampleList.size < 2) {
-                    Toast.makeText(applicationContext, "최소 답변은 2개 이상입니다", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-
-                if (room != null) {
-
-                    title = edt_title.text.toString()
-                    if (title.isNotEmpty()) {
-                        content = edt_content.text.toString()
-                        if (content.isNotEmpty()) {
-
-                            val jsonParam = JSONObject()
-                            try {
-                                jsonParam.put(URL_MAKE_VOTE_PARAM_GID, group.g_idx)
-                                jsonParam.put(URL_MAKE_VOTE_PARAM_ROOM_IDX, room!!.room_idx)
-                                jsonParam.put(URL_MAKE_VOTE_PARAM_TITLE, title)
-                                jsonParam.put(URL_MAKE_VOTE_PARAM_CONTENT, content)
-                                if(chk_end_time.isChecked)
-                                    jsonParam.put(URL_MAKE_VOTE_PARAM_ENDTIME, "$endDate $endTime")
-
-                                val jsonArray = JSONArray()
-                                voteExampleList.iterator().forEach {
-                                    jsonArray.put(it)
-                                }
-                                jsonParam.put(URL_MAKE_VOTE_PARAM_CHOICE, jsonArray)
-
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                            val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-                            isConnecting = true
-
-                            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE,METHOD_POST, jsonParam.toString())
-                        } else
-                            Toast.makeText(applicationContext, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
-                    } else
-                        Toast.makeText(applicationContext, "제목을 입력해주세요", Toast.LENGTH_SHORT).show()
-                } else
-                    Toast.makeText(applicationContext, "그룹을 선택해주세요", Toast.LENGTH_SHORT).show()
+            if(room==null || room!!.room_idx<0) {
+                Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
+                layout_select_room.requestFocus()
+                return@setOnClickListener
             }
+            val title: String = edt_title.text.toString()
+
+            if(title.isEmpty()){
+                Toast.makeText(applicationContext, getText(R.string.txt_enter_title), Toast.LENGTH_SHORT).show()
+                edt_title.requestFocus()
+                return@setOnClickListener
+            }
+
+            val content: String = edt_content.text.toString()
+            if(content.isEmpty()){
+                Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
+                edt_content.requestFocus()
+                return@setOnClickListener
+            }
+
+            val voteExampleList = ArrayList<String>()
+
+            voteExamples.iterator().forEach {
+                val str = it.text.toString()
+                if (str.isNotBlank())
+                    voteExampleList.add(str.trim())
+
+            }
+            if (voteExampleList.size < 2) {
+                Toast.makeText(applicationContext, getText(R.string.txt_minimum_example_is_two), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            val jsonParam = JSONObject()
+            try {
+                jsonParam.put(URL_MAKE_VOTE_PARAM_GID, group.g_idx)
+                jsonParam.put(URL_MAKE_VOTE_PARAM_ROOM_IDX, room!!.room_idx)
+                jsonParam.put(URL_MAKE_VOTE_PARAM_TITLE, title)
+                jsonParam.put(URL_MAKE_VOTE_PARAM_CONTENT, content)
+                if(chk_end_time.isChecked)
+                    jsonParam.put(URL_MAKE_VOTE_PARAM_ENDTIME, "$endDate $endTime")
+
+                val jsonArray = JSONArray()
+                voteExampleList.iterator().forEach {
+                    jsonArray.put(it)
+                }
+                jsonParam.put(URL_MAKE_VOTE_PARAM_CHOICE, jsonArray)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
+            isConnecting = true
+
+            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE,METHOD_POST, jsonParam.toString())
+
         }
 
 

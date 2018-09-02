@@ -17,22 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="40dp">
-            <!--<TextView-->
-                <!--android:id="@+id/tv_room_name"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textSize="16sp"-->
-                <!--android:textStyle="bold"-->
-                <!--android:layout_marginStart="24dp"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--tools:text=" 팀커벨"-->
-                <!--/>-->
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1dp"-->
-                <!--android:background="@color/gray"-->
-                <!--/>-->
+
 
 
           <include layout="@layout/content_select_room_gray" android:id="@+id/layout_select_room"/>
@@ -72,6 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:hint="@string/txt_enter_vote_title"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:paddingEnd="8dp"
                     android:paddingStart="8dp"

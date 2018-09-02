@@ -13,13 +13,11 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_group_list.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.activities.group.MakeGroupActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
-import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
 
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TeamListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -30,7 +28,6 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP_PARAM_GID
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -41,7 +38,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(it: View?) {
         val pos = recyclerView.getChildLayoutPosition(it)
         if (pos == dataList.lastIndex) {
-            addItem(pos)
+            addItem()
             return
         }
 
@@ -80,7 +77,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun addItem(pos: Int) {
+    private fun addItem() {
 
         val i = Intent(applicationContext, MakeGroupActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -188,11 +185,11 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
             if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
-                        Toast.makeText(activity.applicationContext, "그룹이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
                         activity.connectGroupList(true)
                     }
                     else -> {
-                        Toast.makeText(activity.applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

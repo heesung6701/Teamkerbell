@@ -18,7 +18,7 @@ class FileListAdapter(var dataList: ArrayList<File>) : RecyclerView.Adapter<File
         holder.tvTitle.text=dataList.get(position).name
 
         val len =dataList.get(position).length().toFloat()
-        var size = ""
+        var size: String=""
         size = when {
             len>1048576 -> String.format("%.2f",len/1048576)+" Mb" //1024*1024 = 1048576
             len>1024 -> String.format("%.2f",len/1024)+" kb"

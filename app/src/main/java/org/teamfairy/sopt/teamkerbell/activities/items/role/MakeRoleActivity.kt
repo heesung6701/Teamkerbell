@@ -115,7 +115,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
 
                     }
                     else -> {
-                        Toast.makeText(activity.applicationContext, "잠시 후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

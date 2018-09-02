@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.app_bar_filter.*
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.content_vote_list.*
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteTabAdapter
@@ -17,6 +16,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 
 class VoteListActivity : AppCompatActivity() ,RoomActivityInterface{
@@ -62,6 +62,7 @@ class VoteListActivity : AppCompatActivity() ,RoomActivityInterface{
             i.putExtra(INTENT_GROUP,group)
             i.putExtra(INTENT_ROOM,room)
             startActivity(i)
+            viewPager.currentItem = Utils.TAB_REQUEST
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
 
         }

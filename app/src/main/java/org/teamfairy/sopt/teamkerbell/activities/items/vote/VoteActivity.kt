@@ -16,19 +16,22 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_vote.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ChoiceListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByChoiceListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.ResultByMemberListAdapter
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VALUE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE_PARAM_VOTEID
 import org.teamfairy.sopt.teamkerbell.network.info.VoteResponseTask
@@ -48,7 +51,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     }
 
     override fun menuDelete() {
-        attemptDelete()
+        showDeleteDialog()
     }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -108,13 +111,15 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         recentTap = btn_by_choice
 
 
-        if (intent.hasExtra(INTENT_VOTE)) {
-            vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
-            vote!!.setPhotoInfo(applicationContext)
-            setVoteInfo()
-        } else if (intent.hasExtra(INTENT_VOTE_IDX)) {
-            voteIdx=intent.getIntExtra(INTENT_VOTE_IDX,0)
-        } else finish()
+        when {
+            intent.hasExtra(INTENT_VOTE) -> {
+                vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
+                vote!!.setPhotoInfo(applicationContext)
+                setVoteInfo()
+            }
+            intent.hasExtra(INTENT_VOTE_IDX) -> voteIdx=intent.getIntExtra(INTENT_VOTE_IDX,0)
+            else -> finish()
+        }
 
 
 
@@ -155,7 +160,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
 
-        MenuFunc(this)
+        MenuFunc(this,MenuFunc.MENU_OPT.DELETE_ONLY)
 
     }
 
@@ -168,7 +173,23 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     private fun attemptEdit(){
 
     }
-    private fun attemptDelete(){
+
+    private fun showDeleteDialog() {
+
+        val dialog = ConfirmDeleteDialog(this)
+        dialog.show()
+
+        dialog.setOnClickListenerYes(View.OnClickListener {
+            vote?.let { attemptDelete(it) }
+        })
+    }
+    private fun attemptDelete(vote : Vote){
+        val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        jsonParam.put(USGS_REQUEST_URL.URL_REMOVE_VOTE_PARAMS_VOTE_IDX, vote.vote_idx)
+
+        task.execute(USGS_REQUEST_URL.URL_REMOVE_VOTE, METHOD_DELETE,jsonParam.toString())
 
     }
 
@@ -187,7 +208,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         tv_content.text = vote.content
         if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "$INTENT_USER/${vote.u_idx}"))
-            iv_profile.setImageResource(R.drawable.icon_profile_default_png)
+            iv_profile.setImageResource(R.drawable.icon_profile_default)
         tv_name.text = vote.name
         tv_time.text = vote.getTime()
 
@@ -471,7 +492,12 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                         else activity.updateChoiceList()
                     }
                     Utils.MSG_FAIL -> {
-
+                        val message = msg.data.getString(JSON_MESSAGE)
+                        if(message.contains("Success") || message.contains("Internal"))
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+                        activity.finish()
                     }
                 }
             }
@@ -513,4 +539,23 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         }
     }
 
+    fun deleteResult(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_delete_success),Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            else -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+    private class HandlerDelete(activity: VoteActivity) : Handler() {
+        private val mActivity: WeakReference<VoteActivity> = WeakReference<VoteActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            mActivity.get()?.deleteResult(msg)
+        }
+    }
 }

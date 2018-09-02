@@ -2,8 +2,6 @@ package org.teamfairy.sopt.teamkerbell.activities.main.room
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -19,8 +17,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.*
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.*
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.activities.chat.ChatActivity
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
@@ -30,12 +28,11 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.*
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.viewholder.chat.InviteHolder
-import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 /**
@@ -248,7 +245,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     private val onConnect = Emitter.Listener {
 
-        activity.runOnUiThread(Runnable {
+        activity?.runOnUiThread(Runnable {
             Log.i("$LOG_TAG/Socket onConnect/", "connected")
 //            attachSocket()
             enterChatListSocket()
@@ -256,7 +253,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     }
 
     private val onDisconnect = Emitter.Listener {
-        activity.runOnUiThread(Runnable {
+        activity?.runOnUiThread(Runnable {
             Log.i("$LOG_TAG/Socket onDisconnect", "disconnected")
 
         })
@@ -264,7 +261,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     private val onConnectError = Emitter.Listener {
         Log.e("$LOG_TAG/Socket ConnectError", "Error connecting")
-        activity.runOnUiThread(Runnable {
+        activity?.runOnUiThread(Runnable {
             Toast.makeText(activity.applicationContext,
                     R.string.error_connect, Toast.LENGTH_LONG).show()
         })
@@ -281,7 +278,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_LIST_RESULT}", args[0].toString())
 
 
-        activity.runOnUiThread(Runnable {
+        activity?.runOnUiThread(Runnable {
 
 
             val dataArray: JSONArray = JSONArray(args[0].toString())
@@ -322,7 +319,9 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                     }
                     ChatUtils.TYPE_SIGNAL->{
                         r.lastMsgStr  = "신호등이 등록되었습니다."
-
+                    }
+                    ChatUtils.TYPE_ROLE->{
+                        r.lastMsgStr  = "역할분담이 등록되었습니다."
                     }
                     ChatUtils.TYPE_MESSAGE->{
                         r.lastMsgStr  = data.getString(Constants.JSON_CONTENT)
@@ -348,7 +347,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT_LIST}", args[0].toString())
 
-        activity.runOnUiThread(Runnable {
+        activity?.runOnUiThread(Runnable {
             lastChatListResult = args[0].toString()
             updateListFromJSON(JSONObject(args[0].toString()))
             adapter.notifyDataSetChanged()

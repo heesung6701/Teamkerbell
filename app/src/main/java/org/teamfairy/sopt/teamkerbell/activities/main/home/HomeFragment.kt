@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +14,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
@@ -31,7 +28,6 @@ import org.teamfairy.sopt.teamkerbell.activities.main.dialog.ShowUserDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import kotlin.properties.Delegates

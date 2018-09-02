@@ -8,7 +8,7 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL

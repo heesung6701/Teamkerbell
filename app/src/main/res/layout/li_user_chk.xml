@@ -18,7 +18,7 @@
 
         android:layout_height="32dp"
         android:layout_marginEnd="10dp"
-        android:src="@drawable/icon_profile_default_png"
+        android:src="@drawable/icon_profile_default"
         app:civ_border_color="@color/mainColorY"
         app:civ_border_width="0dp" />
 

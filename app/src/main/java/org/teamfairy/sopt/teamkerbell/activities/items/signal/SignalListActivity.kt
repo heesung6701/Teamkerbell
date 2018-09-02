@@ -16,6 +16,7 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 
 class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
@@ -38,8 +39,8 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM) ?: Room()
 
-        top_tab.addTab(top_tab.newTab().setText("수신"))
-        top_tab.addTab(top_tab.newTab().setText("발신"))
+        top_tab.addTab(top_tab.newTab().setText(getString(R.string.txt_receiver)))
+        top_tab.addTab(top_tab.newTab().setText(getString(R.string.txt_sender)))
 
         tabAdapter = SignalTabAdapter(supportFragmentManager, top_tab.tabCount,group)
 
@@ -59,6 +60,7 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
             i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             i.putExtra(INTENT_GROUP,group)
             i.putExtra(INTENT_ROOM,room)
+            viewPager.currentItem = Utils.TAB_REQUEST
             startActivity(i)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }

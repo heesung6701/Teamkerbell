@@ -2,9 +2,8 @@ package org.teamfairy.sopt.teamkerbell.model.interfaces
 
 import android.content.Context
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
-import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR

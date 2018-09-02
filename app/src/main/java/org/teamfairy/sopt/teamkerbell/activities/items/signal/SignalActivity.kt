@@ -16,15 +16,18 @@ import kotlinx.android.synthetic.main.content_recyclerview.*
 import kotlinx.android.synthetic.main.content_signal.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.ListDataAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_LIGHTS_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_DETAIL_SINGLE_LIGHT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_LIGHTS
@@ -50,7 +53,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
     override fun menuDelete() {
-        attemptDelete()
+        showDeleteDialog()
     }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -67,7 +70,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
     var signal: Signal? = null
-    var signalIdx: Int by Delegates.notNull()
+    private var signalIdx: Int by Delegates.notNull()
 
     private var responded: Boolean = false
 
@@ -127,7 +130,6 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         }
 
 
-        MenuFunc(this)
 
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
@@ -197,59 +199,62 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
 
         responded = intent.getBooleanExtra(INTENT_RESPONDED, responded)
 
-        if (isReadMode) {
-            btnCommit.visibility = View.GONE
-            edt_response.visibility = View.VISIBLE
-            edt_response.isEnabled = false
+        when {
+            isReadMode -> {
+                btnCommit.visibility = View.GONE
+                edt_response.visibility = View.VISIBLE
+                edt_response.isEnabled = false
 
-            if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
-                btnMore.visibility = View.VISIBLE
-            layout_response_list.visibility = View.GONE
+                if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
+                    MenuFunc(this,MenuFunc.MENU_OPT.DELETE_ONLY)
+                else btnMore.visibility=View.INVISIBLE
+                layout_response_list.visibility = View.GONE
 
-            edt_response.setText(readSignalContent)
+                edt_response.setText(readSignalContent)
 
-            enableSignButton(false)
+                enableSignButton(false)
 
-
-            btn_commit.visibility = View.GONE
-
-        } else if (responded) {
-
-            connectSignalResponseList()
-
-            btnCommit.visibility = View.GONE
-            edt_response.visibility = View.GONE
-
-            if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
-                btnMore.visibility = View.VISIBLE
-            layout_response_list.visibility = View.VISIBLE
-
-
-            when (selectColor) {
-                Signal.RED ->
-                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.red))
-                Signal.GREEN ->
-                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green))
-                Signal.YELLOW ->
-                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
-                else ->
-                    iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
             }
+            responded -> {
 
-            enableSignButton(true)
+                connectSignalResponseList()
 
-        } else {
-            if (signal != null)
-                updateColor(Signal.colorStrToByte(signal!!.responseColor))
+                btnCommit.visibility = View.GONE
+                edt_response.visibility = View.GONE
 
-            btnCommit.visibility = View.VISIBLE
-            edt_response.visibility = View.VISIBLE
+                if(signal?.u_idx==LoginToken.getUserIdx(applicationContext))
+                    MenuFunc(this,MenuFunc.MENU_OPT.DELETE_ONLY)
+                else btnMore.visibility=View.INVISIBLE
+                layout_response_list.visibility = View.VISIBLE
 
-            btnMore.visibility = View.GONE
-            layout_response_list.visibility = View.GONE
 
-            enableSignButton(true)
+                when (selectColor) {
+                    Signal.RED ->
+                        iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.red))
+                    Signal.GREEN ->
+                        iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green))
+                    Signal.YELLOW ->
+                        iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.yellow))
+                    else ->
+                        iv_sign.setColorFilter(ContextCompat.getColor(applicationContext, R.color.gray))
+                }
 
+                enableSignButton(true)
+
+            }
+            else -> {
+                if (signal != null)
+                    updateColor(Signal.colorStrToByte(signal!!.responseColor))
+
+                edt_response.visibility = View.VISIBLE
+                layout_response_list.visibility = View.GONE
+
+                btnCommit.visibility=View.VISIBLE
+                btnMore.visibility = View.GONE
+
+                enableSignButton(true)
+
+            }
         }
     }
 
@@ -259,7 +264,23 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
         btn_green.isEnabled = b
     }
 
-    private fun attemptDelete(){
+
+    private fun showDeleteDialog() {
+
+        val dialog = ConfirmDeleteDialog(this)
+        dialog.show()
+
+        dialog.setOnClickListenerYes(View.OnClickListener {
+            signal?.let { attemptDelete(it) }
+        })
+    }
+    private fun attemptDelete(signal: Signal){
+        val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        jsonParam.put(USGS_REQUEST_URL.URL_REMOVE_SIGNAL_PARAMS_SIGNAL_IDX, signal.signal_idx)
+
+        task.execute(USGS_REQUEST_URL.URL_REMOVE_SIGNAL, METHOD_DELETE,jsonParam.toString())
 
     }
     private  fun attemptEdit(){
@@ -407,7 +428,12 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
                         activity.updateSignal(result)
                     }
                     else -> {
-
+                        val message = msg.data.getString(USGS_REQUEST_URL.JSON_MESSAGE)
+                        if(message.contains("Success") || message.contains("Internal"))
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+                        activity.finish()
                     }
                 }
             }
@@ -426,13 +452,33 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
                         activity.finish()
                     }
                     else -> {
-                        val result = msg.data.getString("message")
-                        Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+                        activity.finish()
                     }
 
                 }
 
             }
+        }
+    }
+
+    fun deleteResult(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_delete_success),Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            else -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+    private class HandlerDelete(activity: SignalActivity) : Handler() {
+        private val mActivity: WeakReference<SignalActivity> = WeakReference<SignalActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            mActivity.get()?.deleteResult(msg)
         }
     }
 }

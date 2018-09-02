@@ -1,4 +1,4 @@
-package org.teamfairy.sopt.teamkerbell._utils
+package org.teamfairy.sopt.teamkerbell.utils
 
 /**
  * Created by lumiere on 2018-02-03.

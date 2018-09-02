@@ -6,13 +6,10 @@ import android.os.Message
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.room.viewholder.RoomViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
-import org.teamfairy.sopt.teamkerbell.viewholder.chat.InviteHolder
 
 
 /**
@@ -46,7 +43,7 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
             holder.tvCount.visibility=View.INVISIBLE
 
         if(NetworkUtils.getBitmapList(room.photo, holder.ivProfile,mContext, "$INTENT_ROOM/${room.room_idx}"))
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
 
         if(onLongClickHandler!=null) {

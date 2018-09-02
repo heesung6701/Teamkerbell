@@ -15,10 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import io.realm.RealmResults
 import io.realm.Sort
-import io.realm.internal.Util
 import kotlinx.android.synthetic.main.fragment_vote_list.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter.VoteListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*

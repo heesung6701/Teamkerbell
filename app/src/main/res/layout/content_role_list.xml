@@ -18,6 +18,7 @@
         android:textColor="@drawable/select_text_press"
         android:focusable="true"
         android:clickable="true"
+        android:visibility="gone"
         android:textSize="16sp" />
 
     <include layout="@layout/content_recyclerview"/>

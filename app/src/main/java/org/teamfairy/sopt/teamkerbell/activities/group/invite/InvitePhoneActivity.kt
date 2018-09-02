@@ -7,21 +7,16 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_back.*
 import kotlinx.android.synthetic.main.content_invite_phone.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.model.list.ChatMessageF
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
@@ -30,7 +25,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_INVITE_GROUP_PARAM_PHONE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates

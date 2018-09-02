@@ -17,5 +17,9 @@
 
     <include layout="@layout/content_role" />
 
+    <include layout="@layout/content_option_menu"
+        android:visibility="gone"/>
+
+
 
 </android.support.design.widget.CoordinatorLayout>

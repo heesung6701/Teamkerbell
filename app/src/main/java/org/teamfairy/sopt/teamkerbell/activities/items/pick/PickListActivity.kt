@@ -12,7 +12,7 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_filter.*
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.chat.ChatActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.FilterFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
@@ -24,7 +24,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_NULL_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
-import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.PickR
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP

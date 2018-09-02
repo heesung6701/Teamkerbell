@@ -11,7 +11,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_make_group.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
@@ -112,8 +112,8 @@ class MakeGroupActivity : AppCompatActivity() {
 
                     realm.commitTransaction()
 
-                    DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
-                    DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
                     NetworkUtils.connectRoomList(applicationContext,null)
                     NetworkUtils.connectJoinedRoomList(applicationContext,null)
 

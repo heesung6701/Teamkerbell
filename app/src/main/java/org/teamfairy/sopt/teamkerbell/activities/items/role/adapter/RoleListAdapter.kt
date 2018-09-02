@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.RoleListViewHolder
 
@@ -26,7 +26,7 @@ class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : Re
         holder.tvName.text = dataList[position].name
 
 
-        holder.tvRoom.text=DatabaseHelpUtils.getRoom(mContext,dataList[position].room_idx).real_name
+        holder.tvRoom.text= DatabaseHelpUtils.getRoom(mContext,dataList[position].room_idx).real_name
     }
 
 

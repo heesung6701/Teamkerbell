@@ -1,9 +1,8 @@
 package org.teamfairy.sopt.teamkerbell.model.list
 
 import android.content.Context
-import org.teamfairy.sopt.teamkerbell.model.realm.ChatMessageR
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 

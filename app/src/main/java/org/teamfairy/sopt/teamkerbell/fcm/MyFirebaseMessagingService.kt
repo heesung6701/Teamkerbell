@@ -16,14 +16,14 @@ import android.app.NotificationChannel
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_ROOM
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.setPref_isUpdate
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 
 
@@ -211,13 +211,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val CHANNEL_ID = "my_channel_01"// The id of the channel.
-            val name = getString(R.string.app_name);// The user-visible name of the channel.
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            var mChannel: NotificationChannel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel(CHANNEL_ID, name, importance)
-            } else {
-                null
-            }
+//            val name = getString(R.string.app_name);// The user-visible name of the channel.
+//            val importance = NotificationManager.IMPORTANCE_HIGH
+//            var mChannel: NotificationChannel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                NotificationChannel(CHANNEL_ID, name, importance)
+//            } else {
+//                null
+//            }
             notificationBuilder.setChannelId(CHANNEL_ID)
         }
 

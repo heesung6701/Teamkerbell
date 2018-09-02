@@ -1,6 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role.task
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -19,33 +18,21 @@ import kotlinx.android.synthetic.main.content_recyclerview.*
 import kotlinx.android.synthetic.main.content_task.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.R.id.btn_take_role
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell.activities.group.invite.InviteActivity
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.ResponseListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.role.dialog.SelectUserDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.*
-import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.info.TaskResponseListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.app.Activity
-import android.app.AlertDialog
-import android.content.Context
-import android.support.v4.app.ActivityCompat
-import android.content.pm.PackageManager
-import android.os.Build
-import android.content.DialogInterface
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE
@@ -131,6 +118,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.icon_floating_minus))
         } else
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))
+
 
 
         btn_back.setOnClickListener {

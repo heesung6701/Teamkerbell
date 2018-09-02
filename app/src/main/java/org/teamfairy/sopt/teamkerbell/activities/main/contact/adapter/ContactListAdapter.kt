@@ -10,12 +10,6 @@ import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.viewholder.ContactViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
-import android.support.v4.content.ContextCompat.startActivity
-import android.support.v4.content.ContextCompat.startActivity
-
-
-
-
 
 
 /**
@@ -38,7 +32,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         holder.tvPhone.text = user.phone
 
         if(NetworkUtils.getBitmapList(user.photo, holder.ivProfile,mContext, "$INTENT_USER/$user.u_idx"))
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         holder.layoutEmail.setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO)

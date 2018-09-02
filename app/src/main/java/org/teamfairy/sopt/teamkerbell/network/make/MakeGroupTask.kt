@@ -2,12 +2,14 @@ package org.teamfairy.sopt.teamkerbell.network.make
 
 import android.content.Context
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
@@ -30,8 +32,8 @@ class MakeGroupTask(context: Context, handler: Handler, token : String?): GetMes
             val baseJsonResponse = JSONObject(jsonResponse)
 
 
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success") || message.contains("success"))
                     msgCode= MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {
@@ -45,8 +47,8 @@ class MakeGroupTask(context: Context, handler: Handler, token : String?): GetMes
             }
 
 
-            if(baseJsonResponse.has("data")) {
-                val data = baseJsonResponse.getJSONObject("data")
+            if(baseJsonResponse.has(JSON_DATA)) {
+                val data = baseJsonResponse.getJSONObject(JSON_DATA)
 
                 group = Team(data.getInt(Team.ARG_G_IDX),
                         data.getString(Team.ARG_REAL_NAME),
@@ -54,7 +56,7 @@ class MakeGroupTask(context: Context, handler: Handler, token : String?): GetMes
                 if (data.has(Team.ARG_PHOTO))
                     group.photo = data.getString(Team.ARG_PHOTO)
 
-                return group as Any
+                return group
             }
 
         } catch (e: JSONException) {

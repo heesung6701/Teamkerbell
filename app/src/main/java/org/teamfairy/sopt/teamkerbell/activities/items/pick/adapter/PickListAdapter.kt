@@ -33,7 +33,7 @@ class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : Re
 
         val url = dataList[position].photo
         if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext,"$INTENT_USER/${dataList.get(position).u_idx}"))
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         val vto : ViewTreeObserver = holder.tvContent.getViewTreeObserver()
         vto.addOnGlobalLayoutListener {

@@ -7,12 +7,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageButton
-import io.realm.Realm.init
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.btn_filter
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ALL_IDX

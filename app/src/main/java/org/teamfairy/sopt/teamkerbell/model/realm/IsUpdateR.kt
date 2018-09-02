@@ -2,7 +2,7 @@ package org.teamfairy.sopt.teamkerbell.model.realm
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 
 /**
  * Created by lumiere on 2018-01-01.

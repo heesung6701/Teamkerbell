@@ -32,7 +32,6 @@ import android.net.Uri
 import android.os.*
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
-import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
@@ -92,7 +91,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
                 } catch (e: URISyntaxException) {
                     Toast.makeText(applicationContext, "올바르지 않은 파일형식입니다.", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
 //                    Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
                 }
             }
@@ -119,7 +118,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
         tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
         if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user" + taskResponse.u_idx))
-            ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.stackFromEnd = true

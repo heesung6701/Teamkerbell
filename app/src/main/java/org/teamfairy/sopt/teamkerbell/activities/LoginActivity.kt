@@ -20,7 +20,11 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.content.Intent
+import android.graphics.Color
 import android.os.*
+import android.support.v4.content.ContextCompat
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DatabaseReference
@@ -116,6 +120,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     private var mAuthTask: LoginTask? = null
 
+    var ttt = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -123,8 +128,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         populateAutoComplete()
 
         easter_egg.setOnClickListener {
-            email.setText("dd@teamkerbell.tk")
-            password.setText("12341234")
+            if(ttt){
+                email.setText("heesung6701@naver.com")
+                password.setText("asdfghjk")
+
+            }else {
+                email.setText("dd@teamkerbell.tk")
+                password.setText("12341234")
+            }
+            ttt=!ttt;
         }
 
         if (intent.getBooleanExtra(EXIT, false)) {
@@ -138,7 +150,43 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
 
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->  //키보드 엔터눌러도 로그인 되는듯?
+        email.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if(password.text.isNotEmpty() && email.text.isNotEmpty()){
+                    btn_sign_in.setTextColor(Color.WHITE)
+                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn)
+                }else{
+                    btn_sign_in.setTextColor(Color.BLACK)
+                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
+        password.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if(password.text.isNotEmpty() && email.text.isNotEmpty()){
+                    btn_sign_in.setTextColor(Color.WHITE)
+                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn)
+                }else{
+                    btn_sign_in.setTextColor(Color.BLACK)
+                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
+        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true

@@ -9,8 +9,7 @@ import io.realm.Realm
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR

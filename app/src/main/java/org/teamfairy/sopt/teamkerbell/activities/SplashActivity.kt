@@ -16,7 +16,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_P
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.getUserIdx
 import java.lang.ref.WeakReference
@@ -67,9 +67,9 @@ class SplashActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, LoginActivity::class.java)
 
 
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_GROUP,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_JOINED_GROUP,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_USER,true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_GROUP,true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_GROUP,true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_USER,true)
 
         NetworkUtils.connectUserList(applicationContext, null)
         NetworkUtils.connectGroupList(applicationContext, null)

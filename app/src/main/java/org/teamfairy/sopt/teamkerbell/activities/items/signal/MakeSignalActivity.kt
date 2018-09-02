@@ -15,11 +15,9 @@ import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_signal.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.ChatUtils
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -42,7 +40,6 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.ENTIRE_STATUS_CHOSE
@@ -92,16 +89,17 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
         setUserListInit()
 
         chk_particular.setOnCheckedChangeListener { _, p1 ->
-            if (room != null) {
-                if (p1) {
-                    recyclerView.visibility = View.VISIBLE
-                } else
-                    recyclerView.visibility = View.GONE
-                adapter.notifyDataSetChanged()
-            } else {
+            if (room == null  || room!!.room_idx<0) {
                 Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
                 chk_particular.isChecked = false
+                return@setOnCheckedChangeListener
             }
+
+            if (p1) {
+                recyclerView.visibility = View.VISIBLE
+            } else
+                recyclerView.visibility = View.GONE
+            adapter.notifyDataSetChanged()
         }
 
 
@@ -111,45 +109,47 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
 
         btn_commit.setOnClickListener {
 
-            if (!isConnecting) {
-                if (room != null) {
-                    content = edt_content.text.toString()
-                    if (content.isNotEmpty()) {
+            if (isConnecting) return@setOnClickListener
 
-                        openStatus = if (!chk_secret.isChecked) OPEN_STATUS_OPEN else OPEN_STATUS_SECRET
-                        entireStatus = if (!chk_particular.isChecked) ENTIRE_STATUS_ENTIRE else ENTIRE_STATUS_CHOSE
+            if (room == null || room!!.room_idx < 0) {
+                Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
+                layout_select_room.requestFocus()
+                return@setOnClickListener
+            }
+            content = edt_content.text.toString()
+            if (content.isEmpty()) {
+                Toast.makeText(applicationContext, getString(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
+                edt_content.requestFocus()
+                return@setOnClickListener
+            }
 
-                        val jsonParam = JSONObject()
-                        try {
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_UID, LoginToken.getUserIdx(applicationContext))
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CHATID, group.g_idx)
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_ROOM_IDX, room!!.room_idx)
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, content)
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_OPENSTATUS, openStatus)
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS, entireStatus)
-                            val jsonArray = JSONArray()
-                            if (entireStatus == ENTIRE_STATUS_CHOSE) {
-                                userList.iterator().forEach {
-                                    if (it.isChecked)
-                                        jsonArray.put(it.u_idx)
-                                }
-                            }
-                            jsonParam.put(URL_MAKE_SIGNAL_PARAM_USERARRAY, jsonArray)
+            openStatus = if (!chk_secret.isChecked) OPEN_STATUS_OPEN else OPEN_STATUS_SECRET
+            entireStatus = if (!chk_particular.isChecked) ENTIRE_STATUS_ENTIRE else ENTIRE_STATUS_CHOSE
 
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-                        val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-                        isConnecting = true
-                        task.execute(URL_MAKE_SIGNAL,METHOD_POST, jsonParam.toString())
-                    } else {
-                        Toast.makeText(applicationContext, getString(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
-
+            val jsonParam = JSONObject()
+            try {
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_UID, LoginToken.getUserIdx(applicationContext))
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_CHATID, group.g_idx)
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_ROOM_IDX, room!!.room_idx)
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, content)
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_OPENSTATUS, openStatus)
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS, entireStatus)
+                val jsonArray = JSONArray()
+                if (entireStatus == ENTIRE_STATUS_CHOSE) {
+                    userList.iterator().forEach {
+                        if (it.isChecked)
+                            jsonArray.put(it.u_idx)
                     }
                 }
-            } else
-                Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
+                jsonParam.put(URL_MAKE_SIGNAL_PARAM_USERARRAY, jsonArray)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
+            isConnecting = true
+            task.execute(URL_MAKE_SIGNAL, METHOD_POST, jsonParam.toString())
         }
 
     }

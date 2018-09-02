@@ -25,8 +25,8 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_task_response.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.FileListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask

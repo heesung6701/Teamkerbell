@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_invite_user.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -140,7 +140,7 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
             Utils.MSG_SUCCESS->
                     finish()
             else->
-                    Toast.makeText(applicationContext,"잠시 후 다시 시도해주세요",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
         }
 
     }

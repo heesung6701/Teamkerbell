@@ -9,9 +9,8 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
@@ -21,7 +20,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_OPEN_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_COLOR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_CONTENT
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME

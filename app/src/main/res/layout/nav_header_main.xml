@@ -45,7 +45,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_noticedefault"
+                    app:srcCompat="@drawable/ic_notice_white"
                     android:contentDescription="@string/action_notice" />
 
                 <TextView
@@ -71,7 +71,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_pickdefault"
+                    app:srcCompat="@drawable/ic_pick_white"
                     android:contentDescription="@string/action_pick" />
 
 
@@ -98,7 +98,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_votedefault"
+                    app:srcCompat="@drawable/ic_vote_white"
                     android:contentDescription="@string/action_vote" />
 
 
@@ -125,7 +125,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_signaldefault"
+                    app:srcCompat="@drawable/ic_signal_white"
                     android:contentDescription="@string/action_signal" />
 
                 <TextView
@@ -152,7 +152,7 @@
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/icon_list_noticedefault"
+                    app:srcCompat="@drawable/ic_role_white"
                     android:contentDescription="@string/action_role"/>
 
                 <TextView
@@ -196,7 +196,7 @@
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
             android:autoLink="web"
-            android:text="https://docs.google.com/document/d/1TWTWiakvywszqRTUUjdHBFMMBgOSxlrmwyDi5miEFjE/edit"
+            android:text="@string/txt_enter_cloud_link"
 
             />
         <!--android:text="@string/txt_enter_cloud_link"-->
@@ -217,20 +217,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
 
             >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="대화상대"/>
+            android:text="@string/txt_usergroup"/>
         <TextView
             android:id="@+id/tv_numberOfUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="(5명)"/></LinearLayout>
+            tools:text="(5명)"/>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/listview_divide_line_height"
@@ -256,21 +257,30 @@
         android:paddingStart="29dp"
         android:paddingEnd="21dp"
         >
-        <ImageView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/btn_invite"
+            android:gravity="center_vertical"
+            tools:ignore="UseCompoundDrawables">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_add"
-            />
+            android:contentDescription="@string/action_add" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
             android:text="@string/txt_invite_member"
             android:textSize="14sp"
-            android:layout_weight="1"
             />
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
         <ImageView
             android:id="@+id/btn_leave"
             android:layout_width="wrap_content"

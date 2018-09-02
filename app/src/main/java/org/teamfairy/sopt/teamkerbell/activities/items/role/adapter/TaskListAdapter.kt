@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.TaskListViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
@@ -49,7 +49,7 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
 
                 holder.ivProfiles[i].visibility = View.VISIBLE
                 if (NetworkUtils.getBitmapList(url, holder.ivProfiles[i], mContext, "$INTENT_USER/$uIdx")) {
-                    holder.ivProfiles[i].setImageResource(R.drawable.icon_profile_default_png)
+                    holder.ivProfiles[i].setImageResource(R.drawable.icon_profile_default)
                 }
             }
     }

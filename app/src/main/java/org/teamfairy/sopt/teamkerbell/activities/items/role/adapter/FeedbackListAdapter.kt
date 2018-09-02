@@ -21,7 +21,7 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
         holder.tvContent.text=fdb.content
 
         if (NetworkUtils.getBitmapList(fdb.photo, holder.ivProfile, mContext, "user" + fdb.u_idx)) {
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
         }
     }
 

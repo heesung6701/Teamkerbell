@@ -14,17 +14,22 @@ import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_more.*
 import kotlinx.android.synthetic.main.content_role.*
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.TaskListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.role.task.TaskActivity
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.info.RoleTaskListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
@@ -41,7 +46,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     }
 
     override fun menuDelete() {
-        attemptDelete()
+        showDeleteDialog()
     }
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -85,7 +90,8 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             finish()
         }
 
-        MenuFunc(this)
+        if(role.master_idx==LoginToken.getUserIdx(applicationContext))
+             MenuFunc(this)
 
 
     }
@@ -107,8 +113,22 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
     }
 
-    private fun attemptDelete(){
-        //삭제하기
+    private fun showDeleteDialog() {
+
+        val dialog = ConfirmDeleteDialog(this)
+        dialog.show()
+
+        dialog.setOnClickListenerYes(View.OnClickListener {
+            role.let { attemptDelete(it) }
+        })
+    }
+
+    private fun attemptDelete(role: Role){
+        val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_PARAM_ROLE_IDX, role.role_idx)
+        task.execute(USGS_REQUEST_URL.URL_ROLE, METHOD_DELETE,jsonParam.toString())
     }
 
     override fun onClick(p0: View?) {
@@ -142,8 +162,12 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 adapter.notifyDataSetChanged()
             }
             else -> {
-                Toast.makeText(applicationContext,"잠시 후 시도 해주세요.",Toast.LENGTH_SHORT).show()
-
+                val message = msg.data.getString(JSON_MESSAGE)
+                if(message.contains("Success") || message.contains("Internal"))
+                    Toast.makeText(applicationContext, getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
@@ -153,6 +177,26 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         override fun handleMessage(msg: Message) {
             mActivity.get()?.connectedTaskList(msg)
+        }
+    }
+
+    fun deleteResult(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_delete_success),Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            else -> {
+                Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+    private class HandlerDelete(activity: RoleActivity) : Handler() {
+        private val mActivity: WeakReference<RoleActivity> = WeakReference<RoleActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            mActivity.get()?.deleteResult(msg)
         }
     }
 

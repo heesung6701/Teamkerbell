@@ -19,9 +19,9 @@ import org.teamfairy.sopt.teamkerbell.R
 import kotlinx.android.synthetic.main.app_bar_back.*
 import kotlinx.android.synthetic.main.content_profile.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.getRealPathFromURI
-import org.teamfairy.sopt.teamkerbell._utils.FileUtils.Companion.updatePhoto
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
@@ -52,7 +52,7 @@ class ProfileActivity : AppCompatActivity() {
 
         val url = user.photo
         if (NetworkUtils.getBitmapList(url, img_profile,applicationContext,"user"+user.u_idx))
-            img_profile.setImageResource(R.drawable.icon_profile_default_png)
+            img_profile.setImageResource(R.drawable.icon_profile_default)
 
 
         img_profile.setOnClickListener {

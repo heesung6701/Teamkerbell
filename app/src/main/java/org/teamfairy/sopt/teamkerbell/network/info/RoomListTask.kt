@@ -8,8 +8,7 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME

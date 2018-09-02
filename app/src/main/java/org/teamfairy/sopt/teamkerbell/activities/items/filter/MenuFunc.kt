@@ -4,16 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.btn_edit
-import org.teamfairy.sopt.teamkerbell.R.id.recyclerView
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
-import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Room
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -23,8 +18,8 @@ import kotlin.properties.Delegates
 class MenuFunc(activity: Activity, mode: MENU_OPT) {
 
 
-    enum class MENU_OPT(mode :Int){
-        EDIT_ONLY(1), DELETE_ONLY(2), SHOW_ALL(3)
+    enum class MENU_OPT {
+        EDIT_ONLY, DELETE_ONLY, SHOW_ALL
     }
 
     constructor(activity: Activity): this(activity, MENU_OPT.SHOW_ALL)
@@ -44,28 +39,40 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
             menuEdit = activity.findViewById(R.id.tv_menu_edit)
             menuDelete = activity.findViewById(R.id.tv_menu_delete)
 
+            btnMenu=activity.findViewById(R.id.btn_more)
+            btnMenu.visibility=View.VISIBLE
+
             when(mode){
                 MENU_OPT.DELETE_ONLY->{
-                    setDelete(activity)
+                    btnMenu.setImageDrawable(ContextCompat.getDrawable(activity.applicationContext, R.drawable.ic_delete))
+                    btnMenu.setOnClickListener {
+                        (activity as MenuActionInterface).menuDelete()
+                        closeMenu(activity.applicationContext)
+                    }
+//                    setDelete(activity)
                 }
                 MENU_OPT.EDIT_ONLY->{
-                    setEdit(activity)
-
+                    btnMenu.setImageDrawable(ContextCompat.getDrawable(activity.applicationContext, R.drawable.ic_edit))
+                    btnMenu.setOnClickListener {
+                        (activity as MenuActionInterface).menuEdit()
+                        closeMenu(activity.applicationContext)
+                    }
+//                    setEdit(activity)
                 }
                 MENU_OPT.SHOW_ALL->{
                     setDelete(activity)
                     setEdit(activity)
+                    btnMenu.setOnClickListener {
+                        if (menuLayout.visibility == View.VISIBLE)
+                            closeMenu(activity.applicationContext)
+                        else
+                            openMenu(activity.applicationContext)
+                    }
                 }
             }
 
-            btnMenu=activity.findViewById(R.id.btn_more)
-            btnMenu.visibility=View.VISIBLE
-            btnMenu.setOnClickListener {
-                if (menuLayout.visibility == View.VISIBLE)
-                    closeMenu(activity.applicationContext)
-                else
-                    openMenu(activity.applicationContext)
-            }
+
+
         }
     }
 

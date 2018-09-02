@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:gravity="end"
         android:padding="5dp"
-        android:text="1"/>
+        tools:text="1"/>
 
     <TextView
         android:id="@+id/li_tv_time"
@@ -38,18 +38,18 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
         <ImageView
             android:id="@+id/li_iv_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_list_notice"
-            />
+            app:srcCompat="@drawable/ic_notice" />
     <TextView
         android:id="@+id/li_tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="신호등"
+        tools:text="공지"
         android:layout_marginStart="6dp"
         android:textSize="14sp"
         android:textColor="@color/main_yellow"

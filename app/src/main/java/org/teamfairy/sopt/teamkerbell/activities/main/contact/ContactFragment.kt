@@ -15,12 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import io.realm.kotlin.createObject
 import kotlinx.android.synthetic.main.fragment_contact.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.adapter.ContactListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.main.interfaces.HasGroupFragment
@@ -153,7 +151,7 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
     private fun setMyProfile(u: User) {
         tvName.text = u.name
         if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
-            ivPhoto.setImageResource(R.drawable.icon_profile_default_png)
+            ivPhoto.setImageResource(R.drawable.icon_profile_default)
     }
 
     fun getUserList() {

@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="127dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        tools:ignore="UseCompoundDrawables">
 
         <TextView
             android:id="@+id/tv_teamName"
@@ -33,12 +34,13 @@
             android:layout_marginStart="15dp"
             app:srcCompat="@drawable/ic_arrow_drop_down"
 
-            />
+            android:contentDescription="@string/descript_open_menu" />
 
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_group_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -46,13 +48,13 @@
         android:layout_alignStart="@id/layout_select_team"
         android:layout_below="@id/layout_select_team"
         android:gravity="center_vertical"
-        >
+        tools:ignore="UseCompoundDrawables">
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_profile_home"
-            android:layout_marginEnd="8dp"
-            />
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            app:srcCompat="@drawable/ic_group_profile"
+            android:layout_marginEnd="5dp"
+            android:contentDescription="@string/txt_profile" />
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
@@ -61,8 +63,8 @@
             android:focusable="true"
             android:clickable="true"
 
+
             android:textSize="16sp"
-            android:textStyle="bold"
             android:textColor="@drawable/select_text_press"
 
             tools:text="5명" />
@@ -73,13 +75,18 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:overScrollMode="never"
+        android:layout_below="@id/layout_group_count"
         android:scrollbars="none"
+        android:paddingTop="100dp"
+        android:paddingBottom="45dp"
         >
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -95,7 +102,8 @@
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_notice" />
+                    app:srcCompat="@drawable/icon_list_notice"
+                    android:contentDescription="@string/action_notice" />
 
                 <ImageView
                     android:id="@+id/iv_notice_sign"
@@ -105,7 +113,8 @@
                     android:layout_marginTop="9dp"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign"
-                    android:tint="@color/main_yellow"/>
+                    android:tint="@color/main_yellow"
+                    android:contentDescription="@string/action_notice" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -131,7 +140,8 @@
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_pick" />
+                    app:srcCompat="@drawable/icon_list_pick"
+                    android:contentDescription="@string/action_pick" />
 
                 <ImageView
                     android:id="@+id/iv_pick_sign"
@@ -142,7 +152,7 @@
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign"
                     android:tint="@color/main_yellow"
-                    />
+                    android:contentDescription="@string/action_pick" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,7 +178,8 @@
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_vote" />
+                    app:srcCompat="@drawable/icon_list_vote"
+                    android:contentDescription="@string/action_vote" />
 
                 <ImageView
                     android:id="@+id/iv_vote_sign"
@@ -178,7 +189,8 @@
                     android:layout_marginTop="9dp"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign"
-                    android:tint="@color/main_yellow"/>
+                    android:tint="@color/main_yellow"
+                    android:contentDescription="@string/action_vote" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,7 +216,8 @@
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_signal" />
+                    app:srcCompat="@drawable/icon_list_signal"
+                    android:contentDescription="@string/action_signal" />
 
                 <ImageView
                     android:id="@+id/iv_signal_sign"
@@ -212,9 +225,10 @@
                     android:layout_height="14dp"
                     android:layout_alignEnd="@id/btn_signal"
                     android:layout_marginTop="9dp"
-                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign"
-                    android:tint="@color/main_yellow"/>
+                    android:visibility="gone"
+                    android:tint="@color/main_yellow"
+                    android:contentDescription="@string/action_signal" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,7 +254,8 @@
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_notice" />
+                    app:srcCompat="@drawable/icon_list_role"
+                    android:contentDescription="@string/action_role" />
 
                 <ImageView
                     android:id="@+id/iv_role_sign"
@@ -250,7 +265,8 @@
                     android:layout_marginTop="9dp"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_sign"
-                    android:tint="@color/main_yellow"/>
+                    android:tint="@color/main_yellow"
+                    android:contentDescription="@string/action_role" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -262,6 +278,44 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:id="@+id/btn_setting"
+                    android:layout_width="64dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/icon_list_setting"
+                    android:contentDescription="@string/action_setting" />
+
+                <ImageView
+                    android:id="@+id/iv_setting_sign"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignEnd="@id/btn_setting"
+                    android:layout_marginTop="9dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_sign"
+                    android:tint="@color/main_yellow"
+                    android:contentDescription="@string/action_setting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_setting"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="17dp"
+                    android:text="@string/action_setting" />
+
+            </RelativeLayout>
 
         </LinearLayout>
     </HorizontalScrollView>

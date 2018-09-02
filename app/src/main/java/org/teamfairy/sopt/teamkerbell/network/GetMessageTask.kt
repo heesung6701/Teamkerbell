@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR

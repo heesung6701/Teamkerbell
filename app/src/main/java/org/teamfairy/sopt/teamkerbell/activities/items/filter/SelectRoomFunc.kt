@@ -1,7 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.filter
 
 import android.app.Activity
-import android.support.v4.content.res.TypedArrayUtils.getText
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -9,8 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.R.id.*
-import org.teamfairy.sopt.teamkerbell._utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room

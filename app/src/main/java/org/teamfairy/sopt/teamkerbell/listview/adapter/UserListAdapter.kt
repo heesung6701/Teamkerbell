@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder
-import kotlinx.android.synthetic.main.li_user.view.*
 import kotlinx.android.synthetic.main.li_user_chk.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
@@ -35,7 +34,7 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
         }
         val url = dataList[position].photo
         if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
     }
 
     override fun getItemViewType(position: Int): Int {

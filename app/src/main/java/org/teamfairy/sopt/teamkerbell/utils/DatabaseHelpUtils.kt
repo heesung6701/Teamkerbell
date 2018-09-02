@@ -1,4 +1,4 @@
-package org.teamfairy.sopt.teamkerbell._utils
+package org.teamfairy.sopt.teamkerbell.utils
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -14,7 +14,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team.Companion.ARG_G_IDX
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.realm.*
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 
 /**
  * Created by lumiere on 2018-04-27.
@@ -97,7 +96,7 @@ class DatabaseHelpUtils {
 
         fun getRoomUIdxListFromRealm(applicationContext: Context, roomMemberList: ArrayList<Int>, room: Room){
 
-            val realm  = DatabaseHelpUtils.getRealmDefault(applicationContext)
+            val realm  = getRealmDefault(applicationContext)
             val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll()
             joinedRs.iterator().forEach {
                 val user = realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
@@ -107,7 +106,7 @@ class DatabaseHelpUtils {
         }
         fun getRoomUserListFromRealm(applicationContext: Context, roomMemberList: ArrayList<User>, room: Room){
 
-            val realm  = DatabaseHelpUtils.getRealmDefault(applicationContext)
+            val realm  = getRealmDefault(applicationContext)
             val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll()
             joinedRs.iterator().forEach {
                 val user = realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()

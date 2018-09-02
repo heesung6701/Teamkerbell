@@ -4,7 +4,7 @@ import android.os.AsyncTask
 import android.util.Log
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException

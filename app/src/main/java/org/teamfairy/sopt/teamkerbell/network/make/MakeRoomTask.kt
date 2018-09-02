@@ -6,7 +6,7 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell._utils.TagUtils
+import org.teamfairy.sopt.teamkerbell.utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL

@@ -19,7 +19,7 @@
             android:layout_gravity="top"
 
             android:layout_margin="10dp"
-            android:src="@drawable/icon_profile_default_png"
+            android:src="@drawable/icon_profile_default"
             app:civ_border_color="@color/mainColorY"
             app:civ_border_width="0dp" />
 
@@ -54,12 +54,13 @@
                       android:paddingLeft="10dp"
                       android:paddingRight="10dp"
                       android:gravity="center_vertical"
-                      android:orientation="horizontal">
+                      android:orientation="horizontal"
+                      tools:ignore="UseCompoundDrawables">
                       <ImageView
                           android:id="@+id/li_iv_icon"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          app:srcCompat="@drawable/icon_list_notice"
+                          app:srcCompat="@drawable/ic_signal"
                           />
                   <TextView
                       android:id="@+id/li_tv_title"

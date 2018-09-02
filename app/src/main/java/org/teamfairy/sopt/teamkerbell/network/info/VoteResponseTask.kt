@@ -92,7 +92,7 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
                     msgCode= MSG_SUCCESS
                     return VoteResponse(vote, choices, responses)
                 } else {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()

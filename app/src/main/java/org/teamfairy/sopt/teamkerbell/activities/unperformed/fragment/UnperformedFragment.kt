@@ -100,15 +100,15 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         when (type) {
             Utils.TAB_UNPERFORMED_NOTICE -> {
                 (it as Notice).setGroupInfo(activity.applicationContext)
-                (it as Notice).setPhotoInfo(activity.applicationContext)
+                it.setPhotoInfo(activity.applicationContext)
             }
             Utils.TAB_UNPERFORMED_SIGNAL -> {
                 (it as Signal).setGroupInfo(activity.applicationContext)
-                (it as Signal).setPhotoInfo(activity.applicationContext)
+                it.setPhotoInfo(activity.applicationContext)
             }
             Utils.TAB_UNPERFORMED_VOTE -> {
                 (it as Vote).setGroupInfo(activity.applicationContext)
-                (it as Vote).setPhotoInfo(activity.applicationContext)
+                it.setPhotoInfo(activity.applicationContext)
             }
         }
     }

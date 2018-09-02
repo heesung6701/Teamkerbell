@@ -25,7 +25,7 @@ class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext :
         holder.tvTime.text=notice.getSubTitle()
         holder.tvContent.text=notice.content
         if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"$INTENT_USER/${notice.u_idx}"))
-            holder.ivProfile.setImageResource(R.drawable.icon_profile_default_png)
+            holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         holder.tvName.text=notice.name
     }
