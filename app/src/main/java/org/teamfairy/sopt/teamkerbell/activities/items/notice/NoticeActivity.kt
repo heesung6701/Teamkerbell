@@ -83,7 +83,7 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
         if(notice.u_idx==LoginToken.getUserIdx(applicationContext))
             MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
 
-        tv_title.text=notice.getMainTitle()
+        tv_title.text=("${notice.groupName}, ${notice.roomName}")
         tv_content.text=notice.content
         if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"$INTENT_USER/${notice.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default)
@@ -143,6 +143,8 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.notice=msg.obj as Notice
+                        activity.notice!!.setPhotoInfo(activity.applicationContext)
+                        activity.notice!!.setGroupInfo(activity.applicationContext)
                         activity.setNoticeInfo()
                     }
                     else -> {

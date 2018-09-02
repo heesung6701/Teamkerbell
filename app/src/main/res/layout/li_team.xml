@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="56dp"
+    android:orientation="horizontal"
     android:layout_margin="8dp"
     android:gravity="center_vertical"
     android:background="@drawable/shape_border_shadow"
-    android:orientation="horizontal">
+    android:elevation="4dp"
+    android:clickable="true"
+    android:focusable="true">
     <TextView
         android:id="@+id/li_tv_name"
         android:layout_width="0dp"

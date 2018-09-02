@@ -88,14 +88,14 @@
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
-                />
+                android:contentDescription="@string/descript_green" />
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:srcCompat="@drawable/ic_sign_green"
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
-                />
+                android:contentDescription="@string/descript_green" />
         </RelativeLayout>
 
         <View
@@ -121,14 +121,14 @@
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
-                />
+                android:contentDescription="@string/descript_yellow" />
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:srcCompat="@drawable/ic_sign_yellow"
             android:scaleType="fitXY"
             android:layout_centerInParent="true"
-            />
+            android:contentDescription="@string/descript_yellow" />
         </RelativeLayout>
 
 
@@ -153,14 +153,14 @@
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
-                />
+                android:contentDescription="@string/descript_red" />
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:srcCompat="@drawable/ic_sign_red"
                 android:scaleType="fitXY"
                 android:layout_centerInParent="true"
-                />
+                android:contentDescription="@string/descript_red" />
 
         </RelativeLayout>
 
@@ -200,13 +200,13 @@
             android:gravity="center_vertical"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
-            >
+            tools:ignore="UseCompoundDrawables">
             <ImageView
                 android:id="@+id/iv_sign"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:srcCompat="@drawable/ic_sign"
-                />
+                android:contentDescription="@string/action_signal" />
 
             <TextView
                 android:id="@+id/tv_count"

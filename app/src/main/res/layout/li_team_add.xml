@@ -6,6 +6,9 @@
     android:layout_height="56dp"
     android:layout_margin="8dp"
     android:background="@drawable/shape_border_shadow"
+    android:clickable="true"
+    android:elevation="4dp"
+    android:focusable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -14,17 +17,15 @@
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="15dp"
-        app:srcCompat="@drawable/icon_add_circle"
 
-        />
+        app:srcCompat="@drawable/icon_floating_add" />
 
     <TextView
         android:id="@+id/li_tv_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="@string/txt_team_add"
-        />
+        android:text="@string/txt_team_add" />
 
 </LinearLayout>
 

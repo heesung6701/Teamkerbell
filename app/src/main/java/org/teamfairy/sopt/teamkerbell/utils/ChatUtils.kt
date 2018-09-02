@@ -25,13 +25,13 @@ class ChatUtils {
         const val TYPE_ROLE:Int=8
 
 
-        const val TYPE_ENTER_GROUP:Int=9
+        const val TYPE_ENTER_GROUP:Int=91 //deprecate
 
-        const val TYPE_INVITE:Int=10
+        const val TYPE_INVITE:Int=9
 
-        const val TYPE_GROUP_LEAVE:Int=11
+        const val TYPE_GROUP_LEAVE:Int=101 //deprecate
 
-        const val TYPE_LEAVE:Int=12
+        const val TYPE_LEAVE:Int=10
 
         const val TYPE_READLINE: Int = 50
     }

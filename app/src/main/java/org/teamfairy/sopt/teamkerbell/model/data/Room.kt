@@ -31,7 +31,6 @@ class Room(
         this.lastMsgStr=lastMsgStr
         this.lastMsgTime=lastMsgTime
         this.newMsgCnt=newMsgCnt
-
     }
 
 

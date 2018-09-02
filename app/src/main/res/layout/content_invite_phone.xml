@@ -33,7 +33,6 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:imeOptions="actionNext"
-            android:text="hh"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
@@ -56,7 +55,6 @@
             android:maxLength="13"
             android:imeOptions="actionNext"
             android:singleLine="true"
-            android:text="010-5104-3664"
             android:digits="0123456789-"
             />
 

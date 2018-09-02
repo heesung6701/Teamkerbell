@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            >
+            tools:ignore="UselessParent">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -99,6 +99,7 @@
             android:layout_weight="1"
             android:weightSum="4"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:baselineAligned="false">
             <LinearLayout
                 android:orientation="vertical"
@@ -167,6 +168,16 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"/>
             </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:gravity="center_vertical"
+            android:baselineAligned="false">
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="0dp"
@@ -189,16 +200,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"/>
             </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:weightSum="4"
-            android:gravity="center_vertical"
-            android:baselineAligned="false">
-
-
 
             <LinearLayout
                 android:orientation="vertical"

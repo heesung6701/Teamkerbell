@@ -102,14 +102,14 @@ class ChatActivity : AppCompatActivity() {
 
     private var userList = ArrayList<User>()
 
-    var lastChatIdx = 0
-    var lastChatPos = -1
-    var isShowReadLine = false
+    private var lastChatIdx = -1
+    private var lastChatPos = -1
+
+    private var forFinish= false
 
     private var mSocket: Socket by Delegates.notNull()
-    private var isConnected: Boolean = false
 
-    private var isConnectedRoom = true
+    private var isConnectedRoom = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,16 +148,8 @@ class ChatActivity : AppCompatActivity() {
                         adapter_chat.setPick(-1)
                         adapter_chat.notifyDataSetChanged()
                     }
-                    if(lastChatPos!=-1) {
-                        dataList.removeAt(lastChatPos)
-                        listView_chat.adapter=adapter_chat
-                        adapter_chat.notifyDataSetChanged()
-                        scrollToPosition(listView_chat,lastChatPos-1)
+                        clearReadLine()
 
-//                        adapter_chat.notifyItemRangeChanged(lastChatPos,dataList.size)
-                        lastChatPos=-1
-                        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
-                    }
                 }
             }
         })
@@ -178,7 +170,9 @@ class ChatActivity : AppCompatActivity() {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
 
+
                 scrollToPosition(listView_chat, dataList.lastIndex)
+
             }
         }
         btn_expand.setOnClickListener {
@@ -225,15 +219,15 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        btn_camera.setOnClickListener {
-            //카메라 버튼을 눌렀을 때
-        }
-        btn_gallery.setOnClickListener {
-            //갤러리 버튼을 눌렀을 때
-        }
-        btn_video.setOnClickListener {
-            //비디오 버튼을 눌렀을 때
-        }
+//        btn_camera.setOnClickListener {
+//            //카메라 버튼을 눌렀을 때
+//        }
+//        btn_gallery.setOnClickListener {
+//            //갤러리 버튼을 눌렀을 때
+//        }
+//        btn_video.setOnClickListener {
+//            //비디오 버튼을 눌렀을 때
+//        }
         btn_notice.setOnClickListener {
 
             val intent = Intent(this, MakeNoticeActivity::class.java)
@@ -276,7 +270,6 @@ class ChatActivity : AppCompatActivity() {
                 val txt = edt.text.toString()
                 edt.setText("")
                 sendMessageSocket(txt)
-                hideKeyboard()
             } else {
                 edt.requestFocus()
             }
@@ -427,12 +420,12 @@ class ChatActivity : AppCompatActivity() {
         listView_user!!.layoutManager = LinearLayoutManager(applicationContext);
         adapter_user = UserListAdapter(userList, applicationContext)
         listView_user.adapter = adapter_user
-        val divider = DividerItemDecoration(
-                listView_user.context,
-                DividerItemDecoration.VERTICAL
-        )
-        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
-        listView_user.addItemDecoration(divider)
+//        val divider = DividerItemDecoration(
+//                listView_user.context,
+//                DividerItemDecoration.VERTICAL
+//        )
+//        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
+//        listView_user.addItemDecoration(divider)
         tv_numberOfUser.text = if (userList.size > 0) "(" + userList.size.toString() + ")" else ""
     }
 
@@ -463,13 +456,17 @@ class ChatActivity : AppCompatActivity() {
         return isUpdate
     }
 
+    var firstTimeResume = true
     override fun onResume() {
         super.onResume()
         getUserList()
         updateUserList()
         Log.d(LOG_TAG, "onResume")
-        if(mSocket.connected())
-            enterRoomSocket()
+        if(mSocket.connected()) {
+            if(!firstTimeResume)
+                enterRoomSocket()
+            firstTimeResume=false
+        }
         else
             connectSocket()
         addChangeJoinedListener()
@@ -484,6 +481,7 @@ class ChatActivity : AppCompatActivity() {
             DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, dataList.last().chat_idx)
 
         isUpdateJoined.removeAllChangeListeners()
+        leaveRoomSocket()
     }
 
 
@@ -493,21 +491,30 @@ class ChatActivity : AppCompatActivity() {
             detachSocket()
             finish()
         }
-        else if(isConnectedRoom)
-            leaveRoomSocket()
+        else if(isConnectedRoom) {
+            forFinish=true
+            finish()
+        }
         else {
-            if(isConnected)
+            if(mSocket.connected())
                 detachSocket()
             super.onBackPressed()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        leaveRoomSocket()
+
+    fun clearReadLine(){
+        lastChatIdx=-1
+        if(lastChatPos==-1) return
+
+        dataList.removeAt(lastChatPos)
+        scrollToPosition(listView_chat,lastChatPos-1)
+
+        listView_chat.adapter=adapter_chat
+        adapter_chat.notifyDataSetChanged()
+        lastChatPos=-1
+        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
     }
-
-
     fun makeDialog(position: Int) {
         val dialog = ChooseWorkDialog(this)
         dialog.show()
@@ -520,12 +527,12 @@ class ChatActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, dataList[position].content + "\n가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
-                R.id.btn_delete -> {
-
-                }
-                R.id.btn_share -> {
-
-                }
+//                R.id.btn_delete -> {
+//
+//                }
+//                R.id.btn_share -> {
+//
+//                }
 
                 R.id.btn_signal -> {
                     makeSignal(position)
@@ -555,9 +562,9 @@ class ChatActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
 
                 }
-                R.id.btn_search -> {
-
-                }
+//                R.id.btn_search -> {
+//
+//                }
             }
         })
 
@@ -652,7 +659,6 @@ class ChatActivity : AppCompatActivity() {
 
         val socket = ChatApplication.getSocket(group.g_idx)
         if (socket == null) finish()
-        isConnected=true
 
         Log.d(LOG_TAG, "attach socket listener")
         mSocket = socket!!
@@ -684,7 +690,7 @@ class ChatActivity : AppCompatActivity() {
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
         mSocket.on(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.on(Constants.ENTER_ROOM_RESULT, onEnterResult)
-        mSocket.once(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
+        mSocket.on(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
         mSocket.connect()
 
     }
@@ -703,6 +709,11 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun enterRoomSocket() {
+        if(!mSocket.connected()){
+            connectSocket()
+            return
+        }
+
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
         jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
@@ -715,6 +726,10 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    private fun leaveRoomSocket(b :Boolean){
+        forFinish=b
+        leaveRoomSocket()
+    }
     private fun leaveRoomSocket() {
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
@@ -725,7 +740,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun sendMessageSocket(txt: String) {
-        lastChatIdx=-1
+        clearReadLine()
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
         jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
@@ -740,19 +755,16 @@ class ChatActivity : AppCompatActivity() {
 
         Log.i("$LOG_TAG/Socket onConnect/", "connected")
         this.runOnUiThread(Runnable {
-            if (!isConnected) {
-                enterRoomSocket()
-                isConnected = true
-            }
+            enterRoomSocket()
         })
     }
 
     private val onDisconnect = Emitter.Listener {
         Log.i("$LOG_TAG/Socket onDisconnect", "disconnected")
         this.runOnUiThread(Runnable {
-            isConnected = false
-            Toast.makeText(applicationContext,
-                    R.string.disconnect, Toast.LENGTH_LONG).show()
+            detachSocket()
+//            Toast.makeText(applicationContext,
+//                    R.string.disconnect, Toast.LENGTH_LONG).show()
         })
     }
 
@@ -781,7 +793,7 @@ class ChatActivity : AppCompatActivity() {
             adapter_chat.notifyDataSetChanged()
 
             if(firstTime ) scrollToPosition(listView_chat, dataList.lastIndex)
-            isConnectedRoom = true
+            isConnectedRoom=true
         })
     }
 
@@ -791,8 +803,10 @@ class ChatActivity : AppCompatActivity() {
 
             Log.d("$LOG_TAG/Socket ${Constants.LEAVE_ROOM_RESULT}", args[0].toString())
             if (args[0].toString() == "true") {
-                detachSocket()
-                finish()
+                if(forFinish) {
+                    detachSocket()
+                    finish()
+                }
             }
             else
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
@@ -805,8 +819,8 @@ class ChatActivity : AppCompatActivity() {
 
             addChatFromJSON(org.json.JSONObject(args[0].toString()))
 
-            scrollToPosition(listView_chat, dataList.lastIndex)
             adapter_chat.notifyDataSetChanged()
+            scrollToPosition(listView_chat, dataList.lastIndex)
 
         })
     }

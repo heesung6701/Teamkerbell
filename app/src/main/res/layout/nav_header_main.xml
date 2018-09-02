@@ -43,7 +43,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     app:srcCompat="@drawable/ic_notice_white"
                     android:contentDescription="@string/action_notice" />
@@ -69,7 +68,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     app:srcCompat="@drawable/ic_pick_white"
                     android:contentDescription="@string/action_pick" />
@@ -96,7 +94,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     app:srcCompat="@drawable/ic_vote_white"
                     android:contentDescription="@string/action_vote" />
@@ -123,7 +120,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     app:srcCompat="@drawable/ic_signal_white"
                     android:contentDescription="@string/action_signal" />
@@ -150,7 +146,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     app:srcCompat="@drawable/ic_role_white"
                     android:contentDescription="@string/action_role"/>
@@ -184,7 +179,8 @@
                 android:id="@+id/btn_nav_cloud_drive"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_edit"
+                app:srcCompat="@drawable/ic_setting"
+                android:tint="@color/grayDark"
                 android:contentDescription="@string/action_edit" />
 
         </LinearLayout>
@@ -241,6 +237,8 @@
             android:id="@+id/listView_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             />
 
 
@@ -254,8 +252,9 @@
         android:gravity="center_vertical"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingStart="29dp"
-        android:paddingEnd="21dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:elevation="4dp"
         >
         <LinearLayout
             android:layout_width="wrap_content"
@@ -272,7 +271,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
+            android:layout_marginStart="16dp"
             android:text="@string/txt_invite_member"
             android:textSize="14sp"
             />

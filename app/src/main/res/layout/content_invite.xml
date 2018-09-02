@@ -56,6 +56,7 @@
         android:focusable="true"
         android:textSize="18sp"
         android:layout_marginBottom="27dp"
+        android:visibility="gone"
         android:text="@string/txt_invite_email"
         />
     <TextView

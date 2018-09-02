@@ -52,9 +52,8 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     var recyclerView: RecyclerView by Delegates.notNull()
 
     var isUpdateJoined: IsUpdateR? = null
-    var lastChatListResult : String?=null
 
-    private var mSocket: Socket by Delegates.notNull()
+    private var mSocket: Socket? = null
 
     private var isConnectedRoomList = false
 
@@ -90,8 +89,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             }
         })
 
-        updateRoomList()
-        connectSocket()
 
         return v
     }
@@ -99,20 +96,23 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     override fun onResume() {
         super.onResume()
 
-//        attachSocket()
-        enterChatListSocket()
-
+        updateRoomList()
+        if(mSocket?.connected()==true) {
+            attachSocket()
+            enterChatListSocket()
+        }
+        else
+            connectSocket()
 
         addChangeJoinedRoomListener()
     }
 
-    override fun onStop() {
-        super.onStop()
-//        detachSocket()
+    override fun onPause() {
+        super.onPause()
+        detachSocket()
         isUpdateJoined?.removeAllChangeListeners()
-//        removeLastMsgListenr()
-
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -153,8 +153,8 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         isUpdateJoined!!.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
             if (t.isUpdate) {
                 Log.d("$LOG_TAG /isUpdateJoinedRoom", "is ${t.isUpdate}")
-
                 updateRoomList()
+                enterChatListSocket()
                 realm.executeTransaction {
                     t.isUpdate = false
                 }
@@ -178,7 +178,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             i++
         }
 
-        if(lastChatListResult!=null) updateListFromJSON(JSONObject(lastChatListResult))
         adapter.notifyDataSetChanged()
     }
 
@@ -188,7 +187,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         Log.i("$LOG_TAG/Change Group", "${group.g_idx}->${g.g_idx}")
         group = g
-        lastChatListResult=null
         updateRoomList()
 
         connectSocket()
@@ -199,43 +197,45 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     private fun connectSocket() {
         val socket = ChatApplication.getSocket(group.g_idx)
-        if (socket == null) activity.finish()
+        if (socket == null)
+            activity.finish()
 
         mSocket = socket!!
-        mSocket.on(Socket.EVENT_CONNECT, onConnect)
-        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect)
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        mSocket!!.on(Socket.EVENT_CONNECT, onConnect)
+        mSocket!!.on(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket!!.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket!!.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
         attachSocket()
-        mSocket.connect()
+        mSocket!!.connect()
 
     }
     private fun attachSocket(){
-//        Log.d(LOG_TAG, "attach socket listener")
-        mSocket.on(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
-        mSocket.on(Constants.UPDATE_CHAT_LIST, onUpdateChat)
+        Log.d("$LOG_TAG/Socket", "attach socket listener")
+        mSocket?.on(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
+        mSocket?.on(Constants.UPDATE_CHAT_LIST, onUpdateChat)
     }
     private fun detachSocket(){
-        Log.d(LOG_TAG, "detach socket listener")
-        mSocket.off(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
-        mSocket.off(Constants.UPDATE_CHAT_LIST, onUpdateChat)
+        Log.d("$LOG_TAG/Socket", "detach socket listener")
+        mSocket?.off(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
+        mSocket?.off(Constants.UPDATE_CHAT_LIST, onUpdateChat)
     }
     private fun disconnectSocket(){
-        mSocket.disconnect()
-        mSocket.off(Socket.EVENT_CONNECT, onConnect)
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect)
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
-        mSocket.off(Constants.UPDATE_CHAT_LIST, onUpdateChat)
-        mSocket.off(Constants.ENTER_ROOM_LIST_RESULT, onEnterRoomListResult)
-        mSocket.close()
+        mSocket?.disconnect()
+        mSocket?.off(Socket.EVENT_CONNECT, onConnect)
+        mSocket?.off(Socket.EVENT_DISCONNECT, onDisconnect)
+        mSocket?.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
+        mSocket?.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
+        detachSocket()
+        mSocket?.close()
     }
 
 
     private fun enterChatListSocket() {
+        if(mSocket?.connected() != true) return
+
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(activity.applicationContext))
-        mSocket.emit(Constants.ENTER_ROOM_LIST, jsonObj.toString())
+        mSocket?.emit(Constants.ENTER_ROOM_LIST, jsonObj.toString())
         Log.d("$LOG_TAG/Socket", "${Constants.ENTER_ROOM_LIST} with $jsonObj")
 
 
@@ -247,23 +247,23 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         activity?.runOnUiThread(Runnable {
             Log.i("$LOG_TAG/Socket onConnect/", "connected")
-//            attachSocket()
             enterChatListSocket()
         })
     }
 
     private val onDisconnect = Emitter.Listener {
+        Log.i("$LOG_TAG/Socket onDisconnect", "disconnected")
         activity?.runOnUiThread(Runnable {
-            Log.i("$LOG_TAG/Socket onDisconnect", "disconnected")
-
+//            Log.i("$LOG_TAG/Socket onDisconnect", "disconnected")
+            detachSocket()
         })
     }
 
     private val onConnectError = Emitter.Listener {
         Log.e("$LOG_TAG/Socket ConnectError", "Error connecting")
         activity?.runOnUiThread(Runnable {
-            Toast.makeText(activity.applicationContext,
-                    R.string.error_connect, Toast.LENGTH_LONG).show()
+//            Toast.makeText(activity.applicationContext,
+//                    R.string.error_connect, Toast.LENGTH_LONG).show()
         })
     }
 
@@ -292,7 +292,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
                 val type  = data.getInt(Constants.JSON_TYPE)
                 when(type){
-                    ChatUtils.TYPE_INVITE, ChatUtils.TYPE_GROUP_LEAVE, ChatUtils.TYPE_ENTER_GROUP->{
+                    ChatUtils.TYPE_INVITE, ChatUtils.TYPE_ENTER_GROUP->{
                         val d  = data.getString(Constants.JSON_CONTENT)
                         val uIds = d.split('/')
                         var name: String = ""
@@ -304,11 +304,17 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
                         r.lastMsgStr=(name + "님이 입장하셨습니다.")
                     }
-                    ChatUtils.TYPE_GROUP_LEAVE->{
+                    ChatUtils.TYPE_LEAVE, ChatUtils.TYPE_GROUP_LEAVE->{
+                        val d  = data.getString(Constants.JSON_CONTENT)
+                        val uIds = d.split('/')
+                        var name: String = ""
+                        uIds.forEach {
+                            val uId = Integer.parseInt(it)
+                            if(name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
+                            else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                        }
 
-                    }
-                    ChatUtils.TYPE_ENTER_GROUP->{
-
+                        r.lastMsgStr=(name + "님이 퇴장하셨습니다.")
                     }
                     ChatUtils.TYPE_NOTICE->{
                         r.lastMsgStr  = "공지가 등록되었습니다."
@@ -348,7 +354,6 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT_LIST}", args[0].toString())
 
         activity?.runOnUiThread(Runnable {
-            lastChatListResult = args[0].toString()
             updateListFromJSON(JSONObject(args[0].toString()))
             adapter.notifyDataSetChanged()
         })

@@ -270,14 +270,14 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                 }
             }
 
-            ChatUtils.TYPE_LEAVE -> {
+            ChatUtils.TYPE_LEAVE, ChatUtils.TYPE_GROUP_LEAVE -> {
                 val uId = Integer.parseInt(dataList[position].content)
                 val name = DatabaseHelpUtils.getUser(mContext,uId).name
 
                 val leaveHolder: LeaveHolder = holder as LeaveHolder
                 leaveHolder.tv.text = (name + "님이 퇴장하셨습니다.")
             }
-            ChatUtils.TYPE_ENTER_GROUP->{
+            ChatUtils.TYPE_ENTER_GROUP, ChatUtils.TYPE_INVITE->{
 
                 if(dataList[position].content.isNullOrEmpty()){
 
@@ -296,12 +296,6 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     else name += ",${DatabaseHelpUtils.getUser(mContext, uId).name}"
                 }
 
-                val inviteHolder = holder as InviteHolder
-                inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
-            }
-            ChatUtils.TYPE_INVITE -> {
-                val uId = Integer.parseInt(dataList[position].content)
-                val name = DatabaseHelpUtils.getUser(mContext,uId).name
                 val inviteHolder = holder as InviteHolder
                 inviteHolder.tv.text = (name + "님이 입장하셨습니다.")
             }
@@ -361,7 +355,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     viewHolder = ItemLHolder(mainView)
                 }
             }
-            ChatUtils.TYPE_LEAVE -> {
+            ChatUtils.TYPE_LEAVE , ChatUtils.TYPE_GROUP_LEAVE-> {
                 mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_leave, parent, false)
                 viewHolder = LeaveHolder(mainView)
             }

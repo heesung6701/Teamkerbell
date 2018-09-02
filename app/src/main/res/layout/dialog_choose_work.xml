@@ -47,6 +47,7 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="40dp" />
 
     <Button
@@ -58,6 +59,7 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="40dp" />
 
     <Button
@@ -91,7 +93,8 @@
         android:textSize="14sp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:background="@drawable/shape_press_mint"
+        android:background="@drawable/shape_press_mint_bottom"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
     <Button
@@ -105,6 +108,7 @@
         android:background="@drawable/shape_press_mint_bottom"
         android:layout_width="match_parent"
         android:paddingBottom="10dp"
+        android:visibility="gone"
         android:layout_height="40dp" />
 
 </LinearLayout>
