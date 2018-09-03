@@ -113,6 +113,7 @@
     <string name="txt_deleted_item">삭제 된 글입니다.</string>
     <string name="txt_delete_success">삭제 했습니다.</string>
     <string name="txt_usergroup">참여 멤버</string>
+    <string name="txt_unperformed_yet">모든 리스트 확인하신 후 \n 시작하기 버튼을 눌러주세요!</string>
 
 
     <string name="action_notice">공지</string>

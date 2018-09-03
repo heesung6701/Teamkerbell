@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Message
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import kotlinx.android.synthetic.main.activity_unperformed.*
 import org.teamfairy.sopt.teamkerbell.R
@@ -17,6 +16,8 @@ import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter.UnperformedPageAdapter
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.UnperformedFragment
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDialog
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -35,14 +36,8 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.TAB_UNPERFORMED_VOTE
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentInteractionListener{ //, SwipeRefreshLayout.OnRefreshListener {
+class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentInteractionListener{
 
-//    override fun onRefresh() {
-//        connectUnperformed()
-//        mSwipeRefreshLayout.isRefreshing = false
-//    }
-
-    var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
 
 
     var group : Team by Delegates.notNull()
@@ -104,16 +99,22 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
                         iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
+
+                        updateUI(false)
                     }
                     TAB_UNPERFORMED_SIGNAL -> {
                         iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
+
+                        updateUI(false)
                     }
                     TAB_UNPERFORMED_VOTE -> {
                         iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
                         iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
+
+                        updateUI(true)
                     }
                 }
             }
@@ -122,15 +123,23 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
         btn_start.setOnClickListener {
 
-            val intent = Intent(applicationContext, GroupListActivity::class.java)
-            startActivity(intent)
+            if(it.tag==1){
+                val intent = Intent(applicationContext, GroupListActivity::class.java)
+                startActivity(intent)
 
-            finish()
+                finish()
+            }else{
+                showConfirmDialog()
+            }
+
         }
 
 
-//        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
-//        mSwipeRefreshLayout.setOnRefreshListener(this)
+    }
+    private fun showConfirmDialog() {
+        val dialog = ConfirmDialog(this,getString(R.string.txt_unperformed_yet))
+        dialog.show()
+
     }
 
 
@@ -145,13 +154,34 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         }
 
         adapter.updateList(result)
-        if (cnt == 0) {
-            btn_start.visibility = View.VISIBLE
-        } else
-            btn_start.visibility = View.GONE
 
+        if(cnt == 0) {
+            btn_start.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn)
+            btn_start.tag=1
+            btn_start.visibility= View.VISIBLE
+        }else{
+            btn_start.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
+            btn_start.tag=0
+            btn_start.visibility=View.GONE
+        }
     }
 
+    private fun updateUI(isShowBtn : Boolean){
+
+        if(btn_start.tag==1) {
+            btn_start.visibility = View.VISIBLE
+            layout_3dot.visibility=View.GONE
+            return
+        }
+
+        if(isShowBtn){
+            btn_start.visibility=View.VISIBLE
+            layout_3dot.visibility=View.GONE
+        }else{
+            btn_start.visibility=View.GONE
+            layout_3dot.visibility=View.VISIBLE
+        }
+    }
     override fun onResume() {
         super.onResume()
         connectUnperformed()

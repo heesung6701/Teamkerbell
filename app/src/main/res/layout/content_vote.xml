@@ -40,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="기획"
-            android:text="기획"
             android:layout_marginStart="6dp"
             />
         </LinearLayout>
@@ -313,6 +312,7 @@
             android:text="@string/action_complete"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:theme="@style/FlatButton"
             android:textStyle="bold" />
 
     </LinearLayout>

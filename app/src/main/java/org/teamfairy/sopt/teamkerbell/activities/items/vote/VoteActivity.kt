@@ -116,6 +116,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
                 vote!!.setPhotoInfo(applicationContext)
                 setVoteInfo()
+
             }
             intent.hasExtra(INTENT_VOTE_IDX) -> voteIdx=intent.getIntExtra(INTENT_VOTE_IDX,0)
             else -> finish()
@@ -160,7 +161,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
 
-        MenuFunc(this,MenuFunc.MENU_OPT.DELETE_ONLY)
 
     }
 
@@ -195,7 +195,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     private fun setVoteInfo() {
         val vote = this.vote!!
-
 
         if(vote.u_idx==LoginToken.getUserIdx(applicationContext))
             MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
