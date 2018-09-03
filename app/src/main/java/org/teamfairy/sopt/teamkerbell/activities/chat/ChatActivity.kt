@@ -45,6 +45,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.MakeVoteActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
+import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
 import org.teamfairy.sopt.teamkerbell.listview.adapter.UserListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Room.Companion.ARG_ROOM_IDX
@@ -215,7 +216,7 @@ class ChatActivity : AppCompatActivity() {
             drawer_layout.closeDrawer(Gravity.END)
         }
         btn_leave.setOnClickListener {
-            attemptLeave()
+            showDeleteDialog()
 
         }
 
@@ -335,13 +336,16 @@ class ChatActivity : AppCompatActivity() {
                 btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
             }
         }
-
-
-
-//        connectSocket()
         attachSocket()
+    }
+    private fun showDeleteDialog() {
 
+        val dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
+        dialog.show()
 
+        dialog.setOnClickListenerYes(View.OnClickListener {
+            attemptLeave()
+        })
     }
 
 

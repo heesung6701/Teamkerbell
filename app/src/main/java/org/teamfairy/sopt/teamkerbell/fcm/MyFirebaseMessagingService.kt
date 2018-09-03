@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.fcm
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -13,8 +14,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import android.os.Build
 import android.app.NotificationChannel
+import android.graphics.Color
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
@@ -24,7 +28,13 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISU
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.setPref_isUpdate
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.StatusCode
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_INDEX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -32,9 +42,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-
-
-    private var nId: Int = 0
     /**
      * Called when message is received.
      *
@@ -59,9 +66,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            Log.d(TAG, "Message Notification Title: " + remoteMessage.notification!!.title)
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification!!.body!!)
-            sendNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!, null)
+            Log.d(TAG, "Message Notification Title: " + remoteMessage.notification?.title)
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification?.body?:"null")
+            sendNotification(remoteMessage.notification?.title ?: "팀커벨", remoteMessage.notification?.body ?: "메세지가 도착했습니다", "팀커벨",createID())
         } else {
             if (remoteMessage.data.isNotEmpty()) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.data)
@@ -103,29 +110,34 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun handleNow(remoteMessage: RemoteMessage) {
         val params = remoteMessage.data
 
-        var title: String? = null
-        var content: String? = null
-        var g_idx: Int? = null
+        var title: String = "팀커벨"
+        var body: String?=null
+        var idx : Int? =null
+        var room_idx: Int = -1
+        var chat_idx: Int = -1
 
-        var code = 0
+        var status = 0
         try {
             val jsonObject = JSONObject(params)
-            if (jsonObject.has("title"))
-                title = jsonObject.getString("title")
-            if (jsonObject.has("body"))
-                content = jsonObject.getString("body")
-            if (jsonObject.has(JSON_G_IDX))
-                g_idx = jsonObject.getInt(JSON_G_IDX)
+            if (jsonObject.has(JSON_TITLE))
+                title = jsonObject.getString(JSON_TITLE)
+            if (jsonObject.has(JSON_BODY))
+                body = jsonObject.getString(JSON_BODY)
+            if (jsonObject.has(JSON_INDEX))
+                idx = jsonObject.getInt(JSON_INDEX)
+            if (jsonObject.has(JSON_ROOM_IDX))
+                room_idx = jsonObject.getInt(JSON_ROOM_IDX)
+            if (jsonObject.has(JSON_CHAT_IDX))
+                chat_idx = jsonObject.getInt(JSON_CHAT_IDX)
+            if (jsonObject.has(JSON_STATUS))
+                status = jsonObject.getInt(JSON_STATUS)
 
-            if (jsonObject.has("data")) {
-                code = jsonObject.getInt("data")
-            }
 
         } catch (e: JSONException) {
             e.printStackTrace()
         }
 
-        when (code) {
+        when (status) {
             StatusCode.groupChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
             }
@@ -159,20 +171,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
-            StatusCode.votePush ->
-                sendNotification("팀커벨", "공지가 만들어졌습니다.", null)
-            StatusCode.makeSignal ->
-                sendNotification("팀커벨", "신호등이 만들어졌습니다.", null)
-            StatusCode.makeNotice ->
-                sendNotification("팀커벨", "공지가 만들어 졌습니다", null)
-            StatusCode.makeVote ->
-                sendNotification("팀커벨", "투표가 등록되었습니다", null)
-            StatusCode.makeRole ->
-                sendNotification("팀커벨", "역할분담이 등록되었습니다.", null)
+            StatusCode.votePush -> {
+                sendNotification(title, body?:"공지가 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+            }
+            StatusCode.makeSignal ->{
+                sendNotification(title, body?:"신호등이 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
 
+            }
+            StatusCode.makeNotice ->{
 
-            StatusCode.chatMessage ->
-                sendNotification(title!!, content!!, g_idx)
+                sendNotification(title, body?:"공지가 만들어 졌습니다", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+            }
+            StatusCode.makeVote ->{
+
+                sendNotification(title, body?:"투표가 등록되었습니다", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+            }
+            StatusCode.makeRole ->{
+
+                sendNotification(title, body?:"역할분담이 등록되었습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+            }
+
+            StatusCode.chatMessage ->{
+
+                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+            }
 
         }
 
@@ -190,7 +212,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * Create and show a simple notification containing the received FCM message.
      *
      */
-    private fun sendNotification(title: String, content: String, notifyId: Int?) {
+    private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int) {
 
         val intent = Intent(this, SplashActivity::class.java)
         LoginToken.getPref(applicationContext)
@@ -209,31 +231,36 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val CHANNEL_ID = "my_channel_01"// The id of the channel.
-//            val name = getString(R.string.app_name);// The user-visible name of the channel.
-//            val importance = NotificationManager.IMPORTANCE_HIGH
-//            var mChannel: NotificationChannel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                NotificationChannel(CHANNEL_ID, name, importance)
-//            } else {
-//                null
-//            }
-            notificationBuilder.setChannelId(CHANNEL_ID)
-        }
 
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (notifyId == null) {
-            mNotificationManager.notify(nId++,/* ID of notification */ notificationBuilder.build())
-            Log.d(TAG, "nId : $nId")
-        } else {
-            Log.d(TAG, "notifyId : $notifyId")
-            mNotificationManager.notify(notifyId,/* ID of notification */ notificationBuilder.build())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.app_name);// The user-visible name of the channel.
+            val importance = NotificationManager.IMPORTANCE_HIGH
+
+            val mChannel: NotificationChannel = NotificationChannel(CHANNEL_ID, name, importance)
+            mChannel.description=CHANNEL_ID
+            mChannel.enableLights(true)
+            mChannel.lightColor= Color.GREEN
+            mChannel.enableVibration(true)
+            mChannel.vibrationPattern=longArrayOf(100, 200, 100, 200)
+            mChannel.lockscreenVisibility=Notification.VISIBILITY_PUBLIC
+            mNotificationManager.createNotificationChannel(mChannel)
+
+            notificationBuilder.setChannelId(CHANNEL_ID)
+
         }
 
 
+        mNotificationManager.notify(nId, notificationBuilder.build())
+        Log.d(TAG, "nId : $nId")
+
     }
 
+    private fun createID(): Int {
+        val now = Date()
+        return Integer.parseInt(SimpleDateFormat("ddHHmmss", Locale.US).format(now))
+    }
     companion object {
         private val TAG = "FCM"
     }

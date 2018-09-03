@@ -41,20 +41,23 @@ class DatabaseHelpUtils {
         fun getRoom(context: Context, room_idx:Int): Room {
             val realm = getRealmDefault(context)
             val roomR = realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX,room_idx).findFirst() ?: RoomR()
+            val room =roomR.toChatRoom()
             realm.close()
-            return roomR.toChatRoom()
+            return room
         }
         fun getGroup(context: Context, g_idx:Int): Team {
             val realm = getRealmDefault(context)
             val groupR = realm.where(GroupR::class.java).equalTo(Team.ARG_G_IDX,g_idx).findFirst() ?: GroupR()
+            val group =groupR.toGroup()
             realm.close()
-            return groupR.toGroup()
+            return group
         }
         fun getUser(context: Context, u_idx:Int): User {
             val realm = getRealmDefault(context)
             val userR = realm.where(UserR::class.java).equalTo("u_idx",u_idx).findFirst() ?: UserR()
+            val user =userR.toUser()
             realm.close()
-            return userR.toUser()
+            return user
         }
 
         fun getUserListFromRealm(applicationContext: Context, dataListUser: ArrayList<User>, adapterUser: RecyclerView.Adapter<*>, group: Team,withoutUser : Boolean) {
@@ -143,26 +146,30 @@ class DatabaseHelpUtils {
 
 
         fun setPref_isUpdate(applicationContext : Context, key : String, tf : Boolean){
-
-            val pref = applicationContext.getSharedPreferences(PREF_ISUPDATE, Context.MODE_PRIVATE).edit()
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("${PREF_ISUPDATE}_user$uIdx", Context.MODE_PRIVATE).edit()
             pref.putBoolean(key,tf)
             pref.apply()
 
         }
         fun getPref_isUpdate(applicationContext: Context, key : String) : Boolean{
-            val pref = applicationContext.getSharedPreferences(PREF_ISUPDATE, Context.MODE_PRIVATE)
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("${PREF_ISUPDATE}_user$uIdx", Context.MODE_PRIVATE)
             Log.d("$LOG_TAG/pref", pref.getBoolean(key, true).toString())
             return pref.getBoolean(key,true)
         }
 
         fun setRecentChatIdx(applicationContext: Context, room_idx: Int, chat_idx:Int){
 //            Log.d("set lastChatIdx, room$room_idx,", chat_idx.toString())
-            val pref = applicationContext.getSharedPreferences("recentChatIdx", Context.MODE_PRIVATE).edit()
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("recentChatIdx_user$uIdx", Context.MODE_PRIVATE).edit()
             pref.putInt("room$room_idx", chat_idx)
             pref.apply()
         }
         fun getRecentChatIdx(applicationContext: Context, room_idx: Int) : Int {
-            val pref = applicationContext.getSharedPreferences("recentChatIdx", Context.MODE_PRIVATE)
+
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("recentChatIdx_user$uIdx", Context.MODE_PRIVATE)
             return pref.getInt("room$room_idx", -1)
         }
     }

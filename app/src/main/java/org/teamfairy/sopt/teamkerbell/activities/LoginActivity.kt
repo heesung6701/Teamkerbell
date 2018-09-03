@@ -93,12 +93,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         NetworkUtils.connectJoinedRoomList(applicationContext,null,true)
         NetworkUtils.connectRoomList(applicationContext,null,true)
 
-
-//        val dataBase: FirebaseDatabase = FirebaseDatabase.getInstance()
-//        val dataBaseReference: DatabaseReference = dataBase.reference
-//        val dataBaseFireToken: DatabaseReference? = dataBaseReference.child("firebase_tokens").ref
-//        dataBaseFireToken!!.child(LoginToken.getUserIdx(applicationContext).toString()).setValue(FirebaseInstanceId.getInstance().getToken()!!.toString())
-
         val intent = Intent(applicationContext, UnperformedActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -226,8 +220,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok,
-                            { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
+                    .setAction(android.R.string.ok
+                    ) { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) }
         } else {
             requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
         }
