@@ -20,13 +20,18 @@ class Constants{
         const val LEAVE_ROOM = "leaveroom"
         const val LEAVE_ROOM_RESULT = "leaveresult"
 
-
 //        채팅방 메시지보내기
         const val SEND_CHAT  = "sendchat"
 //        채팅방 메세지 받기/업데이트
         const val UPDATE_CHAT = "updatechat"
 //        채팅방에서 메세지 받기/업데이트
         const val UPDATE_CHAT_LIST = "updatechatlist"
+
+
+//채팅방에서 나가기
+        const val EXIT_CHAT_ROOM = "exitchatroom"
+//채팅방에서 나가기 결과
+        const val EXIT_ROOM_RESULT = "exitresult"
 
 
         const val JSON_CHAT_IDX = USGS_REQUEST_URL.JSON_CHAT_IDX

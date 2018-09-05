@@ -19,6 +19,7 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
@@ -131,6 +132,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 chat_idx = jsonObject.getInt(JSON_CHAT_IDX)
             if (jsonObject.has(JSON_STATUS))
                 status = jsonObject.getInt(JSON_STATUS)
+            if (jsonObject.has(JSON_DATA))
+                status = jsonObject.getInt(JSON_DATA)
 
 
         } catch (e: JSONException) {
@@ -200,6 +203,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (LoginToken.isValid()) {
 
+            Log.d(TAG, "LoginToken is Valid ")
             NetworkUtils.connectUserList(applicationContext,null)
             NetworkUtils.connectGroupList(applicationContext,null)
             NetworkUtils.connectRoomList(applicationContext,null)

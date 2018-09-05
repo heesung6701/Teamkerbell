@@ -62,7 +62,6 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
                         Log.d(LOG_TAG,"Group Info is updated")
                     }
 
-
                     realm.commitTransaction()
 
 

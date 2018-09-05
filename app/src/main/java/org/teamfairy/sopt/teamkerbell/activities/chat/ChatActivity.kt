@@ -10,7 +10,6 @@ import android.os.Message
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -338,13 +337,17 @@ class ChatActivity : AppCompatActivity() {
         }
         attachSocket()
     }
+
+    var dialog : ConfirmDeleteDialog? = null
     private fun showDeleteDialog() {
 
-        val dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
-        dialog.show()
+        dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
+        dialog!!.show()
 
-        dialog.setOnClickListenerYes(View.OnClickListener {
-            attemptLeave()
+        dialog!!.setOnClickListenerYes(View.OnClickListener {
+            forFinish=true
+            attemptExitSocket()
+//            attemptLeave()
         })
     }
 
@@ -365,6 +368,13 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    private fun attemptExitSocket(){
+        val jsonObj = JSONObject()
+        jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
+        jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
+        mSocket.emit(Constants.EXIT_CHAT_ROOM , jsonObj.toString())
+        Log.d("$LOG_TAG/Socket ${Constants.EXIT_CHAT_ROOM}", jsonObj.toString())
+    }
     private fun attemptLeave() {
         val task = GetMessageTask(applicationContext, HandlerLeave(this), LoginToken.getToken(applicationContext))
 
@@ -377,22 +387,24 @@ class ChatActivity : AppCompatActivity() {
         task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, METHOD_DELETE, jsonParam.toString())
     }
 
+    private fun deleteRoomFromRealm(){
+        val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
+        realm.beginTransaction()
+        realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).equalTo(ARG_U_IDX, LoginToken.getUserIdx(applicationContext)).findAll().deleteAllFromRealm()
+        realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll().deleteAllFromRealm()
+
+        val isUpdateR
+                : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
+                ?: makeUpdateR(realm, StatusCode.joinedRoomChange)
+        isUpdateR.isUpdate = true
+
+        realm.commitTransaction()
+
+    }
     private fun leavedRoom(msg: Message) {
         when (msg.what) {
             MSG_SUCCESS -> {
-
-                val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
-                realm.beginTransaction()
-                realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).equalTo(ARG_U_IDX, LoginToken.getUserIdx(applicationContext)).findAll().deleteAllFromRealm()
-                realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll().deleteAllFromRealm()
-
-                val isUpdateR
-                        : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
-                        ?: makeUpdateR(realm, StatusCode.joinedRoomChange)
-                isUpdateR.isUpdate = true
-
-                realm.commitTransaction()
-
+                deleteRoomFromRealm()
                 finish()
             }
             else ->
@@ -669,6 +681,7 @@ class ChatActivity : AppCompatActivity() {
         mSocket.on(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.on(Constants.ENTER_ROOM_RESULT, onEnterResult)
         mSocket.on(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
+        mSocket.on(Constants.EXIT_ROOM_RESULT, onExitResult)
 
 
         enterRoomSocket()
@@ -679,6 +692,7 @@ class ChatActivity : AppCompatActivity() {
         mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.off(Constants.ENTER_ROOM_RESULT, onEnterResult)
         mSocket.off(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
+        mSocket.off(Constants.EXIT_ROOM_RESULT, onExitResult)
 
 
     }
@@ -695,6 +709,7 @@ class ChatActivity : AppCompatActivity() {
         mSocket.on(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.on(Constants.ENTER_ROOM_RESULT, onEnterResult)
         mSocket.on(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
+        mSocket.on(Constants.EXIT_ROOM_RESULT, onExitResult)
         mSocket.connect()
 
     }
@@ -708,6 +723,7 @@ class ChatActivity : AppCompatActivity() {
         mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.off(Constants.ENTER_ROOM_RESULT, onEnterResult)
         mSocket.off(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
+        mSocket.off(Constants.EXIT_ROOM_RESULT, onExitResult)
         mSocket.close()
     }
 
@@ -816,6 +832,32 @@ class ChatActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         })
     }
+
+    private val onExitResult = Emitter.Listener { args ->
+        if(args[0]==null) return@Listener
+        this.runOnUiThread(Runnable {
+
+            Log.d("$LOG_TAG/Socket ${Constants.EXIT_ROOM_RESULT}", args[0].toString())
+            if (args[0].toString().length>1) {
+                if(forFinish) {
+                    forFinish=false
+                    deleteRoomFromRealm()
+                    detachSocket()
+                    finish()
+                }else{
+                    addChatFromJSON(JSONObject(args[0].toString()))
+                    adapter_chat.notifyDataSetChanged()
+                    scrollToPosition(listView_chat, dataList.lastIndex)
+
+                }
+            }
+            else {
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+                dialog?.dismiss()
+            }
+        })
+    }
+
     private val onUpdateChat = Emitter.Listener { args ->
         if(args[0]==null) return@Listener
         Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT}", args[0].toString())

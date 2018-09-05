@@ -104,6 +104,7 @@ open class NetworkUtils {
                 if (msg.what == MSG_SUCCESS) {
                     handler?.sendEmptyMessage(MSG_SUCCESS)
                     setPref_isUpdate(applicationContext, pref_key, false)
+
                 }
             }
         }

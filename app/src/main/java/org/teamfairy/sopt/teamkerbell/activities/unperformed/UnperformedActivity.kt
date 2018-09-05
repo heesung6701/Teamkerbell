@@ -126,7 +126,6 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
             if(it.tag==1){
                 val intent = Intent(applicationContext, GroupListActivity::class.java)
                 startActivity(intent)
-
                 finish()
             }else{
                 showConfirmDialog()
@@ -139,7 +138,6 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
     private fun showConfirmDialog() {
         val dialog = ConfirmDialog(this,getString(R.string.txt_unperformed_yet))
         dialog.show()
-
     }
 
 
@@ -162,7 +160,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         }else{
             btn_start.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
             btn_start.tag=0
-            btn_start.visibility=View.GONE
+            updateUI(viewPager.currentItem==TAB_UNPERFORMED_VOTE)
         }
     }
 
