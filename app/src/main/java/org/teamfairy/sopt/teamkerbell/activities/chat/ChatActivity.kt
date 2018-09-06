@@ -361,6 +361,8 @@ class ChatActivity : AppCompatActivity() {
 
     private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
         if(position<0) return
+        Log.d(LOG_TAG ,"is Fixed? ${adapter_chat.isFixedScroll}")
+        Log.d(LOG_TAG ,"is pick_id? ${adapter_chat.pick_idx}")
         if( adapter_chat.pick_idx==dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pick_idx==-1 )) {
             recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
             recyclerView.layoutManager.offsetChildrenVertical(0)
@@ -803,7 +805,7 @@ class ChatActivity : AppCompatActivity() {
         this.runOnUiThread(Runnable {
             val dataArray: JSONArray = JSONArray(args[0].toString())
 
-            val firstTime = dataList.size==0
+//            val firstTime = dataList.size==0 //이거 왜했지
             for (i in 0 until dataArray.length()) {
                 val data = dataArray.getJSONObject(i)
 
@@ -812,7 +814,8 @@ class ChatActivity : AppCompatActivity() {
 
             adapter_chat.notifyDataSetChanged()
 
-            if(firstTime ) scrollToPosition(listView_chat, dataList.lastIndex)
+//            if(firstTime)
+                scrollToPosition(listView_chat, dataList.lastIndex)
             isConnectedRoom=true
         })
     }
@@ -848,7 +851,6 @@ class ChatActivity : AppCompatActivity() {
                     addChatFromJSON(JSONObject(args[0].toString()))
                     adapter_chat.notifyDataSetChanged()
                     scrollToPosition(listView_chat, dataList.lastIndex)
-
                 }
             }
             else {

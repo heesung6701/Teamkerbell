@@ -17,9 +17,13 @@ import android.app.NotificationChannel
 import android.graphics.Color
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
+import org.teamfairy.sopt.teamkerbell.model.data.Room
+import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
+import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
@@ -34,6 +38,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -114,8 +119,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var title: String = "팀커벨"
         var body: String?=null
         var idx : Int? =null
-        var room_idx: Int = -1
-        var chat_idx: Int = -1
+        var gIdx: Int = -1
+        var roomIdx: Int = -1
+        var chatIdx: Int = -1
 
         var status = 0
         try {
@@ -127,13 +133,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             if (jsonObject.has(JSON_INDEX))
                 idx = jsonObject.getInt(JSON_INDEX)
             if (jsonObject.has(JSON_ROOM_IDX))
-                room_idx = jsonObject.getInt(JSON_ROOM_IDX)
+                roomIdx = jsonObject.getInt(JSON_ROOM_IDX)
             if (jsonObject.has(JSON_CHAT_IDX))
-                chat_idx = jsonObject.getInt(JSON_CHAT_IDX)
+                chatIdx = jsonObject.getInt(JSON_CHAT_IDX)
             if (jsonObject.has(JSON_STATUS))
                 status = jsonObject.getInt(JSON_STATUS)
             if (jsonObject.has(JSON_DATA))
                 status = jsonObject.getInt(JSON_DATA)
+            if (jsonObject.has(JSON_G_IDX))
+                gIdx = jsonObject.getInt(JSON_G_IDX)
+            else{
+                val realm = getRealmDefault(applicationContext)
+                gIdx = realm.where(RoomR::class.java).findFirst()?.g_idx ?: -1
+                realm.close()
+            }
 
 
         } catch (e: JSONException) {
@@ -175,28 +188,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
             StatusCode.votePush -> {
-                sendNotification(title, body?:"공지가 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"공지가 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
             StatusCode.makeSignal ->{
-                sendNotification(title, body?:"신호등이 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"신호등이 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_SIGNAL,gIdx)
 
             }
             StatusCode.makeNotice ->{
 
-                sendNotification(title, body?:"공지가 만들어 졌습니다", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"공지가 만들어 졌습니다", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_NOTICE,gIdx)
             }
             StatusCode.makeVote ->{
 
-                sendNotification(title, body?:"투표가 등록되었습니다", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"투표가 등록되었습니다", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
             StatusCode.makeRole ->{
 
-                sendNotification(title, body?:"역할분담이 등록되었습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"역할분담이 등록되었습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_ROLE,gIdx)
             }
 
             StatusCode.chatMessage ->{
 
-                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,room_idx).real_name,chat_idx)
+                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
             }
 
         }

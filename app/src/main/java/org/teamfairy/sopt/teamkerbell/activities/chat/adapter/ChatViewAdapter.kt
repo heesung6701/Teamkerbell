@@ -387,7 +387,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
 
     fun setFixed(b : Boolean){
         isFixedScroll=b
-        Log.d("LOG_TAG/pick_idx","isFixedScroll be $b")
+        Log.d("LOG_TAG/isFixedScroll","isFixedScroll be $b")
     }
     fun setPick(i : Int){
         pick_idx = i

@@ -4,6 +4,11 @@ import android.os.AsyncTask
 import android.util.Log
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import java.io.*
 import java.net.HttpURLConnection
@@ -137,11 +142,11 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
                 jsonParam.put("to", to)
 
                 val data = JSONObject()
-                data.put("data", StatusCode.chatMessage)
-                data.put("body",body)
-                data.put("title",title)
-                data.put("g_idx",g_idx)
-                data.put("room_idx",room_idx)
+                data.put(JSON_DATA, StatusCode.chatMessage)
+                data.put(JSON_BODY,body)
+                data.put(JSON_TITLE,title)
+                data.put(JSON_G_IDX,g_idx)
+                data.put(JSON_ROOM_IDX,room_idx)
 
                 jsonParam.put("data",data)
 
@@ -159,12 +164,11 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
                 jsonParam.put("to", to)
 
                 val data = JSONObject()
-                data.put("data",StatusCode.chatMessage)
-                data.put("body",body)
-                data.put("title",title)
-                data.put("g_idx",g_idx)
-                data.put("room_idx",g_idx)
-                jsonParam.put("data", data)
+                data.put(JSON_DATA,StatusCode.chatMessage)
+                data.put(JSON_BODY,body)
+                data.put(JSON_TITLE,title)
+                data.put(JSON_G_IDX,g_idx)
+                jsonParam.put(JSON_DATA, data)
 
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -142,6 +142,8 @@ class DatabaseHelpUtils {
         const val PREF_ISUPDATE_ROOM = "room"
         const val PREF_ISUPDATE_JOINED_GROUP = "joined_group"
         const val PREF_ISUPDATE_JOINED_ROOM = "joined_room"
+
+
         const val PREF_ISUPDATE = "pref_msg_isUpdate"
 
 
@@ -159,18 +161,31 @@ class DatabaseHelpUtils {
             return pref.getBoolean(key,true)
         }
 
+
+
+        const val PREF_RECENT_CHAT_IDX = "recentChatIdx"
+
         fun setRecentChatIdx(applicationContext: Context, room_idx: Int, chat_idx:Int){
-//            Log.d("set lastChatIdx, room$room_idx,", chat_idx.toString())
+//            Log.d("set lastChatIdx, room$group_idx,", chat_idx.toString())
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("recentChatIdx_user$uIdx", Context.MODE_PRIVATE).edit()
+            val pref = applicationContext.getSharedPreferences("${PREF_RECENT_CHAT_IDX}_user$uIdx", Context.MODE_PRIVATE).edit()
             pref.putInt("room$room_idx", chat_idx)
             pref.apply()
         }
         fun getRecentChatIdx(applicationContext: Context, room_idx: Int) : Int {
 
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("recentChatIdx_user$uIdx", Context.MODE_PRIVATE)
+            val pref = applicationContext.getSharedPreferences("${PREF_RECENT_CHAT_IDX}_user$uIdx", Context.MODE_PRIVATE)
             return pref.getInt("room$room_idx", -1)
         }
+
+
+        const val PREF_ISUPDATE_NOTICE = "joined_group"
+
+        const val PREF_ITEM_COUNT = "pref_msg_isUpdate"
+
+
+
+
     }
 }
