@@ -28,13 +28,19 @@ import java.net.URISyntaxException
 import kotlin.properties.Delegates
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.*
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
+import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 
 
 class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
@@ -51,6 +57,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
     val dataList = ArrayList<RoleFeedback>()
 
     var role: Role by Delegates.notNull()
+    var task: RoleTask by Delegates.notNull()
     var taskResponse: TaskResponse by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +107,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
 
 
         role = intent.getParcelableExtra(INTENT_ROLE)
+        task = intent.getParcelableExtra(INTENT_TASK)
 
         supportActionBar!!.title = role.title
 
@@ -120,14 +128,15 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
         if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user" + taskResponse.u_idx))
             ivProfile.setImageResource(R.drawable.icon_profile_default)
 
-        val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.stackFromEnd = true
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
 
         adapter = FeedbackListAdapter(applicationContext, dataList)
         recyclerView.adapter = adapter
 
+
+        if(taskResponse.u_idx==LoginToken.getUserIdx(applicationContext))
+            MenuFunc(this,MenuFunc.MENU_OPT.SHOW_ALL)
 
         btn_commit.setOnClickListener {
             val txt = edt_commit.text.toString()
@@ -145,7 +154,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
         }
 
 
-        MenuFunc(this)
     }
 
 
@@ -156,10 +164,10 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
     }
 
     private fun attemptEdit(){
-
-//        val task = GetMessageTask(applicationContext, HandlerEdit(this), LoginToken.getToken(applicationContext))
-//
-//        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
+        val intent = Intent(this,MakeTaskResponseActivity::class.java)
+        intent.putExtra(INTENT_TASK,task)
+        intent.putExtra(INTENT_TASK_RESPONSE,taskResponse)
+        startActivity(intent)
     }
     private fun attemptDelete(){
         val task = FeedBackTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
@@ -169,6 +177,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
 
 
     private fun connectFeedBackList() {
+        //TODO 아놔 roleTask정보 업데이트가안됨
         val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
 
         task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
@@ -184,6 +193,29 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                                     //TODO SOMETHING
+
+                    }
+                    else -> {
+                        val message = msg.data.getString("message");
+                        Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    private class HandlerEdit(activity: TaskResponseActivity) : Handler() {
+        private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            if (activity != null) {
+                when (msg.what) {
+                    Utils.MSG_SUCCESS -> {
+                        //TODO SOMETHING
+
                     }
                     else -> {
                         val message = msg.data.getString("message");
@@ -218,11 +250,11 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
                         else
                             activity.li_tv_comment_cnt.text = ""
 
-                        activity.recyclerView.scrollToPosition(dataList.size - 1)
+                        activity.recyclerView.scrollToPosition(dataList.lastIndex)
                         activity.adapter.notifyDataSetChanged()
                     }
                     else -> {
-                        val message = msg.data.getString("message");
+                        val message = msg.data.getString(USGS_REQUEST_URL.JSON_MESSAGE);
                         Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
                     }
 

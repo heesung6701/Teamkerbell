@@ -8,8 +8,12 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Team
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DEFAULT_ROOM_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
@@ -50,9 +54,10 @@ class MakeGroupTask(context: Context, handler: Handler, token : String?): GetMes
             if(baseJsonResponse.has(JSON_DATA)) {
                 val data = baseJsonResponse.getJSONObject(JSON_DATA)
 
-                group = Team(data.getInt(Team.ARG_G_IDX),
-                        data.getString(Team.ARG_REAL_NAME),
-                        data.getString(Team.ARG_CTRL_NAME))
+                group = Team(data.getInt(JSON_G_IDX),
+                        data.getString(JSON_REAL_NAME),
+                        data.getString(JSON_CTRL_NAME),
+                        data.getString(JSON_DEFAULT_ROOM_IDX))
                 if (data.has(Team.ARG_PHOTO))
                     group.photo = data.getString(Team.ARG_PHOTO)
 

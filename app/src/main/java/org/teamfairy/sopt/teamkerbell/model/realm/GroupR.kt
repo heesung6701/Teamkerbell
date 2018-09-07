@@ -15,8 +15,9 @@ open class GroupR() : RealmObject(){
     var real_name: String="알수없음"
     var ctrl_name: String="알수없음"
     var photo: String=""
+    var default_room_idx : Int =- 1
 
 
 
-    fun toGroup() : Team = Team(g_idx, real_name, ctrl_name, photo)
+    fun toGroup() : Team = Team(g_idx, real_name, ctrl_name, photo,default_room_idx)
 }

@@ -110,6 +110,7 @@
     <string name="txt_message_fail">잠시 후 다시 시도해주세요.</string>
     <string name="txt_confirm_delete">정말로 삭제 하시겠습니까?</string>
     <string name="txt_confirm_leave">정말로 나가시겠습니까?</string>
+    <string name="txt_default_cant_leave">기본 채팅방은 나가실 수 없습니다.</string>
     <string name="txt_deleted_item">삭제 된 글입니다.</string>
     <string name="txt_delete_success">삭제 했습니다.</string>
     <string name="txt_usergroup">참여 멤버</string>

@@ -281,7 +281,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
         <ImageView
-            android:id="@+id/btn_leave"
+            android:id="@+id/btn_nav_leave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_out"

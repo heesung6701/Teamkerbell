@@ -12,12 +12,13 @@ data class Team(
         var g_idx: Int, //Primary Key
         override var real_name: String,
         var ctrl_name: String,
-        var photo: String?
+        var photo: String?,
+        var default_room_idx: Int=-1
 ) : GroupInterface,Parcelable{
 
-    constructor(g_idx: Int,real_name: String,ctrl_name: String):this(g_idx,real_name,ctrl_name,null)
+    constructor(g_idx: Int,real_name: String,ctrl_name: String,default_room_idx: Int):this(g_idx,real_name,ctrl_name,null,default_room_idx)
 
-    override fun toString(): String =("${g_idx}/${real_name}/${ctrl_name}/${photo}")
+    override fun toString(): String =("$g_idx/$real_name/$ctrl_name/$photo")
 
     override fun getIdx(): Int =g_idx
 
@@ -27,6 +28,7 @@ data class Team(
         groupR.real_name=real_name
         groupR.ctrl_name=ctrl_name
         groupR.photo=photo?:""
+        groupR.default_room_idx = default_room_idx
         return groupR
     }
 
@@ -35,7 +37,8 @@ data class Team(
             source.readInt(),
             source.readString(),
             source.readString(),
-            source.readString()
+            source.readString(),
+            source.readInt()
     )
 
     override fun describeContents() = 0
@@ -45,6 +48,7 @@ data class Team(
         writeString(real_name)
         writeString(ctrl_name)
         writeString(photo)
+        writeInt(default_room_idx)
     }
 
     companion object {
@@ -59,5 +63,6 @@ data class Team(
         var ARG_REAL_NAME = "real_name"
         var ARG_CTRL_NAME = "ctrl_name"
         var ARG_PHOTO = "photo"
+        var ARG_DEFAULT_ROOM_IDX = "default_room_idx"
     }
 }

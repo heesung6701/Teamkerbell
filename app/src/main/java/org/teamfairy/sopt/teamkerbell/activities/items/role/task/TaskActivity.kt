@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.content_recyclerview.*
 import kotlinx.android.synthetic.main.content_task.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.ResponseListAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.role.dialog.SelectUserDialog
@@ -102,6 +103,10 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         setResponseList()
 
+        if(isMaster) {
+            MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
+            tv_chat_name.text = ("${tv_chat_name.text}(마스터)")
+        }
 
         btn_take_role.setOnClickListener {
             if (isMaster) {

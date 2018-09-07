@@ -16,6 +16,7 @@
 
     <include layout="@layout/content_task_response" />
 
+    <include layout="@layout/content_option_menu" />
     <ProgressBar
         android:id="@+id/download_progress"
         android:layout_width="wrap_content"

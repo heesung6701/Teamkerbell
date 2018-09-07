@@ -43,5 +43,7 @@ class IntentTag {
 
         const val INTENT_FROM_CHAT : String ="FROM_CHAT"
 
+        const val REQUEST_EDIT_ROLE_RESPONSE=502
+
     }
 }

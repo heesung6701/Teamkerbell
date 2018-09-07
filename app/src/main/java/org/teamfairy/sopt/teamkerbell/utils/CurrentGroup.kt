@@ -29,7 +29,8 @@ class CurrentGroup {
             val g = Team(pref.getInt(Team.ARG_G_IDX, 0),
                     pref.getString(Team.ARG_REAL_NAME, "그룹0"),
                     pref.getString(Team.ARG_CTRL_NAME, null),
-                    pref.getString(Team.ARG_PHOTO, null))
+                    pref.getString(Team.ARG_PHOTO, null),
+                    pref.getInt(Team.ARG_DEFAULT_ROOM_IDX,-1))
 
             team = g
 

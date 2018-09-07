@@ -10,6 +10,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Network
 import android.net.Uri
 import android.os.*
 import android.provider.DocumentsContract
@@ -42,6 +43,8 @@ import android.support.v4.app.ActivityCompat
 import android.os.Build
 import android.view.View
 import kotlinx.android.synthetic.main.activity_make_task_response.*
+import org.json.JSONArray
+import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 
 
@@ -52,6 +55,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
     private val SELECT_IMAGE = 10
 
     private var roleTask: RoleTask by Delegates.notNull()
+    private var taskResponse: TaskResponse?= null
     var fileArray = ArrayList<File>()
 
     var adapter: FileListAdapter by Delegates.notNull()
@@ -63,6 +67,12 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 
         roleTask = intent.getParcelableExtra(IntentTag.INTENT_TASK)
         tv_task_name.text = roleTask.content
+
+        if(intent.hasExtra(IntentTag.INTENT_TASK_RESPONSE)) {
+            taskResponse = intent.getParcelableExtra(IntentTag.INTENT_TASK_RESPONSE)
+            edt_content.setText(taskResponse?.content?:"")
+            //TODO FILE Array는 어떻게 추가하지
+        }
 
         btn_back.setOnClickListener {
             finish()
@@ -98,6 +108,10 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_IDX, roleTask.role_idx)
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_TASK_IDX, roleTask.task_idx)
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_RESPONSE_CONTENT, edt_content.text.toString())
+                if(taskResponse!=null){
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_RESPONSE_IDX,taskResponse!!.response_idx)
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_MINUS_ARRAY,JSONArray())
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -106,7 +120,8 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             }
             Log.d("NetworkTask", jsonParam.toString())
 
-            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE,NetworkTask.METHOD_POST, jsonParam.toString())
+
+            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE,if(taskResponse==null) NetworkTask.METHOD_POST else NetworkTask.METHOD_PUT, jsonParam.toString())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

@@ -159,6 +159,17 @@ class ChatActivity : AppCompatActivity() {
 
         tv_nav_room_name.text = room.real_name
 
+
+        if(group.default_room_idx==room.room_idx) {
+            btn_nav_leave.isEnabled=false
+            btn_nav_leave.visibility = View.INVISIBLE
+            tv_nav_room_name.text =("${tv_nav_room_name.text}(기본 채팅방)")
+        }
+        else {
+            btn_nav_leave.setOnClickListener {
+                showDeleteDialog()
+            }
+        }
         edt_sendmessage.setOnFocusChangeListener { _, b ->
             if (b) {
                 if (isExpanded) {
@@ -214,10 +225,7 @@ class ChatActivity : AppCompatActivity() {
 //            startActivity(intent)
             drawer_layout.closeDrawer(Gravity.END)
         }
-        btn_leave.setOnClickListener {
-            showDeleteDialog()
 
-        }
 
 //        btn_camera.setOnClickListener {
 //            //카메라 버튼을 눌렀을 때
@@ -340,7 +348,10 @@ class ChatActivity : AppCompatActivity() {
 
     var dialog : ConfirmDeleteDialog? = null
     private fun showDeleteDialog() {
-
+        if(group.default_room_idx==room.room_idx){
+            Toast.makeText(applicationContext,getString(R.string.txt_default_cant_leave), Toast.LENGTH_SHORT).show()
+            return
+        }
         dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
         dialog!!.show()
 
@@ -648,7 +659,7 @@ class ChatActivity : AppCompatActivity() {
             if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
-                        val obj = msg.obj as String
+//                        val obj = msg.obj as String
                         activity.enterRoomSocket()
                     }
                     else -> {

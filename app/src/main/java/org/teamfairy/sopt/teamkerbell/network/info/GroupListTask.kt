@@ -13,6 +13,7 @@ import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DEFAULT_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
@@ -52,6 +53,7 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
                         g.ctrl_name = data.getString(JSON_CTRL_NAME)
                         if (data.has(JSON_PHOTO))
                             g.photo = data.getString(JSON_PHOTO)
+                        g.default_room_idx=data.getInt(JSON_DEFAULT_ROOM_IDX)
                         realm.copyToRealmOrUpdate(g)
                     }
                     msgCode = MSG_SUCCESS
