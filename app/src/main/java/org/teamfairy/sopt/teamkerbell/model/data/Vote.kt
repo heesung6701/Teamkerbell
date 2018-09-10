@@ -23,6 +23,7 @@ data class Vote(
         var status: Int?
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
 
+
     override fun getRoomTitle(): String {
         return roomName
     }

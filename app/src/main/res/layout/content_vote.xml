@@ -34,6 +34,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_category"
+                android:contentDescription="@string/descript_category" />
                 />
         <TextView
             android:id="@+id/tv_chat_name"

@@ -1,14 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter
 
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.viewholder.UnperformedListViewHolder
-import org.teamfairy.sopt.teamkerbell.viewholder.VoteListViewHolder
 
 
 /**

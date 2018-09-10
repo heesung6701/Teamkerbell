@@ -164,5 +164,6 @@
     <string name="descript_green">초록</string>
     <string name="descript_yellow">노랑</string>
     <string name="descript_red">빨강</string>
+    <string name="descript_category">카테고리</string>
 
 </resources>

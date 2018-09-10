@@ -1,4 +1,4 @@
-package org.teamfairy.sopt.teamkerbell.viewholder
+package org.teamfairy.sopt.teamkerbell.activities.items.vote.viewholder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -10,7 +10,9 @@ import org.teamfairy.sopt.teamkerbell.R
  */
 open class VoteListViewHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
     val tvTitle : TextView = itemView.findViewById(R.id.li_tv_title)
-    val tvSubTitle : TextView = itemView.findViewById(R.id.li_tv_sub_title)
-    val tvCount : TextView = itemView.findViewById(R.id.li_tv_count)
+    val tvName : TextView = itemView.findViewById(R.id.li_tv_name)
+    val tvGroupName : TextView = itemView.findViewById(R.id.li_tv_group_name)
+    val tvRoomName : TextView = itemView.findViewById(R.id.li_tv_room_name)
+    val tvTime : TextView = itemView.findViewById(R.id.li_tv_time)
 
 }

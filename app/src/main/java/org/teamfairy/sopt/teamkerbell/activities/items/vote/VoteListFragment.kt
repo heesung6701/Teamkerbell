@@ -75,7 +75,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-        adapter = VoteListAdapter(dataList)
+        adapter = VoteListAdapter(activity.applicationContext,dataList)
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 

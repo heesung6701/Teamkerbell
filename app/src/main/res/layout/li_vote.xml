@@ -29,27 +29,62 @@
                 tools:text="서비스 마케팅" />
 
             <TextView
-                android:id="@+id/li_tv_count"
+                android:id="@+id/li_tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:textSize="15sp"
-                tools:text="4명"
+                android:textSize="12sp"
+                tools:text="3월 13일 13:00"
 
                 />
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        >
+
         <TextView
-            android:id="@+id/li_tv_sub_title"
-            android:layout_width="match_parent"
+            android:id="@+id/li_tv_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="15sp"
-            tools:text="저희 조사할 기업 어떤 걸로 할지 투표부탁 드립..." />
+            android:textSize="13sp"
+            tools:text="발신자" />
+        <TextView
+            android:id="@+id/li_tv_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textColor="@color/grayDark"
+            android:layout_marginStart="9dp"
+            tools:text="토론동아리" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_category"
+            android:textColor="@color/grayDark"
 
+            android:contentDescription="@string/descript_category" />
+
+        <TextView
+            android:id="@+id/li_tv_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textColor="@color/grayDark"
+            tools:text="채팅방이름(참여 인원수)" />
+
+    </LinearLayout>
 
     </LinearLayout>
 
