@@ -8,40 +8,66 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.model.assist.TaskResponseWithFeedback
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.model.data.RoleFeedback
+import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FEEDBACK
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROLE_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TASK_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 class FeedBackTask(context: Context, var handler: Handler, token: String?) : NetworkTask(context, token) {
 
-    val dataList = ArrayList<RoleFeedback>()
 
     var msgCode: Int = MSG_FAIL
     var message: String = "No Message"
 
-    fun extractFeatureFromJson(jsonResponse: String) {
+    fun extractFeatureFromJson(jsonResponse: String) : TaskResponseWithFeedback? {
 
         message = "No Message"
 
         val realm = getRealmDefault(context)
         try {
+            val dataList = ArrayList<RoleFeedback>()
             val baseJsonResponse = JSONObject(jsonResponse)
-            if (baseJsonResponse.has("message")) {
-                message = baseJsonResponse.getString("message")
+            if (baseJsonResponse.has(JSON_MESSAGE)) {
+                message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
-                    val datas = baseJsonResponse.getJSONArray("data")
-                    for (i in 0 until datas.length()) {
-                        val obj = datas.getJSONObject(i)
+                    val data = baseJsonResponse.getJSONObject(JSON_DATA)
+
+                    val responseJ  = data.getJSONArray(JSON_RESPONSE).getJSONObject(0)
+                    val resp : TaskResponse = TaskResponse(
+                            responseJ.getInt(JSON_U_IDX),
+                            responseJ.getInt(JSON_TASK_IDX),
+                            responseJ.getInt(JSON_RESPONSE_IDX),
+                            responseJ.getString(JSON_CONTENT),
+                            responseJ.getString(JSON_WRITE_TIME))
+
+                    val feedbacks = data.getJSONArray(JSON_FEEDBACK)
+                    for (i in 0 until feedbacks.length()) {
+                        val obj = feedbacks.getJSONObject(i)
 
 
-                        val responseIdx = obj.getInt("role_response_idx")
-                        val uIdx = obj.getInt("u_idx")
-                        val content: String = obj.getString("content")
+                        val responseIdx = obj.getInt(JSON_RESPONSE_IDX)
+                        val uIdx = obj.getInt(JSON_U_IDX)
+                        val content: String = obj.getString(JSON_CONTENT)
                         dataList.add(RoleFeedback(responseIdx, uIdx, content))
                     }
 
                     msgCode = MSG_SUCCESS
+                    val taskResponseWithFeedback = TaskResponseWithFeedback()
+                    taskResponseWithFeedback.taskResponse=resp
+                    taskResponseWithFeedback.feedbacks=dataList
+                    return taskResponseWithFeedback
 
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -54,7 +80,7 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
         } finally {
             if (realm.isInTransaction) realm.commitTransaction()
         }
-
+        return null
     }
 
 
@@ -62,12 +88,12 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
         super.onPostExecute(result)
 
 
-        extractFeatureFromJson(result!!)
+        val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
         Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
-        msg.obj=dataList
+        msg.obj= extractFeatureFromJson(result)
         val data = Bundle()
         data.putString("message", message)
         msg.data = data

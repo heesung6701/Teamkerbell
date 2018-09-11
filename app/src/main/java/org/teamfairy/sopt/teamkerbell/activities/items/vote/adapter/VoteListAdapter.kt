@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.activities.items.vote.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import org.teamfairy.sopt.teamkerbell.R
@@ -25,10 +26,12 @@ class VoteListAdapter(var mContext : Context, var dataList: ArrayList<ListDataIn
 
     override fun onBindViewHolder(holder: VoteListViewHolder, position: Int) {
         val vote = dataList[position] as Vote
-        if(vote.isFinished())
+        if(vote.isFinished()) {
             holder.tvTitle.setTextColor(Color.LTGRAY)
-        else
+        }
+        else {
             holder.tvTitle.setTextColor(Color.DKGRAY)
+        }
         holder.tvTitle.text = vote.title
         holder.tvName.text=LoginToken.getUser(mContext).name
         holder.tvGroupName.text=vote.groupName

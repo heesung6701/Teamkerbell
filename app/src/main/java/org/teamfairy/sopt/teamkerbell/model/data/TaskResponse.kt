@@ -22,6 +22,7 @@ class TaskResponse(
         var count: Int
 ) : UserInfoInterface(),Parcelable {
 
+    constructor(u_idx: Int, task_idx: Int,response_idx: Int,content: String,write_time: String) : this(u_idx,task_idx,response_idx,content,write_time,ArrayList<String>(),0)
     fun setPhotoInfo(context: Context) {
         super.setPhotoInfo(context, u_idx)
     }

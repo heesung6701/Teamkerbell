@@ -120,7 +120,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         if (chkUser[LoginToken.getUserIdx(applicationContext)] == true) {
-            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.icon_floating_minus))
+            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_exclude_member))
         } else
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))
 
@@ -223,7 +223,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
 
         if (chkUser[LoginToken.getUserIdx(applicationContext)] == true) {
-            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.icon_floating_minus))
+            btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_exclude_member))
         } else {
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))
         }

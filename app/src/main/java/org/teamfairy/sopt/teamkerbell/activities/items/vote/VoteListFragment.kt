@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_vote_list.view.*
@@ -62,6 +63,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     private var showFinished = false
     private var voteList: ArrayList<Vote> = arrayListOf<Vote>()
+    private var tvShowFinished: TextView by Delegates.notNull()
 
     private var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -90,10 +92,9 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
-
-        v.tv_show_finished.setOnClickListener {
+        tvShowFinished=v.findViewById(R.id.tv_show_finished)
+        tvShowFinished.setOnClickListener {
             showFinished = !showFinished
-            v.tv_show_finished.text = if (!showFinished) getString(R.string.action_show_finished) else getString(R.string.action_show_not_finished)
             updateVoteList()
         }
 
@@ -128,6 +129,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             }
         }
         adapter.notifyDataSetChanged()
+        tvShowFinished.text = if (!showFinished) getString(R.string.action_show_finished)+"(${voteList.size-dataList.size})" else getString(R.string.action_show_not_finished)+"(${voteList.size-dataList.size})"
     }
 
 

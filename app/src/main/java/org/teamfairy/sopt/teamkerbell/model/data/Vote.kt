@@ -58,7 +58,7 @@ data class Vote(
         return voteR
     }
 
-    fun isFinished() : Boolean = status==1
+    fun isFinished() : Boolean =  (status == 0)
 
     override fun getMainTitle(): String {
         return title!!

@@ -59,20 +59,27 @@
 
         <LinearLayout
             android:id="@+id/layout_add_task"
+            android:background="@drawable/shape_round_gray_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
             android:gravity="center_vertical"
-            android:padding="8dp">
+            android:layout_marginBottom="8dp"
+            android:padding="3dp">
             <!--android:background="@drawable/shape_border_shadow"-->
             <!--android:elevation="4dp"-->
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_round_white"
+                android:gravity="center_vertical"
+                android:padding="5dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:tint="@color/grayDarker"
                 app:srcCompat="@drawable/ic_add" />
 
 
@@ -82,7 +89,7 @@
                 android:layout_marginStart="10dp"
                 android:text="@string/txt_add_task"
                 android:textSize="14sp" />
-
+            </LinearLayout>
 
         </LinearLayout>
 

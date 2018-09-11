@@ -19,70 +19,57 @@
 
     </android.support.v7.widget.RecyclerView>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="bottom"
-                >
-                <ImageButton
-                    app:srcCompat="@drawable/icon_chat_expand"
-                    android:id="@+id/btn_expand"
-                    android:layout_width="30dp"
-                    android:scaleType="fitCenter"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/descript_open_menu" />
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/edt_sendmessage"
-                android:theme="@style/EditText_mainColor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:maxLines="4"
-                android:hint="@string/txt_enter_content"
-                android:textSize="12sp"
-                android:inputType="textMultiLine"
-                android:layout_weight="1"
-                android:scrollbars="vertical"
-
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                >
-                <Button
-                    android:id="@+id/btn_sendMessage"
-                    android:textColor="@color/white"
-                    android:background="@drawable/shape_round_btn"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:theme="@style/FlatButton"
-                    android:textSize="14sp"
-                    android:layout_margin="5dp"
-                    android:text="@string/action_send"
-                    />
-            </LinearLayout>
-
-
+            android:layout_gravity="bottom"
+            >
+            <ImageButton
+                app:srcCompat="@drawable/icon_chat_expand"
+                android:id="@+id/btn_expand"
+                android:layout_width="30dp"
+                android:scaleType="fitCenter"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/descript_open_menu" />
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/edt_sendmessage"
+            android:theme="@style/EditText_mainColor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="4"
+            android:hint="@string/txt_enter_content"
+            android:textSize="12sp"
+            android:inputType="textMultiLine"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+
+            />
+
+
+        <ImageButton
+            android:id="@+id/btn_sendMessage"
+            android:background="@drawable/shape_send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/action_send" />
+
+
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layout_expanded_menu"
         android:layout_width="match_parent"

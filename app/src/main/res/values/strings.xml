@@ -52,6 +52,7 @@
     <string name="prompt_enter_over_twelve">12자 이하로 입력해주세요</string>
 
 
+    <string name="error_enter">입력해주세요.</string>
     <string name="error_invalid_email">이메일 형태로 입력해주세요.</string>
     <string name="error_invalid_password">8자리 이상의 비밀번호를 사용해주세요.</string>
     <string name="error_incorrect_password">비밀번호가 일치하지 않습니다.</string>

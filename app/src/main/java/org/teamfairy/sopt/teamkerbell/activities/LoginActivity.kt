@@ -100,8 +100,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     }
 
 
+    val PREF_LOGIN_DATA = "pref_login_info"
     fun setPref(id: String, pwd: String) {
-        val pref = applicationContext.getSharedPreferences("pref_login_info", MODE_PRIVATE).edit()
+        val pref = applicationContext.getSharedPreferences(PREF_LOGIN_DATA, MODE_PRIVATE).edit()
         pref.putString("id", id)
         pref.putString("pwd", pwd)
         pref.apply()
@@ -256,6 +257,21 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // Store values at the time of the login attempt.
         emailStr = email.text.toString()
         passwordStr = password.text.toString()
+        if(emailStr.isBlank()){
+            email.error=getString(R.string.error_enter)
+            email.requestFocus()
+            return
+        }
+        if(!emailStr.contains("@")){
+            email.error=getString(R.string.error_invalid_email)
+            email.requestFocus()
+            return
+        }
+        if(passwordStr.isBlank()){
+            password.error=getString(R.string.error_enter)
+            password.requestFocus()
+            return
+        }
 
         showProgress(true)
 

@@ -31,8 +31,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.*
+import android.support.v4.widget.SwipeRefreshLayout
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
+import org.teamfairy.sopt.teamkerbell.model.assist.TaskResponseWithFeedback
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
@@ -43,7 +45,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 
 
-class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
+class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRefreshLayout.OnRefreshListener{
     override fun menuEdit() {
          attemptEdit()
     }
@@ -53,12 +55,28 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
     }
 
 
+    private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
+    override fun onRefresh() {
+        connectFeedBackList()
+        mSwipeRefreshLayout.isRefreshing = false
+    }
+
+
     var adapter: FeedbackListAdapter by Delegates.notNull()
     val dataList = ArrayList<RoleFeedback>()
 
     var role: Role by Delegates.notNull()
     var task: RoleTask by Delegates.notNull()
     var taskResponse: TaskResponse by Delegates.notNull()
+
+
+
+    var ivProfile: ImageView by Delegates.notNull()
+    var tvName: TextView by Delegates.notNull()
+    var tvDetail: TextView by Delegates.notNull()
+    var ivFile: ImageView by Delegates.notNull()
+    var tvContent: TextView by Delegates.notNull()
+    var tvCommentC: TextView by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_response)
@@ -73,10 +91,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
             li_iv_file.visibility = View.VISIBLE
             li_iv_file.setOnClickListener {
                 try {
-
-
 //                    requestAppPermissions()
-
                     Toast.makeText(applicationContext,taskResponse.fileArray.first().substringAfterLast('/')+"를 다운로드 시작합니다",Toast.LENGTH_SHORT).show()
                     val r = DownloadManager.Request(Uri.parse(taskResponse.fileArray.first()))
 
@@ -112,21 +127,14 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
         supportActionBar!!.title = role.title
 
 
-        val ivProfile: ImageView = findViewById(R.id.li_iv_profile)
-        val tvName: TextView = findViewById(R.id.li_tv_name)
-        val tvDetail: TextView = findViewById(R.id.li_tv_detail)
-        val ivFile: ImageView = findViewById(R.id.li_iv_file)
-        val tvContent: TextView = findViewById(R.id.li_tv_content)
-        val tvCommentC: TextView = findViewById(R.id.li_tv_comment_cnt)
+        ivProfile= findViewById(R.id.li_iv_profile)
+        tvName = findViewById(R.id.li_tv_name)
+        tvDetail = findViewById(R.id.li_tv_detail)
+        ivFile = findViewById(R.id.li_iv_file)
+        tvContent= findViewById(R.id.li_tv_content)
+        tvCommentC = findViewById(R.id.li_tv_comment_cnt)
 
-        tvName.text = taskResponse.name
-        tvDetail.text = taskResponse.write_time
-
-        tvContent.text = taskResponse.content
-        tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
-
-        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user" + taskResponse.u_idx))
-            ivProfile.setImageResource(R.drawable.icon_profile_default)
+        setResponseData(taskResponse)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -153,6 +161,9 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
             onBackPressed()
         }
 
+        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+        mSwipeRefreshLayout.setOnRefreshListener(this)
+
 
     }
 
@@ -176,8 +187,19 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
     }
 
 
+    private fun setResponseData(taskResponse : TaskResponse){
+        this.taskResponse=taskResponse
+        tvName.text = taskResponse.name
+        tvDetail.text = taskResponse.write_time
+
+        tvContent.text = taskResponse.content
+        tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
+
+        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user" + taskResponse.u_idx))
+            ivProfile.setImageResource(R.drawable.icon_profile_default)
+
+    }
     private fun connectFeedBackList() {
-        //TODO 아놔 roleTask정보 업데이트가안됨
         val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
 
         task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
@@ -236,7 +258,12 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface {
             if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
-                        val datas: ArrayList<RoleFeedback> = msg.obj as ArrayList<RoleFeedback>
+                        val taskResponseWithFeedback = msg.obj as TaskResponseWithFeedback
+                        val response = taskResponseWithFeedback.taskResponse
+                        response!!.setPhotoInfo(activity.applicationContext)
+                        activity.setResponseData(response)
+
+                        val datas: ArrayList<RoleFeedback> = taskResponseWithFeedback.feedbacks!!
                         val dataList = activity.dataList
                         dataList.clear()
 

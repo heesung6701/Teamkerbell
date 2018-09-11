@@ -93,11 +93,11 @@
                 />
             <ImageButton
                 android:id="@+id/btn_take_role"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_add"
-                />
+                android:contentDescription="@string/action_add" />
         </LinearLayout>
 
     </LinearLayout>
