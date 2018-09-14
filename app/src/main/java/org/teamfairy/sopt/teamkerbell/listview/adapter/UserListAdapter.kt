@@ -33,7 +33,7 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
             holder.chk.setOnCheckedChangeListener { _, p1 -> userCheckData.isChecked = p1 }
         }
         val url = dataList[position].photo
-        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "user${dataList[position].u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
     }
 

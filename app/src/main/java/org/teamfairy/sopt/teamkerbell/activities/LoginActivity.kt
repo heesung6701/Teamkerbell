@@ -22,6 +22,7 @@ import android.Manifest.permission.READ_CONTACTS
 import android.content.Intent
 import android.graphics.Color
 import android.os.*
+import android.provider.LiveFolders.INTENT
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
@@ -71,7 +72,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
                 when {
                     result.contains("Success") -> {
-                        activity.setPref(activity.emailStr, activity.passwordStr)
+//                        activity.setPref(activity.emailStr, activity.passwordStr)
                         activity.login()
                     }
                     result.contains("Failed") -> Toast.makeText(activity.applicationContext, "아이디 또는 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
@@ -100,13 +101,13 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     }
 
 
-    val PREF_LOGIN_DATA = "pref_login_info"
-    fun setPref(id: String, pwd: String) {
-        val pref = applicationContext.getSharedPreferences(PREF_LOGIN_DATA, MODE_PRIVATE).edit()
-        pref.putString("id", id)
-        pref.putString("pwd", pwd)
-        pref.apply()
-    }
+//    val PREF_LOGIN_DATA = "pref_login_info"
+//    fun setPref(id: String, pwd: String) {
+//        val pref = applicationContext.getSharedPreferences(PREF_LOGIN_DATA, MODE_PRIVATE).edit()
+//        pref.putString("id", id)
+//        pref.putString("pwd", pwd)
+//        pref.apply()
+//    }
 
     override fun onBackPressed() {
         finish()

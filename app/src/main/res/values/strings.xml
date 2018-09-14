@@ -41,6 +41,9 @@
     <string name="title_activity_pick_list">Pick</string>
 
     <string name="title_activity_profile">프로필 관리</string>
+    <string name="title_activity_setting">설정</string>
+    <string name="title_activity_copy_right">CopyRight</string>
+    <string name="title_activity_version_info">버전 정보</string>
 
 
     <!-- Strings related to login -->
@@ -64,8 +67,8 @@
 
     <!-- common string -->
     <string name="action_complete">완료</string>
-    <string name="title_activity_main">MainActivity</string>
 
+    <string name="txt_version">ver Beta 1.0</string>
 
     <string name="txt_team_list">팀 리스트</string>
     <string name="txt_reorder">순서변경하기</string>
@@ -116,6 +119,13 @@
     <string name="txt_delete_success">삭제 했습니다.</string>
     <string name="txt_usergroup">참여 멤버</string>
     <string name="txt_unperformed_yet">모든 리스트 확인하신 후 \n 시작하기 버튼을 눌러주세요!</string>
+    <string name="txt_setting_profile">프로필 설정</string>
+    <string name="txt_setting_message">메세지 알림 설정</string>
+    <string name="txt_version_info">버전 정보</string>
+    <string name="txt_copyright">Copyright</string>
+    <string name="txt_direct_to_ceo">Direct to CEO</string>
+    <string name="txt_ceo_email">ahndh0605@gmail.com</string>
+    <string name="txt_copyright_content">All copyrights reserved by teamkerbell★</string>
 
 
     <string name="action_notice">공지</string>
@@ -161,10 +171,15 @@
     <string name="error_connect">소켓 연결 에러</string>
     <string name="connect">소켓 연결</string>
 
+
     <string name="descript_open_menu">메뉴 열기</string>
     <string name="descript_green">초록</string>
     <string name="descript_yellow">노랑</string>
     <string name="descript_red">빨강</string>
     <string name="descript_category">카테고리</string>
-
+    <string name="txt_sign_out">로그아웃</string>
+    <string name="txt_confirm_sign_out">로그아웃 하시겠습니까?</string>
+    <string name="txt_setting_app">앱 설정</string>
+    <string name="txt_setting_group">팀 설정</string>
+    <string name="action_leave_group">팀 나가기</string>
 </resources>

@@ -28,7 +28,7 @@ class LoginToken(){
         }
 
         fun getToken(context: Context) : String{
-            if(token.isNotEmpty()) getPref(context)
+            if(token.isBlank()) getPref(context)
             return token
         }
 
@@ -70,9 +70,13 @@ class LoginToken(){
             pref.putString("photo",u.photo)
             pref.putString("id",u.id)
             pref.putString("token", token)
-
             pref.apply()
 
+        }
+        fun signOut(context : Context){
+            val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE).edit()
+            pref.clear()
+            pref.apply()
         }
     }
 }

@@ -39,6 +39,7 @@ import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.MakeNoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeCardActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.pick.PickListActivity
+import org.teamfairy.sopt.teamkerbell.activities.items.role.MakeRoleActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.MakeSignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
@@ -263,6 +264,16 @@ class ChatActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        }
+        btn_role.setOnClickListener {
+            val intent = Intent(this, MakeRoleActivity::class.java)
+            intent.putExtra(INTENT_GROUP, group)
+            intent.putExtra(INTENT_ROOM, room)
+            intent.putExtra(INTENT_FROM_CHAT,true)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+
         }
 
 
@@ -553,15 +564,23 @@ class ChatActivity : AppCompatActivity() {
                     val clipboardManager = applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                     val clipData = ClipData.newPlainText(getString(R.string.app_name), dataList[position].content)
                     clipboardManager.primaryClip = clipData
-                    Toast.makeText(applicationContext, dataList[position].content + "\n가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
+                    Toast.makeText(applicationContext, dataList[position].content + "가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                 }
 //                R.id.btn_delete -> {
 //
 //                }
-//                R.id.btn_share -> {
-//
-//                }
+                R.id.btn_share -> {
+
+                    val intent = Intent(android.content.Intent.ACTION_SEND)
+                    intent.type = "text/plain"
+
+                    intent.putExtra(Intent.EXTRA_TEXT, dataList[position].content)
+
+                    val chooser = Intent.createChooser(intent, "공유하기")
+                    startActivity(chooser)
+                    dialog.dismiss()
+                }
 
                 R.id.btn_signal -> {
                     makeSignal(position)

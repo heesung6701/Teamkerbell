@@ -195,7 +195,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
         tvContent.text = taskResponse.content
         tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
-        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user" + taskResponse.u_idx))
+        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user${ taskResponse.u_idx}"))
             ivProfile.setImageResource(R.drawable.icon_profile_default)
 
     }

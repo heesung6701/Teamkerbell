@@ -48,7 +48,7 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
                 val url = DatabaseHelpUtils.getUser(mContext, uIdx).photo
 
                 holder.ivProfiles[i].visibility = View.VISIBLE
-                if (NetworkUtils.getBitmapList(url, holder.ivProfiles[i], mContext, "$INTENT_USER/$uIdx")) {
+                if (NetworkUtils.getBitmapList(url, holder.ivProfiles[i], mContext, "user$uIdx")) {
                     holder.ivProfiles[i].setImageResource(R.drawable.icon_profile_default)
                 }
             }

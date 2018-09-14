@@ -21,7 +21,7 @@ class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>,
         holder.tvContent.text = dataList[position]["content"]
         holder.tvName.text = dataList[position]["name"]
 
-        if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext, "$INTENT_USER/${dataList[position][JSON_U_IDX]}"))
+        if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext, "user${dataList[position][JSON_U_IDX]}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
     }

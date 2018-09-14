@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
 
         main_tab.addTab(main_tab.newTab().setIcon(R.drawable.icon_tab_contact))
-        main_tab.addTab(main_tab.newTab().setIcon(R.drawable.icon_tab_chat))
+        main_tab.addTab(main_tab.newTab().setCustomView(R.layout.tab_chat))
         main_tab.addTab(main_tab.newTab().setIcon(R.drawable.icon_tab_home))
 
         main_tab.tabGravity = TabLayout.GRAVITY_FILL

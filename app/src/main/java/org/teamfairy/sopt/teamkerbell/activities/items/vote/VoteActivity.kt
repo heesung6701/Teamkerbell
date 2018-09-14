@@ -206,7 +206,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         tv_chat_name.text = group.real_name
 
         tv_content.text = vote.content
-        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "$INTENT_USER/${vote.u_idx}"))
+        if (NetworkUtils.getBitmapList(vote.photo, iv_profile, applicationContext, "user${vote.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default)
         tv_name.text = vote.name
         tv_time.text = vote.getTime()

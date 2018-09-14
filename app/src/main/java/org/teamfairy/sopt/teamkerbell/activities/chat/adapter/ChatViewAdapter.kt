@@ -85,7 +85,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.profile.visibility = View.VISIBLE
                         receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList.get(position).u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList.get(position).u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
 
                     }
@@ -139,7 +139,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.name.visibility = View.GONE
                     } else {
                         receiveHolder.profile.visibility = View.VISIBLE
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList[position].u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
                         receiveHolder.name.visibility = View.VISIBLE
                     }
@@ -180,7 +180,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.name.visibility = View.GONE
                     } else {
                         receiveHolder.profile.visibility = View.VISIBLE
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList[position].u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
                         receiveHolder.name.visibility = View.VISIBLE
                     }
@@ -222,7 +222,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.profile.visibility = View.VISIBLE
                         receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList[position].u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
                     }
                 }
@@ -264,7 +264,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.profile.visibility = View.VISIBLE
                         receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "$INTENT_USER/${dataList[position].u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList[position].u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
                     }
                 }

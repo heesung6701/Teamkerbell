@@ -11,6 +11,7 @@
     <color name="mainColorDark">#141E3B</color>
 
     <color name="mainColorM">@color/main_blue_green</color>
+    <color name="mainColorMLight">#9ad6d0</color>
 
     <color name="mainColorY">@color/main_yellow</color>
 

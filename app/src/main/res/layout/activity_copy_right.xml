@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.main.contact.ProfileActivity">
+    tools:context=".activities.setting.CopyRightActivity">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+
         <include layout="@layout/app_bar_back"/>
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <include layout="@layout/content_profile" />
+    <include layout="@layout/content_copy_right" />
 
 </android.support.design.widget.CoordinatorLayout>

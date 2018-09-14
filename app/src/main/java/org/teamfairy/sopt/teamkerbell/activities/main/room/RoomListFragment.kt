@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import kotlinx.android.synthetic.main.tab_chat.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -155,9 +156,9 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 Log.d("$LOG_TAG /isUpdateJoinedRoom", "is ${t.isUpdate}")
                 updateRoomList()
                 enterChatListSocket()
-                realm.executeTransaction {
-                    t.isUpdate = false
-                }
+                realm.beginTransaction()
+                t.isUpdate = false
+                realm.commitTransaction()
             }
         }
 
@@ -284,6 +285,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             val dataArray: JSONArray = JSONArray(args[0].toString())
 
 
+            var totalCnt : Int =0
             for (i in 0 until dataArray.length()) {
                 val data = dataArray.getJSONObject(i)
 
@@ -335,9 +337,18 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 }
                 r.lastMsgTime= data.getString(Constants.JSON_WRITE_TIME)
                 r.newMsgCnt = data.getInt(Constants.JSON_UN_READ_COUNT)
+                totalCnt+=r.newMsgCnt
 
             }
             adapter.notifyDataSetChanged()
+
+            if(totalCnt==0) activity.tab_badge.text=""
+            activity.tab_badge.text=when(totalCnt){
+                in Int.MIN_VALUE..0 -> ""
+                in 999 downTo 0 -> totalCnt.toString()
+                else-> "999+"
+            }
+            activity.tab_badge.visibility = if(activity.tab_badge.text.isNullOrBlank()) View.INVISIBLE else View.VISIBLE
 
             isConnectedRoomList = true
 

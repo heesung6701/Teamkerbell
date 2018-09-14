@@ -214,7 +214,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             StatusCode.chatMessage ->{
 
-                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx,gIdx)
             }
 
         }
@@ -234,6 +234,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * Create and show a simple notification containing the received FCM message.
      *
      */
+    private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int,g_idx : Int) {
+        if(!DatabaseHelpUtils.getSettingPush(applicationContext)) return
+        if(!DatabaseHelpUtils.getSettingPush(applicationContext,g_idx)) return
+        sendNotification(title,content,CHANNEL_ID,nId)
+    }
     private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int) {
 
         val intent = Intent(this, SplashActivity::class.java)

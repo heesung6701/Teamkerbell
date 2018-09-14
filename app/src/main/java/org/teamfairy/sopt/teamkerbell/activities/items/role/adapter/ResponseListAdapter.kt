@@ -24,7 +24,7 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
         holder.tvContent.text=taskResponse.content
         holder.tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
-        if (NetworkUtils.getBitmapList(taskResponse.photo, holder.ivProfile, mContext, "user" + taskResponse.u_idx))
+        if (NetworkUtils.getBitmapList(taskResponse.photo, holder.ivProfile, mContext, "user${ taskResponse.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         if(taskResponse.fileArray.isNotEmpty())

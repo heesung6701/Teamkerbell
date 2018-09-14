@@ -85,7 +85,7 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
 
         tv_title.text=("${notice.groupName}, ${notice.roomName}")
         tv_content.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"$INTENT_USER/${notice.u_idx}"))
+        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"user${notice.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default)
         tv_name.text=notice.name
         tv_time.text=notice.getSubTitle()

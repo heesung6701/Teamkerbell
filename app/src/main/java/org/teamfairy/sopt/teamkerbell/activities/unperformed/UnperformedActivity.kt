@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.unperformed
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,23 +9,29 @@ import android.os.Message
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_unperformed.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.GroupListActivity
+import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.notice.NoticeActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.adapter.UnperformedPageAdapter
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.fragment.UnperformedFragment
-import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
 import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDialog
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
+import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
+import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt.Companion.WHAT_ROLE
+import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt.Companion.badgeClearAll
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.info.UnperformedTask
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
@@ -42,6 +49,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
     var group : Team by Delegates.notNull()
     var adapter: UnperformedPageAdapter by Delegates.notNull()
+
+
 
     override fun onFragmentInteraction(msg: Message) {
         when (msg.what) {
@@ -74,7 +83,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         setContentView(R.layout.activity_unperformed)
 
 
-
+//        Toast.makeText(applicationContext,"onCreate",Toast.LENGTH_SHORT).show()
         iv_unperformed_1.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColorP))
         iv_unperformed_2.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
         iv_unperformed_3.setColorFilter(ContextCompat.getColor(applicationContext, R.color.grayLight))
@@ -133,7 +142,6 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
         }
 
-
     }
     private fun showConfirmDialog() {
         val dialog = ConfirmDialog(this,getString(R.string.txt_unperformed_yet))
@@ -162,6 +170,9 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
             btn_start.tag=0
             updateUI(viewPager.currentItem==TAB_UNPERFORMED_VOTE)
         }
+
+//        Toast.makeText(applicationContext,"badgeClear",Toast.LENGTH_SHORT).show()
+        BadgeCnt.badgeClearAll(applicationContext)
     }
 
     private fun updateUI(isShowBtn : Boolean){
@@ -182,8 +193,10 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
     }
     override fun onResume() {
         super.onResume()
+//        Toast.makeText(applicationContext,"onResume",Toast.LENGTH_SHORT).show()
         connectUnperformed()
     }
+
 
     private fun connectUnperformed() {
         val task = UnperformedTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
@@ -197,20 +210,26 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
 
-            if (activity != null) {
 
 
-                when (msg.what) {
-                    Utils.MSG_SUCCESS -> {
-                        activity.updateDataList(msg.obj as HashMap<String, ArrayList<*>>)
-                    }
-                    else -> {
+            when (msg.what) {
+                Utils.MSG_SUCCESS -> {
+                    activity?.updateDataList(msg.obj as HashMap<String, ArrayList<*>>)
+                }
+                else -> {
 
-                    }
                 }
             }
         }
 
     }
 
+    override fun onBackPressed() {
+        val i = Intent(this, SplashActivity::class.java)
+        i.putExtra(IntentTag.EXIT,true)
+        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NO_HISTORY
+        startActivity(i)
+        finish()
+
+    }
 }

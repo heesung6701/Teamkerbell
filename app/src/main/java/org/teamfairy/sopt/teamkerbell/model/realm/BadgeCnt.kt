@@ -3,7 +3,6 @@ package org.teamfairy.sopt.teamkerbell.model.realm
 import android.content.Context
 import android.util.Log
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 
 /**
@@ -34,7 +33,7 @@ open class BadgeCnt() : RealmObject(){
                 Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] create")
                 badgeCnt= realm.createObject(BadgeCnt::class.java)
                 badgeCnt!!.what=key
-                badgeCnt!!.g_idx=g_idx
+                badgeCnt.g_idx=g_idx
             }
             badgeCnt.cnt+=1
             realm.commitTransaction()
@@ -53,13 +52,14 @@ open class BadgeCnt() : RealmObject(){
                 Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] create")
                 badgeCnt= realm.createObject(BadgeCnt::class.java)
                 badgeCnt!!.what=key
-                badgeCnt!!.g_idx=g_idx
+                badgeCnt.g_idx=g_idx
             }
             badgeCnt.cnt=0
             realm.commitTransaction()
             Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] clear")
             realm.close()
         }
+
         fun getCount(applicationContext: Context, key : Int, g_idx: Int) : Int{
             val realm = getRealmDefault(applicationContext)
 
@@ -71,7 +71,7 @@ open class BadgeCnt() : RealmObject(){
                 realm.beginTransaction()
                 badgeCnt= realm.createObject(BadgeCnt::class.java)
                 badgeCnt!!.what=key
-                badgeCnt!!.g_idx=g_idx
+                badgeCnt.g_idx=g_idx
                 realm.commitTransaction()
             }
 
@@ -80,5 +80,20 @@ open class BadgeCnt() : RealmObject(){
             realm.close()
             return c
         }
+         fun badgeClearAll(applicationContext: Context){
+
+            val realm = getRealmDefault(applicationContext)
+
+            val result = realm.where(BadgeCnt::class.java).notEqualTo(BadgeCnt.ARG_WHAT, WHAT_ROLE).findAll()
+            realm.beginTransaction()
+            result.forEach {
+                it.cnt=0
+            }
+            realm.commitTransaction()
+            realm.close()
+        }
+
+
     }
+
 }

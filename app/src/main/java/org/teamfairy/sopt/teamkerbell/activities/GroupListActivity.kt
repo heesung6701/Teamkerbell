@@ -67,7 +67,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         tv_hello.text = ("${LoginToken.getUser(applicationContext).name}님 안녕하세요!")
 
         adapter = TeamListAdapter(dataList, this)
-        adapter.setOnLongClickHandler(HandlerDelete(this))
+//        adapter.setOnLongClickHandler(HandlerDelete(this))
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -80,7 +80,6 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
     private fun addItem() {
 
         val i = Intent(applicationContext, MakeGroupActivity::class.java)
-        i.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(i)
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
     }
@@ -99,17 +98,17 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun deleteGroup(group: Team) {
-        val task = GetMessageTask(applicationContext, HandlerDeleteSuccess(this), LoginToken.getToken(applicationContext))
-
-        val jsonParam = JSONObject()
-        try {
-            jsonParam.put(URL_LEAVE_GROUP_PARAM_GID, group.g_idx)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        task.execute(USGS_REQUEST_URL.URL_LEAVE_GROUP,METHOD_DELETE, jsonParam.toString())
-    }
+//    private fun deleteGroup(group: Team) {
+//        val task = GetMessageTask(applicationContext, HandlerDeleteSuccess(this), LoginToken.getToken(applicationContext))
+//
+//        val jsonParam = JSONObject()
+//        try {
+//            jsonParam.put(URL_LEAVE_GROUP_PARAM_GID, group.g_idx)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//        task.execute(USGS_REQUEST_URL.URL_LEAVE_GROUP,METHOD_DELETE, jsonParam.toString())
+//    }
 
     private fun connectGroupList(b: Boolean) {
         NetworkUtils.connectGroupList(applicationContext, HandlerGet(this), b)
@@ -177,31 +176,31 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private class HandlerDeleteSuccess(activity: GroupListActivity) : Handler() {
-        private val mActivity: WeakReference<GroupListActivity> = WeakReference<GroupListActivity>(activity)
+//    private class HandlerDeleteSuccess(activity: GroupListActivity) : Handler() {
+//        private val mActivity: WeakReference<GroupListActivity> = WeakReference<GroupListActivity>(activity)
+//
+//        override fun handleMessage(msg: Message) {
+//            val activity = mActivity.get()
+//            if (activity != null) {
+//                when (msg.what) {
+//                    Utils.MSG_SUCCESS -> {
+//                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
+//                        activity.connectGroupList(true)
+//                    }
+//                    else -> {
+//                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-                when (msg.what) {
-                    Utils.MSG_SUCCESS -> {
-                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
-                        activity.connectGroupList(true)
-                    }
-                    else -> {
-                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
-    private class HandlerDelete(activity: GroupListActivity) : Handler() {
-        private val mActivity: WeakReference<GroupListActivity> = WeakReference<GroupListActivity>(activity)
-
-        override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            activity?.deleteGroup(activity.groupList[msg.what])
-        }
-    }
+//    private class HandlerDelete(activity: GroupListActivity) : Handler() {
+//        private val mActivity: WeakReference<GroupListActivity> = WeakReference<GroupListActivity>(activity)
+//
+//        override fun handleMessage(msg: Message) {
+//            val activity = mActivity.get()
+//            activity?.deleteGroup(activity.groupList[msg.what])
+//        }
+//    }
 }

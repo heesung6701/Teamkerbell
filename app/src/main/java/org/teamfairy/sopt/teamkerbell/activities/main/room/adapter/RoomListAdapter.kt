@@ -38,11 +38,15 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         holder.tvTime.text = room.lastMsgTime
         if(dataList[position].newMsgCnt>0){
             holder.tvCount.visibility=View.VISIBLE
-            holder.tvCount.text= room.newMsgCnt.toString()
+            holder.tvCount.text=when(room.newMsgCnt){
+                in Int.MIN_VALUE..0 -> ""
+                in 999 downTo 0 -> room.newMsgCnt.toString()
+                else-> "999+"
+            }
         }else
             holder.tvCount.visibility=View.INVISIBLE
 
-        if(NetworkUtils.getBitmapList(room.photo, holder.ivProfile,mContext, "$INTENT_ROOM/${room.room_idx}"))
+        if(NetworkUtils.getBitmapList(room.photo, holder.ivProfile,mContext, "room${room.room_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
 

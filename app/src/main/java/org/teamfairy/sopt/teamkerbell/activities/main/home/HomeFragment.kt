@@ -26,6 +26,7 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.RoleListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListActivity
 import org.teamfairy.sopt.teamkerbell.activities.items.vote.VoteListActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.dialog.ShowUserDialog
+import org.teamfairy.sopt.teamkerbell.activities.setting.SettingActivity
 import org.teamfairy.sopt.teamkerbell.listview.adapter.TextListAdapter
 import org.teamfairy.sopt.teamkerbell.model.interfaces.GroupInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Team
@@ -52,10 +53,10 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     var tvCount: TextView by Delegates.notNull()
 
 
-    private var badgeNotice : ImageView by Delegates.notNull()
-    private var badgeSignal : ImageView by Delegates.notNull()
-    private var badgeVote : ImageView by Delegates.notNull()
-    private var badgeRole : ImageView by Delegates.notNull()
+    private var badgeNotice : TextView by Delegates.notNull()
+    private var badgeSignal : TextView by Delegates.notNull()
+    private var badgeVote : TextView by Delegates.notNull()
+    private var badgeRole : TextView by Delegates.notNull()
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -68,10 +69,10 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         showGroupInfo()
 
-        badgeNotice=v.iv_notice_sign
-        badgeSignal=v.iv_signal_sign
-        badgeVote=v.iv_vote_sign
-        badgeRole=v.iv_role_sign
+        badgeNotice=v.tv_notice_sign
+        badgeSignal=v.tv_signal_sign
+        badgeVote=v.tv_vote_sign
+        badgeRole=v.tv_role_sign
 
         v.btn_notice.setOnClickListener {
             BadgeCnt.clear(activity.applicationContext,BadgeCnt.WHAT_NOTICE,group.g_idx)
@@ -106,6 +107,12 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             val i = Intent(activity.applicationContext, RoleListActivity::class.java)
             i.putExtra(INTENT_GROUP, group)
             startActivity(i)
+        }
+        v.btn_setting.setOnClickListener {
+            val i = Intent(activity.applicationContext, SettingActivity::class.java)
+            i.putExtra(INTENT_GROUP, group)
+            startActivity(i)
+
         }
 
 
@@ -244,7 +251,7 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 realm.beginTransaction()
                 badgeCnt= realm.createObject(BadgeCnt::class.java)
                 badgeCnt!!.what=key
-                badgeCnt!!.g_idx=group.g_idx
+                badgeCnt.g_idx=group.g_idx
                 realm.commitTransaction()
             }
 
@@ -270,32 +277,40 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private fun setBadgeCnt(key : Int, value : Int){
         when(key){
             BadgeCnt.WHAT_NOTICE->{
-                if(value>0)
-                    badgeNotice.visibility=View.VISIBLE
-                else
-                    badgeNotice.visibility=View.GONE
-
+                badgeNotice.text=when(value){
+                    in Int.MIN_VALUE..0 -> ""
+                    in 999 downTo 0 -> value.toString()
+                    else-> "999+"
+                }
+                badgeNotice.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
             }
             BadgeCnt.WHAT_SIGNAL->{
-                if(value>0)
-                    badgeSignal.visibility=View.VISIBLE
-                else
-                    badgeSignal.visibility=View.GONE
+                badgeSignal.text=when(value){
+                    in Int.MIN_VALUE..0 -> ""
+                    in 999 downTo 0 -> value.toString()
+                    else-> "999+"
+                }
+                badgeSignal.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
+
 
             }
             BadgeCnt.WHAT_VOTE->{
-                if(value>0)
-                    badgeVote.visibility=View.VISIBLE
-                else
-                    badgeVote.visibility=View.GONE
+
+                badgeVote.text=when(value){
+                    in Int.MIN_VALUE..0 -> ""
+                    in 999 downTo 0 -> value.toString()
+                    else-> "999+"
+                }
+                badgeVote.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
 
             }
             BadgeCnt.WHAT_ROLE->{
-
-                if(value>0)
-                    badgeRole.visibility=View.VISIBLE
-                else
-                    badgeRole.visibility=View.GONE
+                badgeRole.text=when(value){
+                    in Int.MIN_VALUE..0 -> ""
+                    in 999 downTo 0 -> value.toString()
+                    else-> "999+"
+                }
+                badgeRole.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
 
             }
         }

@@ -137,6 +137,7 @@ class DatabaseHelpUtils {
             getRoomListFromRealm(applicationContext,dataListRoom,adapterRoom,group,false)
         }
 
+        const val PREF_USER = "pref_user"
         const val PREF_ISUPDATE_USER = "user"
         const val PREF_ISUPDATE_GROUP = "group"
         const val PREF_ISUPDATE_ROOM = "room"
@@ -144,48 +145,78 @@ class DatabaseHelpUtils {
         const val PREF_ISUPDATE_JOINED_ROOM = "joined_room"
 
 
-        const val PREF_ISUPDATE = "pref_msg_isUpdate"
+        const val PREF_ISUPDATE = "isUpdate_"
 
 
         fun setPref_isUpdate(applicationContext : Context, key : String, tf : Boolean){
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("${PREF_ISUPDATE}_user$uIdx", Context.MODE_PRIVATE).edit()
-            pref.putBoolean(key,tf)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE).edit()
+
+            Log.d("$LOG_TAG/pref", "$PREF_ISUPDATE$key -> $tf" )
+            pref.putBoolean("$PREF_ISUPDATE$key",tf)
             pref.apply()
 
         }
         fun getPref_isUpdate(applicationContext: Context, key : String) : Boolean{
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("${PREF_ISUPDATE}_user$uIdx", Context.MODE_PRIVATE)
-            Log.d("$LOG_TAG/pref", pref.getBoolean(key, true).toString())
-            return pref.getBoolean(key,true)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE)
+            Log.d("$LOG_TAG/pref", "$PREF_ISUPDATE$key is ${pref.getBoolean("$PREF_ISUPDATE$key", true)}")
+            return pref.getBoolean("$PREF_ISUPDATE$key",true)
         }
 
 
 
-        const val PREF_RECENT_CHAT_IDX = "recentChatIdx"
+        const val PREF_RECENT_CHAT_IDX = "recentChatIdx_group"
 
         fun setRecentChatIdx(applicationContext: Context, room_idx: Int, chat_idx:Int){
-//            Log.d("set lastChatIdx, room$group_idx,", chat_idx.toString())
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("${PREF_RECENT_CHAT_IDX}_user$uIdx", Context.MODE_PRIVATE).edit()
-            pref.putInt("room$room_idx", chat_idx)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE).edit()
+            Log.d("$LOG_TAG/pref", "$PREF_RECENT_CHAT_IDX$room_idx -> $chat_idx")
+            pref.putInt("$PREF_RECENT_CHAT_IDX$room_idx", chat_idx)
             pref.apply()
         }
         fun getRecentChatIdx(applicationContext: Context, room_idx: Int) : Int {
 
             val uIdx =LoginToken.getUserIdx(applicationContext)
-            val pref = applicationContext.getSharedPreferences("${PREF_RECENT_CHAT_IDX}_user$uIdx", Context.MODE_PRIVATE)
-            return pref.getInt("room$room_idx", -1)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE)
+            Log.d("$LOG_TAG/pref", "$PREF_RECENT_CHAT_IDX$room_idx is ${pref.getInt("$PREF_RECENT_CHAT_IDX$room_idx", -1)}")
+            return pref.getInt("$PREF_RECENT_CHAT_IDX$room_idx", -1)
         }
 
 
-        const val PREF_ISUPDATE_NOTICE = "joined_group"
-
-        const val PREF_ITEM_COUNT = "pref_msg_isUpdate"
 
 
+        const val PREF_SETTING_MESSAGE = "setting_push_group"
 
+        fun setSettingPush(applicationContext: Context, tf : Boolean){
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE).edit()
+            Log.d("$LOG_TAG/pref", "$PREF_SETTING_MESSAGE -> $tf")
+            pref.putBoolean(PREF_SETTING_MESSAGE, tf)
+            pref.apply()
+        }
+        fun getSettingPush(applicationContext: Context) : Boolean {
+
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE)
+            Log.d("$LOG_TAG/pref", "$PREF_SETTING_MESSAGE is ${pref.getBoolean(PREF_SETTING_MESSAGE, true)}")
+            return pref.getBoolean(PREF_SETTING_MESSAGE, true)
+        }
+
+        fun setSettingPush(applicationContext: Context, g_idx: Int, tf : Boolean){
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE).edit()
+            Log.d("$LOG_TAG/pref", "$PREF_SETTING_MESSAGE$g_idx -> $tf")
+            pref.putBoolean("$PREF_SETTING_MESSAGE$g_idx", tf)
+            pref.apply()
+        }
+        fun getSettingPush(applicationContext: Context, g_idx: Int) : Boolean {
+
+            val uIdx =LoginToken.getUserIdx(applicationContext)
+            val pref = applicationContext.getSharedPreferences("$PREF_USER$uIdx", Context.MODE_PRIVATE)
+            Log.d("$LOG_TAG/pref", "$PREF_SETTING_MESSAGE$g_idx is ${pref.getBoolean("$PREF_SETTING_MESSAGE$g_idx", true)}")
+            return pref.getBoolean("$PREF_SETTING_MESSAGE$g_idx", true)
+        }
 
     }
 }

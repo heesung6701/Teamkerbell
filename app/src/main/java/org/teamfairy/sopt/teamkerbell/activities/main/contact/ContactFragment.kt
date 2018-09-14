@@ -129,19 +129,20 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
             Log.d(LOG_TAG, "was true")
             getUserList()
 
-            realm.executeTransaction {
-                isUpdateR.isUpdate = false
-                Log.d(LOG_TAG, "become false")
-            }
+            realm.beginTransaction()
+            isUpdateR.isUpdate = false
+            realm.commitTransaction()
+            Log.d(LOG_TAG, "become false")
         }
+
         isUpdateR.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
             if (t.isUpdate) {
                 Log.d(LOG_TAG, "is ${t.isUpdate} on addChangeListener")
                 getUserList()
-                realm.executeTransaction {
-                    t.isUpdate = false
-                    Log.d(LOG_TAG, "is updated on addChangeListener")
-                }
+                realm.beginTransaction()
+                t.isUpdate = false
+                realm.commitTransaction()
+                Log.d(LOG_TAG, "is updated on addChangeListener")
             }
         }
         isUpdateRs[what]= isUpdateR
@@ -150,7 +151,7 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
 
     private fun setMyProfile(u: User) {
         tvName.text = u.name
-        if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "$INTENT_USER/${u.u_idx}"))
+        if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "user${u.u_idx}"))
             ivPhoto.setImageResource(R.drawable.icon_profile_default)
     }
 

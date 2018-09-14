@@ -51,7 +51,7 @@ class ProfileActivity : AppCompatActivity() {
         tv_phone.text  = user.phone
 
         val url = user.photo
-        if (NetworkUtils.getBitmapList(url, img_profile,applicationContext,"user"+user.u_idx))
+        if (NetworkUtils.getBitmapList(url, img_profile,applicationContext,"user${user.u_idx}"))
             img_profile.setImageResource(R.drawable.icon_profile_default)
 
 
@@ -96,7 +96,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    fun uploadFIle(){
+    private fun uploadFIle(){
 
 
         val jsonParam = JSONObject()
