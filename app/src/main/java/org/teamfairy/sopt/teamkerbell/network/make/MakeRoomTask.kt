@@ -6,13 +6,9 @@ import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.json.JSONException
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.utils.TagUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.model.data.Team
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CTRL_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_REAL_NAME
@@ -21,7 +17,6 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
-import kotlin.properties.Delegates
 
 /**
  * Created by lumiere on 2018-01-05.

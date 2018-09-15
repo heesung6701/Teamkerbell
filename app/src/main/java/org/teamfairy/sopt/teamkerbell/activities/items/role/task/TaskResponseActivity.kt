@@ -3,9 +3,6 @@ package org.teamfairy.sopt.teamkerbell.activities.items.role.task
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.app_bar_more.*
 import org.teamfairy.sopt.teamkerbell.R
 
@@ -32,6 +29,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.*
 import android.support.v4.widget.SwipeRefreshLayout
+import android.widget.*
+import kotlinx.android.synthetic.main.li_feedback.*
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.model.assist.TaskResponseWithFeedback
@@ -40,14 +39,13 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
-import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_PUT
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 
 
-class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRefreshLayout.OnRefreshListener{
+class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefreshLayout.OnRefreshListener {
     override fun menuEdit() {
-         attemptEdit()
+        attemptEdit()
     }
 
     override fun menuDelete() {
@@ -70,54 +68,23 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
     var taskResponse: TaskResponse by Delegates.notNull()
 
 
-
     var ivProfile: ImageView by Delegates.notNull()
     var tvName: TextView by Delegates.notNull()
-    var tvDetail: TextView by Delegates.notNull()
-    var ivFile: ImageView by Delegates.notNull()
+    private var tvDetail: TextView by Delegates.notNull()
+    private var layoutFile: LinearLayout by Delegates.notNull()
+    var tvFileName: TextView by Delegates.notNull()
     var tvContent: TextView by Delegates.notNull()
-    var tvCommentC: TextView by Delegates.notNull()
+    private var tvCommentC: TextView by Delegates.notNull()
+
+    private var btnBefore: ImageButton by Delegates.notNull()
+    private var btnNext: ImageButton by Delegates.notNull()
+
+    var selectedFile : Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_response)
         setSupportActionBar(toolbar)
 
-
-        taskResponse = intent.getParcelableExtra(INTENT_TASK_RESPONSE)
-
-        taskResponse.setPhotoInfo(this)
-
-        if (taskResponse.fileArray.isNotEmpty()) {
-            li_iv_file.visibility = View.VISIBLE
-            li_iv_file.setOnClickListener {
-                try {
-//                    requestAppPermissions()
-                    Toast.makeText(applicationContext,taskResponse.fileArray.first().substringAfterLast('/')+"를 다운로드 시작합니다",Toast.LENGTH_SHORT).show()
-                    val r = DownloadManager.Request(Uri.parse(taskResponse.fileArray.first()))
-
-// This put the download in the same Download dir the browser uses
-                    r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, taskResponse.fileArray.first().substringAfterLast('/'))
-
-// When downloading music and videos they will be listed in the player
-// (Seems to be available since Honeycomb only)
-                    r.allowScanningByMediaScanner()
-
-// Notify user when download is completed
-// (Seems to be available since Honeycomb only)
-                    r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-// Start download
-                    val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                    dm.enqueue(r)
-
-                } catch (e: URISyntaxException) {
-                    Toast.makeText(applicationContext, "올바르지 않은 파일형식입니다.", Toast.LENGTH_SHORT).show()
-                } catch (e: Exception) {
-                    Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
-//                    Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
 
 
@@ -127,12 +94,20 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
         supportActionBar!!.title = role.title
 
 
-        ivProfile= findViewById(R.id.li_iv_profile)
+        ivProfile = findViewById(R.id.li_iv_profile)
         tvName = findViewById(R.id.li_tv_name)
         tvDetail = findViewById(R.id.li_tv_detail)
-        ivFile = findViewById(R.id.li_iv_file)
-        tvContent= findViewById(R.id.li_tv_content)
+        layoutFile = findViewById(R.id.li_layout_file)
+        tvFileName = findViewById(R.id.li_tv_file_name)
+        tvContent = findViewById(R.id.li_tv_content)
         tvCommentC = findViewById(R.id.li_tv_comment_cnt)
+
+        btnBefore= findViewById(R.id.li_btn_file_before)
+        btnNext = findViewById(R.id.li_btn_file_next)
+
+
+        taskResponse = intent.getParcelableExtra(INTENT_TASK_RESPONSE)
+        taskResponse.setPhotoInfo(this)
 
         setResponseData(taskResponse)
 
@@ -143,8 +118,8 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
         recyclerView.adapter = adapter
 
 
-        if(taskResponse.u_idx==LoginToken.getUserIdx(applicationContext))
-            MenuFunc(this,MenuFunc.MENU_OPT.SHOW_ALL)
+        if (taskResponse.u_idx == LoginToken.getUserIdx(applicationContext))
+            MenuFunc(this, MenuFunc.MENU_OPT.SHOW_ALL)
 
         btn_commit.setOnClickListener {
             val txt = edt_commit.text.toString()
@@ -152,7 +127,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
             val jsonParam = JSONObject()
             jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
             jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_CONTENT, txt)
-            task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK,METHOD_POST, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK, METHOD_POST, jsonParam.toString())
 
             edt_commit.setText("")
         }
@@ -161,12 +136,30 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
             onBackPressed()
         }
 
-        mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+        btnNext.setOnClickListener {
+            selectedFile++
+            if(selectedFile==taskResponse.fileArray.lastIndex) it.visibility=View.INVISIBLE
+            tvFileName.text = ("${selectedFile+1}.${taskResponse.fileArray[selectedFile]}")
+
+            btnBefore.visibility=View.VISIBLE
+
+        }
+        btnBefore.setOnClickListener {
+            selectedFile--
+            if(selectedFile==-1){
+                it.visibility=View.INVISIBLE
+                tvFileName.text=("All.${taskResponse.fileArray[0]}" + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
+            }else{
+                tvFileName.text=("${selectedFile+1}.${taskResponse.fileArray[selectedFile]}")
+            }
+            btnNext.visibility=View.VISIBLE
+        }
+
+        mSwipeRefreshLayout = findViewById(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
 
     }
-
 
 
     override fun onResume() {
@@ -174,31 +167,86 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
         connectFeedBackList()
     }
 
-    private fun attemptEdit(){
-        val intent = Intent(this,MakeTaskResponseActivity::class.java)
-        intent.putExtra(INTENT_TASK,task)
-        intent.putExtra(INTENT_TASK_RESPONSE,taskResponse)
+    private fun attemptEdit() {
+        val intent = Intent(this, MakeTaskResponseActivity::class.java)
+        intent.putExtra(INTENT_TASK, task)
+        intent.putExtra(INTENT_TASK_RESPONSE, taskResponse)
         startActivity(intent)
     }
-    private fun attemptDelete(){
-        val task = FeedBackTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
+
+    private fun attemptDelete() {
+        val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
 
         task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE + "/" + taskResponse.response_idx, METHOD_DELETE)
     }
 
 
-    private fun setResponseData(taskResponse : TaskResponse){
-        this.taskResponse=taskResponse
+    private fun setResponseData(taskResponse: TaskResponse) {
+
+
+        this.taskResponse = taskResponse
         tvName.text = taskResponse.name
         tvDetail.text = taskResponse.write_time
 
         tvContent.text = taskResponse.content
         tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
-        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user${ taskResponse.u_idx}"))
+        if (NetworkUtils.getBitmapList(taskResponse.photo, ivProfile, this, "user${taskResponse.u_idx}"))
             ivProfile.setImageResource(R.drawable.icon_profile_default)
 
+        if (taskResponse.fileArray.isNotEmpty()) {
+            tvFileName.text = (taskResponse.fileArray[0] + if (taskResponse.fileArray.size > 1) "+${taskResponse.fileArray.size - 1}" else "")
+            layoutFile.visibility = View.VISIBLE
+
+            layoutFile.setOnClickListener {
+                if (selectedFile == -1) {
+                    Toast.makeText(applicationContext, taskResponse.fileArray.first().substringAfterLast('/') + "(+${taskResponse.fileArray.size - 1})를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
+//                    requestAppPermissions()
+                    taskResponse.fileArray.forEach {
+                       downLoadFile(it)
+                    }
+                }else{
+                    Toast.makeText(applicationContext, "${taskResponse.fileArray[selectedFile]}를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
+                    downLoadFile(taskResponse.fileArray[selectedFile])
+                }
+            }
+            if(taskResponse.fileArray.size>1)
+                btnNext.visibility=View.VISIBLE
+
+        } else {
+            tvFileName.text = getString(R.string.txt_no_file)
+//            layoutFile.visibility = View.GONE
+        }
+
+
     }
+    private  fun downLoadFile(url : String){
+        try {
+            val r = DownloadManager.Request(Uri.parse(url))
+
+            // This put the download in the same Download dir the browser uses
+            r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substringAfterLast('/'))
+
+            // When downloading music and videos they will be listed in the player
+            // (Seems to be available since Honeycomb only)
+            r.allowScanningByMediaScanner()
+
+            // Notify user when download is completed
+            // (Seems to be available since Honeycomb only)
+            r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+
+            // Start download
+            val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(r)
+
+        } catch (e: URISyntaxException) {
+            Toast.makeText(applicationContext, "올바르지 않은 파일형식입니다.", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun connectFeedBackList() {
         val task = FeedBackTask(applicationContext, HandlerGetFeedback(this), LoginToken.getToken(applicationContext))
 
@@ -214,7 +262,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
             if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
-                                    //TODO SOMETHING
+                        activity.finish()
 
                     }
                     else -> {
@@ -228,27 +276,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface , SwipeRef
         }
     }
 
-    private class HandlerEdit(activity: TaskResponseActivity) : Handler() {
-        private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
-
-        override fun handleMessage(msg: Message) {
-            val activity = mActivity.get()
-            if (activity != null) {
-                when (msg.what) {
-                    Utils.MSG_SUCCESS -> {
-                        //TODO SOMETHING
-
-                    }
-                    else -> {
-                        val message = msg.data.getString("message");
-                        Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-
-            }
-        }
-    }
 
     private class HandlerGetFeedback(activity: TaskResponseActivity) : Handler() {
         private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)

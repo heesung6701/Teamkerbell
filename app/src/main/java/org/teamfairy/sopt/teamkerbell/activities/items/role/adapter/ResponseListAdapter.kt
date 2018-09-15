@@ -21,16 +21,21 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
         holder.tvName.text=taskResponse.name
         holder.tvDetail.text=taskResponse.write_time
 
+        if(taskResponse.fileArray.isNotEmpty()) {
+            holder.tvFileName.text=  (taskResponse.fileArray[0] + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
+            holder.layoutFile.visibility = View.VISIBLE
+        }
+        else {
+            holder.tvFileName.text = mContext.getString(R.string.txt_no_file)
+//            holder.layoutFile.visibility = View.GONE
+        }
         holder.tvContent.text=taskResponse.content
         holder.tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
         if (NetworkUtils.getBitmapList(taskResponse.photo, holder.ivProfile, mContext, "user${ taskResponse.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
-        if(taskResponse.fileArray.isNotEmpty())
-            holder.ivFile.visibility=View.VISIBLE
-        else
-            holder.ivFile.visibility=View.GONE
+
     }
 
 

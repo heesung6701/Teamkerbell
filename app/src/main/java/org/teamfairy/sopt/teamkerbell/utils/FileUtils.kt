@@ -109,8 +109,8 @@ class FileUtils {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos)
                 options -= 10
             }
-            Log.d(LOG_TAG + "/file_options", options.toString())
-            Log.d(LOG_TAG + "/file_size_after", baos.toByteArray().size.toString())
+            Log.d("$LOG_TAG/file_options", options.toString())
+            Log.d("$LOG_TAG/file_size_after", baos.toByteArray().size.toString())
 
             return baos
         }
@@ -119,9 +119,9 @@ class FileUtils {
 
             val name = imagePath.substringAfterLast("/")
             val btt: Bitmap = BitmapFactory.decodeFile(imagePath)
-            Log.d(LOG_TAG + "/file", btt.height.toString() + "," + btt.width.toString())
+            Log.d("$LOG_TAG/file", btt.height.toString() + "," + btt.width.toString())
             val bitmap = resizeBitmap(imagePath)
-            Log.d(LOG_TAG + "/file", bitmap.height.toString() + "," + bitmap.width.toString())
+            Log.d("$LOG_TAG/file", bitmap.height.toString() + "," + bitmap.width.toString())
 
             val baos = compressImage(bitmap)
 
@@ -146,7 +146,7 @@ class FileUtils {
             } else {
                 fileNew.createNewFile()
             }
-            Log.d(LOG_TAG + "/file", fileNew.path)
+            Log.d("$LOG_TAG/file", fileNew.path)
 
             val os = FileOutputStream(fileNew);
 

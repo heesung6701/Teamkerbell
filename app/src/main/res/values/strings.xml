@@ -182,4 +182,5 @@
     <string name="txt_setting_app">앱 설정</string>
     <string name="txt_setting_group">팀 설정</string>
     <string name="action_leave_group">팀 나가기</string>
+    <string name="txt_no_file">첨부된 파일이 없습니다.</string>
 </resources>

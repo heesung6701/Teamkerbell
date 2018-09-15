@@ -6,16 +6,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentUris
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.net.Network
 import android.net.Uri
 import android.os.*
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -43,6 +40,7 @@ import android.support.v4.app.ActivityCompat
 import android.os.Build
 import android.view.View
 import kotlinx.android.synthetic.main.activity_make_task_response.*
+import kotlinx.android.synthetic.main.li_file.view.*
 import org.json.JSONArray
 import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
@@ -60,6 +58,8 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 
     var adapter: FileListAdapter by Delegates.notNull()
 
+
+    var minusArray = JSONArray()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_task_response)
@@ -71,7 +71,19 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         if(intent.hasExtra(IntentTag.INTENT_TASK_RESPONSE)) {
             taskResponse = intent.getParcelableExtra(IntentTag.INTENT_TASK_RESPONSE)
             edt_content.setText(taskResponse?.content?:"")
-            //TODO FILE Array는 어떻게 추가하지
+
+            taskResponse?.fileArray?.forEach {
+                val layout = layoutInflater.inflate(R.layout.li_file, layout_uploaded, false)
+                val fileName = it
+                layout.li_tv_title.text= fileName
+                layout.li_tv_sub_title.text="업로드된 파일"
+                layout.li_btn_minus.setOnClickListener {
+                    layout_uploaded.removeView(layout)
+                    minusArray.put(fileName)
+                }
+                layout_uploaded.addView(layout)
+
+            }
         }
 
         btn_back.setOnClickListener {
@@ -96,7 +108,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 
         btn_commit.setOnClickListener {
             if(edt_content.text.isEmpty() && edt_content.text.isBlank()){
-                Toast.makeText(applicationContext,"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,getString(R.string.txt_enter_content),Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             isUploading()
@@ -110,7 +122,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_RESPONSE_CONTENT, edt_content.text.toString())
                 if(taskResponse!=null){
                     jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_RESPONSE_IDX,taskResponse!!.response_idx)
-                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_MINUS_ARRAY,JSONArray())
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_MINUS_ARRAY,minusArray)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

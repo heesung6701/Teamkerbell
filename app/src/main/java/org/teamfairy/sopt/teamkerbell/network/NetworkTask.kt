@@ -116,7 +116,8 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             Log.d("$LOG_TAG/REQUEST_URL", params[0])
             Log.d("$LOG_TAG/REQUEST_METHOD", params[1])
-            Log.d("$LOG_TAG/REQUEST_JSON", params[2])
+            if(params.lastIndex<=2)
+                Log.d("$LOG_TAG/REQUEST_JSON", params[2])
 
             val url = createUrl(*params)
             urlConnection = url!!.openConnection() as HttpURLConnection
@@ -138,7 +139,9 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             val os = urlConnection.outputStream
             val osw = OutputStreamWriter(os, "UTF-8")
-            osw.write(params[2])
+            if(params.lastIndex<=2) {
+                osw.write(params[2])
+            }
             osw.flush()
 
 
@@ -574,6 +577,4 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         }
         return output.toString()
     }
-
-
 }
