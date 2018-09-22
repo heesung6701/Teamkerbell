@@ -2,6 +2,7 @@ package org.teamfairy.sopt.teamkerbell.model.realm
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.teamfairy.sopt.teamkerbell.activities.chat.socket.Constants
 import org.teamfairy.sopt.teamkerbell.model.list.ContactListData
 import org.teamfairy.sopt.teamkerbell.model.data.User
 
@@ -21,4 +22,9 @@ open class UserR : RealmObject() {
 
     fun toContactListData(): ContactListData = ContactListData(null, User(u_idx, name, phone, bio, photo, id),false)
     fun toUser() : User = User(u_idx, name, phone, bio, photo, id)
+
+    companion object {
+        const val ARG_U_IDX = Constants.JSON_U_IDX
+
+    }
 }

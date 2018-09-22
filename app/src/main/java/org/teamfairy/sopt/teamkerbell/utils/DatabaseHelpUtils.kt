@@ -137,6 +137,7 @@ class DatabaseHelpUtils {
             getRoomListFromRealm(applicationContext,dataListRoom,adapterRoom,group,false)
         }
 
+
         const val PREF_USER = "pref_user"
         const val PREF_ISUPDATE_USER = "user"
         const val PREF_ISUPDATE_GROUP = "group"
@@ -218,5 +219,18 @@ class DatabaseHelpUtils {
             return pref.getBoolean("$PREF_SETTING_MESSAGE$g_idx", true)
         }
 
+        fun clearForSignOut(context: Context){
+            val realm = getRealmDefault(context)
+            realm.beginTransaction()
+            realm.where(JoinedRoomR::class.java).findAll().deleteAllFromRealm()
+            realm.where(JoinedGroupR::class.java).findAll().deleteAllFromRealm()
+            realm.where(UserR::class.java).findAll().deleteAllFromRealm()
+            realm.where(GroupR::class.java).findAll().deleteAllFromRealm()
+            realm.where(RoomR::class.java).findAll().deleteAllFromRealm()
+            realm.where(IsUpdateR::class.java).findAll().deleteAllFromRealm()
+
+            realm.commitTransaction()
+            realm.close()
+        }
     }
 }

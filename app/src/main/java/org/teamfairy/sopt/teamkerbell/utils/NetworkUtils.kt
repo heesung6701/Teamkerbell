@@ -54,7 +54,7 @@ open class NetworkUtils {
         fun connectRoomList(applicationContext: Context, handler: Handler?) = connectRoomList(applicationContext,handler,false)
         fun connectRoomList(applicationContext: Context, handler: Handler?,isUpdate : Boolean) {
             if(isUpdate || getPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM)) {
-                Log.d("${LOG_TAG}/connect", "update Room List")
+                Log.d("$LOG_TAG/connect", "update Room List")
                 val task = RoomListTask(applicationContext, HandlerSuccess(applicationContext, PREF_ISUPDATE_ROOM,handler), LoginToken.getToken(applicationContext))
                 task.execute(URL_ROOMLIST, METHOD_GET)
             } else {

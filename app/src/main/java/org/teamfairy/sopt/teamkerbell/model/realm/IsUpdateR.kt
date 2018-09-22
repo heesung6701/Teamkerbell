@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.model.realm
 
+import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.teamfairy.sopt.teamkerbell.utils.StatusCode
@@ -21,5 +22,11 @@ open class IsUpdateR() : RealmObject(){
         const val WHAT_JOINED_GROUP  = StatusCode.joinedGroupChange
         const val WHAT_JOINED_ROOM  = StatusCode.joinedRoomChange
 
+        fun create(realm : Realm,what : Int) : IsUpdateR{
+            realm.beginTransaction()
+            val isUpdateR = realm.createObject(IsUpdateR::class.java, what)
+            realm.commitTransaction()
+            return isUpdateR
+        }
     }
 }

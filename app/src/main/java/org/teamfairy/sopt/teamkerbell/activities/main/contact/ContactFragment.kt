@@ -123,7 +123,7 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
 
         val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
         val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
-                ?: realm.createObject(IsUpdateR::class.java, what)
+                ?: IsUpdateR.create(realm,what)
 
         if (isUpdateR.isUpdate) {
             Log.d(LOG_TAG, "was true")

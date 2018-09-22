@@ -59,6 +59,8 @@ class SettingActivity : AppCompatActivity() {
 
         //그룹 설정
         swc_setting_allow_noti_group.setOnCheckedChangeListener { _, isChecked ->
+
+            Toast.makeText(applicationContext,"${group.real_name}팀의 메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
             DatabaseHelpUtils.setSettingPush(applicationContext,group.g_idx,isChecked)
         }
         layout_leave.setOnClickListener {
@@ -71,6 +73,7 @@ class SettingActivity : AppCompatActivity() {
 
         //앱설정
         swc_setting_allow_noti.setOnCheckedChangeListener { _, isChecked ->
+            Toast.makeText(applicationContext,"메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
             DatabaseHelpUtils.setSettingPush(applicationContext,isChecked)
         }
         layout_version.setOnClickListener {
@@ -86,8 +89,11 @@ class SettingActivity : AppCompatActivity() {
             dialog.show()
             dialog.setOnClickListenerYes(View.OnClickListener {
                 LoginToken.signOut(applicationContext)
+                DatabaseHelpUtils.clearForSignOut(applicationContext)
+
                 val i = Intent(this, SplashActivity::class.java)
-                i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+                i.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK
+                finishAffinity()
                 startActivity(i)
             })
         }

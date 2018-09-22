@@ -71,11 +71,11 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
 
 
 
-                } else {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }else {
+                    Log.d(LOG_TAG, message)
                 }
             } else {
-                Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
+                Log.d(LOG_TAG, jsonResponse)
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -83,6 +83,7 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
             if (realm.isInTransaction) {
                 realm.commitTransaction()
             }
+            realm.close()
         }
 
     }

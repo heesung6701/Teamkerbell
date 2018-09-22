@@ -50,6 +50,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
     var group : Team by Delegates.notNull()
     var adapter: UnperformedPageAdapter by Delegates.notNull()
 
+    var isConnected= false
 
 
     override fun onFragmentInteraction(msg: Message) {
@@ -58,10 +59,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
                 val i = Intent(applicationContext,VoteActivity::class.java)
                 i.putExtra(INTENT_VOTE,msg.obj as Vote)
                 startActivity(i)
-
             }
             TAB_UNPERFORMED_NOTICE->{
-
                 val i = Intent(applicationContext,NoticeActivity::class.java)
                 i.putExtra(INTENT_NOTICE,msg.obj as Notice)
                 startActivity(i)
@@ -144,8 +143,19 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
     }
     private fun showConfirmDialog() {
-        val dialog = ConfirmDialog(this,getString(R.string.txt_unperformed_yet))
+        val message = if(!isConnected)
+            getString(R.string.txt_check_internet)
+        else
+            getString(R.string.txt_unperformed_yet)
+
+        val dialog = ConfirmDialog(this,message)
         dialog.show()
+        if(!isConnected){
+            dialog.setOnClickListenerYes(View.OnClickListener {
+                connectUnperformed()
+                dialog.dismiss()
+            });
+        }
     }
 
 
@@ -199,6 +209,8 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
 
     private fun connectUnperformed() {
+        isConnected=false
+        progress.visibility=View.VISIBLE
         val task = UnperformedTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(USGS_REQUEST_URL.URL_UNPERFORMED,METHOD_GET)
     }
@@ -214,9 +226,14 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
 
             when (msg.what) {
                 Utils.MSG_SUCCESS -> {
+                    activity?.isConnected=true
+                    activity?.progress?.visibility=View.GONE
                     activity?.updateDataList(msg.obj as HashMap<String, ArrayList<*>>)
                 }
                 else -> {
+                    activity?.isConnected=false
+                    activity?.progress?.visibility=View.VISIBLE
+                    activity?.showConfirmDialog()
 
                 }
             }
@@ -227,7 +244,7 @@ class UnperformedActivity : AppCompatActivity(), UnperformedFragment.OnFragmentI
     override fun onBackPressed() {
         val i = Intent(this, SplashActivity::class.java)
         i.putExtra(IntentTag.EXIT,true)
-        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NO_HISTORY
+        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(i)
         finish()
 

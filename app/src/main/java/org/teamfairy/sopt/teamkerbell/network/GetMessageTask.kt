@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import org.json.JSONException
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_EXIST
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
@@ -38,11 +39,15 @@ open class GetMessageTask(context: Context, var handler: Handler?,token : String
                     msgCode= MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {
                     msgCode = MSG_NO_INTERNET
-                    Toast.makeText(context,"인터넷 연결상태를 확인해주세요",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context,"인터넷 연결상태를 확인해주세요",Toast.LENGTH_SHORT).show()
                 }
                 else if (message.contains("Failed") || message.contains("failed")) {
                     msgCode = MSG_FAIL
-                    Toast.makeText(context,"잠시후 다시 도전 해주세요",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context,"잠시후 다시 도전 해주세요",Toast.LENGTH_SHORT).show()
+                }
+                else if (message.contains("Exist") || message.contains("exist")) {
+                    msgCode = MSG_EXIST
+//                    Toast.makeText(context,"이미 존재합니다.",Toast.LENGTH_SHORT).show()
                 }
             }
             if (baseJsonResponse.has("data")) {

@@ -207,7 +207,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
             StatusCode.makeRole ->{
-
                 sendNotification(title, body?:"역할분담이 등록되었습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_ROLE,gIdx)
             }

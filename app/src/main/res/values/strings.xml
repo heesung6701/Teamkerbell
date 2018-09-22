@@ -121,9 +121,16 @@
     <string name="txt_unperformed_yet">모든 리스트 확인하신 후 \n 시작하기 버튼을 눌러주세요!</string>
     <string name="txt_setting_profile">프로필 설정</string>
     <string name="txt_setting_message">메세지 알림 설정</string>
+    <string name="txt_setting_message_all">전체 메세지 알림 설정</string>
+    <string name="txt_download_all">전체 다운로드</string>
+
+    <string name="txt_check_internet">인터넷 상태를 확인해주세요.</string>
     <string name="txt_version_info">버전 정보</string>
     <string name="txt_copyright">Copyright</string>
     <string name="txt_direct_to_ceo">Direct to CEO</string>
+
+
+
     <string name="txt_ceo_email">ahndh0605@gmail.com</string>
     <string name="txt_copyright_content">All copyrights reserved by teamkerbell★</string>
 
@@ -183,4 +190,5 @@
     <string name="txt_setting_group">팀 설정</string>
     <string name="action_leave_group">팀 나가기</string>
     <string name="txt_no_file">첨부된 파일이 없습니다.</string>
+    <string name="descript_dot">dot</string>
 </resources>

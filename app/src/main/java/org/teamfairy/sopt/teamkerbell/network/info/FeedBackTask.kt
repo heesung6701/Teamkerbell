@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
 import org.json.JSONObject
@@ -15,10 +14,12 @@ import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FEEDBACK
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FEEDBACK_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FILE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FILES
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROLE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TASK_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_WRITE_TIME
@@ -44,36 +45,37 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
                 if (message.contains("Success")) {
                     val data = baseJsonResponse.getJSONObject(JSON_DATA)
 
-                    val responseJ  = data.getJSONArray(JSON_RESPONSE).getJSONObject(0)
-                    val resp : TaskResponse = TaskResponse(
+                    val responseJ = data.getJSONArray(JSON_RESPONSE).getJSONObject(0)
+                    val resp: TaskResponse = TaskResponse(
                             responseJ.getInt(JSON_U_IDX),
                             responseJ.getInt(JSON_TASK_IDX),
                             responseJ.getInt(JSON_RESPONSE_IDX),
                             responseJ.getString(JSON_CONTENT),
                             responseJ.getString(JSON_WRITE_TIME))
-
+                    val fileArray = data.getJSONArray(JSON_FILES)
+                    for (i in 0 until fileArray.length()) {
+                        resp.fileArray.add(fileArray.getJSONObject(i).getString(JSON_FILE))
+                    }
                     val feedbacks = data.getJSONArray(JSON_FEEDBACK)
                     for (i in 0 until feedbacks.length()) {
                         val obj = feedbacks.getJSONObject(i)
 
 
                         val responseIdx = obj.getInt(JSON_RESPONSE_IDX)
+                        val feedbackIdx = obj.getInt(JSON_FEEDBACK_IDX)
                         val uIdx = obj.getInt(JSON_U_IDX)
                         val content: String = obj.getString(JSON_CONTENT)
-                        dataList.add(RoleFeedback(responseIdx, uIdx, content))
+                        val writeTime: String = obj.getString(JSON_WRITE_TIME)
+                        dataList.add(RoleFeedback(feedbackIdx,responseIdx, uIdx, content,writeTime))
                     }
 
                     msgCode = MSG_SUCCESS
                     val taskResponseWithFeedback = TaskResponseWithFeedback()
-                    taskResponseWithFeedback.taskResponse=resp
-                    taskResponseWithFeedback.feedbacks=dataList
+                    taskResponseWithFeedback.taskResponse = resp
+                    taskResponseWithFeedback.feedbacks = dataList
                     return taskResponseWithFeedback
 
-                } else {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(context, jsonResponse, Toast.LENGTH_SHORT).show()
             }
         } catch (e: JSONException) {
             e.printStackTrace()

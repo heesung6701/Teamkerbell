@@ -74,10 +74,10 @@ class JoinedRoomListTask(context: Context, var handler: Handler?, token: String?
                     realm.commitTransaction()
                     msgCode = MSG_SUCCESS
                 } else {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Log.d(LOG_TAG, message)
                 }
             } else {
-                Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
+                Log.d(LOG_TAG, jsonResponse)
             }
         } catch (e: JSONException) {
             e.printStackTrace()

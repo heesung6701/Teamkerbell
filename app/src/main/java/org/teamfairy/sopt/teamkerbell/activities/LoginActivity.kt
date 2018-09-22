@@ -45,10 +45,17 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_C
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_ID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.EXIT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 
 
@@ -68,15 +75,20 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 activity.mAuthTask = null
                 activity.showProgress(false)
 
-                val result = msg.data.getString(JSON_MESSAGE)
 
-                when {
-                    result.contains("Success") -> {
-//                        activity.setPref(activity.emailStr, activity.passwordStr)
+                when(msg.what) {
+                    Utils.MSG_SUCCESS->{
                         activity.login()
                     }
-                    result.contains("Failed") -> Toast.makeText(activity.applicationContext, "아이디 또는 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
+                    else->{
+
+                        val result = msg.data.getString(JSON_MESSAGE)
+
+                        if(result.contains("Failed"))
+                            Toast.makeText(activity.applicationContext, "아이디 또는 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -85,14 +97,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     fun login() {
 
-
-
         //로그인할때 받아와야되나??
         NetworkUtils.connectGroupList(applicationContext,null,true)
         NetworkUtils.connectUserList(applicationContext,null,true)
         NetworkUtils.connectJoinedGroupList(applicationContext,null,true)
         NetworkUtils.connectJoinedRoomList(applicationContext,null,true)
         NetworkUtils.connectRoomList(applicationContext,null,true)
+
+//        DatabaseHelpUtils.setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
+//        DatabaseHelpUtils.setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
+//        DatabaseHelpUtils.setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
 
         val intent = Intent(applicationContext, UnperformedActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

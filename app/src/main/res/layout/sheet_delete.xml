@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sheet_delete"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:background="@color/grayLight"
+    android:focusable="true"
+    android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_delete"
+            android:backgroundTint="@color/grayLight"
+            android:contentDescription="@string/txt_delete" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginStart="24dp"
+            android:gravity="center_vertical"
+            android:text="@string/txt_delete"
+            android:textSize="18sp" />
+</LinearLayout>

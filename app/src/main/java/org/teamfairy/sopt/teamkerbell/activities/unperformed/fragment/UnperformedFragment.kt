@@ -25,6 +25,7 @@ import kotlin.properties.Delegates
 
 class UnperformedFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
+
         val pos = recyclerView.getChildAdapterPosition(p0)
         val msg = Message()
         msg.what = type

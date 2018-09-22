@@ -16,7 +16,7 @@ class LoginToken(){
         private var user : User?=null
         private var token: String=""
 
-        fun isValid() : Boolean=    (token.isNotEmpty() && user != null )
+        fun isValid() : Boolean=    (token.isNotBlank() && user != null )
 
         fun getUserIdx(context: Context): Int{
             if(user ==null) getPref(context)
@@ -74,6 +74,8 @@ class LoginToken(){
 
         }
         fun signOut(context : Context){
+            user=null
+            token=""
             val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE).edit()
             pref.clear()
             pref.apply()

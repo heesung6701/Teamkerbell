@@ -13,9 +13,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_group_list.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
-import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.group.MakeGroupActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
 
@@ -28,9 +26,8 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP_PARAM_GID
+import org.teamfairy.sopt.teamkerbell.utils.*
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
@@ -143,7 +140,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
-                ?: realm.createObject(IsUpdateR::class.java, what)
+                ?: IsUpdateR.create(realm,what)
 
         if (isUpdateR.isUpdate) {
             Log.d(LOG_TAG, "was true")
@@ -203,4 +200,12 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
 //            activity?.deleteGroup(activity.groupList[msg.what])
 //        }
 //    }
+
+    override fun onBackPressed() {
+        val i = Intent(this, SplashActivity::class.java)
+        i.putExtra(IntentTag.EXIT,true)
+        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(i)
+        finish()
+    }
 }

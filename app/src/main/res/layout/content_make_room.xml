@@ -13,16 +13,27 @@
     >
 
 
-    <ImageView
-        android:id="@+id/img_profile"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/img_profile"
+            android:layout_width="102dp"
+            android:layout_height="102dp"
+            android:src="@drawable/icon_profile_default"
+            app:civ_border_width="0dp"
+            />
+        <ImageView
+            android:layout_gravity="bottom|end"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:srcCompat="@drawable/icon_camera"
+            android:contentDescription="@string/action_edit" />
 
-        android:src="@drawable/icon_addgroup_profile_png"/>
-        <!--app:civ_border_color="@color/mainColor"-->
-        <!--app:civ_border_width="0dp" -->
-        <!--/>-->
+    </FrameLayout>
 
 
     <TextView

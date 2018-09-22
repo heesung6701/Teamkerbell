@@ -121,11 +121,8 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             val url = createUrl(*params)
             urlConnection = url!!.openConnection() as HttpURLConnection
-            if(params[1]== METHOD_DELETE && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-                urlConnection.setRequestProperty("X-HTTP-Method-Override", METHOD_DELETE)
-                urlConnection.requestMethod = METHOD_POST
-            }else
-                urlConnection.requestMethod = params[1]
+
+            urlConnection.requestMethod = params[1]
             urlConnection.setRequestProperty("Content-Type", "application/json")
             urlConnection.setRequestProperty("Accept", "application/json")
             urlConnection.connectTimeout = 3000
@@ -209,17 +206,16 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             if (token != null)
                 urlConnection.setRequestProperty("token", token!!)
 
-            Log.d("$LOG_TAG/REQUEST_URL", params[0])
             urlConnection.connect()
 
 
             inputStream = try {
 
-                if (urlConnection.responseCode / 100 == 2) {
-                    urlConnection.inputStream
-                } else {
-                    urlConnection.errorStream
-                }
+            if (urlConnection.responseCode / 100 == 2) {
+                urlConnection.inputStream
+            } else {
+                urlConnection.errorStream
+            }
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.d("$LOG_TAG/HTTP_ERROR", urlConnection.responseCode.toString() + "")

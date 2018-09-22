@@ -1,5 +1,6 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role.task
 
+import android.Manifest
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -26,11 +27,14 @@ import kotlin.properties.Delegates
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
+import android.support.design.widget.BottomSheetDialog
+import android.support.v4.app.ActivityCompat.requestPermissions
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.widget.*
-import kotlinx.android.synthetic.main.li_feedback.*
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.MenuFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.MenuActionInterface
 import org.teamfairy.sopt.teamkerbell.model.assist.TaskResponseWithFeedback
@@ -39,7 +43,6 @@ import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
-import org.teamfairy.sopt.teamkerbell.utils.FileUtils
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 
 
@@ -79,7 +82,10 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
     private var btnBefore: ImageButton by Delegates.notNull()
     private var btnNext: ImageButton by Delegates.notNull()
 
-    var selectedFile : Int = -1
+    var selectedFile: Int = -1
+
+
+    var dialogDelete: BottomSheetDialog by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_response)
@@ -102,7 +108,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         tvContent = findViewById(R.id.li_tv_content)
         tvCommentC = findViewById(R.id.li_tv_comment_cnt)
 
-        btnBefore= findViewById(R.id.li_btn_file_before)
+        btnBefore = findViewById(R.id.li_btn_file_before)
         btnNext = findViewById(R.id.li_btn_file_next)
 
 
@@ -115,6 +121,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
 
         adapter = FeedbackListAdapter(applicationContext, dataList)
+        adapter.setOnLongClickHandler(HandlerDeleteFeedBack(this))
         recyclerView.adapter = adapter
 
 
@@ -138,21 +145,22 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
         btnNext.setOnClickListener {
             selectedFile++
-            if(selectedFile==taskResponse.fileArray.lastIndex) it.visibility=View.INVISIBLE
-            tvFileName.text = ("${selectedFile+1}.${taskResponse.fileArray[selectedFile]}")
+            if (selectedFile == taskResponse.fileArray.lastIndex) it.visibility = View.INVISIBLE
+            tvFileName.text = ("${selectedFile + 1}.${taskResponse.fileArray[selectedFile].substringAfterLast('/')}")
 
-            btnBefore.visibility=View.VISIBLE
+            btnBefore.visibility = View.VISIBLE
 
         }
         btnBefore.setOnClickListener {
             selectedFile--
-            if(selectedFile==-1){
-                it.visibility=View.INVISIBLE
-                tvFileName.text=("All.${taskResponse.fileArray[0]}" + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
-            }else{
-                tvFileName.text=("${selectedFile+1}.${taskResponse.fileArray[selectedFile]}")
+            if (selectedFile == -1) {
+                it.visibility = View.INVISIBLE
+                tvFileName.text = getString(R.string.txt_download_all)
+//                tvFileName.text=("All.${taskResponse.fileArray[0]}" + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
+            } else {
+                tvFileName.text = ("${selectedFile + 1}.${taskResponse.fileArray[selectedFile].substringAfterLast('/')}")
             }
-            btnNext.visibility=View.VISIBLE
+            btnNext.visibility = View.VISIBLE
         }
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_layout)
@@ -180,6 +188,16 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE + "/" + taskResponse.response_idx, METHOD_DELETE)
     }
 
+    private fun attemptDeleteFeedback(feedback: RoleFeedback) {
+        val task = GetMessageTask(applicationContext, HandlerDeleteFeedBackSuccess(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
+        jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_FEEDBACK_IDX, feedback.feedback_idx.toString())
+
+        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK, METHOD_DELETE,jsonParam.toString())
+    }
+
 
     private fun setResponseData(taskResponse: TaskResponse) {
 
@@ -195,7 +213,8 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         if (taskResponse.fileArray.isNotEmpty()) {
-            tvFileName.text = (taskResponse.fileArray[0] + if (taskResponse.fileArray.size > 1) "+${taskResponse.fileArray.size - 1}" else "")
+            tvFileName.text = getString(R.string.txt_download_all)
+//            tvFileName.text = (taskResponse.fileArray[0] + if (taskResponse.fileArray.size > 1) "+${taskResponse.fileArray.size - 1}" else "")
             layoutFile.visibility = View.VISIBLE
 
             layoutFile.setOnClickListener {
@@ -203,15 +222,15 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
                     Toast.makeText(applicationContext, taskResponse.fileArray.first().substringAfterLast('/') + "(+${taskResponse.fileArray.size - 1})를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
 //                    requestAppPermissions()
                     taskResponse.fileArray.forEach {
-                       downLoadFile(it)
+                        checkPermission(it)
                     }
-                }else{
+                } else {
                     Toast.makeText(applicationContext, "${taskResponse.fileArray[selectedFile]}를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
-                    downLoadFile(taskResponse.fileArray[selectedFile])
+                    checkPermission(taskResponse.fileArray[selectedFile])
                 }
             }
-            if(taskResponse.fileArray.size>1)
-                btnNext.visibility=View.VISIBLE
+            if (taskResponse.fileArray.size > 1)
+                btnNext.visibility = View.VISIBLE
 
         } else {
             tvFileName.text = getString(R.string.txt_no_file)
@@ -220,7 +239,8 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
 
     }
-    private  fun downLoadFile(url : String){
+
+    private fun downLoadFile(url: String) {
         try {
             val r = DownloadManager.Request(Uri.parse(url))
 
@@ -242,9 +262,55 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         } catch (e: URISyntaxException) {
             Toast.makeText(applicationContext, "올바르지 않은 파일형식입니다.", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
+            e.printStackTrace()
             Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
             //Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun checkPermission(url: String) {
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                } else {
+                    downLoadFile(url)
+                }
+            } else {
+                downLoadFile(url)
+            }
+        } else {
+            downLoadFile(url)
+        }
+    }
+
+    fun openDeleteDialog(id: Int) {
+        val view = layoutInflater.inflate(R.layout.sheet_delete, null)
+        dialogDelete = BottomSheetDialog(this)
+        dialogDelete.setContentView(view)
+        val btnDelete = view.findViewById(R.id.sheet_delete) as LinearLayout
+        btnDelete.setOnClickListener {
+            attemptDeleteFeedback(dataList[id])
+        }
+//        dialogDelete.setOnCancelListener(DialogInterface.OnCancelListener {  })
+        dialogDelete.show()
+    }
+
+    private fun deleteFeedback(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS -> {
+                Toast.makeText(applicationContext, getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
+                connectFeedBackList()
+                dialogDelete.dismiss()
+            }
+            else -> {
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
     }
 
     private fun connectFeedBackList() {
@@ -266,8 +332,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
                     }
                     else -> {
-                        val message = msg.data.getString("message");
-                        Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -308,13 +373,30 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
                         activity.adapter.notifyDataSetChanged()
                     }
                     else -> {
-                        val message = msg.data.getString(USGS_REQUEST_URL.JSON_MESSAGE);
-                        Toast.makeText(activity.applicationContext, message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
 
                 }
 
             }
+        }
+    }
+
+    private class HandlerDeleteFeedBack(activity: TaskResponseActivity) : Handler() {
+        private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get() ?: return
+            activity.openDeleteDialog(msg.what)
+        }
+    }
+
+    private class HandlerDeleteFeedBackSuccess(activity: TaskResponseActivity) : Handler() {
+        private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            activity?.deleteFeedback(msg)
         }
     }
 

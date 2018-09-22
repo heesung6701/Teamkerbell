@@ -8,6 +8,7 @@ import android.widget.Toast
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
@@ -118,10 +119,10 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
 
                     return result
                 } else {
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
             }
         } catch (e: JSONException) {
             e.printStackTrace()

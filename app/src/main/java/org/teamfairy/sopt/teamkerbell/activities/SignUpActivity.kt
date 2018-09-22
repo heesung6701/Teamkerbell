@@ -21,6 +21,7 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_CHECK_PARAM_ID
@@ -31,6 +32,7 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_EXIST
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import java.net.URLEncoder
@@ -103,6 +105,13 @@ class SignUpActivity : AppCompatActivity() {
         })
 
 
+        email.setOnFocusChangeListener { v, hasFocus ->
+
+            if(!hasFocus){
+                attemptIdCheck(email.text.toString() .toString())
+
+            }
+        }
         email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -112,10 +121,9 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(txt: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (txt!!.isNotEmpty()) {
-                    val encodeTxt: String = URLEncoder.encode(txt.toString(), "UTF-8")
-                    val str = String(encodeTxt.toByteArray(Charsets.UTF_8))
-                    attemptIdCheck(str)
-
+//                    val encodeTxt: String = URLEncoder.encode(txt.toString(), "UTF-8")
+//                    val str = String(encodeTxt.toByteArray(Charsets.UTF_8))
+//                    attemptIdCheck(txt.toString())
                 } else {
                     email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
                 }
@@ -140,11 +148,10 @@ class SignUpActivity : AppCompatActivity() {
     fun attemptIdCheck(str : String){
         val idCheckTask = GetMessageTask(applicationContext, HandlerIdCheck(this))
 
-        val builtUri = Uri.parse(URL_REGIST_CHECK)
-                .buildUpon()
-                .appendQueryParameter(URL_REGIST_CHECK_PARAM_ID, str).build()
+        val jsonParam = JSONObject()
+        jsonParam.put(URL_REGIST_CHECK_PARAM_ID, str)
 
-        idCheckTask.execute(builtUri.toString(), NetworkTask.METHOD_GET)
+        idCheckTask.execute(URL_REGIST_CHECK, NetworkTask.METHOD_POST,jsonParam.toString())
     }
     private var doubleBackToExitPressedOnce = false
     override fun onBackPressed() {
@@ -254,6 +261,9 @@ class SignUpActivity : AppCompatActivity() {
                 intent.putExtra(INTENT_PWD, passwordStr)
                 startActivity(intent)
                 finish()
+            }
+            MSG_EXIST->{
+                Toast.makeText(applicationContext, getString(R.string.error_field_existed), Toast.LENGTH_SHORT).show()
             }
             else -> {
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()

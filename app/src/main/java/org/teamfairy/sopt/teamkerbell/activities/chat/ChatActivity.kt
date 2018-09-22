@@ -124,7 +124,7 @@ class ChatActivity : AppCompatActivity() {
 
 
         lastChatIdx = DatabaseHelpUtils.getRecentChatIdx(applicationContext,room.room_idx)
-        Log.d("$LOG_TAG/lastChatIdx", lastChatIdx.toString())
+//        Log.d("$LOG_TAG/lastChatIdx", lastChatIdx.toString())
         supportActionBar!!.title = room.real_name
 
         val layoutManager = LinearLayoutManager(this)
@@ -383,8 +383,8 @@ class ChatActivity : AppCompatActivity() {
 
     private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
         if(position<0) return
-        Log.d(LOG_TAG ,"is Fixed? ${adapter_chat.isFixedScroll}")
-        Log.d(LOG_TAG ,"is pick_id? ${adapter_chat.pick_idx}")
+//        Log.d(LOG_TAG ,"is Fixed? ${adapter_chat.isFixedScroll}")
+//        Log.d(LOG_TAG ,"is pick_id? ${adapter_chat.pick_idx}")
         if( adapter_chat.pick_idx==dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pick_idx==-1 )) {
             recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
             recyclerView.layoutManager.offsetChildrenVertical(0)
@@ -501,7 +501,7 @@ class ChatActivity : AppCompatActivity() {
         super.onResume()
         getUserList()
         updateUserList()
-        Log.d(LOG_TAG, "onResume")
+//        Log.d(LOG_TAG, "onResume")
         if(mSocket.connected()) {
             if(!firstTimeResume)
                 enterRoomSocket()
@@ -515,7 +515,7 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Log.d(LOG_TAG, "onPause")
+//        Log.d(LOG_TAG, "onPause")
 
         if (dataList.last().chat_idx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
             DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, dataList.last().chat_idx)
@@ -553,7 +553,7 @@ class ChatActivity : AppCompatActivity() {
         listView_chat.adapter=adapter_chat
         adapter_chat.notifyDataSetChanged()
         lastChatPos=-1
-        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
+//        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
     }
     fun makeDialog(position: Int) {
         val dialog = ChooseWorkDialog(this)
