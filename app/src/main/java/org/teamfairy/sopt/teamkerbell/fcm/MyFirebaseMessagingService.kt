@@ -22,6 +22,7 @@ import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -34,11 +35,14 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.setPref_
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_INDEX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESULT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getGroup
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRoom
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -122,6 +126,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var gIdx: Int = -1
         var roomIdx: Int = -1
         var chatIdx: Int = -1
+        var roomName: String = ""
+        var groupName: String = ""
+
 
         var status = 0
         try {
@@ -132,16 +139,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 body = jsonObject.getString(JSON_BODY)
             if (jsonObject.has(JSON_INDEX))
                 idx = jsonObject.getInt(JSON_INDEX)
-            if (jsonObject.has(JSON_ROOM_IDX))
+            if (jsonObject.has(JSON_ROOM_IDX)) {
                 roomIdx = jsonObject.getInt(JSON_ROOM_IDX)
-            if (jsonObject.has(JSON_CHAT_IDX))
+                val room =  getRoom(applicationContext, roomIdx)
+                roomName=  room.real_name
+                groupName =  getGroup(applicationContext, room.g_idx).real_name
+            }
+            if (jsonObject.has(JSON_CHAT_IDX)) {
                 chatIdx = jsonObject.getInt(JSON_CHAT_IDX)
+            }
             if (jsonObject.has(JSON_STATUS))
                 status = jsonObject.getInt(JSON_STATUS)
             if (jsonObject.has(JSON_DATA))
                 status = jsonObject.getInt(JSON_DATA)
-            if (jsonObject.has(JSON_G_IDX))
+            if (jsonObject.has(JSON_G_IDX)) {
                 gIdx = jsonObject.getInt(JSON_G_IDX)
+                groupName =  getGroup(applicationContext, gIdx).real_name
+            }
+            if(jsonObject.has(JSON_RESULT)){
+                val result = JSONObject(jsonObject.getString(JSON_RESULT))
+                roomIdx = result.getInt(JSON_ROOM_IDX)
+                val room =  getRoom(applicationContext, roomIdx)
+                roomName=  room.real_name
+                groupName =  getGroup(applicationContext, room.g_idx).real_name
+                chatIdx = result.getInt(JSON_CHAT_IDX)
+                body=result.getString(JSON_CONTENT)
+            }
             else{
                 val realm = getRealmDefault(applicationContext)
                 gIdx = realm.where(RoomR::class.java).findFirst()?.g_idx ?: -1
@@ -152,6 +175,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
+        if(groupName.isNotEmpty())
+            title=groupName
 
         when (status) {
             StatusCode.groupChange -> {
@@ -188,32 +213,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
             StatusCode.votePush -> {
-                sendNotification(title, body?:"공지가 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"공지가 만들어졌습니다.", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
             StatusCode.makeSignal ->{
-                sendNotification(title, body?:"신호등이 만들어졌습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"신호등이 만들어졌습니다.", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_SIGNAL,gIdx)
 
             }
             StatusCode.makeNotice ->{
 
-                sendNotification(title, body?:"공지가 만들어 졌습니다", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"공지가 만들어 졌습니다", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_NOTICE,gIdx)
             }
             StatusCode.makeVote ->{
 
-                sendNotification(title, body?:"투표가 등록되었습니다", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"투표가 등록되었습니다", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
             StatusCode.makeRole ->{
-                sendNotification(title, body?:"역할분담이 등록되었습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx)
+                sendNotification(title, body?:"역할분담이 등록되었습니다.", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_ROLE,gIdx)
             }
 
             StatusCode.chatMessage ->{
 
-                sendNotification(title, body?:"메세지가 도착했습니다.", DatabaseHelpUtils.getRoom(applicationContext,roomIdx).real_name,chatIdx,gIdx)
+                sendNotification(title, body?:"메세지가 도착했습니다.", roomName,chatIdx,gIdx)
             }
 
         }

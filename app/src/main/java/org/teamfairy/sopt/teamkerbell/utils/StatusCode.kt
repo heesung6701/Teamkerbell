@@ -15,6 +15,7 @@ class StatusCode {
         const val joinedGroupWithJoinedRoom = 108
         const val allChange = 109
 
+
         const val votePush = 301
         const val makeNotice = 302
         const val makeSignal = 303
@@ -22,6 +23,6 @@ class StatusCode {
         const val makeRole = 305
 
 
-        const val chatMessage =909
+        const val chatMessage =200
     }
 }

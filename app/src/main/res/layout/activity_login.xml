@@ -32,7 +32,6 @@
             android:orientation="vertical"
             android:gravity="center_vertical"
             >
-<!--TODO 지워야 할 부분-->
             <ImageView
                 android:id="@+id/easter_egg"
                 android:layout_width="140dp"

@@ -45,6 +45,7 @@ class DatabaseHelpUtils {
             realm.close()
             return room
         }
+
         fun getGroup(context: Context, g_idx:Int): Team {
             val realm = getRealmDefault(context)
             val groupR = realm.where(GroupR::class.java).equalTo(Team.ARG_G_IDX,g_idx).findFirst() ?: GroupR()

@@ -23,6 +23,7 @@
             android:layout_height="72dp"
             android:layout_marginStart="24dp"
             android:gravity="center_vertical"
+            android:textColor="@color/black"
             android:text="@string/txt_delete"
             android:textSize="18sp" />
 </LinearLayout>

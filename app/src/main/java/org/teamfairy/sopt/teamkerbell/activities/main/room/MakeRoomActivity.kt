@@ -132,7 +132,7 @@ class MakeRoomActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val makeRoomTask = MakeRoomTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext),group.g_idx)
-        if (filePhoto != null) makeRoomTask.file = filePhoto!!
+        if (filePhoto != null) makeRoomTask.photo = filePhoto!!
         makeRoomTask.execute(URL_MAKE_ROOM, METHOD_POST, jsonParam.toString())
     }
 

@@ -138,14 +138,10 @@ class FileUtils {
             if (!folder.exists() || !folder.isDirectory)
                 folder.mkdir()
 
-            var fileNew = File(folder.absolutePath + File.separator +  name)
-            if (!fileNew.exists()) {
-//                TODO(여기 뭔가 이상한데 )
-                fileNew = File(folder.absolutePath + File.separator +  name)
+            val fileNew = File(folder.absolutePath + File.separator +  name)
+            if (!fileNew.exists())
                 fileNew.createNewFile()
-            } else {
-                fileNew.createNewFile()
-            }
+
             Log.d("$LOG_TAG/file", fileNew.path)
 
             val os = FileOutputStream(fileNew);

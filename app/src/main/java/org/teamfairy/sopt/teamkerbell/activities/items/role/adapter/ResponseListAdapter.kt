@@ -22,7 +22,7 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
         holder.tvDetail.text=taskResponse.write_time
 
         if(taskResponse.fileArray.isNotEmpty()) {
-            holder.tvFileName.text=  (taskResponse.fileArray[0] + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
+            holder.tvFileName.text=  (taskResponse.fileArray[0].substringAfterLast('/') + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
             holder.layoutFile.visibility = View.VISIBLE
         }
         else {
