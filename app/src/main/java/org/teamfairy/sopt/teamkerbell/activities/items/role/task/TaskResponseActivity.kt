@@ -219,13 +219,15 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
             layoutFile.setOnClickListener {
                 if (selectedFile == -1) {
-                    Toast.makeText(applicationContext, taskResponse.fileArray.first().substringAfterLast('/') + "(+${taskResponse.fileArray.size - 1})를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, taskResponse.fileArray.first().substringAfterLast('/') +
+                            (if(taskResponse.fileArray.size>1)  "(+${taskResponse.fileArray.size - 1})" else "" )
+                            +"를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
 //                    requestAppPermissions()
                     taskResponse.fileArray.forEach {
                         checkPermission(it)
                     }
                 } else {
-                    Toast.makeText(applicationContext, "${taskResponse.fileArray[selectedFile]}를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "${taskResponse.fileArray[selectedFile].substringAfterLast('/')}를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
                     checkPermission(taskResponse.fileArray[selectedFile])
                 }
             }

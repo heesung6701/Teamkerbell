@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
@@ -16,7 +13,6 @@ import kotlinx.android.synthetic.main.app_bar_back.*
 import kotlinx.android.synthetic.main.content_setting.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.activities.GroupListActivity
-import org.teamfairy.sopt.teamkerbell.activities.LoginActivity
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.ProfileActivity
 import org.teamfairy.sopt.teamkerbell.dialog.ConfirmDeleteDialog
@@ -49,8 +45,11 @@ class SettingActivity : AppCompatActivity() {
         if (NetworkUtils.getBitmapList(user.photo, iv_user_profile, applicationContext, "user${user.u_idx}"))
             iv_user_profile.setImageResource(R.drawable.icon_profile_default)
 
-        swc_setting_allow_noti.isChecked = DatabaseHelpUtils.getSettingPush(applicationContext)
-        swc_setting_allow_noti_group.isChecked = DatabaseHelpUtils.getSettingPush(applicationContext,group.g_idx)
+        val settingNotificationAll = DatabaseHelpUtils.getSettingPush(applicationContext)
+        swc_setting_allow_noti.isChecked = settingNotificationAll
+        swc_setting_allow_noti_group.isEnabled=settingNotificationAll
+
+        swc_setting_allow_noti_group.isChecked =DatabaseHelpUtils.getSettingPush(applicationContext,group.g_idx)
 
         layout_profile.setOnClickListener {
             val i = Intent(this, ProfileActivity::class.java)
@@ -59,9 +58,9 @@ class SettingActivity : AppCompatActivity() {
 
         //그룹 설정
         swc_setting_allow_noti_group.setOnCheckedChangeListener { _, isChecked ->
-
             Toast.makeText(applicationContext,"${group.real_name}팀의 메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
             DatabaseHelpUtils.setSettingPush(applicationContext,group.g_idx,isChecked)
+
         }
         layout_leave.setOnClickListener {
             val dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
@@ -75,6 +74,8 @@ class SettingActivity : AppCompatActivity() {
         swc_setting_allow_noti.setOnCheckedChangeListener { _, isChecked ->
             Toast.makeText(applicationContext,"메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
             DatabaseHelpUtils.setSettingPush(applicationContext,isChecked)
+
+            swc_setting_allow_noti_group.isEnabled=isChecked
         }
         layout_version.setOnClickListener {
             val i = Intent(this, VersionInfoActivity::class.java)
@@ -89,7 +90,6 @@ class SettingActivity : AppCompatActivity() {
             dialog.show()
             dialog.setOnClickListenerYes(View.OnClickListener {
                 LoginToken.signOut(applicationContext)
-                DatabaseHelpUtils.clearForSignOut(applicationContext)
 
                 val i = Intent(this, SplashActivity::class.java)
                 i.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK

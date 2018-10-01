@@ -31,7 +31,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         holder.tvEmail.text = user.id
         holder.tvPhone.text = user.phone
 
-        if(NetworkUtils.getBitmapList(user.photo, holder.ivProfile,mContext, "user$user.u_idx"))
+        if(NetworkUtils.getBitmapList(user.photo, holder.ivProfile,mContext, "user${user.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         holder.layoutEmail.setOnClickListener {

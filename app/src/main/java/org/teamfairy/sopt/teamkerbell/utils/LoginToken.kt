@@ -79,6 +79,20 @@ class LoginToken(){
             val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE).edit()
             pref.clear()
             pref.apply()
+
+
+            DatabaseHelpUtils.clearForSignOut(context)
+        }
+        fun updateToken(context: Context?,  token : String){
+            if(context ==null) return
+
+            Companion.token =token
+            setPref(context)
+        }
+        fun updatePhoto(context : Context,photoUrl : String?){
+            if(photoUrl==null) return
+            user?.photo=photoUrl
+            setPref(context)
         }
     }
 }

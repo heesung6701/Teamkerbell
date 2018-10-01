@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat.startActivity
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -27,6 +28,13 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
+import android.widget.EditText
+import android.text.InputFilter
+import org.teamfairy.sopt.teamkerbell.R.id.group_name
+import java.util.regex.Pattern
+import android.text.Spanned
+import org.teamfairy.sopt.teamkerbell.utils.EditTextFilter.Companion.setFilter
+
 
 class MakeGroupActivity : AppCompatActivity() {
 
@@ -41,12 +49,13 @@ class MakeGroupActivity : AppCompatActivity() {
 
         tv_welcome.text = ("${user.name}님, 어서오세요!")
 
-
+        setFilter(group_name)
 
         btn_start.setOnClickListener {
             attemptMakeGroup()
         }
     }
+
 
 
     override fun finish() {

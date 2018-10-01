@@ -123,7 +123,7 @@ class ProfileActivity : AppCompatActivity() {
                     var photoUrl : String?= msg.obj as String
                     if (!URLUtil.isValidUrl(photoUrl)) photoUrl = null
 
-                    user.photo=photoUrl
+                    LoginToken.updatePhoto(applicationContext,photoUrl)
 
                     val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
                     realm.beginTransaction()

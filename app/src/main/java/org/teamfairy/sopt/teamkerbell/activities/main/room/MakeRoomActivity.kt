@@ -14,16 +14,15 @@ import android.support.v7.app.AppCompatActivity
 import android.text.InputFilter
 import android.text.TextUtils
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
 import kotlinx.android.synthetic.main.app_bar_close.*
 import kotlinx.android.synthetic.main.content_make_room.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
 import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
-import org.teamfairy.sopt.teamkerbell.utils.StatusCode
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
@@ -34,12 +33,13 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.make.MakeRoomTask
+import org.teamfairy.sopt.teamkerbell.utils.*
+import org.teamfairy.sopt.teamkerbell.utils.EditTextFilter.Companion.setFilter
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
+import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 class MakeRoomActivity : AppCompatActivity() {
@@ -59,16 +59,7 @@ class MakeRoomActivity : AppCompatActivity() {
 
         group = intent.getParcelableExtra(INTENT_GROUP)
 
-        val spFilter = InputFilter { source, start, end, dest, dstart, dend ->
-
-            var r: CharSequence? = null
-            for (i in start until end) {
-                if (!Character.isLetterOrDigit(source[i])) {
-                    r = ""
-                }
-            }
-            r
-        }
+        setFilter(room_name)
 
         img_profile.setOnClickListener {
 
@@ -88,7 +79,6 @@ class MakeRoomActivity : AppCompatActivity() {
             }
         }
 
-        room_name.filters = arrayOf(spFilter)
 
         btn_start.setOnClickListener {
             attemptMakeRoom()
@@ -124,13 +114,8 @@ class MakeRoomActivity : AppCompatActivity() {
     }
     private fun makeRoom(roomName : String){
         val jsonParam = JSONObject()
-        try {
-            jsonParam.put(URL_MAKE_ROOM_PARAM_NAME,roomName )
-            jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX,group.g_idx)
-//            jsonParam.put(URL_MAKE_ROOM_PARAM_USERARRAY,JSONArray())
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        jsonParam.put(URL_MAKE_ROOM_PARAM_NAME,roomName )
+        jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX,group.g_idx)
         val makeRoomTask = MakeRoomTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext),group.g_idx)
         if (filePhoto != null) makeRoomTask.photo = filePhoto!!
         makeRoomTask.execute(URL_MAKE_ROOM, METHOD_POST, jsonParam.toString())

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.app.ActivityCompat.finishAffinity
+import android.support.v4.content.ContextCompat.startActivity
 import android.util.Log
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -16,14 +18,23 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_P
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.activities.main.room.MakeRoomActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
+import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
+import org.teamfairy.sopt.teamkerbell.network.RefreshTokenTask
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_NAME
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REFRESH_TOKEN_PARAM_ID
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REFRESH_TOKEN_PARAM_U_IDX
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_NAME
+import org.teamfairy.sopt.teamkerbell.utils.*
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.getUserIdx
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.signOut
 import java.lang.ref.WeakReference
+import java.lang.reflect.Method
 
 class SplashActivity : AppCompatActivity() {
 
@@ -79,7 +90,7 @@ class SplashActivity : AppCompatActivity() {
 
             LoginToken.getPref(applicationContext)
             if (LoginToken.isValid()) {
-                login()
+                checkValidToken()
             } else {
                 Handler().postDelayed({
                     val i = Intent(applicationContext, LoginActivity::class.java)
@@ -88,4 +99,47 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
+    fun signOut(){
+        LoginToken.signOut(applicationContext)
+
+        val i = Intent(this, SplashActivity::class.java)
+        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK
+        finishAffinity()
+        startActivity(i)
+    }
+    fun checkValidToken(){
+        val task = RefreshTokenTask(applicationContext, HandlerCheck(this),LoginToken.getToken(applicationContext))
+        val jsonParam = JSONObject()
+        val u = LoginToken.getUser(applicationContext)
+        jsonParam.put(URL_REFRESH_TOKEN_PARAM_ID,u.id)
+        jsonParam.put(URL_REFRESH_TOKEN_PARAM_U_IDX,u.u_idx)
+        task.execute(USGS_REQUEST_URL.URL_REFRESH_TOKEN,NetworkTask.METHOD_POST,jsonParam.toString())
+    }
+
+    private class HandlerCheck(activity: SplashActivity) : Handler() {
+        private val mActivity: WeakReference<SplashActivity> = WeakReference<SplashActivity>(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            when(msg.what){
+                Utils.MSG_SUCCESS->{
+                    activity?.login()
+                }
+                Utils.MSG_EXPIRED->{
+                    LoginToken.updateToken(activity?.applicationContext, msg.obj as String)
+                    activity?.login()
+                }
+                Utils.MSG_INVALID->{
+                    activity?.signOut()
+                }
+                else->{
+
+                    //TODO 인터넷이 안좋아서 안될수도 있으니..
+                    activity?.signOut()
+                }
+            }
+        }
+    }
+
+
 }

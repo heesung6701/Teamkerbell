@@ -8,8 +8,11 @@ import android.widget.Toast
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TOKEN
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_EXIST
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_EXPIRED
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL
+import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_INVALID
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
@@ -21,7 +24,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 //아이디 중복확인
 //회원가입
-open class GetMessageTask(context: Context, var handler: Handler?,token : String?): NetworkTask(context,token) {
+open class RefreshTokenTask(context: Context, var handler: Handler?, token : String?): NetworkTask(context,token) {
 
 
     constructor(context: Context,handler : Handler) : this(context,handler,null)
@@ -40,19 +43,22 @@ open class GetMessageTask(context: Context, var handler: Handler?,token : String
                     msgCode= MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {
                     msgCode = MSG_NO_INTERNET
-//                    Toast.makeText(context,"인터넷 연결상태를 확인해주세요",Toast.LENGTH_SHORT).show()
-                }
-                else if (message.contains("Failed") || message.contains("failed")) {
-                    msgCode = MSG_FAIL
-//                    Toast.makeText(context,"잠시후 다시 도전 해주세요",Toast.LENGTH_SHORT).show()
                 }
                 else if (message.contains("Exist") || message.contains("exist")) {
                     msgCode = MSG_EXIST
-//                    Toast.makeText(context,"이미 존재합니다.",Toast.LENGTH_SHORT).show()
+                }
+                else if (message.contains("Expired") || message.contains("expired")) {
+                    msgCode = MSG_EXPIRED
+                }
+                else if (message.contains("Invalid") || message.contains("invalid")) {
+                    msgCode = MSG_INVALID
+                }
+                else if (message.contains("Failed") || message.contains("failed")) {
+                    msgCode = MSG_FAIL
                 }
             }
-            if (baseJsonResponse.has(JSON_DATA)) {
-                data = baseJsonResponse.getString(JSON_DATA)
+            if (baseJsonResponse.has(JSON_TOKEN)) {
+                data = baseJsonResponse.getString(JSON_TOKEN)
                 return data as Any
             }
 

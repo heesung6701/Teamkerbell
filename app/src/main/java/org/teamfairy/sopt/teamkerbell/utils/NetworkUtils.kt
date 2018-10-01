@@ -118,7 +118,7 @@ open class NetworkUtils {
             try {
                 var urlToBytes = realm.where(UrlToBytes::class.java).equalTo("key", key).findFirst()
 
-                Log.d("RealmTransaction", "begin $LOG_TAG")
+//                Log.d("RealmTransaction", "begin $LOG_TAG")
                 realm.beginTransaction()
                 if (urlToBytes == null) {
                     Log.d("$LOG_TAG/key", "create $key")
@@ -129,7 +129,7 @@ open class NetworkUtils {
                     urlToBytes.byteArray = null
                 }
 
-                Log.d("RealmTransaction", "commit $LOG_TAG")
+//                Log.d("RealmTransaction", "commit $LOG_TAG")
                 realm.commitTransaction()
 
                 if (urlToBytes.byteArray == null || !urlToBytes.url.equals(str)) {
@@ -155,7 +155,7 @@ open class NetworkUtils {
             } finally {
                 if (realm.isInTransaction) {
                     realm.commitTransaction()
-                    Log.d("RealmTransaction", "commit ${LOG_TAG}")
+//                    Log.d("RealmTransaction", "commit ${LOG_TAG}")
                 }
             }
             return false
@@ -182,11 +182,11 @@ open class NetworkUtils {
 
                             val realm = getRealmDefault(context!!)
 
-                            Log.d("RealmTransaction", "begin $LOG_TAG")
+//                            Log.d("RealmTransaction", "begin $LOG_TAG")
                             realm.beginTransaction()
                             urlToBytes.byteArray = bytes
                             realm.commitTransaction()
-                            Log.d("RealmTransaction", "commit $LOG_TAG")
+//                            Log.d("RealmTransaction", "commit $LOG_TAG")
 
                         }
                     }

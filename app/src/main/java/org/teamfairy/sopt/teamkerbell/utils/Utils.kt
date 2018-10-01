@@ -42,6 +42,8 @@ class Utils {
         const val MSG_NO_INTERNET: Int = 2
         const val MSG_FAIL: Int = 3
         const val MSG_EXIST: Int = 4
+        const val MSG_EXPIRED: Int = 5
+        const val MSG_INVALID: Int = 6
 
         const val MSG_NO_INTERNET_STR = "NO NETWORK"
         const val MSG_FAIL_STR = "CONNECT FAIL"

@@ -17,6 +17,7 @@ import android.app.NotificationChannel
 import android.graphics.Color
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
+import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
 import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
@@ -160,16 +161,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 val result = JSONObject(jsonObject.getString(JSON_RESULT))
                 roomIdx = result.getInt(JSON_ROOM_IDX)
                 val room =  getRoom(applicationContext, roomIdx)
+                gIdx=room.g_idx
                 roomName=  room.real_name
                 groupName =  getGroup(applicationContext, room.g_idx).real_name
                 chatIdx = result.getInt(JSON_CHAT_IDX)
                 body=result.getString(JSON_CONTENT)
             }
-            else{
-                val realm = getRealmDefault(applicationContext)
-                gIdx = realm.where(RoomR::class.java).findFirst()?.g_idx ?: -1
-                realm.close()
-            }
+//            else{
+//                val realm = getRealmDefault(applicationContext)
+//                gIdx = realm.where(RoomR::class.java).findFirst()?.g_idx ?: -1
+//                realm.close()
+//            }
 
 
         } catch (e: JSONException) {
@@ -219,15 +221,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.makeSignal ->{
                 sendNotification(title, body?:"신호등이 만들어졌습니다.", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_SIGNAL,gIdx)
-
             }
             StatusCode.makeNotice ->{
-
                 sendNotification(title, body?:"공지가 만들어 졌습니다", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_NOTICE,gIdx)
             }
             StatusCode.makeVote ->{
-
                 sendNotification(title, body?:"투표가 등록되었습니다", roomName,chatIdx)
                 BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
             }
@@ -238,7 +237,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             StatusCode.chatMessage ->{
 
-                sendNotification(title, body?:"메세지가 도착했습니다.", roomName,chatIdx,gIdx)
+
+                if(DatabaseHelpUtils.getSettingPush(applicationContext) || DatabaseHelpUtils.getSettingPush(applicationContext,gIdx)){
+                    Log.d(TAG,"message make notification")
+                    sendNotification(title, body?:"메세지가 도착했습니다.", roomName,chatIdx,gIdx)
+                }else{
+                    Log.d(TAG,"message doesn't make notification")
+                }
             }
 
         }
@@ -261,6 +266,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int,g_idx : Int) {
         if(!DatabaseHelpUtils.getSettingPush(applicationContext)) return
         if(!DatabaseHelpUtils.getSettingPush(applicationContext,g_idx)) return
+        if(ChatApplication.mSocket!=null && ChatApplication.recentGIdx==g_idx) return
         sendNotification(title,content,CHANNEL_ID,nId)
     }
     private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int) {
