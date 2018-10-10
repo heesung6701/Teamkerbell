@@ -41,4 +41,5 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="tutorial_background">#80000000</color>
 </resources>

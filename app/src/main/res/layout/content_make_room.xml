@@ -48,16 +48,17 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
         android:theme="@style/EditText_mainColor">
 
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_enter_over_twelve"
             android:imeOptions="actionNext"
             android:inputType="textPersonName"
-            android:maxLength="12"
             android:maxLines="1"
             android:singleLine="true" />
 

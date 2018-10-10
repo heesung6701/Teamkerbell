@@ -31,17 +31,19 @@
     <android.support.design.widget.TextInputLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
     android:theme="@style/EditText_mainColor"
+
     >
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/group_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_enter_over_twelve"
         android:inputType="textPersonName"
         android:maxLines="1"
-        android:maxLength="12"
         android:imeOptions="actionNext"
         android:singleLine="true"
         />

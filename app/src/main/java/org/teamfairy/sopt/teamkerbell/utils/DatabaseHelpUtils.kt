@@ -149,6 +149,10 @@ class DatabaseHelpUtils {
 
         const val PREF_ISUPDATE = "isUpdate_"
 
+        const val PREF_ISUPDATE_TUTORIAL_SIGNAL ="signal_tutorial"
+
+
+
 
         fun setPref_isUpdate(applicationContext : Context, key : String, tf : Boolean){
             val uIdx =LoginToken.getUserIdx(applicationContext)

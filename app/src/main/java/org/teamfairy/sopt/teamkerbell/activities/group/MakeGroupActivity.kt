@@ -75,6 +75,9 @@ class MakeGroupActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(groupName)) {
             group_name.error = getString(R.string.error_field_required)
             cancel = true
+        }else if (groupName.length>Team.max_length) {
+            group_name.error = getString(R.string.error_invalid_length_12)
+            cancel = true
         }
 
         if (cancel) {

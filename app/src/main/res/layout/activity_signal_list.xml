@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/app_bar_filter"/>
+        <include layout="@layout/app_bar_filter_help"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -27,4 +27,104 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/icon_floating_add" />
+    <LinearLayout
+        android:visibility="gone"
+        android:translationZ="10dp"
+        android:id="@+id/layout_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tutorial_background"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        >
+        <ImageView
+            android:id="@+id/iv_close_tutorial"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="17dp"
+            android:layout_gravity="end"
+            app:srcCompat="@drawable/ic_close_white"
+            android:contentDescription="@string/action_close" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager_tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:overScrollMode="never"
+            android:gravity="center">
+
+        </android.support.v4.view.ViewPager>
+
+        <Button
+            android:id="@+id/btn_next_tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_round_btn_25dp"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/action_next"
+            android:layout_marginBottom="34dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="90dp"
+            >
+            
+            <ImageView
+                android:id="@+id/iv_sign_1_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_white"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial_describe_1" />
+
+            <ImageView
+                android:id="@+id/iv_sign_2_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_gray"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial" />
+
+            <ImageView
+                android:id="@+id/iv_sign_3_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_gray"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial" />
+            <ImageView
+                android:id="@+id/iv_sign_4_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_gray"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial" />
+            <ImageView
+                android:id="@+id/iv_sign_5_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_gray"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial" />
+            <ImageView
+                android:id="@+id/iv_sign_6_tutorial"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                app:srcCompat="@drawable/ic_sign_gray"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/txt_tutorial" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>

@@ -70,6 +70,8 @@ class Room(
             override fun newArray(size: Int): Array<Room?> = arrayOfNulls(size)
         }
 
+        var max_length = 12
+
 
         var ARG_ROOM_IDX = "room_idx"
         var ARG_REAL_NAME = "real_name"

@@ -19,6 +19,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
@@ -145,7 +146,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
 
-    fun attemptIdCheck(str : String){
+    private fun attemptIdCheck(str : String){
         val idCheckTask = GetMessageTask(applicationContext, HandlerIdCheck(this))
 
         val jsonParam = JSONObject()
@@ -188,7 +189,6 @@ class SignUpActivity : AppCompatActivity() {
         email.error = null
         password.error = null
 
-        // Store values at the time of the login attempt.
         emailStr = email.text.toString()
         passwordStr = password.text.toString()
 
@@ -222,14 +222,40 @@ class SignUpActivity : AppCompatActivity() {
             cancel = true
         }
 
+
+        // Store values at the time of the login attempt.
+        val txtName = name.text.toString()
+        val txtPhone = phone.text.toString()
+
+
+        if (TextUtils.isEmpty(txtName)) {
+            name.error = getString(R.string.error_field_required)
+            focusView = name
+            cancel = true
+        }else if(txtName.length>User.name_max_length){
+            name.error = getString(R.string.error_invalid_length_20)
+            focusView = name
+            cancel = true
+        }
+
+
+
+        if (TextUtils.isEmpty(txtPhone)) {
+            phone.error = getString(R.string.error_field_required)
+            focusView = phone
+            cancel = true
+        }else if(txtPhone.length < "010-0000-0000".length){
+            phone.error = getString(R.string.error_invalid_phone)
+            focusView = phone
+            cancel = true
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView?.requestFocus()
         } else {
 
-            val txtName = name.text.toString()
-            val txtPhone = phone.text.toString()
 
 
             val jsonParam = JSONObject()

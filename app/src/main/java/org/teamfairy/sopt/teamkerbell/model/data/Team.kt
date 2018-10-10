@@ -59,6 +59,8 @@ data class Team(
         }
 
 
+        var max_length  = 12
+
         var ARG_G_IDX = "g_idx"
         var ARG_REAL_NAME = "real_name"
         var ARG_CTRL_NAME = "ctrl_name"

@@ -104,6 +104,9 @@ class MakeRoomActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(roomName)) {
             room_name.error = getString(R.string.error_field_required)
             cancel = true
+        }else if (roomName.length>Room.max_length) {
+            room_name.error = getString(R.string.error_invalid_length_12)
+            cancel = true
         }
 
         if (cancel) {

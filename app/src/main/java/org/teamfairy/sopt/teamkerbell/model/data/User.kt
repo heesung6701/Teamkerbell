@@ -17,6 +17,9 @@ open class User(
 ){
     companion object {
 
+        var name_max_length = 20
+
+
         var ARG_U_IDX = "u_idx"
         var ARG_NAME = "name"
         var ARG_PHONE = "phone"
