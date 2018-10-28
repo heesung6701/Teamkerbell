@@ -25,12 +25,12 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
 
 
     companion object {
-         val TYPE_ITEM = 1
-         val TYPE_FOOT = 2
+         const val TYPE_ITEM = 1
+         const val TYPE_FOOT = 2
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, pos: Int) {
-        val position = holder!!.adapterPosition
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, pos: Int) {
+        val position = holder.adapterPosition
         when(getItemViewType(position)){
             TYPE_FOOT->{
 
@@ -64,16 +64,16 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when(viewType){
             TYPE_FOOT->{
-                val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_team_add, parent, false)
+                val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_team_add, parent, false)
                 mainView.setOnClickListener(mOnClickListener)
                 EmptyViewHolder(mainView)
             }
             else->{ //TYPE_ITEM
-                val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_team, parent, false)
+                val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_team, parent, false)
                 mainView.setOnClickListener(mOnClickListener)
                 TeamViewHolder(mainView)
             }

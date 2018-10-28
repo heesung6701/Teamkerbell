@@ -23,8 +23,8 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
     }
 
     private  var isCheckable: Boolean = true
-    override fun onBindViewHolder(holder: UserViewHolder?, pos: Int) {
-        val position = holder!!.adapterPosition
+    override fun onBindViewHolder(holder: UserViewHolder, pos: Int) {
+        val position = holder.adapterPosition
         holder.itemView.visibility = View.VISIBLE
         holder.tvName.text = dataList[position].name
         if (isCheckable && dataList[position] is UserCheckData) {
@@ -41,11 +41,11 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val mainView: View?
         val viewHolder: UserViewHolder?
         if (dataList[viewType] is UserCheckData) {
-            mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user_chk, parent, false)
+            mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_user_chk, parent, false)
             isCheckable = true
             val userCheckData = dataList[viewType] as UserCheckData
             mainView.setOnClickListener {
@@ -54,7 +54,7 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
             }
             mainView.li_user_chk.visibility = View.VISIBLE
         } else {
-            mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user, parent, false)
+            mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_user, parent, false)
             isCheckable=false
         }
         if(mOnClick!=null)

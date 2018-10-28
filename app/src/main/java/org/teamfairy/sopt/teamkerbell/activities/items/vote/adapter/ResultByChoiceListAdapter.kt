@@ -40,14 +40,14 @@ class ResultByChoiceListAdapter(var dataList: ArrayList<HashMap<String, String>>
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (dataList[viewType]["type"]) {
             "header" -> {
-                val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_vote_choice, parent, false)
+                val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_vote_choice, parent, false)
                 ChoiceListViewHolder(mainView)
             }
             else -> {
-                val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_user, parent, false)
+                val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_user, parent, false)
                 UserViewHolder(mainView)
             }
         }

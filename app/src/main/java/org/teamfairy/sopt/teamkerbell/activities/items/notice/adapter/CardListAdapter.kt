@@ -17,8 +17,8 @@ import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
  * Created by lumiere on 2017-12-30.
  */
 class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
-    override fun onBindViewHolder(holder: CardViewHolder?, position: Int) {
-        val pos = holder!!.adapterPosition
+    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
+        val pos = holder.adapterPosition
 
         val notice = dataList[pos] as Notice
         holder.tvTitle.text=notice.roomName
@@ -39,8 +39,8 @@ class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext :
 
     override fun getItemViewType(position: Int): Int =position
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CardViewHolder {
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_card, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_card, parent, false)
         mainView.setOnClickListener(mOnClickListener)
         val c =  CardViewHolder(mainView)
         c.tvContent.movementMethod = ScrollingMovementMethod()

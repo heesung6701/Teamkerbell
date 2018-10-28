@@ -22,7 +22,7 @@ import kotlin.properties.Delegates
  */
 class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         changeRoom(dataList[pos] as Room)
     }

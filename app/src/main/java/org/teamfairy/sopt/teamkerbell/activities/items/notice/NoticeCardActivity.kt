@@ -88,7 +88,7 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
                 recyclerView.context,
                 DividerItemDecoration.VERTICAL
         )
-        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
+        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider)!!)
 
         FilterFunc(this)
 
@@ -141,7 +141,7 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         connectNoticeList()
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
 
         val i = Intent(applicationContext, NoticeActivity::class.java)

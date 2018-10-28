@@ -58,8 +58,8 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedbackViewHolder {
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_feedback, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedbackViewHolder {
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_feedback, parent, false)
         return FeedbackViewHolder(mainView)
     }
 

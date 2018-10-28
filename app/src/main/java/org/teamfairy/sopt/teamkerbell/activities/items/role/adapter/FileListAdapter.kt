@@ -37,9 +37,9 @@ class FileListAdapter(var dataList: ArrayList<File>) : RecyclerView.Adapter<File
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FileViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_file, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_file, parent, false)
         return FileViewHolder(mainView)
     }
 

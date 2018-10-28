@@ -24,7 +24,7 @@ import kotlin.properties.Delegates
 
 
 class UnperformedFragment : Fragment(), View.OnClickListener {
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
 
         val pos = recyclerView.getChildAdapterPosition(p0)
         val msg = Message()
@@ -46,9 +46,9 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater!!.inflate(R.layout.fragment_unperformed, container, false)
+        val v = inflater.inflate(R.layout.fragment_unperformed, container, false)
 
 
         tvEmpty = v.findViewById(R.id.tv_empty)
@@ -98,18 +98,21 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
     }
 
     private fun updateDataInfo(it : ListDataInterface){
-        when (type) {
-            Utils.TAB_UNPERFORMED_NOTICE -> {
-                (it as Notice).setGroupInfo(activity.applicationContext)
-                it.setPhotoInfo(activity.applicationContext)
-            }
-            Utils.TAB_UNPERFORMED_SIGNAL -> {
-                (it as Signal).setGroupInfo(activity.applicationContext)
-                it.setPhotoInfo(activity.applicationContext)
-            }
-            Utils.TAB_UNPERFORMED_VOTE -> {
-                (it as Vote).setGroupInfo(activity.applicationContext)
-                it.setPhotoInfo(activity.applicationContext)
+
+        activity?.let { activity ->
+            when (type) {
+                Utils.TAB_UNPERFORMED_NOTICE -> {
+                    (it as Notice).setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                }
+                Utils.TAB_UNPERFORMED_SIGNAL -> {
+                    (it as Signal).setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                }
+                Utils.TAB_UNPERFORMED_VOTE -> {
+                    (it as Vote).setGroupInfo(activity.applicationContext)
+                    it.setPhotoInfo(activity.applicationContext)
+                }
             }
         }
     }

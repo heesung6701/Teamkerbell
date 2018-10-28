@@ -59,9 +59,9 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TaskListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_task, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_task, parent, false)
         mainView.setOnClickListener(mOnClick)
 
         return TaskListViewHolder(mainView)

@@ -32,9 +32,9 @@ class UnperformedListAdapter(var dataList: ArrayList<ListDataInterface>) : Recyc
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UnperformedListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnperformedListViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_unperformed, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_unperformed, parent, false)
 
         mainView.setOnClickListener(mOnClick)
 

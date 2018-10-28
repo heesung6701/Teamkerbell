@@ -69,9 +69,9 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ListContentHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListContentHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.list_item, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
 
 
 

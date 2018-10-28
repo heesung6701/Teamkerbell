@@ -298,7 +298,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 }
 
 
-                recyclerResult.adapter.notifyDataSetChanged()
+                recyclerResult.adapter?.notifyDataSetChanged()
             }
             R.id.btn_by_member -> {
 
@@ -321,7 +321,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
                 }
 
-                recyclerResult.adapter.notifyDataSetChanged()
+                recyclerResult.adapter?.notifyDataSetChanged()
             }
             R.id.btn_by_not_voted -> {
 
@@ -344,7 +344,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
                 }
 
-                recyclerResult.adapter.notifyDataSetChanged()
+                recyclerResult.adapter?.notifyDataSetChanged()
             }
         }
 
@@ -361,7 +361,8 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         }
     }
 
-    private fun unableVote(): Boolean = (vote!!.isFinished() || adapterChoice.selectedId != -1 && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
+    private fun unableVote(): Boolean = (vote!!.isFinished() || adapterChoice.selectedId != -1
+            && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
             && dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]))
 
     private fun showResult() {
@@ -383,7 +384,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerChoice.getChildAdapterPosition(p0)
         if (vote!=null && !vote!!.isFinished()) {
             adapterChoice.selectedId = pos

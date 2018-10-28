@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,6 +14,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_group_list.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
+import org.teamfairy.sopt.teamkerbell.R.id.tv_hello
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.activities.group.MakeGroupActivity
 import org.teamfairy.sopt.teamkerbell.activities.main.MainActivity
@@ -32,16 +34,17 @@ import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 class GroupListActivity : AppCompatActivity(), View.OnClickListener {
-    override fun onClick(it: View?) {
-        val pos = recyclerView.getChildLayoutPosition(it)
-        if (pos == dataList.lastIndex) {
-            addItem()
-            return
-        }
 
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.putExtra(INTENT_GROUP, groupList[pos])
-        startActivity(intent)
+    override fun onClick(it: View) {
+            val pos = recyclerView.getChildLayoutPosition(it)
+            if (pos == dataList.lastIndex) {
+                addItem()
+                return
+            }
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.putExtra(INTENT_GROUP, groupList[pos])
+            startActivity(intent)
 
     }
 

@@ -58,8 +58,8 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ContactViewHolder {
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_contact, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_contact, parent, false)
         mainView.setOnClickListener(onClickListener)
         return ContactViewHolder(mainView)
     }

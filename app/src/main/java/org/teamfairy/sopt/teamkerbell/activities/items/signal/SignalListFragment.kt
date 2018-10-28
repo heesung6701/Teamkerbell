@@ -84,17 +84,18 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-        adapter = ListDataAdapter(dataList, activity.applicationContext)
-        adapter.setOnItemClick(this)
-        recyclerView.adapter = adapter
+        activity?.let {
+            adapter = ListDataAdapter(dataList, it.applicationContext)
+            adapter.setOnItemClick(this)
+            recyclerView.adapter = adapter
 
-        val divider = DividerItemDecoration(
-                recyclerView.context,
-                DividerItemDecoration.VERTICAL
-        )
-        divider.setDrawable(ContextCompat.getDrawable(activity.baseContext, R.drawable.shape_line_divider))
-        recyclerView.addItemDecoration(divider)
-
+            val divider = DividerItemDecoration(
+                    recyclerView.context,
+                    DividerItemDecoration.VERTICAL
+            )
+            divider.setDrawable(ContextCompat.getDrawable(it.baseContext, R.drawable.shape_line_divider)!!)
+            recyclerView.addItemDecoration(divider)
+        }
 
         val signBar = v.findViewById<LinearLayout>(R.id.sign_bar)
 
@@ -179,7 +180,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         adapter.notifyDataSetChanged()
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         val signal: Signal? = dataList[pos] as Signal
 
@@ -198,14 +199,17 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         var url = ""
 
-        val task = SignalListTask(activity.applicationContext, HandlerGet(this), LoginToken.getToken(activity.applicationContext))
-        url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
-        task.execute("$url/${group.g_idx}", NetworkTask.METHOD_GET)
+        activity?.let {
+            val task = SignalListTask(it.applicationContext, HandlerGet(this), LoginToken.getToken(it.applicationContext))
+            url = if (state == Utils.SIGNAL_SENDER) URL_GROUP_LIGHT_SENDER else URL_GROUP_LIGHT_RECEIVER
+            task.execute("$url/${group.g_idx}", NetworkTask.METHOD_GET)
+        }
     }
 
     fun getSignalList(result: ArrayList<Signal>) {
         signalList.clear()
-        result.iterator().forEach {
+        activity?.let { activity ->
+            result.iterator().forEach {
             when (state) {
                 Utils.SIGNAL_ALL -> {
                     it.setPhotoInfo(activity.applicationContext)
@@ -226,7 +230,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
                     }
                 }
             }
-        }
+        } }
         updateList()
     }
 

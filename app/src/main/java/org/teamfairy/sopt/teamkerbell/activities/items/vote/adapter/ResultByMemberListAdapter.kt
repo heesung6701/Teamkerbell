@@ -31,9 +31,9 @@ class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>,
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ResultByMemberViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultByMemberViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_vote_result_by_member, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_vote_result_by_member, parent, false)
         return ResultByMemberViewHolder(mainView)
     }
 

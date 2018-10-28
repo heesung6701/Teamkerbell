@@ -42,9 +42,9 @@ class ChoiceListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mCon
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChoiceListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChoiceListViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_vote_choice, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_vote_choice, parent, false)
         mainView.setOnClickListener(mOnClick)
         return ChoiceListViewHolder(mainView)
     }

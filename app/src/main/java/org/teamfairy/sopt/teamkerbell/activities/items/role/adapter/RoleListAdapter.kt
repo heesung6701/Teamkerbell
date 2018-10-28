@@ -34,9 +34,9 @@ class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : Re
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RoleListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoleListViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_role, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_role, parent, false)
         mainView.setOnClickListener(mOnClick)
         return RoleListViewHolder(mainView)
     }

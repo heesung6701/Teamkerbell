@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import io.realm.RealmObject.addChangeListener
 import kotlinx.android.synthetic.main.fragment_contact.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
@@ -62,38 +63,40 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
 
     var isUpdateRs: HashMap<Int, IsUpdateR> = HashMap()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater!!.inflate(R.layout.fragment_contact, container, false)
+        val v = inflater.inflate(R.layout.fragment_contact, container, false)
 
-        tvName = v.findViewById(R.id.tv_user_name)
-        ivPhoto = v.findViewById(R.id.iv_user_profile)
+        activity?.let { activity ->
+            tvName = v.findViewById(R.id.tv_user_name)
+            ivPhoto = v.findViewById(R.id.iv_user_profile)
 
 
-        recyclerView = v.findViewById(R.id.recyclerView)
-        adapter = ContactListAdapter(dataList, activity.applicationContext)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = adapter
+            recyclerView = v.findViewById(R.id.recyclerView)
+            adapter = ContactListAdapter(dataList, activity.applicationContext)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            recyclerView.adapter = adapter
 
-        mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
-        mSwipeRefreshLayout.setOnRefreshListener(this)
+            mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
+            mSwipeRefreshLayout.setOnRefreshListener(this)
 
-        v.edt_search.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                txtSearch = p0.toString().trim()
-                getUserList()
+            v.edt_search.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+                    txtSearch = p0.toString().trim()
+                    getUserList()
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+            })
+            v.layout_profile.setOnClickListener {
+                val intent = Intent(activity.applicationContext, ProfileActivity::class.java)
+                startActivity(intent)
             }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        })
-        v.layout_profile.setOnClickListener {
-            val intent = Intent(activity.applicationContext, ProfileActivity::class.java)
-            startActivity(intent)
         }
         return v
     }
@@ -102,7 +105,9 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
     override fun onResume() {
         super.onResume()
         getUserList()
+        activity?.let { activity->
         setMyProfile(LoginToken.getUser(activity.applicationContext))
+        }
 
         addChangeListener(IsUpdateR.WHAT_USER)
         addChangeListener(IsUpdateR.WHAT_JOINED_GROUP)
@@ -121,42 +126,48 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
 
         Log.d(LOG_TAG, "add ChangeListener what : ${what}")
 
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
-                ?: IsUpdateR.create(realm,what)
+        activity?.let { activity ->
+            val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+            val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
+                    ?: IsUpdateR.create(realm, what)
 
-        if (isUpdateR.isUpdate) {
-            Log.d(LOG_TAG, "was true")
-            getUserList()
-
-            realm.beginTransaction()
-            isUpdateR.isUpdate = false
-            realm.commitTransaction()
-            Log.d(LOG_TAG, "become false")
-        }
-
-        isUpdateR.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
-            if (t.isUpdate) {
-                Log.d(LOG_TAG, "is ${t.isUpdate} on addChangeListener")
+            if (isUpdateR.isUpdate) {
+                Log.d(LOG_TAG, "was true")
                 getUserList()
+
                 realm.beginTransaction()
-                t.isUpdate = false
+                isUpdateR.isUpdate = false
                 realm.commitTransaction()
-                Log.d(LOG_TAG, "is updated on addChangeListener")
+                Log.d(LOG_TAG, "become false")
             }
+
+            isUpdateR.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
+                if (t.isUpdate) {
+                    Log.d(LOG_TAG, "is ${t.isUpdate} on addChangeListener")
+                    getUserList()
+                    realm.beginTransaction()
+                    t.isUpdate = false
+                    realm.commitTransaction()
+                    Log.d(LOG_TAG, "is updated on addChangeListener")
+                }
+            }
+            isUpdateRs[what] = isUpdateR
         }
-        isUpdateRs[what]= isUpdateR
     }
 
 
     private fun setMyProfile(u: User) {
         tvName.text = u.name
-        if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "user${u.u_idx}"))
-            ivPhoto.setImageResource(R.drawable.icon_profile_default)
+        activity?.let { activity->
+            if (NetworkUtils.getBitmapList(u.photo, ivPhoto, activity.applicationContext, "user${u.u_idx}"))
+                ivPhoto.setImageResource(R.drawable.icon_profile_default)
+        }
     }
 
     fun getUserList() {
-        DatabaseHelpUtils.getUserListFromRealm(activity.applicationContext, dataListOrigin, adapter as RecyclerView.Adapter<*>, group, true)
+        activity?.let {activity->
+            DatabaseHelpUtils.getUserListFromRealm(activity.applicationContext, dataListOrigin, adapter as RecyclerView.Adapter<*>, group, true)
+        }
         updateUserList()
     }
 

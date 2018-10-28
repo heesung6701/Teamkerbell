@@ -59,10 +59,10 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private var badgeRole : TextView by Delegates.notNull()
 
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val v = inflater!!.inflate(R.layout.fragment_home, container, false)
+        val v = inflater.inflate(R.layout.fragment_home, container, false)
         tvTeamName = v.findViewById(R.id.tv_teamName)
         tvCount = v.findViewById(R.id.tv_count)
         ivDropDown = v.findViewById(R.id.iv_drop_down)
@@ -74,49 +74,61 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         badgeVote=v.tv_vote_sign
         badgeRole=v.tv_role_sign
 
-        v.btn_notice.setOnClickListener {
-            BadgeCnt.clear(activity.applicationContext,BadgeCnt.WHAT_NOTICE,group.g_idx)
-            val i = Intent(activity.applicationContext, NoticeCardActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
-        }
-
-        v.btn_pick.setOnClickListener {
-            val i = Intent(activity.applicationContext, PickListActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
-        }
-
-        v.btn_signal.setOnClickListener {
-            BadgeCnt.clear(activity.applicationContext,BadgeCnt.WHAT_SIGNAL,group.g_idx)
-            val i = Intent(activity.applicationContext, SignalListActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
-        }
-
-
-        v.btn_vote.setOnClickListener {
-            BadgeCnt.clear(activity.applicationContext,BadgeCnt.WHAT_VOTE,group.g_idx)
-            val i = Intent(activity.applicationContext, VoteListActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
-        }
-
-        v.btn_role.setOnClickListener {
-            BadgeCnt.clear(activity.applicationContext,BadgeCnt.WHAT_ROLE,group.g_idx)
-            val i = Intent(activity.applicationContext, RoleListActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
-        }
-        v.btn_setting.setOnClickListener {
-            val i = Intent(activity.applicationContext, SettingActivity::class.java)
-            i.putExtra(INTENT_GROUP, group)
-            startActivity(i)
+        v.btn_notice.setOnClickListener { _ ->
+            activity?.let {
+                BadgeCnt.clear(it.applicationContext,BadgeCnt.WHAT_NOTICE,group.g_idx)
+                val i = Intent(it.applicationContext, NoticeCardActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
 
         }
 
+        v.btn_pick.setOnClickListener { _ ->
+            activity?.let {
+                val i = Intent(it.applicationContext, PickListActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
+        }
 
-        adapterGroup = TextListAdapter(dataListGroup, activity.applicationContext)
+        v.btn_signal.setOnClickListener { _ ->
+            activity?.let {
+                BadgeCnt.clear(it.applicationContext, BadgeCnt.WHAT_SIGNAL, group.g_idx)
+                val i = Intent(it.applicationContext, SignalListActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
+        }
+
+
+        v.btn_vote.setOnClickListener { _ ->
+            activity?.let {
+                BadgeCnt.clear(it.applicationContext, BadgeCnt.WHAT_VOTE, group.g_idx)
+                val i = Intent(it.applicationContext, VoteListActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
+        }
+
+        v.btn_role.setOnClickListener { _ ->
+            activity?.let {
+                BadgeCnt.clear(it.applicationContext, BadgeCnt.WHAT_ROLE, group.g_idx)
+                val i = Intent(it.applicationContext, RoleListActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
+        }
+        v.btn_setting.setOnClickListener { _ ->
+            activity?.let {
+                val i = Intent(it.applicationContext, SettingActivity::class.java)
+                i.putExtra(INTENT_GROUP, group)
+                startActivity(i)
+            }
+
+        }
+
+        adapterGroup = TextListAdapter(dataListGroup, activity!!.applicationContext)
         adapterGroup.setOnItemClickListener(this)
         adapterGroup.currentIdx = group.g_idx
 
@@ -144,10 +156,12 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     }
 
     private fun showGroupInfo() {
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        tvTeamName.text = group.real_name
-        tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll().size}명")
-        realm.close()
+        activity?.let {
+            val realm = DatabaseHelpUtils.getRealmDefault(it.applicationContext)
+            tvTeamName.text = group.real_name
+            tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll().size}명")
+            realm.close()
+        }
     }
 
 
@@ -172,10 +186,12 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         dialog.setOnClickListener(View.OnClickListener { p0 ->
             when (p0.id) {
                 R.id.btn_add -> {
-                    val i = Intent(activity.applicationContext, InviteActivity::class.java)
-                    i.putExtra(INTENT_GROUP, group)
-                    startActivity(i)
-                    dialog.dismiss()
+                    activity?.let{
+                        val i = Intent(it.applicationContext, InviteActivity::class.java)
+                        i.putExtra(INTENT_GROUP, group)
+                        startActivity(i)
+                        dialog.dismiss()
+                    }
                 }
             }
         })
@@ -197,14 +213,17 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             ivDropDown.rotation = 180.0f
 
 
-            DatabaseHelpUtils.getGroupListFromRealm(activity.applicationContext, dataListGroup as ArrayList<Team>, adapterGroup as RecyclerView.Adapter<*>, group)
+            activity?.let {
+                DatabaseHelpUtils.getGroupListFromRealm(it.applicationContext, dataListGroup as ArrayList<Team>, adapterGroup as RecyclerView.Adapter<*>, group)
+            }
         }
 
     }
 
     private fun changeGroup() {
 
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+        activity?.let {
+        val realm = DatabaseHelpUtils.getRealmDefault(it.applicationContext)
         tvTeamName.text = group.real_name
         tvCount.text = ("${realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).findAll().size}명")
         realm.close()
@@ -218,11 +237,11 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         removeBadgeCntListener()
         addChangeBadgeCntListener()
-
+        }
     }
 
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         group = dataListGroup[pos] as Team
         changeGroup()
@@ -234,13 +253,16 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         super.onAttach(context)
 
 
-        NetworkUtils.connectGroupList(activity.applicationContext, null)
-        NetworkUtils.connectUserList(activity.applicationContext, null)
+        activity?.let {
+            NetworkUtils.connectGroupList(it.applicationContext, null)
+            NetworkUtils.connectUserList(it.applicationContext, null)
+        }
     }
 
     private var badgeCnts = ArrayList<BadgeCnt>()
     private fun addChangeBadgeCntListener(){
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+        activity?.let {
+        val realm = DatabaseHelpUtils.getRealmDefault(it.applicationContext)
 
         removeBadgeCntListener()
         Log.d("$TAG /BadgeCnt", "g_idx: ${group.g_idx} add listener")
@@ -264,7 +286,7 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 setBadgeCnt(t.what,t.cnt)
             }
         }
-
+        }
     }
     private fun removeBadgeCntListener(){
         if(badgeCnts.size>0)

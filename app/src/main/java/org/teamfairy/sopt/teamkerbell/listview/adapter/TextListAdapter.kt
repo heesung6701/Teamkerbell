@@ -33,8 +33,8 @@ class  TextListAdapter(var dataList : ArrayList<GroupInterface>, var mContext: C
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TextViewHolder { // use my viewholder
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_group, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder { // use my viewholder
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_group, parent, false)
         mainView.setOnClickListener(onItemClick)
         return TextViewHolder(mainView)
     }

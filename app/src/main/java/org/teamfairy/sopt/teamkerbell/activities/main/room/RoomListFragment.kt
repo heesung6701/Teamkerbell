@@ -59,10 +59,11 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private var isConnectedRoomList = false
 
     var fab : FloatingActionButton by Delegates.notNull()
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater!!.inflate(R.layout.fragment_room_list, container, false)
+        val v = inflater.inflate(R.layout.fragment_room_list, container, false)
 
+        activity?.let { activity->
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         dataList = arrayListOf<Room>()
@@ -80,7 +81,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0 && fab.visibility == View.VISIBLE) {
                     fab.hide()
@@ -89,7 +90,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 }
             }
         })
-
+        }
 
         return v
     }
@@ -121,64 +122,70 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     }
 
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
 
         val pos = recyclerView.getChildAdapterPosition(p0)
 
         dataList[pos].newMsgCnt=0
 
-        val i = Intent(activity.applicationContext, ChatActivity::class.java)
-        i.putExtra(INTENT_GROUP,group)
-        i.putExtra(INTENT_ROOM, dataList[pos])
-        startActivity(i)
+        activity?.let {activity->
+            val i = Intent(activity.applicationContext, ChatActivity::class.java)
+            i.putExtra(INTENT_GROUP,group)
+            i.putExtra(INTENT_ROOM, dataList[pos])
+            startActivity(i)
+        }
 //        detachSocket()
     }
 
     private fun addChangeJoinedRoomListener() {
 
-        val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
-        isUpdateJoined = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
-        if (isUpdateJoined == null) {
-            realm.beginTransaction()
-            isUpdateJoined = realm.createObject(IsUpdateR::class.java, StatusCode.joinedRoomChange)
-            isUpdateJoined!!.isUpdate = false
-            realm.commitTransaction()
-        } else {
-            if (isUpdateJoined?.isUpdate == true) {
-                updateRoomList()
+        activity?.let { activity->
+            val realm = DatabaseHelpUtils.getRealmDefault(activity.applicationContext)
+            isUpdateJoined = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
+            if (isUpdateJoined == null) {
                 realm.beginTransaction()
+                isUpdateJoined = realm.createObject(IsUpdateR::class.java, StatusCode.joinedRoomChange)
                 isUpdateJoined!!.isUpdate = false
                 realm.commitTransaction()
+            } else {
+                if (isUpdateJoined?.isUpdate == true) {
+                    updateRoomList()
+                    realm.beginTransaction()
+                    isUpdateJoined!!.isUpdate = false
+                    realm.commitTransaction()
+                }
             }
-        }
-        isUpdateJoined!!.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
-            if (t.isUpdate) {
-                Log.d("$LOG_TAG /isUpdateJoinedRoom", "is ${t.isUpdate}")
-                updateRoomList()
-                enterChatListSocket()
-                realm.beginTransaction()
-                t.isUpdate = false
-                realm.commitTransaction()
+            isUpdateJoined!!.addChangeListener<IsUpdateR> { t: IsUpdateR, _ ->
+                if (t.isUpdate) {
+                    Log.d("$LOG_TAG /isUpdateJoinedRoom", "is ${t.isUpdate}")
+                    updateRoomList()
+                    enterChatListSocket()
+                    realm.beginTransaction()
+                    t.isUpdate = false
+                    realm.commitTransaction()
+                }
             }
-        }
 
+        }
     }
 
 
     private fun updateRoomList() {
 
-        val realm = getRealmDefault(activity.applicationContext)
+        activity?.let { activity->
+            val realm = getRealmDefault(activity.applicationContext)
 
-        dataList.clear()
-        var i = 0
-        val groupR = realm.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).equalTo(User.ARG_U_IDX,LoginToken.getUserIdx(activity.applicationContext)).findAll()
-        groupR.forEach {
-            val roomR = realm.where(RoomR::class.java).equalTo(Room.ARG_ROOM_IDX, it.room_idx).findFirst()
-                    ?: RoomR()
-            dataList.add(roomR.toChatRoom())
-            i++
+            dataList.clear()
+            var i = 0
+            val groupR = realm.where(JoinedRoomR::class.java).equalTo(Team.ARG_G_IDX, group.g_idx).equalTo(User.ARG_U_IDX,LoginToken.getUserIdx(activity.applicationContext)).findAll()
+            groupR.forEach {
+                val roomR = realm.where(RoomR::class.java).equalTo(Room.ARG_ROOM_IDX, it.room_idx).findFirst()
+                        ?: RoomR()
+                dataList.add(roomR.toChatRoom())
+                i++
+            }
+
         }
-
         adapter.notifyDataSetChanged()
     }
 
@@ -199,7 +206,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private fun connectSocket() {
         val socket = ChatApplication.getSocket(group.g_idx)
         if (socket == null)
-            activity.finish()
+            activity?.finish()
 
         mSocket = socket!!
         mSocket!!.on(Socket.EVENT_CONNECT, onConnect)
@@ -234,10 +241,12 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private fun enterChatListSocket() {
         if(mSocket?.connected() != true) return
 
-        val jsonObj = JSONObject()
-        jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(activity.applicationContext))
-        mSocket?.emit(Constants.ENTER_ROOM_LIST, jsonObj.toString())
-        Log.d("$LOG_TAG/Socket", "${Constants.ENTER_ROOM_LIST} with $jsonObj")
+        activity?.let {  activity->
+            val jsonObj = JSONObject()
+            jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(activity.applicationContext))
+            mSocket?.emit(Constants.ENTER_ROOM_LIST, jsonObj.toString())
+            Log.d("$LOG_TAG/Socket", "${Constants.ENTER_ROOM_LIST} with $jsonObj")
+        }
 
 
     }
@@ -279,7 +288,7 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_LIST_RESULT}", args[0].toString())
 
 
-        activity?.runOnUiThread(Runnable {
+        activity?.runOnUiThread {
 
 
             val dataArray: JSONArray = JSONArray(args[0].toString())
@@ -300,8 +309,10 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                         var name: String = ""
                         uIds.forEach {
                             val uId = Integer.parseInt(it)
-                            if(name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
-                            else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                            activity?.let { activity->
+                                if(name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
+                                else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                            }
                         }
 
                         r.lastMsgStr=(name + "님이 입장하셨습니다.")
@@ -312,8 +323,10 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                         var name: String = ""
                         uIds.forEach {
                             val uId = Integer.parseInt(it)
-                            if(name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
-                            else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                            activity?.let { activity ->
+                                if (name.isEmpty()) name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name.toString()
+                                else name += ",${DatabaseHelpUtils.getUser(activity.applicationContext, uId).name}"
+                            }
                         }
 
                         r.lastMsgStr=(name + "님이 퇴장하셨습니다.")
@@ -342,17 +355,18 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             }
             adapter.notifyDataSetChanged()
 
-            if(totalCnt==0) activity.tab_badge.text=""
-            activity.tab_badge.text=when(totalCnt){
-                in Int.MIN_VALUE..0 -> ""
-                in 999 downTo 0 -> totalCnt.toString()
-                else-> "999+"
+            activity?.let { activity ->
+                if (totalCnt == 0) activity.tab_badge.text = ""
+                activity.tab_badge.text = when (totalCnt) {
+                    in Int.MIN_VALUE..0 -> ""
+                    in 999 downTo 0 -> totalCnt.toString()
+                    else -> "999+"
+                }
+                activity.tab_badge.visibility = if (activity.tab_badge.text.isNullOrBlank()) View.INVISIBLE else View.VISIBLE
             }
-            activity.tab_badge.visibility = if(activity.tab_badge.text.isNullOrBlank()) View.INVISIBLE else View.VISIBLE
-
             isConnectedRoomList = true
 
-        })
+        }
     }
 
 
@@ -364,10 +378,10 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT_LIST}", args[0].toString())
 
-        activity?.runOnUiThread(Runnable {
+        activity?.runOnUiThread {
             updateListFromJSON(JSONObject(args[0].toString()))
             adapter.notifyDataSetChanged()
-        })
+        }
     }
 
     private fun updateListFromJSON(data : JSONObject): Room{
@@ -386,8 +400,10 @@ class RoomListFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
             ChatUtils.TYPE_ENTER_GROUP->{
                 val uId = Integer.parseInt(message)
-                val name = DatabaseHelpUtils.getUser(activity.applicationContext,uId).name
-                r.lastMsgStr = (name + "님이 입장하셨습니다.")
+                activity?.let { activity ->
+                    val name = DatabaseHelpUtils.getUser(activity.applicationContext, uId).name
+                    r.lastMsgStr = (name + "님이 입장하셨습니다.")
+                }
             }
             else->{
                 r.lastMsgStr = message

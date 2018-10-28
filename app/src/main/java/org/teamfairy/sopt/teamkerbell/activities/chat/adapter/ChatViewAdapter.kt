@@ -47,9 +47,9 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
     var isFixedScroll = false
     var pick_idx = -1
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, pos: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, pos: Int) {
 
-        val position = holder!!.adapterPosition
+        val position = holder.adapterPosition
         val data = dataList[position]
         when (data.type) {
             ChatUtils.TYPE_MESSAGE -> {
@@ -326,7 +326,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val mainView: View
         var viewHolder: RecyclerView.ViewHolder? = null
 
@@ -334,29 +334,29 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
         when (data.type) {
             ChatUtils.TYPE_MESSAGE -> {
                 if (data.isSender(mContext)) {
-                    mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_request, parent, false)
+                    mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_request, parent, false)
                     viewHolder = RequestMessageHolder(mainView)
                 } else {
-                    mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_receive, parent, false)
+                    mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_receive, parent, false)
                     viewHolder = ReceiveMessageHolder(mainView)
                 }
             }
             ChatUtils.TYPE_READLINE -> {
-                mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_readline, parent, false)
+                mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_readline, parent, false)
                 viewHolder = ReadLineHolder(mainView)
             }
 
             ChatUtils.TYPE_NOTICE ,ChatUtils.TYPE_SIGNAL,ChatUtils.TYPE_VOTE,ChatUtils.TYPE_ROLE -> {
                 if (data.isSender(mContext)) {
-                    mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_item_r, parent, false)
+                    mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_item_r, parent, false)
                     viewHolder = ItemHolder(mainView)
                 } else {
-                    mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_item_l, parent, false)
+                    mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_item_l, parent, false)
                     viewHolder = ItemLHolder(mainView)
                 }
             }
             ChatUtils.TYPE_LEAVE , ChatUtils.TYPE_GROUP_LEAVE-> {
-                mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_leave, parent, false)
+                mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_leave, parent, false)
                 viewHolder = LeaveHolder(mainView)
             }
             ChatUtils.TYPE_PHOTO -> {
@@ -365,7 +365,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
 
             }
             ChatUtils.TYPE_ENTER_GROUP,ChatUtils.TYPE_INVITE ->{
-                mainView = LayoutInflater.from(parent!!.context).inflate(R.layout.li_chat_invite, parent, false)
+                mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_chat_invite, parent, false)
                 viewHolder = InviteHolder(mainView)
             }
             else -> {  // ChatUtils.TYPE_FILE -> {

@@ -43,9 +43,9 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ResponseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResponseViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_task_response, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_task_response, parent, false)
         mainView.setOnClickListener {
             onClickHandler.sendEmptyMessage(viewType)
         }

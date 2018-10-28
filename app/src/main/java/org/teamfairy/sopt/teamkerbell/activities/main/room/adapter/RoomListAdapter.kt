@@ -30,10 +30,10 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         onClickListener = l
     }
 
-    override fun onBindViewHolder(holder: RoomViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
         val room = dataList[position]
 
-        holder!!.tvName.text = room.real_name
+        holder.tvName.text = room.real_name
         holder.tvContent.text = room.lastMsgStr
         holder.tvTime.text = room.lastMsgTime
         if(dataList[position].newMsgCnt>0){
@@ -72,8 +72,8 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RoomViewHolder {
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_room, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_room, parent, false)
         mainView.setOnClickListener(onClickListener)
         return RoomViewHolder(mainView)
     }

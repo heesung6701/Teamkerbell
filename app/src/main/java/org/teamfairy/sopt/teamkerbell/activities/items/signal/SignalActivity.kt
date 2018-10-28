@@ -315,7 +315,7 @@ class SignalActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
 
         val pos = recyclerView.getChildAdapterPosition(p0)
         val signalResponse = dataList[pos] as SignalResponse

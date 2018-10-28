@@ -45,9 +45,9 @@ class VoteListAdapter(var mContext : Context, var dataList: ArrayList<ListDataIn
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): VoteListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VoteListViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_vote, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_vote, parent, false)
 
         mainView.setOnClickListener(mOnClick)
 

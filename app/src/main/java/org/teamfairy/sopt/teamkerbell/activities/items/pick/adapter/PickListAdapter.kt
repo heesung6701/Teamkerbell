@@ -68,9 +68,9 @@ class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : Re
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PickViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PickViewHolder {
 
-        val mainView: View = LayoutInflater.from(parent!!.context).inflate(R.layout.li_pick, parent, false)
+        val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_pick, parent, false)
         mainView.setOnClickListener(mOnClick)
         return PickViewHolder(mainView)
     }

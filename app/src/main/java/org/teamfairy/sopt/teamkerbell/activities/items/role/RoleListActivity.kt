@@ -76,7 +76,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
                 recyclerView.context,
                 DividerItemDecoration.VERTICAL
         )
-        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
+        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider)!!)
         recyclerView.addItemDecoration(divider)
 
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
@@ -105,7 +105,7 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         connectRoleList()
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         val i = Intent(applicationContext, RoleActivity::class.java)
         i.putExtra(INTENT_GROUP, group)

@@ -138,7 +138,7 @@ class ChatActivity : AppCompatActivity() {
         listView_chat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(newState== RecyclerView.SCROLL_STATE_DRAGGING)
                 {
@@ -387,7 +387,7 @@ class ChatActivity : AppCompatActivity() {
 //        Log.d(LOG_TAG ,"is pick_id? ${adapter_chat.pick_idx}")
         if( adapter_chat.pick_idx==dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pick_idx==-1 )) {
             recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
-            recyclerView.layoutManager.offsetChildrenVertical(0)
+            (recyclerView.layoutManager as LinearLayoutManagerWithSmoothScroller).offsetChildrenVertical(0)
             recyclerView.scrollToPosition(position)
         }
     }

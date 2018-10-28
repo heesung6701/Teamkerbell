@@ -131,7 +131,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         task.execute(USGS_REQUEST_URL.URL_ROLE, METHOD_DELETE,jsonParam.toString())
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         val i = Intent(applicationContext, TaskActivity::class.java)
         i.putExtra(INTENT_GROUP, group)

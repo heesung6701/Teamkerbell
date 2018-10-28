@@ -32,7 +32,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import kotlin.properties.Delegates
 
 class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClickListener {
-    override fun onClick(p0: View?) {
+    override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
         val pick = dataList[pos]
 
@@ -83,7 +83,7 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
                 recyclerView.context,
                 DividerItemDecoration.VERTICAL
         )
-        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider))
+        divider.setDrawable(ContextCompat.getDrawable(baseContext, R.drawable.shape_line_divider)!!)
         recyclerView.addItemDecoration(divider)
 
         FilterFunc(this)
