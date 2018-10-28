@@ -16,10 +16,10 @@
         android:textColor="@color/white"
         />
     <ImageView
-        android:layout_width="32dp"
-        android:layout_height="56dp"
+        android:layout_width="205dp"
+        android:layout_height="297dp"
         android:layout_marginTop="23dp"
-        app:srcCompat="@drawable/ic_signal_tutorial"
+        app:srcCompat="@drawable/img_tutorial_sign4"
         android:contentDescription="@string/txt_tutorial" />
     <TextView
         android:layout_width="wrap_content"
