@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="10dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
     android:orientation="vertical">
 
 
@@ -19,8 +20,8 @@
             android:layout_height="40dp"
 
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/icon_profile_default"
             app:civ_border_color="@color/mainColorY"
             app:civ_border_width="0dp" />
@@ -56,6 +57,16 @@
                     tools:text="채팅내용x`입니다. 얼마나 일거질지 나도 궁금하답니다."
                     android:textSize="12sp" />
 
+
+
+                <TextView
+                    android:id="@+id/li_tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="8dp"
+                    tools:text="오후 3.27"
+                    android:textSize="7sp" />
                 <TextView
                     android:id="@+id/li_tv_count"
                     android:layout_width="wrap_content"
@@ -63,15 +74,6 @@
                     android:layout_gravity="bottom"
                     android:padding="5dp"
                     tools:text="1"/>
-
-                <TextView
-                    android:id="@+id/li_tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    tools:text="오후 3.27"
-                    android:textSize="12sp" />
-
             </LinearLayout>
 
         </LinearLayout>

@@ -1,5 +1,18 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/ic_circle" android:gravity="center"/>
-    <item android:drawable="@drawable/ic_notice_white" android:gravity="center"/>
+        <!--android:drawable="@drawable/ic_circle"-->
+    <item>
+        <shape
+            android:shape="oval">
+            <size
+                android:width="60dp"
+                android:height="64dp"/>
+            <solid android:color="@color/mainColorP" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_notice_white"
+        android:gravity="center" />
+
+
 </layer-list>

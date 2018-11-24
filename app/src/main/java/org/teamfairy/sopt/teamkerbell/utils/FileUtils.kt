@@ -41,14 +41,12 @@ class FileUtils {
 
 
         private fun exifOrientationToDegrees(exifOrientation: Int): Int {
-            if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                return 90
-            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                return 180
-            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                return 270
+            when (exifOrientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> return 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> return 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> return 270
+                else -> return 0
             }
-            return 0
         }
 
         private fun rotateBitmap(bitmap: Bitmap, degrees: Int): Bitmap {
@@ -78,7 +76,7 @@ class FileUtils {
             val result: String
             val cursor = contentResolver.query(contentURI, null, null, null, null)
             if (cursor == null) {
-                result = contentURI.getPath()
+                result = contentURI.path
             } else {
                 cursor.moveToFirst()
                 val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)

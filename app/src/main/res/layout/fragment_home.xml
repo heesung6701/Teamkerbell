@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:padding="2dp"
     android:id="@+id/layout_parent"
+    android:gravity="center_vertical"
     >
 
 
@@ -14,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="127dp"
         android:gravity="center_vertical"
         tools:ignore="UseCompoundDrawables">
 
@@ -85,25 +85,27 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
             android:gravity="center_vertical"
             >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_notice"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/icon_list_notice"
-                    android:contentDescription="@string/action_notice" />
+                    android:contentDescription="@string/action_notice"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/icon_list_notice" />
 
                 <TextView
                     android:id="@+id/tv_notice_sign"
@@ -130,17 +132,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_pick"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/icon_list_pick"
                     android:contentDescription="@string/action_pick" />
 
@@ -169,17 +171,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_vote"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/icon_list_vote"
                     android:contentDescription="@string/action_vote" />
 
@@ -208,17 +210,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_signal"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/icon_list_signal"
                     android:contentDescription="@string/action_signal" />
 
@@ -247,17 +249,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_role"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/icon_list_role"
                     android:contentDescription="@string/action_role" />
 
@@ -287,17 +289,17 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
                 tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/btn_setting"
-                    android:layout_width="64dp"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/icon_list_setting"
                     android:contentDescription="@string/action_setting" />
 

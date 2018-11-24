@@ -13,9 +13,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
 import io.realm.RealmObject.addChangeListener
+import kotlinx.android.synthetic.main.fragment_contact.*
 import kotlinx.android.synthetic.main.fragment_contact.view.*
 
 import org.teamfairy.sopt.teamkerbell.R
@@ -97,7 +99,24 @@ class ContactFragment : Fragment(), HasGroupFragment, SwipeRefreshLayout.OnRefre
                 val intent = Intent(activity.applicationContext, ProfileActivity::class.java)
                 startActivity(intent)
             }
+//            v.edt_search.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
+//                when (actionId) {
+//
+//                    EditorInfo.IME_ACTION_SEARCH -> {
+//                        txtSearch = edt_search.text.toString().trim()
+//                        getUserList()
+//                    }
+//                    else -> {
+//                        return@OnEditorActionListener false
+//                    }
+//                }
+//
+//                true
+//            })
+
         }
+
+
         return v
     }
 

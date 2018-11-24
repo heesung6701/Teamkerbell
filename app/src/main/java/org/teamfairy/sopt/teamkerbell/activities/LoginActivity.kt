@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
-import android.content.CursorLoader
 import android.content.Loader
 import android.database.Cursor
 import android.net.Uri
@@ -19,17 +18,15 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.content.CursorLoader
 import android.content.Intent
 import android.graphics.Color
 import android.os.*
-import android.provider.LiveFolders.INTENT
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 
 import kotlinx.android.synthetic.main.activity_login.*
@@ -39,18 +36,11 @@ import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_CLIENTTOKEN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_ID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
 import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_GROUP
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_JOINED_ROOM
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_ROOM
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.PREF_ISUPDATE_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.EXIT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.FROMSIGNUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ID
@@ -137,17 +127,17 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // Set up the login form.
         populateAutoComplete()
 
-        easter_egg.setOnClickListener {
-            if(ttt){
-                email.setText("heesung6701@naver.com")
-                password.setText("asdfghjk")
-
-            }else {
-                email.setText("dd@teamkerbell.tk")
-                password.setText("12341234")
-            }
-            ttt=!ttt;
-        }
+//        easter_egg.setOnClickListener {
+//            if(ttt){
+//                email.setText("heesung6701@naver.com")
+//                password.setText("asdfghjk")
+//
+//            }else {
+//                email.setText("dd@teamkerbell.tk")
+//                password.setText("12341234")
+//            }
+//            ttt=!ttt;
+//        }
 
         if (intent.getBooleanExtra(EXIT, false)) {
             finish()
