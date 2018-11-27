@@ -38,11 +38,12 @@
             android:id="@+id/li_tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_round_btn_chat"
+            android:background="@drawable/img_chat_balloon"
             android:maxWidth="350dp"
             android:padding="10dp"
             tools:text="엉여여"
             android:textSize="12sp"
+            android:ellipsize="end"
             android:textStyle="bold" />
 
 

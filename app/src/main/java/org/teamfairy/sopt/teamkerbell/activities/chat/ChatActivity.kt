@@ -15,6 +15,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.webkit.URLUtil
 import android.widget.EditText
@@ -180,7 +182,8 @@ class ChatActivity : AppCompatActivity() {
                 }
 
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
+
+                    imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
 
 
                 scrollToPosition(listView_chat, dataList.lastIndex)
@@ -214,9 +217,11 @@ class ChatActivity : AppCompatActivity() {
         btn_draw_menu.setOnClickListener {
             isOpenDrawLayout = !isOpenDrawLayout
             if (isOpenDrawLayout) {
+//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
                 hideKeyboard()
                 drawer_layout.openDrawer(Gravity.END)
             } else {
+//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                 drawer_layout.closeDrawer(Gravity.END)
             }
         }
@@ -336,6 +341,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         btn_nav_cloud_drive.setOnClickListener {
+
             if(tv_nav_cloud_link.visibility == View.VISIBLE){
                 tv_nav_cloud_link.visibility=View.GONE
                 edt_nav_cloud_link.visibility=View.VISIBLE

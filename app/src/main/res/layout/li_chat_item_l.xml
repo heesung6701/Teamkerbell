@@ -46,7 +46,9 @@
               <LinearLayout
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:background="@drawable/shape_round_white"
+                  android:background="@drawable/img_chat_balloon_left"
+                  android:minWidth="150dp"
+                  android:maxWidth="250dp"
                   android:orientation="vertical"
                   >
                   <LinearLayout
@@ -77,12 +79,13 @@
                   </LinearLayout>
                   <TextView
                       android:id="@+id/li_tv_content"
-                      android:layout_width="200dp"
+                      android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
+                      android:maxWidth="200dp"
                       android:maxLines="3"
                       android:padding="10dp"
                       android:textSize="14sp"
-                      tools:text="내용"
+                      tools:text="내용2222222222222222222222222222222222222222222222222222222222222222222222222222222222"
                       />
               </LinearLayout>
 

@@ -68,7 +68,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     if(data.chat_idx==pick_idx)
                         requestHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat_pick)
                     else
-                        requestHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat)
+                        requestHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.img_chat_balloon)
 
                 } else {
                     val receiveHolder: ReceiveMessageHolder = holder as ReceiveMessageHolder
@@ -85,7 +85,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                         receiveHolder.profile.visibility = View.VISIBLE
                         receiveHolder.name.visibility = View.VISIBLE
 
-                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList.get(position).u_idx}"))
+                        if (NetworkUtils.getBitmapList(data.photo, receiveHolder.profile, mContext, "user${dataList[position].u_idx}"))
                             receiveHolder.profile.setImageResource(R.drawable.icon_profile_default)
 
                     }
@@ -98,7 +98,7 @@ class ChatViewAdapter(var dataList: ArrayList<ChatMessage>, var mContext: Contex
                     if(data.chat_idx==pick_idx)
                         receiveHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat_pick)
                     else
-                        receiveHolder.content.background = ContextCompat.getDrawable(mContext,R.drawable.shape_round_btn_chat)
+                        receiveHolder.content.background = ContextCompat.getDrawable(mContext, R.drawable.img_chat_balloon_left)
                 }
 
             }

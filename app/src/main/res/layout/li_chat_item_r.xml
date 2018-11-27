@@ -31,10 +31,12 @@
         />
 
     <LinearLayout
-        android:layout_width="207dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_round_white"
+        android:background="@drawable/img_chat_balloon"
         android:orientation="vertical"
+        android:minWidth="150dp"
+        android:maxWidth="250dp"
         >
         <LinearLayout
         android:layout_width="match_parent"
@@ -65,9 +67,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="3"
+        android:maxWidth="250dp"
+        android:ellipsize="end"
         android:padding="10dp"
-        tools:text="내용
-        엊쩌구
+        tools:text="내용sdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+        엊쩌구dddddddddddddddddddddddddddddddddddddddddddddddddddddd
             저쩌구"
         /></LinearLayout>
 </LinearLayout>
