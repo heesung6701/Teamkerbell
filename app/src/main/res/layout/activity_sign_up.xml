@@ -62,24 +62,73 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/EditText_mainColor">
 
-        <AutoCompleteTextView
-            android:id="@+id/phone"
-            android:layout_width="match_parent"
+        >
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_phone"
-            android:inputType="phone"
-            android:digits="0123456789-"
-            android:maxLines="1"
-            android:maxLength="13"
-            android:imeOptions="actionNext"
-            android:singleLine="true" />
+            android:layout_weight="1"
+            android:theme="@style/EditText_mainColor">
 
-    </android.support.design.widget.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789-"
+                android:hint="@string/prompt_phone"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLength="13"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btn_start_verification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_round_btn_gray"
+            android:text="인증" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_verification_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:theme="@style/EditText_mainColor">
+
+            <AutoCompleteTextView
+                android:id="@+id/verification_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="인증번호를 입력해주세요."
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btn_verify_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_round_btn_gray"
+            android:text="인증" />
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
