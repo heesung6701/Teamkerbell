@@ -8,15 +8,18 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.ImageView
-import java.io.*
-import android.media.ExifInterface
-import android.util.DisplayMetrics
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 
 /**
@@ -28,6 +31,14 @@ class FileUtils {
 
 
         val PATH_FILE_DOWNLOAD = "Teamkerbell"
+
+
+        val SELECT_FILE = 11
+        val SELECT_IMAGE = 10
+
+
+        val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE = 123
+        val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE = 124
 
         private fun checkExinterface(imagePath: String, bitmap: Bitmap): Bitmap {
             // 이미지를 상황에 맞게 회전시킨다

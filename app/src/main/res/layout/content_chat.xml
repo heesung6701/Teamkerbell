@@ -88,7 +88,6 @@
         android:background="@color/grayLight"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:visibility="gone"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,7 +95,6 @@
             android:layout_weight="1"
             android:weightSum="4"
             android:gravity="center_vertical"
-            android:visibility="gone"
             android:baselineAligned="false">
             <LinearLayout
                 android:orientation="vertical"
@@ -111,10 +109,10 @@
                     android:layout_height="59dp"
                     android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_photo"
-                    android:contentDescription="@string/action_file" />
+                    android:contentDescription="@string/action_camera"
+                    app:srcCompat="@drawable/icon_chat_camera" />
                 <TextView
-                    android:text="@string/action_file"
+                    android:text="@string/action_camera"
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -166,6 +164,30 @@
                     android:textSize="12sp"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:ignore="NestedWeights">
+
+                <ImageButton
+                    android:id="@+id/btn_file"
+                    android:layout_width="59dp"
+                    android:layout_height="59dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/action_file"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/icon_chat_photo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/action_file"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

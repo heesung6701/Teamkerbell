@@ -1,13 +1,18 @@
 package org.teamfairy.sopt.teamkerbell.activities.chat
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.os.Handler
-import android.os.Message
+import android.Manifest
+import android.annotation.TargetApi
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.*
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.os.*
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.support.graphics.drawable.VectorDrawableCompat
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -15,8 +20,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.webkit.URLUtil
 import android.widget.EditText
@@ -24,16 +27,13 @@ import android.widget.Toast
 import io.realm.Realm
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import org.teamfairy.sopt.teamkerbell.R
-
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.app_bar_chat.*
 import kotlinx.android.synthetic.main.content_chat.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.utils.*
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.chat.adapter.ChatViewAdapter
 import org.teamfairy.sopt.teamkerbell.activities.chat.dialog.ChooseWorkDialog
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
@@ -55,9 +55,13 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.model.data.User.Companion.ARG_U_IDX
 import org.teamfairy.sopt.teamkerbell.model.list.ChatMessage
-import org.teamfairy.sopt.teamkerbell.model.realm.*
+import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR.Companion.ARG_WHAT
+import org.teamfairy.sopt.teamkerbell.model.realm.JoinedRoomR
+import org.teamfairy.sopt.teamkerbell.model.realm.PickR
+import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
@@ -72,21 +76,25 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_P
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_OPENSTATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_SIGNAL_PARAM_UID
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
+import org.teamfairy.sopt.teamkerbell.utils.*
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.SELECT_FILE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.SELECT_IMAGE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PICK_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken
-import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
-import org.teamfairy.sopt.teamkerbell.utils.Utils
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.ENTIRE_STATUS_ENTIRE
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.OPEN_STATUS_OPEN
+import java.io.File
+import java.io.IOException
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 
 
     private val LOG_TAG = ChatActivity::class.java.simpleName
@@ -169,9 +177,7 @@ class ChatActivity : AppCompatActivity() {
             tv_nav_room_name.text =("${tv_nav_room_name.text}(기본 채팅방)")
         }
         else {
-            btn_nav_leave.setOnClickListener {
-                showDeleteDialog()
-            }
+            btn_nav_leave.setOnClickListener(this)
         }
         edt_sendmessage.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -190,179 +196,232 @@ class ChatActivity : AppCompatActivity() {
 
             }
         }
-        btn_expand.setOnClickListener {
-            isExpanded = !isExpanded
-            if (isExpanded) {
-                hideKeyboard()
-                layout_expanded_menu.visibility = View.VISIBLE
-                btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expandclose, null))
-            } else {
-                layout_expanded_menu.visibility = View.GONE
-                btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expand, null))
-            }
-        }
+        btn_expand.setOnClickListener(this)
 
-        btn_back.setOnClickListener {
-                onBackPressed()
-        }
-        btn_invite.setOnClickListener {
-
-            val intent = Intent(applicationContext, InviteUserActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
-        btn_draw_menu.setOnClickListener {
-            isOpenDrawLayout = !isOpenDrawLayout
-            if (isOpenDrawLayout) {
-//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                hideKeyboard()
-                drawer_layout.openDrawer(Gravity.END)
-            } else {
-//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                drawer_layout.closeDrawer(Gravity.END)
-            }
-        }
-        btn_board.setOnClickListener {
-            //            val intent = Intent(this, BoardActivity::class.java)
-//            intent.putExtra("group", group)
-//            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
+        btn_back.setOnClickListener(this)
+        btn_invite.setOnClickListener(this)
+        btn_draw_menu.setOnClickListener(this)
+        btn_board.setOnClickListener(this)
 
 
 //        btn_camera.setOnClickListener {
 //            //카메라 버튼을 눌렀을 때
 //        }
-//        btn_gallery.setOnClickListener {
-//            //갤러리 버튼을 눌렀을 때
-//        }
-//        btn_video.setOnClickListener {
-//            //비디오 버튼을 눌렀을 때
-//        }
-        btn_notice.setOnClickListener {
-
-            val intent = Intent(this, MakeNoticeActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            intent.putExtra(INTENT_FROM_CHAT,true)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-        }
-        btn_signal.setOnClickListener {
-            val intent = Intent(this, MakeSignalActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            intent.putExtra(INTENT_FROM_CHAT,true)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-        }
-        btn_vote.setOnClickListener {
-            val intent = Intent(this, MakeVoteActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            intent.putExtra(INTENT_FROM_CHAT,true)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-        }
-        btn_role.setOnClickListener {
-            val intent = Intent(this, MakeRoleActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            intent.putExtra(INTENT_FROM_CHAT,true)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-
-        }
+        btn_gallery.setOnClickListener(this)
+        btn_video.setOnClickListener(this)
+        btn_file.setOnClickListener(this)
+        btn_notice.setOnClickListener(this)
+        btn_signal.setOnClickListener(this)
+        btn_vote.setOnClickListener(this)
+        btn_role.setOnClickListener(this)
 
 
-        btn_sendMessage.setOnClickListener {
+        btn_sendMessage.setOnClickListener(this)
 
 
-            if (!isConnectedRoom) {
-                Toast.makeText(applicationContext, "현재 채팅방에 연결할수 없습니다", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            val edt: EditText = edt_sendmessage
-            if (edt.text.isNotEmpty()) {
-                val txt = edt.text.toString()
-                edt.setText("")
-                sendMessageSocket(txt)
-            } else {
-                edt.requestFocus()
-            }
-        }
+        btn_nav_notice.setOnClickListener(this)
+        btn_nav_pick.setOnClickListener(this)
+        btn_nav_role.setOnClickListener(this)
+        btn_nav_signal.setOnClickListener(this)
+        btn_nav_vote.setOnClickListener(this)
 
 
-        btn_nav_notice.setOnClickListener {
-            val intent = Intent(this, NoticeCardActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
-        btn_nav_pick.setOnClickListener {
-
-            val intent = Intent(this, PickListActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-
-            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-
-        }
-        btn_nav_role.setOnClickListener {
-            val intent = Intent(this, RoleListActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
-        btn_nav_signal.setOnClickListener {
-            val intent = Intent(this, SignalListActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
-        btn_nav_vote.setOnClickListener {
-            val intent = Intent(this, VoteListActivity::class.java)
-            intent.putExtra(INTENT_GROUP, group)
-            intent.putExtra(INTENT_ROOM, room)
-            startActivity(intent)
-            drawer_layout.closeDrawer(Gravity.END)
-        }
-
-        btn_nav_cloud_drive.setOnClickListener {
-
-            if(tv_nav_cloud_link.visibility == View.VISIBLE){
-                tv_nav_cloud_link.visibility=View.GONE
-                edt_nav_cloud_link.visibility=View.VISIBLE
-
-                btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor))
-            }else{
-                if(!edt_nav_cloud_link.text.isNullOrBlank()){
-                    if(URLUtil.isValidUrl( edt_nav_cloud_link.text.toString()))
-                        tv_nav_cloud_link.text=edt_nav_cloud_link.text.toString()
-                    else
-                        Toast.makeText(applicationContext,"유효하지 않는 URL 입니다.",Toast.LENGTH_SHORT).show()
-                }
-                tv_nav_cloud_link.visibility=View.VISIBLE
-                edt_nav_cloud_link.visibility=View.GONE
-
-                btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
-            }
-        }
+        btn_nav_cloud_drive.setOnClickListener(this)
         attachSocket()
     }
 
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.btn_nav_cloud_drive -> {
+                if (tv_nav_cloud_link.visibility == View.VISIBLE) {
+                    tv_nav_cloud_link.visibility = View.GONE
+                    edt_nav_cloud_link.visibility = View.VISIBLE
+
+                    btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor))
+                } else {
+                    if (!edt_nav_cloud_link.text.isNullOrBlank()) {
+                        if (URLUtil.isValidUrl(edt_nav_cloud_link.text.toString()))
+                            tv_nav_cloud_link.text = edt_nav_cloud_link.text.toString()
+                        else
+                            Toast.makeText(applicationContext, "유효하지 않는 URL 입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    tv_nav_cloud_link.visibility = View.VISIBLE
+                    edt_nav_cloud_link.visibility = View.GONE
+
+                    btn_nav_cloud_drive.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+                }
+            }
+            R.id.btn_nav_leave -> {
+                showDeleteDialog()
+            }
+            R.id.btn_nav_notice -> {
+                val intent = Intent(this, NoticeCardActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+            R.id.btn_nav_pick -> {
+                val intent = Intent(this, PickListActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+            R.id.btn_nav_role -> {
+                val intent = Intent(this, RoleListActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+            R.id.btn_nav_signal -> {
+                val intent = Intent(this, SignalListActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+            R.id.btn_nav_vote -> {
+                val intent = Intent(this, VoteListActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+
+
+            R.id.btn_role -> {
+                val intent = Intent(this, MakeRoleActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                intent.putExtra(INTENT_FROM_CHAT, true)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+
+            }
+            R.id.btn_vote -> {
+                val intent = Intent(this, MakeVoteActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                intent.putExtra(INTENT_FROM_CHAT, true)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            }
+            R.id.btn_signal -> {
+                val intent = Intent(this, MakeSignalActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                intent.putExtra(INTENT_FROM_CHAT, true)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            }
+            R.id.btn_notice -> {
+                val intent = Intent(this, MakeNoticeActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                intent.putExtra(INTENT_FROM_CHAT, true)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+            }
+            R.id.btn_file -> {
+                if (checkPermissionREAD_EXTERNAL_STORAGE(this, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE)) {
+                    intentFile()
+                }
+            }
+
+            R.id.btn_gallery -> {
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                        } else {
+                            requestExplorer()
+                        }
+                    } else {
+                        requestExplorer()
+                    }
+                } else {
+                    requestExplorer()
+                }
+
+            }
+
+
+            R.id.btn_back -> {
+                onBackPressed()
+            }
+
+            R.id.btn_sendMessage -> {
+
+                if (!isConnectedRoom) {
+                    Toast.makeText(applicationContext, "현재 채팅방에 연결할수 없습니다", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                val edt: EditText = edt_sendmessage
+                if (edt.text.isNotEmpty()) {
+                    val txt = edt.text.toString()
+                    edt.setText("")
+                    sendMessageSocket(txt)
+                } else {
+                    edt.requestFocus()
+                }
+            }
+
+            R.id.btn_draw_menu -> {
+                isOpenDrawLayout = !isOpenDrawLayout
+                if (isOpenDrawLayout) {
+//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                    hideKeyboard()
+                    drawer_layout.openDrawer(Gravity.END)
+                } else {
+//                window.attributes.softInputMode= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    drawer_layout.closeDrawer(Gravity.END)
+                }
+            }
+
+            R.id.btn_board -> {
+                //            val intent = Intent(this, BoardActivity::class.java)
+//            intent.putExtra("group", group)
+//            startActivity(intent)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+
+            R.id.btn_invite -> {
+                val intent = Intent(applicationContext, InviteUserActivity::class.java)
+                intent.putExtra(INTENT_GROUP, group)
+                intent.putExtra(INTENT_ROOM, room)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+                drawer_layout.closeDrawer(Gravity.END)
+            }
+
+            R.id.btn_expand -> {
+                isExpanded = !isExpanded
+                if (isExpanded) {
+                    hideKeyboard()
+                    layout_expanded_menu.visibility = View.VISIBLE
+                    btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expandclose, null))
+                } else {
+                    layout_expanded_menu.visibility = View.GONE
+                    btn_expand.setImageDrawable(VectorDrawableCompat.create(resources, R.drawable.icon_chat_expand, null))
+                }
+            }
+        }
+    }
+
+    private fun requestExplorer() {
+        if (checkPermissionREAD_EXTERNAL_STORAGE(this, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE)) {
+            intentImage()
+        }
+    }
     var dialog : ConfirmDeleteDialog? = null
     private fun showDeleteDialog() {
         if(group.default_room_idx==room.room_idx){
@@ -616,6 +675,7 @@ class ChatActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
 
                 }
+
 //                R.id.btn_search -> {
 //
 //                }
@@ -624,6 +684,292 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == SELECT_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    val url = getPath(applicationContext, data!!.data)
+                    val file = File(url)
+
+                    attemptUploadStorage(requestCode, file)
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+            }
+
+        }
+
+        if (requestCode == SELECT_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    val file = FileUtils.updatePhoto(FileUtils.getRealPathFromURI(data!!.data, contentResolver), null)
+                    attemptUploadStorage(requestCode, file)
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+
+    private fun checkPermissionREAD_EXTERNAL_STORAGE(context: Context, request: Int): Boolean {
+        val currentAPIVersion = Build.VERSION.SDK_INT
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                context as Activity,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    showDialog("External storage", context,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            request)
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    context,
+                                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                                    request)
+                }
+                return false
+            } else {
+                return true
+            }
+
+        } else {
+            return true
+        }
+    }
+
+    fun showDialog(msg: String, context: Context,
+                   permission: String, request: Int) {
+        val alertBuilder = AlertDialog.Builder(context)
+        alertBuilder.setCancelable(true)
+        alertBuilder.setTitle("Permission necessary")
+        alertBuilder.setMessage("$msg permission is necessary")
+        alertBuilder.setPositiveButton(android.R.string.yes) { _, _ ->
+            ActivityCompat.requestPermissions(context as Activity,
+                    arrayOf(permission),
+                    request)
+
+        }
+        val alert = alertBuilder.create()
+        alert.show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                intentImage()
+            } else {
+                Toast.makeText(applicationContext, "GET_ACCOUNTS Denied",
+                        Toast.LENGTH_SHORT).show()
+
+            }
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                intentFile()
+            } else {
+                Toast.makeText(applicationContext, "GET_ACCOUNTS Denied",
+                        Toast.LENGTH_SHORT).show()
+            }
+            else -> super.onRequestPermissionsResult(requestCode, permissions,
+                    grantResults)
+        }
+    }
+
+    private fun intentFile() {
+
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+
+//       구글 드라이브 등에서 가져오는기 막음
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.type = "*/*"
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+        startActivityForResult(intent, SELECT_FILE);
+
+    }
+
+    private fun intentImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        startActivityForResult(intent, SELECT_IMAGE)
+
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    fun getPath(context: Context, uri: Uri): String? {
+
+        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val type = split[0]
+
+                if ("primary".equals(type, ignoreCase = true)) {
+                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+                }
+
+
+            } else if (isDownloadsDocument(uri)) {
+
+                val id = DocumentsContract.getDocumentId(uri)
+                val contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)!!)
+
+                return getDataColumn(context, contentUri, null, null)
+            } else if (isMediaDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val type = split[0]
+
+                var contentUri: Uri? = null
+                if ("image" == type) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else if ("video" == type) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else if ("audio" == type) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                }
+
+                val selection = "_id=?"
+                val selectionArgs = arrayOf(split[1])
+
+                return getDataColumn(context, contentUri, selection, selectionArgs)
+            }// MediaProvider
+            // DownloadsProvider
+        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+
+            // Return the remote address
+            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(context, uri, null, null)
+
+        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+            return uri.path
+        }// File
+        // MediaStore (and general)
+
+        return null
+    }
+
+
+    fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(column)
+
+        try {
+            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val index = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(index)
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close()
+        }
+        return null
+    }
+
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    fun isExternalStorageDocument(uri: Uri): Boolean {
+        return "com.android.externalstorage.documents" == uri.authority
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    fun isGooglePhotosUri(uri: Uri): Boolean {
+        return "com.google.android.apps.photos.content" == uri.authority
+    }
+
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Docs
+     */
+    fun isGoogleDocssUri(uri: Uri): Boolean {
+        return "com.google.android.apps.docs.storage" == uri.authority
+    }
+
+
+    private fun attemptUploadStorage(type: Int, file: File) {
+        val task = GetMessageTask(applicationContext, HandlerUpload(this), LoginToken.getToken(applicationContext))
+
+        val jsonParam = JSONObject()
+        try {
+            jsonParam.put(USGS_REQUEST_URL.URL_PHOTO_SINGLE_PARAM_ROOM_IDX, room.room_idx)
+            jsonParam.put(USGS_REQUEST_URL.URL_PHOTO_SINGLE_PARAM_U_IDX, LoginToken.getUserIdx(applicationContext))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        var url = ""
+        when (type) {
+            SELECT_FILE -> {
+                task.file = file
+                url = USGS_REQUEST_URL.URL_FILE
+            }
+            SELECT_IMAGE -> {
+                task.photo = file
+                url = USGS_REQUEST_URL.URL_PHOTO_SINGLE
+            }
+        }
+
+        task.execute(url, NetworkTask.METHOD_POST, jsonParam.toString())
+    }
+
+    private class HandlerUpload(activity: ChatActivity) : Handler() {
+        private val mActivity: WeakReference<ChatActivity> = WeakReference(activity)
+
+        override fun handleMessage(msg: Message) {
+            val activity = mActivity.get()
+            if (activity != null) {
+                when (msg.what) {
+                    Utils.MSG_SUCCESS -> {
+                        Toast.makeText(activity.applicationContext, "업로드 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                    }
+                    else -> {
+//                        activity.isFailed()
+                    }
+                }
+
+            }
+        }
+    }
     private var makeContent: String? = null
     private var makeType: Int by Delegates.notNull()
     private fun makeSignal(position: Int) {
@@ -909,6 +1255,17 @@ class ChatActivity : AppCompatActivity() {
         })
     }
 
+    constructor(parcel: Parcel) : this() {
+        isOpenDrawLayout = parcel.readByte() != 0.toByte()
+        isExpanded = parcel.readByte() != 0.toByte()
+        lastChatIdx = parcel.readInt()
+        lastChatPos = parcel.readInt()
+        forFinish = parcel.readByte() != 0.toByte()
+        isConnectedRoom = parcel.readByte() != 0.toByte()
+        firstTimeResume = parcel.readByte() != 0.toByte()
+        makeContent = parcel.readString()
+    }
+
     private fun addChatFromJSON(data : JSONObject){
 
         val chatIdx = data.getInt(Constants.JSON_CHAT_IDX)
@@ -945,6 +1302,31 @@ class ChatActivity : AppCompatActivity() {
 
         if(chatIdx==adapter_chat.pick_idx){
             scrollToPosition(listView_chat,dataList.indexOf(chatData))
+        }
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeByte(if (isOpenDrawLayout) 1 else 0)
+        parcel.writeByte(if (isExpanded) 1 else 0)
+        parcel.writeInt(lastChatIdx)
+        parcel.writeInt(lastChatPos)
+        parcel.writeByte(if (forFinish) 1 else 0)
+        parcel.writeByte(if (isConnectedRoom) 1 else 0)
+        parcel.writeByte(if (firstTimeResume) 1 else 0)
+        parcel.writeString(makeContent)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ChatActivity> {
+        override fun createFromParcel(parcel: Parcel): ChatActivity {
+            return ChatActivity(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ChatActivity?> {
+            return arrayOfNulls(size)
         }
     }
 }

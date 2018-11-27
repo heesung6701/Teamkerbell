@@ -13,22 +13,32 @@ import android.net.Uri
 import android.os.*
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import android.widget.Toast
-import org.teamfairy.sopt.teamkerbell.R
-
+import kotlinx.android.synthetic.main.activity_make_task_response.*
 import kotlinx.android.synthetic.main.app_bar_commit.*
 import kotlinx.android.synthetic.main.content_make_task_response.*
+import kotlinx.android.synthetic.main.li_file.view.*
+import org.json.JSONArray
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
-import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
+import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.items.role.adapter.FileListAdapter
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
+import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
+import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.SELECT_FILE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.SELECT_IMAGE
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -36,21 +46,9 @@ import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
-import android.support.v4.app.ActivityCompat
-import android.os.Build
-import android.view.View
-import kotlinx.android.synthetic.main.activity_make_task_response.*
-import kotlinx.android.synthetic.main.li_file.view.*
-import org.json.JSONArray
-import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
-import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 
 
 class MakeTaskResponseActivity : AppCompatActivity() {
-
-
-    private val SELECT_FILE = 11
-    private val SELECT_IMAGE = 10
 
     private var roleTask: RoleTask by Delegates.notNull()
     private var taskResponse: TaskResponse?= null
@@ -239,11 +237,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
     }
 
 
-    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE = 123
-    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE = 124
-
-    private fun checkPermissionREAD_EXTERNAL_STORAGE(
-            context: Context,request: Int): Boolean {
+    private fun checkPermissionREAD_EXTERNAL_STORAGE(context: Context, request: Int): Boolean {
         val currentAPIVersion = Build.VERSION.SDK_INT
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context,
@@ -272,8 +266,8 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         }
     }
 
-    fun showDialog(msg: String, context: Context,
-                   permission: String,request : Int) {
+    private fun showDialog(msg: String, context: Context,
+                           permission: String, request: Int) {
         val alertBuilder = AlertDialog.Builder(context)
         alertBuilder.setCancelable(true)
         alertBuilder.setTitle("Permission necessary")

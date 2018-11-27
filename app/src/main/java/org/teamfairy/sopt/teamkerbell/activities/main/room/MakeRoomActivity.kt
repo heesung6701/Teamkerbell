@@ -11,18 +11,13 @@ import android.os.Message
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.text.InputFilter
 import android.text.TextUtils
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
-import org.teamfairy.sopt.teamkerbell.R
-
 import kotlinx.android.synthetic.main.app_bar_close.*
 import kotlinx.android.synthetic.main.content_make_room.*
 import org.json.JSONObject
-import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
-import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
+import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
@@ -33,13 +28,17 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.make.MakeRoomTask
-import org.teamfairy.sopt.teamkerbell.utils.*
+import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.EditTextFilter.Companion.setFilter
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.getRealPathFromURI
+import org.teamfairy.sopt.teamkerbell.utils.FileUtils.Companion.updatePhoto
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
+import org.teamfairy.sopt.teamkerbell.utils.LoginToken
+import org.teamfairy.sopt.teamkerbell.utils.StatusCode
+import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
-import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 class MakeRoomActivity : AppCompatActivity() {

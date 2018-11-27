@@ -4,9 +4,6 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
 import android.util.Log
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_PROFILE
-import java.io.*
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BIO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_FILE
@@ -18,10 +15,15 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_RESPONSE_CON
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROLE_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TASK_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_USER_ARRAY
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_FILE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_GROUP
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_PHOTO_SINGLE
+import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_PROFILE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_RESPONSE
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_FAIL_STR
 import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_NO_INTERNET_STR
+import java.io.*
 import java.net.*
 import java.nio.charset.Charset
 
@@ -69,7 +71,9 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 NetworkTask.METHOD_POST -> {
                     jsonResponse = if (params[0] == URL_MAKE_GROUP ||
                             params[0] == URL_MAKE_ROOM ||
-                            params[0] == URL_ROLE_RESPONSE) {
+                            params[0] == URL_ROLE_RESPONSE ||
+                            params[0] == URL_PHOTO_SINGLE ||
+                            params[0] == URL_FILE) {
                         makeHttpRequestFormData(*params)
                     } else {
                         makeHttpRequest(*params)
