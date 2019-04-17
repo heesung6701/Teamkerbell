@@ -1,128 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/shape_press_dark"
-    android:orientation="vertical">
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "wrap_content"
+    android:background = "@drawable/shape_press_dark"
+    android:orientation = "vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginStart="20dp"
-
-            android:layout_marginTop="12dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorY"
-            app:civ_border_width="0dp" />
-
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile"
+            android:layout_width = "36dp"
+            android:layout_height = "36dp"
+            android:layout_marginStart = "20dp"
+            android:layout_marginTop = "12dp"
+            android:layout_marginBottom = "12dp"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorY"
+            app:civ_border_width = "0dp" />
 
         <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-        android:orientation="vertical">
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_marginStart = "10dp"
+            android:layout_marginEnd = "10dp"
+            android:layout_weight = "1"
+            android:orientation = "vertical">
 
-        <TextView
-            android:id="@+id/li_tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            tools:text="윤희성"
-            android:textSize="14sp" />
+            <TextView
+                android:id = "@+id/li_tv_name"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "8dp"
+                android:textSize = "14sp"
+                tools:text = "윤희성" />
 
-        <TextView
-            android:id="@+id/li_tv_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="2018/02/13 오후 12:25 | 31.3MB"
-            android:textSize="14sp" />
+            <TextView
+                android:id = "@+id/li_tv_detail"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:textSize = "14sp"
+                tools:text = "2018/02/13 오후 12:25 | 31.3MB" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    </LinearLayout>
     <LinearLayout
-        android:id="@+id/li_layout_file"
-        android:layout_width="match_parent"
-        android:layout_height="102dp"
-        android:orientation="horizontal"
-        android:background="@color/grayLight">
-        <ImageButton
-            android:id="@+id/li_btn_file_before"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_next"
-            android:padding="10dp"
-            android:rotation="180"
-            android:visibility="invisible"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/action_file" />
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_content_copy"
-            android:contentDescription="@string/action_file" />
-        <TextView
-            android:id="@+id/li_tv_file_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            tools:text="서비스마케팅 발표 최종본.pptx"
-            />
-
-    </LinearLayout>
+        android:id = "@+id/li_layout_file"
+        android:layout_width = "match_parent"
+        android:layout_height = "102dp"
+        android:background = "@color/grayLight"
+        android:orientation = "horizontal">
 
         <ImageButton
-            android:id="@+id/li_btn_file_next"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_next"
-            android:visibility="invisible"
-            android:padding="10dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/action_file" />
+            android:id = "@+id/li_btn_file_before"
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"
+            android:background = "@android:color/transparent"
+            android:contentDescription = "@string/action_file"
+            android:padding = "10dp"
+            android:rotation = "180"
+            android:visibility = "invisible"
+            app:srcCompat = "@drawable/ic_next" />
+
+        <LinearLayout
+            android:layout_width = "0dp"
+            android:layout_height = "match_parent"
+            android:layout_weight = "1"
+            android:gravity = "center"
+            android:orientation = "vertical"
+            tools:ignore = "UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:contentDescription = "@string/action_file"
+                app:srcCompat = "@drawable/ic_content_copy" />
+
+            <TextView
+                android:id = "@+id/li_tv_file_name"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "12dp"
+                tools:text = "서비스마케팅 발표 최종본.pptx" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id = "@+id/li_btn_file_next"
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"
+            android:background = "@android:color/transparent"
+            android:contentDescription = "@string/action_file"
+            android:padding = "10dp"
+            android:visibility = "invisible"
+            app:srcCompat = "@drawable/ic_next" />
     </LinearLayout>
+
     <TextView
-        android:id="@+id/li_tv_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="대여 가능한 면접장소 리스트 정리해 놓았습니다~"
-        android:padding="10dp"
-        />
+        android:id = "@+id/li_tv_content"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:padding = "10dp"
+        tools:text = "대여 가능한 면접장소 리스트 정리해 놓았습니다~" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_comment_count"
-        />
-    <TextView
-        android:id="@+id/li_tv_comment_cnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="1"
-        />
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content">
+
+        <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text = "@string/txt_comment_count" />
+
+        <TextView
+            android:id = "@+id/li_tv_comment_cnt"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            tools:text = "1" />
     </LinearLayout>
 
 </LinearLayout>

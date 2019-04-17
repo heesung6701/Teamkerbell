@@ -1,100 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment"
-    android:orientation="vertical"
-    >
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:orientation = "vertical"
+    android:padding = "16dp"
+    tools:context = "org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalListFragment">
 
     <LinearLayout
-        android:id="@+id/sign_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layout_gravity="end">
+        android:id = "@+id/sign_bar"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_gravity = "end"
+        android:layout_marginTop = "6dp"
+        android:orientation = "horizontal"
+        android:visibility = "gone">
 
         <RelativeLayout
-            android:id="@+id/btn_red"
-            android:layout_width="30dp"
-            android:layout_height="30dp">
+            android:id = "@+id/btn_red"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp">
 
             <ImageView
-                android:id="@+id/iv_focus_red"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_sign"
-                android:tint="@color/red_off"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:layout_centerInParent="true"
-                android:visibility="invisible"
-                />
+                android:id = "@+id/iv_focus_red"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:layout_centerInParent = "true"
+                android:background = "@android:color/transparent"
+                android:scaleType = "fitXY"
+                android:tint = "@color/red_off"
+                android:visibility = "invisible"
+                app:srcCompat = "@drawable/ic_sign" />
+
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_sign_red"
-                android:layout_centerInParent="true"
-                />
+                android:layout_width = "20dp"
+                android:layout_height = "20dp"
+                android:layout_centerInParent = "true"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_red" />
 
         </RelativeLayout>
 
-
         <RelativeLayout
-            android:id="@+id/btn_yellow"
-            android:layout_width="30dp"
-            android:layout_height="30dp">
+            android:id = "@+id/btn_yellow"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp">
 
             <ImageView
-                android:id="@+id/iv_focus_yellow"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_sign"
-                android:tint="@color/yellow_off"
-                android:scaleType="fitXY"
-                android:layout_centerInParent="true"
-                android:visibility="invisible"
-                />
+                android:id = "@+id/iv_focus_yellow"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:layout_centerInParent = "true"
+                android:scaleType = "fitXY"
+                android:tint = "@color/yellow_off"
+                android:visibility = "invisible"
+                app:srcCompat = "@drawable/ic_sign" />
+
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_sign_yellow"
-                android:layout_centerInParent="true"
-                />
+                android:layout_width = "20dp"
+                android:layout_height = "20dp"
+                android:layout_centerInParent = "true"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_yellow" />
 
         </RelativeLayout>
+
         <RelativeLayout
-            android:id="@+id/btn_green"
-            android:layout_width="30dp"
-            android:layout_height="30dp">
+            android:id = "@+id/btn_green"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp">
 
             <ImageView
-                android:id="@+id/iv_focus_green"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_sign"
-                android:tint="@color/green_off"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:layout_centerInParent="true"
-                android:visibility="invisible"
-                />
+                android:id = "@+id/iv_focus_green"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:layout_centerInParent = "true"
+                android:background = "@android:color/transparent"
+                android:scaleType = "fitXY"
+                android:tint = "@color/green_off"
+                android:visibility = "invisible"
+                app:srcCompat = "@drawable/ic_sign" />
+
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_sign_green"
-                android:layout_centerInParent="true"
-                />
+                android:layout_width = "20dp"
+                android:layout_height = "20dp"
+                android:layout_centerInParent = "true"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_green" />
 
         </RelativeLayout>
     </LinearLayout>
-    <include layout="@layout/content_recyclerview"/>
+
+    <include layout = "@layout/content_recyclerview" />
 
 </LinearLayout>

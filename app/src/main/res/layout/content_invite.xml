@@ -14,83 +14,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:visibility="gone"
-        >
+        android:visibility = "gone">
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:layout_weight="1"
         android:text="@string/txt_invite_url"
-        />
-
+        android:textSize = "18sp" />
         <Button
             android:id="@+id/btn_copy"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:textSize="14sp"
-            android:text="@string/txt_copy_url"
             android:background="@drawable/shape_round_btn"
-            android:textColor="@color/white"
             android:padding="3dp"
-            />
+            android:text = "@string/txt_copy_url"
+            android:textColor = "@color/white"
+            android:textSize = "14sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_invite_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="27dp"
-        tools:text="https://www.teamkerbell.com/landing/#/seed/xUDdiimw"
+        android:textSize = "16sp"
         android:visibility="gone"
-        />
+        tools:text = "https://www.teamkerbell.com/landing/#/seed/xUDdiimw" />
 
     <TextView
         android:id="@+id/tv_invite_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/select_text_press"
+        android:layout_marginBottom = "27dp"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="18sp"
-        android:layout_marginBottom="27dp"
-        android:visibility="gone"
         android:text="@string/txt_invite_email"
-        />
+        android:textColor = "@drawable/select_text_press"
+        android:textSize = "18sp"
+        android:visibility = "gone" />
+
     <TextView
         android:id="@+id/tv_invite_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/select_text_press"
+        android:layout_marginBottom = "27dp"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="18sp"
-        android:layout_marginBottom="27dp"
         android:text="@string/txt_invite_phone"
-        />
+        android:textColor = "@drawable/select_text_press"
+        android:textSize = "18sp" />
 
     <TextView
         android:id="@+id/tv_invite_qr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/select_text_press"
+        android:layout_marginBottom = "21dp"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="18sp"
-        android:layout_marginBottom="21dp"
         android:text="@string/txt_invite_qr"
-        android:visibility="gone"
-        />
+        android:textColor = "@drawable/select_text_press"
+        android:textSize = "18sp"
+        android:visibility = "gone" />
     
     <ImageView
         android:id="@+id/iv_qr_code"
         android:layout_width="225dp"
         android:layout_height="225dp"
-        android:src="@color/gray"
-        android:scaleType="fitXY"
         android:layout_gravity="center"
-        android:visibility="gone"
-        />
+        android:scaleType = "fitXY"
+        android:src = "@color/gray"
+        android:visibility = "gone" />
 </LinearLayout>

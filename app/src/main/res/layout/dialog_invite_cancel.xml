@@ -3,36 +3,25 @@
     android:layout_width="240dp"
     android:layout_height="136dp"
     android:background="@drawable/shape_round_default"
-
-    android:orientation="vertical" >
-
-
-
-
+    android:orientation = "vertical">
         <TextView
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="26dp"
-            android:gravity="center"
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop = "30dp"
+            android:layout_marginBottom = "26dp"
+            android:gravity = "center"
             android:text="어플에 가입되어 있지 않은 유저입니다"
             android:textSize="14sp" />
 
-
-
-            <Button
-                android:id="@+id/btn_complete"
-                android:theme="@style/FlatButton"
-                android:layout_width="140dp"
-                android:layout_height="46dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/shape_round_btn"
-                android:textColor="@color/white"
-                android:text="완료" />
-
-
-    </LinearLayout>
-
-
+    <Button
+        android:id = "@+id/btn_complete"
+        android:layout_width = "140dp"
+        android:layout_height = "46dp"
+        android:layout_gravity = "center_horizontal"
+        android:background = "@drawable/shape_round_btn"
+        android:orientation = "horizontal"
+        android:text = "완료"
+        android:textColor = "@color/white"
+        android:theme = "@style/FlatButton" />
+</LinearLayout>

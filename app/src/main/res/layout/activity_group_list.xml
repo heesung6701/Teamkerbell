@@ -6,56 +6,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.teamfairy.sopt.teamkerbell.activities.GroupListActivity"
-    >
-
+    android:paddingRight = "@dimen/activity_horizontal_margin"
+    tools:context = "org.teamfairy.sopt.teamkerbell.activities.GroupListActivity">
     <TextView
         android:id="@+id/tv_hello"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="체다님, 안녕하세요!"
         android:layout_marginTop="112dp"
         android:layout_marginBottom="64dp"
+        android:gravity = "center"
         android:textSize="18sp"
-        />
-
+        tools:text = "체다님, 안녕하세요!" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom = "12dp"
         android:gravity="bottom"
-        android:layout_marginBottom="12dp"
-        >
+        android:orientation = "horizontal">
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/txt_team_list"
-        android:textSize="16sp"
         android:layout_marginStart="24dp"
         android:layout_weight="1"
-        />
+        android:text = "@string/txt_team_list"
+        android:textSize = "16sp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txt_reorder"
-        android:textColor="@color/mainColorP"
-        android:visibility="invisible"
         android:clickable="true"
         android:focusable="true"
+        android:text = "@string/txt_reorder"
+        android:textColor = "@color/mainColorP"
         android:textSize="14sp"
-        android:textStyle="bold"/>
+        android:textStyle = "bold"
+        android:visibility = "invisible" />
     </LinearLayout>
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        />
-
-
+        android:overScrollMode = "never" />
 </LinearLayout>

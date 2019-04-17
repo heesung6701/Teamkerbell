@@ -8,32 +8,29 @@
     android:layout_marginTop="@dimen/action_bar_size"
     android:background="@drawable/shape_border_shadow"
     android:elevation="4dp"
-    android:overScrollMode="never"
     android:orientation="vertical"
-    android:visibility="gone"
-    >
+    android:overScrollMode = "never"
+    android:visibility = "gone">
     <TextView
         android:id="@+id/tv_menu_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txt_edit"
-        android:textSize="14sp"
         android:padding="5dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:visibility="gone"
-        />
+        android:text = "@string/txt_edit"
+        android:textSize = "14sp"
+        android:visibility = "gone" />
     <TextView
         android:id="@+id/tv_menu_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txt_delete"
-        android:textSize="14sp"
         android:padding="5dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:visibility="gone"
-        />
+        android:text = "@string/txt_delete"
+        android:textSize = "14sp"
+        android:visibility = "gone" />
 
 </LinearLayout>
 

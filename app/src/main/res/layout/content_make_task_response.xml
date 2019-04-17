@@ -10,57 +10,52 @@
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.task.MakeTaskResponseActivity"
     tools:showIn="@layout/activity_make_task_response">
 
-
     <TextView
         android:id="@+id/tv_task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textSize="16sp"
-        tools:text="역할 이름"
-        />
-
+        tools:text = "역할 이름" />
 
     <EditText
         android:id="@+id/edt_content"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom = "30dp"
         android:background="@drawable/shape_round_gray_light"
         android:gravity="top|start"
         android:hint="@string/txt_enter_content"
         android:inputType="none"
-        android:scrollHorizontally="false"
-        android:padding="16dp" />
+        android:padding = "16dp"
+        android:scrollHorizontally = "false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:orientation="horizontal"
-        >
+        android:orientation = "horizontal">
+
         <LinearLayout
             android:id="@+id/btn_add_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:theme="@style/FlatButton"
-            >
+            android:theme = "@style/FlatButton">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="10dp"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/icon_floating_add"
-                />
+                app:srcCompat = "@drawable/icon_floating_add" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/action_upload_file"
-                />
+                android:text = "@string/action_upload_file" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,40 +65,29 @@
             android:layout_marginStart="20dp"
             android:gravity="center"
             android:theme="@style/FlatButton"
-            android:visibility="gone"
-            >
+            android:visibility = "gone">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="10dp"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/icon_floating_add"
-                />
+                app:srcCompat = "@drawable/icon_floating_add" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="사진 첨부하기"
-                />
-
+                android:text = "사진 첨부하기" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/layout_uploaded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-    </LinearLayout>
+        android:orientation = "vertical" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        >
-
+        android:overScrollMode = "never">
     </android.support.v7.widget.RecyclerView>
-
-
 </LinearLayout>

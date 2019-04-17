@@ -13,12 +13,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom = "25dp"
+        android:text = "@string/txt_invite_email"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/txt_invite_email"
-        android:layout_marginBottom="25dp"
-        />
-
+        android:textStyle = "bold" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -30,25 +28,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_email"
+            android:imeOptions = "actionNext"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:imeOptions="actionNext"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btn_send"
-        android:background="@drawable/shape_round_btn_gray"
         android:layout_width="112dp"
         android:layout_height="wrap_content"
+        android:layout_gravity = "end"
         android:layout_marginTop="24dp"
+        android:background = "@drawable/shape_round_btn_gray"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="@string/action_send"
-        android:layout_gravity="end"
-        />
-
-
+        android:text = "@string/action_send" />
 </LinearLayout>
 

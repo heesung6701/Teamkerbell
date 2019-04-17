@@ -4,29 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background = "@color/white"
+    android:orientation = "vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity"
-    tools:showIn="@layout/activity_signal"
-    android:background="@color/white"
-    android:orientation="vertical">
+    tools:showIn = "@layout/activity_signal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginBottom = "24dp"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
-        android:layout_marginBottom="24dp"
-        >
+        android:orientation = "vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:paddingTop="20dp"
             android:paddingLeft="22dp"
-            android:paddingRight="22dp"
-            >
+            android:paddingTop = "20dp"
+            android:paddingRight = "22dp">
 
             <TextView
                 android:id="@+id/tv_name"
@@ -50,93 +47,85 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="7sp"
-            android:textSize="16sp"
-
             android:paddingLeft="22dp"
             android:paddingRight="22dp"
             android:paddingBottom="32dp"
+            android:textSize = "16sp"
             tools:text="저희 그날 강의실 대여가 안된다고 하는데 다들 주위 스터디룸 'ㅇㅇㅇ'에서 진행하는거 괜찮으신가요??
 다들 괜찮으신지 응답부탁드려요!" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="63dp"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:weightSum="3"
         android:gravity="center"
-        >
+        android:orientation = "horizontal"
+        android:weightSum = "3">
         <RelativeLayout
             android:id="@+id/btn_green"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/shape_press_dark"
-            >
+            android:background = "@drawable/shape_press_dark">
 
             <ImageView
                 android:id="@+id/iv_focus_green"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/ic_sign"
+                android:layout_centerInParent = "true"
+                android:contentDescription = "@string/descript_green"
+                android:scaleType = "fitXY"
                 android:tint="@color/green_off"
-                android:scaleType="fitXY"
-                android:layout_centerInParent="true"
                 android:visibility="invisible"
-                android:contentDescription="@string/descript_green" />
+                app:srcCompat = "@drawable/ic_sign" />
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:srcCompat="@drawable/ic_sign_green"
-                android:scaleType="fitXY"
                 android:layout_centerInParent="true"
-                android:contentDescription="@string/descript_green" />
+                android:contentDescription = "@string/descript_green"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_green" />
         </RelativeLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="34dp"
-            android:background="@color/gray"
-            />
+            android:background = "@color/gray" />
         <RelativeLayout
             android:id="@+id/btn_yellow"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/shape_press_dark"
-
-            >
+            android:background = "@drawable/shape_press_dark">
 
             <ImageView
                 android:id="@+id/iv_focus_yellow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:tint="@color/yellow_off"
-                android:scaleType="fitXY"
                 android:layout_centerInParent="true"
+                android:contentDescription = "@string/descript_yellow"
+                android:scaleType = "fitXY"
+                android:tint = "@color/yellow_off"
                 android:visibility="invisible"
-                android:contentDescription="@string/descript_yellow" />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_sign_yellow"
-            android:scaleType="fitXY"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/descript_yellow" />
-        </RelativeLayout>
+                app:srcCompat = "@drawable/ic_sign" />
 
+            <ImageView
+                android:layout_width = "30dp"
+                android:layout_height = "30dp"
+                android:layout_centerInParent = "true"
+                android:contentDescription = "@string/descript_yellow"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_yellow" />
+        </RelativeLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="34dp"
-            android:background="@color/gray"
-            />
+            android:background = "@color/gray" />
         <RelativeLayout
             android:id="@+id/btn_red"
             android:layout_width="0dp"
@@ -148,29 +137,26 @@
                 android:id="@+id/iv_focus_red"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:tint="@color/red_off"
+                android:layout_centerInParent = "true"
+                android:contentDescription = "@string/descript_red"
                 android:scaleType="fitXY"
-                android:layout_centerInParent="true"
+                android:tint = "@color/red_off"
                 android:visibility="invisible"
-                android:contentDescription="@string/descript_red" />
+                app:srcCompat = "@drawable/ic_sign" />
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:srcCompat="@drawable/ic_sign_red"
-                android:scaleType="fitXY"
                 android:layout_centerInParent="true"
-                android:contentDescription="@string/descript_red" />
-
+                android:contentDescription = "@string/descript_red"
+                android:scaleType = "fitXY"
+                app:srcCompat = "@drawable/ic_sign_red" />
         </RelativeLayout>
-
     </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray"
-            />
+            android:background = "@color/gray" />
     </LinearLayout>
 
     <EditText
@@ -179,20 +165,18 @@
         android:layout_height="match_parent"
         android:layout_margin="18dp"
         android:background="@color/grayLight"
-        android:visibility="gone"
         android:gravity="top"
-        android:padding="4dp"
         android:hint="@string/txt_enter_content"
         android:inputType="none"
+        android:padding = "4dp"
         android:scrollHorizontally="false"
-        />
+        android:visibility = "gone" />
 
     <LinearLayout
         android:id="@+id/layout_response_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation = "vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -205,8 +189,8 @@
                 android:id="@+id/iv_sign"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:contentDescription="@string/action_signal" />
+                android:contentDescription = "@string/action_signal"
+                app:srcCompat = "@drawable/ic_sign" />
 
             <TextView
                 android:id="@+id/tv_count"
@@ -214,12 +198,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:textSize="16sp"
-                tools:text="3명 응답"/>
-
+                tools:text = "3명 응답" />
         </LinearLayout>
 
-        <include layout="@layout/content_recyclerview"/>
-
-
+        <include layout = "@layout/content_recyclerview" />
     </LinearLayout>
 </LinearLayout>

@@ -1,50 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/shape_press_dark"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
-
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "60dp"
+    android:background = "@drawable/shape_press_dark"
+    android:baselineAligned = "false"
+    android:gravity = "center_vertical"
+    android:orientation = "horizontal">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-    <TextView
-        android:id="@+id/li_tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="소작업 1"
-        android:textSize="14sp" />
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_marginStart = "20dp"
+        android:layout_weight = "1"
+        android:orientation = "vertical">
+
         <TextView
-            android:id="@+id/li_tv_sub_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="20mb"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            />
+            android:id = "@+id/li_tv_title"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textSize = "14sp"
+            tools:text = "소작업 1" />
+
+        <TextView
+            android:id = "@+id/li_tv_sub_title"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textColor = "@color/gray"
+            android:textSize = "12sp"
+            tools:text = "20mb" />
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp">
-
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_marginEnd = "10dp">
 
         <ImageButton
-            android:id="@+id/li_btn_minus"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            app:srcCompat="@drawable/icon_floating_minus"/>
+            android:id = "@+id/li_btn_minus"
+            android:layout_width = "24dp"
+            android:layout_height = "24dp"
+            android:layout_gravity = "center_vertical"
+            app:srcCompat = "@drawable/icon_floating_minus" />
     </LinearLayout>
-
 
 </LinearLayout>

@@ -13,12 +13,12 @@
         android:id="@+id/layout_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="24dp"
-        android:paddingBottom="16dp"
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal"
         android:paddingStart="22dp"
+        android:paddingTop = "24dp"
         android:paddingEnd="20dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:paddingBottom = "16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_user_profile"
@@ -31,38 +31,36 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:layout_weight = "1"
+            android:lineSpacingExtra = "5sp"
             android:text="@string/txt_setting_profile"
-            android:textSize="15sp"
-            android:lineSpacingExtra="5sp"
-            android:layout_weight="1"/>
+            android:textSize = "15sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_category"
+            android:contentDescription = "@string/txt_setting_profile"
 
-            android:contentDescription="@string/txt_setting_profile" />
+            app:srcCompat = "@drawable/ic_category" />
     </LinearLayout>
-
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="@string/txt_setting_group"/>
+        android:text = "@string/txt_setting_group" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:paddingStart="22dp"
-        android:paddingEnd="20dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation = "horizontal"
+        android:paddingStart = "22dp"
+        android:paddingEnd = "20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/iv_group_profile"
@@ -76,35 +74,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            tools:text="팀 이름"
+            android:lineSpacingExtra = "5sp"
             android:textSize="15sp"
-            android:lineSpacingExtra="5sp"/>
-
+            tools:text = "팀 이름" />
 
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:orientation = "horizontal"
         android:paddingStart="22dp"
+        android:paddingTop = "16dp"
         android:paddingEnd="22dp"
-        >
+        android:paddingBottom = "16dp">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:lineSpacingExtra="5sp"
             android:layout_weight="1"
-            android:text="@string/txt_setting_message"/>
-
+            android:lineSpacingExtra = "5sp"
+            android:text = "@string/txt_setting_message"
+            android:textSize = "15sp" />
 
         <Switch
             android:id="@+id/swc_setting_allow_noti_group"
@@ -117,73 +111,63 @@
             android:textOn=""
             android:thumb="@drawable/switch_thumb_selector"
             android:track="@drawable/switch_track_selector" />
-
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
 
     <LinearLayout
         android:id="@+id/layout_leave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation = "horizontal"
+        android:paddingStart = "22dp"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="22dp"
         android:paddingEnd="22dp"
-        >
+        android:paddingBottom = "16dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:lineSpacingExtra="5sp"
-            android:text="@string/action_leave_group" />
+            android:text = "@string/action_leave_group"
+            android:textSize = "15sp" />
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
-
+        android:background = "@color/gray" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="5dp"
-        android:text="@string/txt_setting_app"/>
+        android:layout_marginTop = "20dp"
+        android:text = "@string/txt_setting_app" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity = "center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:paddingStart = "22dp"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="22dp"
         android:paddingEnd="22dp"
-        >
+        android:paddingBottom = "16dp">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:layout_weight = "1"
             android:lineSpacingExtra="5sp"
-            android:layout_weight="1"
-            android:text="@string/txt_setting_message_all"/>
-
+            android:text = "@string/txt_setting_message_all"
+            android:textSize = "15sp" />
 
             <Switch
                 android:id="@+id/swc_setting_allow_noti"
@@ -196,91 +180,78 @@
                 android:textOn=""
                 android:thumb="@drawable/switch_thumb_selector"
                 android:track="@drawable/switch_track_selector" />
-
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
- <LinearLayout
-     android:id="@+id/layout_version"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
-        >
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textSize="15sp"
-         android:lineSpacingExtra="5sp"
-         android:text="@string/txt_version_info"
-         />
+        android:background = "@color/gray" />
+
+    <LinearLayout
+        android:id = "@+id/layout_version"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal"
+        android:paddingStart = "22dp"
+        android:paddingTop = "16dp"
+        android:paddingEnd = "22dp"
+        android:paddingBottom = "16dp">
+
+        <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:lineSpacingExtra = "5sp"
+            android:text = "@string/txt_version_info"
+            android:textSize = "15sp" />
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
     <LinearLayout
         android:id="@+id/layout_copyright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation = "horizontal"
+        android:paddingStart = "22dp"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="22dp"
         android:paddingEnd="22dp"
-        >
+        android:paddingBottom = "16dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:lineSpacingExtra="5sp"
-            android:text="@string/txt_copyright" />
+            android:text = "@string/txt_copyright"
+            android:textSize = "15sp" />
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
 
     <LinearLayout
         android:id="@+id/layout_sign_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:orientation = "horizontal"
         android:paddingStart="22dp"
+        android:paddingTop = "16dp"
         android:paddingEnd="22dp"
-        >
+        android:paddingBottom = "16dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:lineSpacingExtra="5sp"
-            android:text="@string/txt_sign_out" />
+            android:text = "@string/txt_sign_out"
+            android:textSize = "15sp" />
     </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        />
+        android:background = "@color/gray" />
 </LinearLayout>

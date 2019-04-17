@@ -5,18 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.EditRoleActivity">
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/app_bar_commit"/>
-
+        <include layout = "@layout/app_bar_commit" />
     </android.support.design.widget.AppBarLayout>
-
     <include layout="@layout/content_edit_role" />
-
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -18,64 +18,61 @@
             android:layout_height="wrap_content"
             android:paddingBottom="40dp">
 
-
-
-          <include layout="@layout/content_select_room_gray" android:id="@+id/layout_select_room"/>
+            <include
+                android:id = "@+id/layout_select_room"
+                layout = "@layout/content_select_room_gray" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:overScrollMode="never"
-                android:background="@drawable/shape_border_shadow"
-                android:elevation="4dp"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/filter_overwrap_height"
+                android:layout_below = "@id/layout_select_room"
                 android:layout_alignStart="@id/layout_select_room"
                 android:layout_alignEnd="@id/layout_select_room"
-                android:layout_below="@id/layout_select_room"
-                />
+                android:layout_marginTop = "@dimen/filter_overwrap_height"
+                android:background = "@drawable/shape_border_shadow"
+                android:elevation = "4dp"
+                android:overScrollMode = "never"
+                android:visibility = "gone" />
 
             <LinearLayout
-                android:layout_below="@id/layout_select_room"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below = "@id/layout_select_room"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop = "10dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
-
-
 
                 <EditText
                     android:id="@+id/edt_title"
-                    android:background="@drawable/shape_round_gray_light"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:background = "@drawable/shape_round_gray_light"
                     android:hint="@string/txt_enter_vote_title"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:paddingEnd="8dp"
                     android:paddingStart="8dp"
+                    android:paddingTop = "8dp"
+                    android:paddingEnd = "8dp"
+                    android:paddingBottom = "8dp"
                     android:textSize="16sp"
                     android:theme="@style/EditText_mainColor" />
 
                 <EditText
                     android:id="@+id/edt_content"
-                    android:background="@drawable/shape_round_gray_light"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="200dp"
-                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginBottom = "16dp"
+                    android:background = "@drawable/shape_round_gray_light"
                     android:gravity="top|start"
+                    android:hint = "@string/txt_enter_content"
                     android:inputType="none"
+                    android:minHeight = "200dp"
                     android:padding="16dp"
-                    android:hint="@string/txt_enter_content"
                     android:scrollHorizontally="false"
                     android:theme="@style/EditText_mainColor" />
 
@@ -85,40 +82,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
                     <EditText
                         android:id="@+id/edt_vote_example1"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
+                        android:layout_marginBottom = "8dp"
                         android:background="@drawable/shape_round_gray_light"
                         android:gravity="center_vertical"
                         android:hint="@string/txt_enter_vote_example"
                         android:inputType="text"
                         android:maxLines="1"
+                        android:paddingStart = "16dp"
+                        android:paddingTop = "6dp"
                         android:paddingEnd="16dp"
-                        android:paddingStart="16dp"
                         android:paddingBottom="6dp"
-                        android:paddingTop="6dp"
                         android:textSize="16sp"
-                        android:layout_marginBottom="8dp"
                         android:theme="@style/EditText_mainColor" />
-
 
                     <EditText
                         android:id="@+id/edt_vote_example2"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
+                        android:layout_marginBottom = "8dp"
                         android:background="@drawable/shape_round_gray_light"
                         android:gravity="center_vertical"
                         android:hint="@string/txt_enter_vote_example"
                         android:inputType="text"
                         android:maxLines="1"
+                        android:paddingStart = "16dp"
+                        android:paddingTop = "6dp"
                         android:paddingEnd="16dp"
-                        android:paddingStart="16dp"
                         android:paddingBottom="6dp"
-                        android:paddingTop="6dp"
                         android:textSize="16sp"
-                        android:layout_marginBottom="8dp"
                         android:theme="@style/EditText_mainColor" />
                 </LinearLayout>
 
@@ -127,16 +122,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="26dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation = "horizontal">
 
                     <ImageButton
                         android:id="@+id/btn_vote_example_add"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="end"
+                        android:background = "@android:color/transparent"
                         android:theme="@style/FlatButton"
-                        android:background="@android:color/transparent"
                         android:tint="@color/grayDark"
                         app:srcCompat="@drawable/ic_add" />
 
@@ -145,16 +139,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:textSize="16sp"
-                        tools:text="항목 추가하기"
-                        />
+                        tools:text = "항목 추가하기" />
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
-
 
                     <android.support.v7.widget.AppCompatCheckBox
                         android:id="@+id/chk_end_time"
@@ -171,24 +162,22 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/layout_end_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:gravity = "center_vertical"
+                    android:visibility = "gone">
 
                     <Button
                         android:id="@+id/btn_end_time_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:paddingEnd="10dp"
                         android:paddingStart="10dp"
-                        tools:text="2018-06-05"
+                        android:paddingEnd = "10dp"
                         android:textSize="20sp"
                         android:theme="@style/FlatButton"
-
-                        />
+                        tools:text = "2018-06-05" />
 
                     <Button
                         android:id="@+id/btn_end_time_time"
@@ -196,17 +185,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:background="@android:color/transparent"
+                        android:paddingStart = "10dp"
                         android:paddingEnd="10dp"
-                        android:paddingStart="10dp"
-                        tools:text="00:00"
                         android:textSize="20sp"
                         android:theme="@style/FlatButton"
-
-                        />
+                        tools:text = "00:00" />
                 </LinearLayout>
-
             </LinearLayout>
-
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

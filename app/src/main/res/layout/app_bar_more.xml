@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_size"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:background="@drawable/shape_action_bar">
+    android:background = "@drawable/shape_action_bar"
+    android:orientation = "horizontal">
 
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_back"
-        android:background="@android:color/transparent"
+        android:layout_gravity = "center"
         android:layout_margin="16dp"
-        android:layout_gravity="center"/>
+        android:background = "@android:color/transparent"
+        app:srcCompat = "@drawable/ic_back" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -22,27 +22,25 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            app:titleTextColor="@color/black"
             android:id="@+id/toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
+            android:background = "@android:color/transparent"
+            android:gravity = "center_horizontal"
             app:contentInsetRight="16dp"
-            android:background="@android:color/transparent"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme = "@style/AppTheme.PopupOverlay"
+            app:titleTextColor = "@color/black" />
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/btn_more"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_more"
+        android:layout_gravity = "center"
+        android:layout_margin = "16dp"
+        android:background = "@android:color/transparent"
         android:tint="@color/black"
-        android:background="@android:color/transparent"
-        android:layout_margin="16dp"
-        android:layout_gravity="center"
         android:visibility="invisible"
-        />
-
+        app:srcCompat = "@drawable/ic_more" />
 </LinearLayout>

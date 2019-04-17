@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:id = "@+id/layout_tutorial_6"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:gravity = "center"
+    android:orientation = "vertical">
 
-<LinearLayout
-    android:id="@+id/layout_tutorial_6"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_tutorial"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        />
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text = "@string/txt_tutorial"
+        android:textColor = "@color/white"
+        android:textSize = "14sp" />
+
     <ImageView
-        android:layout_width="205dp"
-        android:layout_height="297dp"
-        android:layout_marginTop="23dp"
-        app:srcCompat="@drawable/img_tutorial_sign6"
-        android:contentDescription="@string/txt_tutorial" />
+        android:layout_width = "205dp"
+        android:layout_height = "297dp"
+        android:layout_marginTop = "23dp"
+        android:contentDescription = "@string/txt_tutorial"
+        app:srcCompat = "@drawable/img_tutorial_sign6" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_signal"
-        android:textSize="25sp"
-        android:textColor="@color/white"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop = "20dp"
+        android:text = "@string/action_signal"
+        android:textColor = "@color/white"
+        android:textSize = "25sp" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:gravity="center_horizontal"
-        android:text="@string/txt_tutorial_describe_6"
-        android:textColor="@color/white"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop = "10dp"
+        android:gravity = "center_horizontal"
+        android:text = "@string/txt_tutorial_describe_6"
+        android:textColor = "@color/white"
+        android:textSize = "14sp" />
 </LinearLayout>

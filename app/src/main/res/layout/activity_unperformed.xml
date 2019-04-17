@@ -18,28 +18,25 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="48dp"
-        android:overScrollMode="never" />
+        android:overScrollMode = "never"
+        android:paddingTop = "48dp" />
 
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-
-            />
+            android:layout_gravity = "center" />
     </FrameLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -53,9 +50,7 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"
-
-            />
+            android:visibility = "gone" />
 
         <LinearLayout
             android:id="@+id/layout_3dot"
@@ -72,26 +67,24 @@
                 android:id="@+id/iv_unperformed_1"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:contentDescription="@string/descript_dot" />
+                android:contentDescription = "@string/descript_dot"
+                app:srcCompat = "@drawable/ic_sign" />
 
             <ImageView
                 android:id="@+id/iv_unperformed_2"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginStart="15dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:contentDescription="@string/descript_dot" />
+                android:contentDescription = "@string/descript_dot"
+                app:srcCompat = "@drawable/ic_sign" />
 
             <ImageView
                 android:id="@+id/iv_unperformed_3"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginStart="15dp"
-                app:srcCompat="@drawable/ic_sign"
-                android:contentDescription="@string/descript_dot" />
-
+                android:contentDescription = "@string/descript_dot"
+                app:srcCompat = "@drawable/ic_sign" />
         </LinearLayout>
-
     </FrameLayout>
 </LinearLayout>

@@ -1,4 +1,3 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,154 +13,141 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingBottom="5dp"
-
-        android:background="@color/gray">
+        android:background = "@color/gray"
+        android:paddingBottom = "5dp">
 
     </android.support.v7.widget.RecyclerView>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal">
 
         <ImageButton
-            app:srcCompat="@drawable/icon_chat_expand"
             android:id="@+id/btn_expand"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:paddingEnd="4dp"
+            android:background = "@android:color/transparent"
+            android:contentDescription = "@string/descript_open_menu"
             android:paddingStart="16dp"
             android:paddingTop="12dp"
+            android:paddingEnd = "4dp"
             android:paddingBottom="12dp"
-
             android:scaleType="centerCrop"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/descript_open_menu" />
-
+            app:srcCompat = "@drawable/icon_chat_expand" />
 
         <EditText
             android:id="@+id/edt_sendmessage"
-            android:theme="@style/EditText_mainColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="4"
+            android:layout_marginStart = "4dp"
+            android:layout_marginEnd = "4dp"
+            android:layout_weight = "1"
             android:hint="@string/txt_enter_content"
-            android:textSize="12sp"
             android:inputType="textMultiLine"
-            android:layout_weight="1"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
+            android:maxLines = "4"
             android:scrollbars="vertical"
-
-            />
+            android:textSize = "12sp"
+            android:theme = "@style/EditText_mainColor" />
 
 
         <ImageButton
             android:id="@+id/btn_sendMessage"
-            android:src="@drawable/shape_send_btn"
-            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:paddingEnd="16dp"
+            android:background = "@android:color/transparent"
+            android:contentDescription = "@string/action_send"
             android:paddingStart="4dp"
-
             android:paddingTop="16dp"
+            android:paddingEnd = "16dp"
             android:paddingBottom="16dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/action_send" />
-
-
+            android:src = "@drawable/shape_send_btn" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_expanded_menu"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:orientation="vertical"
         android:background="@color/grayLight"
+        android:orientation = "vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        >
+        android:visibility = "gone">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:weightSum="4"
+            android:baselineAligned = "false"
             android:gravity="center_vertical"
-            android:baselineAligned="false">
+            android:weightSum = "4">
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1"
+                android:orientation = "vertical"
                 tools:ignore="NestedWeights">
                 <ImageButton
                     android:id="@+id/btn_camera"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
-                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/action_camera"
+                    android:scaleType = "fitCenter"
                     app:srcCompat="@drawable/icon_chat_camera" />
                 <TextView
-                    android:text="@string/action_camera"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_camera"
+                    android:textSize = "12sp" />
             </LinearLayout>
 
-
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1">
+                android:orientation = "vertical">
                 <ImageButton
                     android:id="@+id/btn_gallery"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_gallery"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_gallery"
-                    android:contentDescription="@string/action_gallery" />
+                    app:srcCompat = "@drawable/icon_chat_gallery" />
                 <TextView
-                    android:text="@string/action_gallery"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_gallery"
+                    android:textSize = "12sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1">
+                android:orientation = "vertical">
                 <ImageButton
                     android:id="@+id/btn_video"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_video"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_video"
-                    android:contentDescription="@string/action_video" />
+                    app:srcCompat = "@drawable/icon_chat_video" />
                 <TextView
-                    android:text="@string/action_video"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_video"
+                    android:textSize = "12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -193,101 +179,99 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:weightSum="4"
+            android:baselineAligned = "false"
             android:gravity="center_vertical"
-            android:baselineAligned="false">
+            android:weightSum = "4">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1"
+                android:orientation = "vertical"
                 tools:ignore="NestedWeights">
                 <ImageButton
                     android:id="@+id/btn_notice"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
-                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_notice"
-                    android:contentDescription="@string/action_notice" />
+                    android:contentDescription = "@string/action_notice"
+                    android:scaleType = "fitCenter"
+                    app:srcCompat = "@drawable/icon_chat_notice" />
                 <TextView
-                    android:text="@string/action_notice"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_notice"
+                    android:textSize = "12sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1"
+                android:orientation = "vertical"
                 tools:ignore="NestedWeights">
                 <ImageButton
                     android:id="@+id/btn_signal"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
-                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_light"
-                    android:contentDescription="@string/action_signal" />
+                    android:contentDescription = "@string/action_signal"
+                    android:scaleType = "fitCenter"
+                    app:srcCompat = "@drawable/icon_chat_light" />
                 <TextView
-                    android:text="@string/action_signal"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_signal"
+                    android:textSize = "12sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1">
+                android:orientation = "vertical">
                 <ImageButton
                     android:id="@+id/btn_vote"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_vote"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_vote"
-                    android:contentDescription="@string/action_vote" />
+                    app:srcCompat = "@drawable/icon_chat_vote" />
                 <TextView
-                    android:text="@string/action_vote"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_vote"
+                    android:textSize = "12sp" />
             </LinearLayout>
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight = "1"
                 android:gravity="center"
-                android:layout_weight="1">
+                android:orientation = "vertical">
                 <ImageButton
                     android:id="@+id/btn_role"
                     android:layout_width="59dp"
                     android:layout_height="59dp"
-                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icon_chat_role"
-                    android:contentDescription="@string/action_role" />
+                    android:contentDescription = "@string/action_role"
+                    android:scaleType = "fitCenter"
+                    app:srcCompat = "@drawable/icon_chat_role" />
                 <TextView
-                    android:text="@string/action_role"
-                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
+                    android:layout_marginTop = "4dp"
+                    android:text = "@string/action_role"
+                    android:textSize = "12sp" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
 

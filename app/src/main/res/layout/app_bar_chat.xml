@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_size"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:background="@drawable/shape_action_bar">
+    android:background = "@drawable/shape_action_bar"
+    android:orientation = "horizontal">
 
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_back"
-        android:tint="@color/black"
+        android:layout_gravity = "center"
+        android:layout_margin = "10dp"
         android:background="@android:color/transparent"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"/>
+        android:tint = "@color/black"
+        app:srcCompat = "@drawable/ic_back" />
 
 
     <LinearLayout
@@ -24,23 +24,22 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            app:titleTextColor="@color/black"
             android:id="@+id/toolbar"
             android:layout_width="wrap_content"
-            app:contentInsetRight="16dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/transparent"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:contentInsetRight = "16dp"
+            app:popupTheme = "@style/AppTheme.PopupOverlay"
+            app:titleTextColor = "@color/black" />
     </LinearLayout>
     <ImageButton
         android:id="@+id/btn_draw_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_menu"
-        android:tint="@color/black"
+        android:layout_gravity = "center"
+        android:layout_margin = "10dp"
         android:background="@android:color/transparent"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"/>
-
+        android:tint = "@color/black"
+        app:srcCompat = "@drawable/ic_menu" />
 </LinearLayout>

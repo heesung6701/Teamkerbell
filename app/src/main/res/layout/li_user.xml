@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="5dp"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "wrap_content"
+    android:layout_height = "wrap_content"
+    android:layout_marginLeft = "8dp"
+    android:layout_marginTop = "5dp"
+    android:layout_marginRight = "8dp"
+    android:layout_marginBottom = "5dp"
+    android:gravity = "center_vertical"
+    android:orientation = "horizontal">
 
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/li_user_profile"
-        android:layout_width="32dp"
-
-        android:layout_height="32dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/icon_profile_default"
-        app:civ_border_color="@color/mainColorY"
-        app:civ_border_width="0dp" />
-
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:id = "@+id/li_user_profile"
+        android:layout_width = "32dp"
+        android:layout_height = "32dp"
+        android:layout_marginEnd = "10dp"
+        android:src = "@drawable/icon_profile_default"
+        app:civ_border_color = "@color/mainColorY"
+        app:civ_border_width = "0dp" />
 
     <TextView
-        android:id="@+id/li_user_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        tools:text="사용자1" />
-
+        android:id = "@+id/li_user_name"
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:layout_weight = "1"
+        android:textSize = "12sp"
+        android:textStyle = "bold"
+        tools:text = "사용자1" />
 
 </LinearLayout>
 

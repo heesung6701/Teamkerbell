@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background = "@color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.EditRoleActivity"
-    android:background="@color/white"
     tools:showIn="@layout/activity_edit_role">
-
 
     <include
         android:id="@+id/layout_select_room"
@@ -18,9 +17,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/layout_select_room"
-        android:layout_alignStart="@id/layout_select_room"
         android:layout_below="@id/layout_select_room"
+        android:layout_alignStart = "@id/layout_select_room"
+        android:layout_alignEnd = "@id/layout_select_room"
         android:layout_marginTop="@dimen/filter_overwrap_height"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
@@ -33,9 +32,8 @@
         android:layout_below="@id/layout_select_room"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
-        android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        >
+        android:paddingEnd = "16dp">
 
         <TextView
             android:id="@+id/tv_role_name"
@@ -44,36 +42,32 @@
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:paddingEnd="8dp"
             android:paddingStart="8dp"
+            android:paddingEnd = "8dp"
             android:textSize="15sp"
-            tools:text="역할 제목"
-            />
+            tools:text = "역할 제목" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="32dp"
             android:layout_marginTop="3dp"
-            android:background="@color/gray"
-            />
+            android:layout_marginBottom = "32dp"
+            android:background = "@color/gray" />
 
         <LinearLayout
             android:id="@+id/layout_add_task"
-            android:background="@drawable/shape_round_gray_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_marginBottom="8dp"
+            android:background = "@drawable/shape_round_gray_light"
+            android:gravity = "center_vertical"
             android:padding="3dp">
-            <!--android:background="@drawable/shape_border_shadow"-->
-            <!--android:elevation="4dp"-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:background="@drawable/shape_round_white"
                 android:gravity="center_vertical"
+                android:orientation = "horizontal"
                 android:padding="5dp">
             <ImageView
                 android:layout_width="wrap_content"
@@ -81,7 +75,6 @@
                 android:layout_gravity="center_vertical"
                 android:tint="@color/grayDarker"
                 app:srcCompat="@drawable/ic_add" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,8 +93,7 @@
                 android:id="@+id/layout_role_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation = "vertical" />
         </ScrollView>
-
     </LinearLayout>
 </RelativeLayout>

@@ -1,335 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="2dp"
-    android:id="@+id/layout_parent"
-    android:gravity="center_vertical"
-    >
-
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:id = "@+id/layout_parent"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:gravity = "center_vertical"
+    android:padding = "2dp">
 
     <LinearLayout
-        android:id="@+id/layout_select_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:gravity="center_vertical"
-        tools:ignore="UseCompoundDrawables">
+        android:id = "@+id/layout_select_team"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_marginStart = "30dp"
+        android:gravity = "center_vertical"
+        tools:ignore = "UseCompoundDrawables">
 
         <TextView
-            android:id="@+id/tv_teamName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textColor="@color/mainColorP"
-            tools:text="SOPT" />
-
+            android:id = "@+id/tv_teamName"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textColor = "@color/mainColorP"
+            android:textSize = "24sp"
+            tools:text = "SOPT" />
 
         <ImageView
-            android:id="@+id/iv_drop_down"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="15dp"
-            app:srcCompat="@drawable/ic_arrow_drop_down"
-
-            android:contentDescription="@string/descript_open_menu" />
-
+            android:id = "@+id/iv_drop_down"
+            android:layout_width = "24dp"
+            android:layout_height = "24dp"
+            android:layout_marginStart = "15dp"
+            android:contentDescription = "@string/descript_open_menu"
+            app:srcCompat = "@drawable/ic_arrow_drop_down" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_group_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:orientation="horizontal"
-        android:layout_alignStart="@id/layout_select_team"
-        android:layout_below="@id/layout_select_team"
-        android:gravity="center_vertical"
-        tools:ignore="UseCompoundDrawables">
+        android:id = "@+id/layout_group_count"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_below = "@id/layout_select_team"
+        android:layout_alignStart = "@id/layout_select_team"
+        android:layout_marginTop = "7dp"
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal"
+        tools:ignore = "UseCompoundDrawables">
+
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/ic_group_profile"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/txt_profile" />
+            android:layout_width = "15dp"
+            android:layout_height = "15dp"
+            android:layout_marginEnd = "5dp"
+            android:contentDescription = "@string/txt_profile"
+            app:srcCompat = "@drawable/ic_group_profile" />
+
         <TextView
-            android:id="@+id/tv_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id = "@+id/tv_count"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
 
-            android:focusable="true"
-            android:clickable="true"
+            android:clickable = "true"
+            android:focusable = "true"
 
+            android:textColor = "@drawable/select_text_press"
+            android:textSize = "16sp"
 
-            android:textSize="16sp"
-            android:textColor="@drawable/select_text_press"
-
-            tools:text="5명" />
+            tools:text = "5명" />
     </LinearLayout>
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:overScrollMode="never"
-        android:layout_below="@id/layout_group_count"
-        android:scrollbars="none"
-        android:paddingTop="100dp"
-        android:paddingBottom="45dp"
-        >
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_below = "@id/layout_group_count"
+        android:layout_centerInParent = "true"
+        android:overScrollMode = "never"
+        android:paddingTop = "100dp"
+        android:paddingBottom = "45dp"
+        android:scrollbars = "none">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingStart="17dp"
-            android:paddingEnd="17dp"
-            android:gravity="center_vertical"
-            >
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"
+            android:gravity = "center_vertical"
+            android:orientation = "horizontal"
+            android:paddingStart = "17dp"
+            android:paddingEnd = "17dp">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_notice"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/action_notice"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_notice" />
+                    android:id = "@+id/btn_notice"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_notice"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_notice" />
 
                 <TextView
-                    android:id="@+id/tv_notice_sign"
-                    android:layout_width="wrap_content"
-                    android:minWidth="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignEnd="@id/btn_notice"
-                    android:background="@drawable/badge_background"
-                    android:gravity="center"
-                    android:visibility="invisible"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/action_notice" />
+                    android:id = "@+id/tv_notice_sign"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "20dp"
+                    android:layout_alignEnd = "@id/btn_notice"
+                    android:background = "@drawable/badge_background"
+                    android:contentDescription = "@string/action_notice"
+                    android:gravity = "center"
+                    android:minWidth = "20dp"
+                    android:textStyle = "bold"
+                    android:visibility = "invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_notice"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_notice" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_notice"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_notice" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_pick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_pick"
-                    android:contentDescription="@string/action_pick" />
+                    android:id = "@+id/btn_pick"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_pick"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_pick" />
 
                 <TextView
-                    android:id="@+id/tv_pick_sign"
-                    android:layout_width="wrap_content"
-                    android:minWidth="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignEnd="@id/btn_pick"
-                    android:visibility="invisible"
-                    android:gravity="center"
-                    android:background="@drawable/badge_background"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/action_pick" />
+                    android:id = "@+id/tv_pick_sign"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "20dp"
+                    android:layout_alignEnd = "@id/btn_pick"
+                    android:background = "@drawable/badge_background"
+                    android:contentDescription = "@string/action_pick"
+                    android:gravity = "center"
+                    android:minWidth = "20dp"
+                    android:textStyle = "bold"
+                    android:visibility = "invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_pick"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_pick" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_pick"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_pick" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_vote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_vote"
-                    android:contentDescription="@string/action_vote" />
+                    android:id = "@+id/btn_vote"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_vote"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_vote" />
 
                 <TextView
-                    android:id="@+id/tv_vote_sign"
-                    android:layout_width="wrap_content"
-                    android:minWidth="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignEnd="@id/btn_vote"
-                    android:visibility="invisible"
-                    android:gravity="center"
-                    android:background="@drawable/badge_background"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/action_vote" />
+                    android:id = "@+id/tv_vote_sign"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "20dp"
+                    android:layout_alignEnd = "@id/btn_vote"
+                    android:background = "@drawable/badge_background"
+                    android:contentDescription = "@string/action_vote"
+                    android:gravity = "center"
+                    android:minWidth = "20dp"
+                    android:textStyle = "bold"
+                    android:visibility = "invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_vote"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_vote" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_vote"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_vote" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_signal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_signal"
-                    android:contentDescription="@string/action_signal" />
+                    android:id = "@+id/btn_signal"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_signal"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_signal" />
 
                 <TextView
-                    android:id="@+id/tv_signal_sign"
-                    android:layout_width="wrap_content"
-                    android:minWidth="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignEnd="@id/btn_signal"
-                    android:background="@drawable/badge_background"
-                    android:visibility="invisible"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/action_signal" />
+                    android:id = "@+id/tv_signal_sign"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "20dp"
+                    android:layout_alignEnd = "@id/btn_signal"
+                    android:background = "@drawable/badge_background"
+                    android:contentDescription = "@string/action_signal"
+                    android:gravity = "center"
+                    android:minWidth = "20dp"
+                    android:textStyle = "bold"
+                    android:visibility = "invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_signal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_signal" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_signal"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_signal" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_role"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_role"
-                    android:contentDescription="@string/action_role" />
+                    android:id = "@+id/btn_role"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_role"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_role" />
 
                 <TextView
-                    android:id="@+id/tv_role_sign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:minWidth="20dp"
-                    android:layout_alignEnd="@id/btn_role"
-                    android:layout_marginTop="9dp"
-                    android:gravity="center"
-                    android:visibility="invisible"
-                    android:background="@drawable/badge_background"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/action_role" />
+                    android:id = "@+id/tv_role_sign"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "20dp"
+                    android:layout_alignEnd = "@id/btn_role"
+                    android:layout_marginTop = "9dp"
+                    android:background = "@drawable/badge_background"
+                    android:contentDescription = "@string/action_role"
+                    android:gravity = "center"
+                    android:minWidth = "20dp"
+                    android:textStyle = "bold"
+                    android:visibility = "invisible" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_role"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_role" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_role"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_role" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_horizontal"
-                tools:ignore="UselessParent">
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "15dp"
+                android:layout_marginRight = "15dp"
+                android:gravity = "center_horizontal"
+                tools:ignore = "UselessParent">
 
                 <ImageButton
-                    android:id="@+id/btn_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon_list_setting"
-                    android:contentDescription="@string/action_setting" />
-
+                    android:id = "@+id/btn_setting"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:background = "@android:color/transparent"
+                    android:contentDescription = "@string/action_setting"
+                    android:scaleType = "centerCrop"
+                    app:srcCompat = "@drawable/icon_list_setting" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btn_setting"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/action_setting" />
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@id/btn_setting"
+                    android:layout_centerHorizontal = "true"
+                    android:layout_marginTop = "17dp"
+                    android:text = "@string/action_setting" />
 
             </RelativeLayout>
 
         </LinearLayout>
     </HorizontalScrollView>
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="157dp"
-        android:layout_height="219dp"
-        android:paddingTop="17dp"
-        android:paddingBottom="17dp"
-        android:paddingLeft="13dp"
-        android:paddingRight="13dp"
-        android:overScrollMode="never"
-        android:layout_below="@+id/layout_select_team"
-        android:layout_alignStart="@+id/layout_select_team"
-        android:background="@drawable/shape_border_shadow"
-        android:elevation="4dp"
-        android:visibility="gone"
-        />
+        android:id = "@+id/recyclerView"
+        android:layout_width = "157dp"
+        android:layout_height = "219dp"
+        android:layout_below = "@+id/layout_select_team"
+        android:layout_alignStart = "@+id/layout_select_team"
+        android:background = "@drawable/shape_border_shadow"
+        android:elevation = "4dp"
+        android:overScrollMode = "never"
+        android:paddingLeft = "13dp"
+        android:paddingTop = "17dp"
+        android:paddingRight = "13dp"
+        android:paddingBottom = "17dp"
+        android:visibility = "gone" />
 
 </RelativeLayout>

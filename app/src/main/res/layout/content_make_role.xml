@@ -8,7 +8,6 @@
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.role.MakeRoleActivity"
     tools:showIn="@layout/activity_make_role">
 
-
     <include
         android:id="@+id/layout_select_room"
         layout="@layout/content_select_room" />
@@ -17,9 +16,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/layout_select_room"
+        android:layout_below = "@id/layout_select_room"
         android:layout_alignStart="@id/layout_select_room"
-        android:layout_below="@id/layout_select_room"
+        android:layout_alignEnd = "@id/layout_select_room"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
         android:overScrollMode="never"
@@ -31,21 +30,21 @@
         android:layout_below="@id/layout_select_room"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
-        android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        >
+        android:paddingEnd = "16dp">
 
         <EditText
             android:id="@+id/edt_role_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop = "8dp"
             android:layout_marginBottom="32dp"
-            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:hint="@string/txt_enter_title"
+            android:inputType = ""
             android:maxLines="1"
-            android:paddingEnd="8dp"
             android:paddingStart="8dp"
+            android:paddingEnd = "8dp"
             android:textSize="15sp"
             android:theme="@style/EditText_mainColor" />
 
@@ -57,16 +56,16 @@
             android:id="@+id/layout_role_tasks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation = "vertical" />
         </ScrollView>
 
         <LinearLayout
             android:id="@+id/layout_add_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart = "3dp"
             android:layout_marginEnd="3dp"
-            android:layout_marginStart="3dp"
+            android:layout_marginBottom = "8dp"
             android:background="@drawable/shape_border_shadow"
             android:elevation="4dp"
             android:gravity="center_vertical"
@@ -78,16 +77,12 @@
                 android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_add" />
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/txt_add_task"
                 android:textSize="14sp" />
-
-
         </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>

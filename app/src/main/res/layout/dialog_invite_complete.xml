@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="240dp"
-    android:layout_height="136dp"
-    android:background="@drawable/shape_round_default"
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:layout_width = "240dp"
+    android:layout_height = "136dp"
+    android:background = "@drawable/shape_round_default"
+    android:orientation = "vertical">
 
-    android:orientation="vertical" >
+    <TextView
+        android:id = "@+id/tv_content"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop = "30dp"
+        android:layout_marginBottom = "26dp"
+        android:gravity = "center"
+        android:text = "팀원 초대가 완료되었습니다 "
+        android:textSize = "14sp" />
 
-
-
-
-        <TextView
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="26dp"
-            android:gravity="center"
-            android:id="@+id/tv_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="팀원 초대가 완료되었습니다 "
-            android:textSize="14sp" />
-
-
-
-            <Button
-                android:id="@+id/btn_create_dialog"
-                android:theme="@style/FlatButton"
-                android:layout_width="140dp"
-                android:layout_height="46dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/shape_round_btn"
-                android:textColor="@color/white"
-                android:text="완료" />
-
-
-    </LinearLayout>
-
-
+    <Button
+        android:id = "@+id/btn_create_dialog"
+        android:layout_width = "140dp"
+        android:layout_height = "46dp"
+        android:layout_gravity = "center_horizontal"
+        android:background = "@drawable/shape_round_btn"
+        android:orientation = "horizontal"
+        android:text = "완료"
+        android:textColor = "@color/white"
+        android:theme = "@style/FlatButton" />
+</LinearLayout>

@@ -8,16 +8,13 @@
     tools:context="org.teamfairy.sopt.teamkerbell.activities.items.pick.PickListActivity"
     tools:showIn="@layout/activity_pick_list">
 
-
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:overScrollMode="never"
             android:clipToPadding="false"
+            android:overScrollMode = "never"
             android:paddingBottom="25dp" />
-
 
 </android.support.constraint.ConstraintLayout>

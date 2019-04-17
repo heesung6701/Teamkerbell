@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:overScrollMode="never"
-        >
+        android:overScrollMode = "never">
 
         <LinearLayout
             android:id="@+id/layout_min_height"
@@ -31,24 +30,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="22dp"
                 android:layout_marginBottom="3dp"
                 android:gravity="center_vertical"
-                >
+                android:orientation = "horizontal">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_category"
-                    />
+                    app:srcCompat = "@drawable/ic_category" />
 
                 <TextView
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    tools:text="기획, 서버"
-                    />
+                    tools:text = "기획, 서버" />
             </LinearLayout>
 
             <TextView
@@ -57,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:lineSpacingExtra="7sp"
-                android:paddingEnd="5dp"
                 android:paddingStart="5dp"
+                android:paddingEnd = "5dp"
                 android:textSize="16sp"
                 tools:text="교류전 일정이 확정되어 안내드립니다:)
 장소 : 숙대 명신관 512호
@@ -67,15 +63,14 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd = "5dp"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/iv_profile"
                     android:layout_width="40dp"
-
                     android:layout_height="40dp"
                     android:src="@drawable/icon_profile_default"
                     app:civ_border_width="0dp" />
@@ -102,14 +97,9 @@
                         android:lineSpacingExtra="7sp"
                         android:textSize="12sp"
                         tools:text="3월 13일 13:00" />
-
-
                 </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
-
-
             <Button
                 android:id="@+id/btn_commit"
                 android:layout_width="match_parent"
@@ -117,8 +107,8 @@
                 android:layout_marginTop="41dp"
                 android:background="@drawable/shape_round_btn"
                 android:text="@string/action_commit"
+                android:textColor = "@color/white"
                 android:textSize="18sp"
-                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:theme="@style/FlatButton" />
 

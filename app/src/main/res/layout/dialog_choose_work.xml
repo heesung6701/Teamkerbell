@@ -1,113 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools = "http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_card"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.chat.ChatActivity"
-    >
+    tools:context = ".activities.chat.ChatActivity">
+
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:background="@drawable/shape_round_8dp"
+        android:layout_height = "50dp"
         android:layout_marginBottom="0.7dp"
-        android:layout_height="50dp">
+        android:background = "@drawable/shape_round_8dp">
 
         <Button
+            android:layout_width = "match_parent"
+            android:layout_height = "40dp"
             android:layout_marginTop="10dp"
-            android:theme="@style/FlatButton"
+            android:background = "@color/white"
+            android:paddingLeft = "30dp"
+            android:paddingRight = "30dp"
             android:text="@string/txt_chose_work"
             android:textColor="@color/mainColorM"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:background="@color/white"
-            android:layout_width="match_parent"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_height="40dp" />
-
+            android:theme = "@style/FlatButton" />
     </RelativeLayout>
+
     <Button
-        android:theme="@style/FlatButton"
         android:id="@+id/btn_copy"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
         android:background="@drawable/shape_press_mint"
-        android:text="@string/txt_copy"
-        android:textSize="14sp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:text = "@string/txt_copy"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton" />
 
     <Button
-        android:theme="@style/FlatButton"
         android:id="@+id/btn_delete"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
         android:background="@drawable/shape_press_mint"
+        android:paddingLeft = "30dp"
+        android:paddingRight = "30dp"
         android:text="@string/txt_delete"
         android:textSize="14sp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="40dp" />
+        android:theme = "@style/FlatButton"
+        android:visibility = "gone" />
 
     <Button
-        android:theme="@style/FlatButton"
         android:id="@+id/btn_share"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
         android:background="@drawable/shape_press_mint"
-        android:text="@string/txt_share"
-        android:textSize="14sp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:text = "@string/txt_share"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton" />
 
     <Button
-
-        android:theme="@style/FlatButton"
         android:id="@+id/btn_signal"
-        android:text="@string/action_signal"
-        android:textSize="14sp"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
         android:background="@drawable/shape_press_mint"
-        android:layout_width="match_parent"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_height="40dp" />
-    <Button
+        android:text = "@string/action_signal"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton" />
 
-        android:theme="@style/FlatButton"
+    <Button
         android:id="@+id/btn_notice"
-        android:text="@string/action_notice"
-        android:textSize="14sp"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
         android:background="@drawable/shape_press_mint"
-        android:layout_width="match_parent"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:layout_height="40dp" />
+        android:text = "@string/action_notice"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton" />
 
     <Button
-
-        android:theme="@style/FlatButton"
         android:id="@+id/btn_pick"
-        android:text="@string/action_pick"
-        android:textSize="14sp"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
+        android:background = "@drawable/shape_press_mint_bottom"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:background="@drawable/shape_press_mint_bottom"
         android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
-    <Button
-        android:theme="@style/FlatButton"
-        android:id="@+id/btn_search"
-        android:text="@string/txt_search"
-        android:textSize="14sp"
-        android:paddingTop="10dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:background="@drawable/shape_press_mint_bottom"
-        android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:visibility="gone"
-        android:layout_height="40dp" />
+        android:text = "@string/action_pick"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton" />
 
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width = "match_parent"
+        android:layout_height = "40dp"
+        android:background = "@drawable/shape_press_mint_bottom"
+        android:paddingLeft = "30dp"
+        android:paddingTop="10dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="10dp"
+        android:text = "@string/txt_search"
+        android:textSize = "14sp"
+        android:theme = "@style/FlatButton"
+        android:visibility = "gone" />
 </LinearLayout>

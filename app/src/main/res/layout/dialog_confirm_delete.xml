@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_card_light_grey"
-    android:padding="20dp"
     android:gravity="center"
-    >
+    android:orientation = "vertical"
+    android:padding = "20dp">
 
     <TextView
         android:id="@+id/dialog_tv_content"
@@ -16,44 +15,37 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
+        android:gravity = "center"
         android:text="@string/txt_confirm_delete"
-        android:gravity="center"
         android:textColor="@color/black"
         android:textSize="18sp" />
-
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal"
-        >
+        android:orientation = "horizontal">
+
         <Button
-            android:theme="@style/FlatButton"
             android:id="@+id/btn_confirm_yes"
+            android:layout_width = "125dp"
+            android:layout_height = "wrap_content"
             android:background="@drawable/shape_round_btn"
             android:text="@string/action_commit"
-            android:textSize="20sp"
             android:textColor="@color/white"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
+            android:textSize = "20sp"
+            android:theme = "@style/FlatButton"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btn_confirm_no"
+            android:layout_width = "125dp"
+            android:layout_height = "wrap_content"
+            android:layout_marginStart = "20dp"
             android:background="@drawable/shape_round_default"
-            android:theme="@style/FlatButton"
             android:text="@string/action_cancel"
             android:textSize="20sp"
-            android:layout_marginStart="20dp"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
+            android:theme = "@style/FlatButton"
             tools:ignore="ButtonStyle" />
-
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>

@@ -16,11 +16,10 @@
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:paddingBottom="17dp"
-        android:paddingEnd="24dp"
         android:paddingStart="24dp"
         android:paddingTop="7dp"
-        >
+        android:paddingEnd = "24dp"
+        android:paddingBottom = "17dp">
 
         <TextView
             android:id="@+id/tv_chat_name"
@@ -31,19 +30,18 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginEnd="-24dp"
             android:layout_marginStart="-24dp"
-            android:background="@color/gray"
-            />
+            android:layout_marginEnd = "-24dp"
+            android:background = "@color/gray" />
 
         <TextView
             android:id="@+id/tv_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="19dp"
-            android:paddingEnd="2dp"
+            android:layout_marginBottom = "8dp"
             android:paddingStart="2dp"
+            android:paddingEnd = "2dp"
             android:textSize="16sp"
             tools:text="역할이름" />
 
@@ -52,8 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5sp"
-            android:paddingEnd="2dp"
             android:paddingStart="2dp"
+            android:paddingEnd = "2dp"
             android:textSize="14sp"
             tools:text="작성자 : 아이도루" />
 
@@ -63,8 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:lineSpacingExtra="5sp"
-            android:paddingEnd="2dp"
             android:paddingStart="2dp"
+            android:paddingEnd = "2dp"
             android:textSize="14sp"
             tools:text=" 3월 15일 13:00" />
 
@@ -73,11 +71,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:lineSpacingExtra="5sp"
-            android:paddingEnd="5dp"
             android:paddingStart="5dp"
+            android:paddingEnd = "5dp"
             android:text="@string/txt_project_member"
-            android:textSize="14sp"
-             />
+            android:textSize = "14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,17 +86,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:overScrollMode="never"
-                />
+                android:overScrollMode = "never" />
             <ImageButton
                 android:id="@+id/btn_take_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_add"
-                android:contentDescription="@string/action_add" />
+                android:contentDescription = "@string/action_add"
+                app:srcCompat = "@drawable/ic_add" />
         </LinearLayout>
 
     </LinearLayout>
-    <include layout="@layout/content_recyclerview"/>
+
+    <include layout = "@layout/content_recyclerview" />
 </LinearLayout>

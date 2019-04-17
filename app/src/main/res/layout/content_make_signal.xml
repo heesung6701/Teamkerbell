@@ -18,22 +18,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/content_select_room_gray" android:id="@+id/layout_select_room"/>
-
+            <include
+                android:id = "@+id/layout_select_room"
+                layout = "@layout/content_select_room_gray" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:overScrollMode="never"
-                android:background="@drawable/shape_border_shadow"
-                android:elevation="4dp"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/filter_overwrap_height"
+                android:layout_below = "@id/layout_select_room"
                 android:layout_alignStart="@id/layout_select_room"
                 android:layout_alignEnd="@id/layout_select_room"
-                android:layout_below="@id/layout_select_room"
-                />
+                android:layout_marginTop = "@dimen/filter_overwrap_height"
+                android:background = "@drawable/shape_border_shadow"
+                android:elevation = "4dp"
+                android:overScrollMode = "never"
+                android:visibility = "gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,24 +43,22 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-
                 <EditText
                     android:id="@+id/edt_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="26dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginBottom = "26dp"
                     android:background="@drawable/shape_round_gray_light"
                     android:gravity="top|start"
+                    android:hint = "@string/txt_enter_content"
                     android:inputType="none"
-                    android:textSize="14sp"
                     android:minHeight="250dp"
+                    android:padding = "16dp"
                     android:scrollHorizontally="false"
-                    android:hint="@string/txt_enter_content"
-                    android:padding="16dp"
+                    android:textSize = "14sp"
                     android:theme="@style/EditText_mainColor" />
-
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -82,15 +80,13 @@
                         android:layout_marginStart="6dp"
                         android:text="@string/action_signal_secret"
                         android:textSize="15sp" />
-
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop = "16dp"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatCheckBox
@@ -107,25 +103,17 @@
                         android:layout_marginStart="6dp"
                         android:text="@string/action_signal_particular"
                         android:textSize="15sp" />
-
-
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:background="@drawable/shape_round_gray_light"
                     android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp">
-
-                </android.support.v7.widget.RecyclerView>
-
-
+                    android:layout_marginRight = "22dp"
+                    android:background = "@drawable/shape_round_gray_light"
+                    android:visibility = "gone" />
             </LinearLayout>
-
         </RelativeLayout>
     </ScrollView>
-
 </LinearLayout>

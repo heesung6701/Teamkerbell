@@ -9,32 +9,26 @@
     android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.teamfairy.sopt.teamkerbell.activities.main.room.MakeRoomActivity"
-    tools:showIn="@layout/activity_make_room"
-    >
-
+    tools:showIn = "@layout/activity_make_room">
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        >
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity = "center">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_profile"
             android:layout_width="102dp"
             android:layout_height="102dp"
             android:src="@drawable/icon_profile_default"
-            app:civ_border_width="0dp"
-            />
+            app:civ_border_width = "0dp" />
         <ImageView
-            android:layout_gravity="bottom|end"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            app:srcCompat="@drawable/icon_camera"
-            android:contentDescription="@string/action_edit" />
-
+            android:layout_gravity = "bottom|end"
+            android:contentDescription = "@string/action_edit"
+            app:srcCompat = "@drawable/icon_camera" />
     </FrameLayout>
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,9 +42,9 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme = "@style/EditText_mainColor"
         app:counterEnabled="true"
-        app:counterMaxLength="12"
-        android:theme="@style/EditText_mainColor">
+        app:counterMaxLength = "12">
 
         <EditText
             android:id="@+id/room_name"
@@ -69,9 +63,9 @@
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="71dp"
         android:layout_marginStart="71dp"
         android:layout_marginTop="134dp"
+        android:layout_marginEnd = "71dp"
         android:background="@drawable/shape_round_btn"
         android:padding="12dp"
         android:text="@string/action_start"
@@ -79,6 +73,4 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:theme="@style/FlatButton" />
-
-
 </LinearLayout>

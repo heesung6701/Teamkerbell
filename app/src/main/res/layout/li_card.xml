@@ -1,108 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="238dp"
-    android:layout_height="376dp"
-    android:layout_margin="12dp"
-    android:background="@drawable/shape_border_shadow"
-    android:elevation="4dp"
-    android:orientation="vertical"
-    android:padding="4dp">
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "238dp"
+    android:layout_height = "376dp"
+    android:layout_margin = "12dp"
+    android:background = "@drawable/shape_border_shadow"
+    android:elevation = "4dp"
+    android:orientation = "vertical"
+    android:padding = "4dp">
 
     <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="42dp"
-        android:textSize="16sp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        tools:text="토론 동아리"
-        android:layout_toStartOf="@id/tv_time"
-        android:layout_alignParentStart="true"
-        />
+        android:id = "@+id/tv_title"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_alignParentStart = "true"
+        android:layout_marginStart = "20dp"
+        android:layout_marginTop = "42dp"
+        android:layout_toStartOf = "@id/tv_time"
+        android:ellipsize = "end"
+        android:maxLines = "1"
+        android:textSize = "16sp"
+        tools:text = "토론 동아리" />
 
     <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/tv_title"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="42dp"
-        android:textSize="12sp"
-        tools:text="3월 13일 13:00" />
+        android:id = "@+id/tv_time"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_alignBottom = "@id/tv_title"
+        android:layout_alignParentEnd = "true"
+        android:layout_marginTop = "42dp"
+        android:layout_marginEnd = "20dp"
+        android:textSize = "12sp"
+        tools:text = "3월 13일 13:00" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/tv_title"
-        android:layout_marginBottom="13dp"
-        android:layout_marginTop="10dp"
-        android:background="#d8d8d8" />
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:layout_below = "@id/tv_title"
+        android:layout_marginTop = "10dp"
+        android:layout_marginBottom = "13dp"
+        android:background = "#d8d8d8" />
 
     <TextView
-        android:id="@+id/tv_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="21dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="54dp"
-        tools:text="교류전 일정이 확정되어 안내드립니다:)
+        android:id = "@+id/tv_content"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_below = "@id/tv_title"
+        android:layout_marginStart = "20dp"
+        android:layout_marginTop = "24dp"
+        android:layout_marginEnd = "21dp"
+        android:layout_marginBottom = "54dp"
+        android:scrollbars = "vertical"
+        tools:text = "교류전 일정이 확정되어 안내드립니다:)
 장소 : 숙대 명신관 512호
-일시 : 5월 21일"
-        android:layout_below="@id/tv_title"
-        android:layout_marginTop="24dp"
-        android:scrollbars="vertical"
-        />
+일시 : 5월 21일" />
 
+    <LinearLayout
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_alignParentBottom = "true"
+        android:layout_marginStart = "12dp"
+        android:layout_marginTop = "16dp"
+        android:layout_marginBottom = "20dp"
+        android:gravity = "center_vertical"
+        android:orientation = "horizontal">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="12dp"
-            >
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/li_user_profile"
-                android:layout_width="30dp"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_user_profile"
+            android:layout_width = "30dp"
 
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/icon_profile_default"
-                app:civ_border_color="@color/mainColorY"
-                app:civ_border_width="0dp" />
+            android:layout_height = "30dp"
+            android:layout_marginEnd = "10dp"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorY"
+            app:civ_border_width = "0dp" />
 
+        <TextView
+            android:id = "@+id/li_user_name"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_weight = "1"
+            android:textSize = "12sp"
+            android:textStyle = "bold"
+            tools:text = "사용자1" />
 
-            <TextView
-                android:id="@+id/li_user_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:text="사용자1"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_alignParentEnd = "true"
 
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="12dp"
-        android:lineSpacingExtra="7sp"
+        android:layout_alignParentBottom = "true"
+        android:layout_marginEnd = "12dp"
+        android:layout_marginBottom = "20dp"
+        android:lineSpacingExtra = "7sp"
+        android:textSize = "12sp"
 
-        tools:text="6명 참여중"
-        />
+        tools:text = "6명 참여중" />
 
 </RelativeLayout>

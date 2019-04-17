@@ -1,121 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/shape_border_shadow"
-    android:elevation="4dp"
-    android:layout_marginStart="28dp"
-    android:layout_marginEnd="28dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
-
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "72dp"
+    android:layout_marginStart = "28dp"
+    android:layout_marginTop = "4dp"
+    android:layout_marginEnd = "28dp"
+    android:layout_marginBottom = "4dp"
+    android:background = "@drawable/shape_border_shadow"
+    android:elevation = "4dp"
+    android:gravity = "center_vertical"
+    android:orientation = "horizontal">
 
     <TextView
-        android:id="@+id/li_tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        tools:text="소작업 1"
-        android:ellipsize="end"
-        android:textSize="14sp" />
-
+        android:id = "@+id/li_tv_content"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_marginStart = "20dp"
+        android:ellipsize = "end"
+        android:textSize = "14sp"
+        tools:text = "소작업 1" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:layout_marginEnd="10dp">
-
-
-
-
-
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginEnd = "10dp"
+        android:gravity = "end">
 
         <FrameLayout
-            android:id="@+id/li_layout_profileC"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="-15dp"
-            >
+            android:id = "@+id/li_layout_profileC"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_alignParentEnd = "true"
+            android:layout_gravity = "center"
+            android:layout_marginStart = "-15dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/li_iv_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/icon_profile_default"
-                app:civ_border_color="@color/mainColorM"
-                app:civ_border_width="0dp" />
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:id = "@+id/li_iv_profile"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:src = "@drawable/icon_profile_default"
+                app:civ_border_color = "@color/mainColorM"
+                app:civ_border_width = "0dp" />
 
             <TextView
-                android:id="@+id/li_tv_profileC"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="+1"
-                android:textSize="20sp" />
+                android:id = "@+id/li_tv_profileC"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:layout_gravity = "center"
+                android:gravity = "center"
+                android:text = "+1"
+                android:textSize = "20sp" />
         </FrameLayout>
+
         <de.hdodenhof.circleimageview.CircleImageView
 
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-15dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorM"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
-            app:civ_border_width="0dp" />
+            xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile1"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_alignParentEnd = "true"
+            android:layout_marginStart = "-15dp"
+            android:layout_marginEnd = "30dp"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorM"
+            app:civ_border_width = "0dp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile2"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-15dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorM"
-            android:layout_toStartOf="@id/li_iv_profile1"
-            app:civ_border_width="0dp" />
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile2"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_marginStart = "-15dp"
+            android:layout_toStartOf = "@id/li_iv_profile1"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorM"
+            app:civ_border_width = "0dp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile3"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-15dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorM"
-            android:layout_toStartOf="@id/li_iv_profile2"
-            app:civ_border_width="0dp" />
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile3"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_marginStart = "-15dp"
+            android:layout_toStartOf = "@id/li_iv_profile2"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorM"
+            app:civ_border_width = "0dp" />
 
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile4"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_marginStart = "-15dp"
+            android:layout_toStartOf = "@id/li_iv_profile3"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorM"
+            app:civ_border_width = "0dp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile4"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-15dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorM"
-            android:layout_toStartOf="@id/li_iv_profile3"
-            app:civ_border_width="0dp" />
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/li_iv_profile5"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-15dp"
-            android:src="@drawable/icon_profile_default"
-            app:civ_border_color="@color/mainColorM"
-            android:layout_toStartOf="@id/li_iv_profile4"
-            app:civ_border_width="0dp" />
-
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:id = "@+id/li_iv_profile5"
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:layout_marginStart = "-15dp"
+            android:layout_toStartOf = "@id/li_iv_profile4"
+            android:src = "@drawable/icon_profile_default"
+            app:civ_border_color = "@color/mainColorM"
+            app:civ_border_width = "0dp" />
 
     </RelativeLayout>
-
 
 </LinearLayout>

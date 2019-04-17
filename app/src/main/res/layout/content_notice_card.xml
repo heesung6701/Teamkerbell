@@ -13,14 +13,13 @@
         android:id="@+id/tv_show_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity = "end"
         android:layout_margin="16dp"
-        android:layout_gravity="end"
+        android:clickable = "true"
+        android:focusable = "true"
         android:text="@string/action_show_list"
         android:textColor="@drawable/select_text_press"
-        android:focusable="true"
-        android:clickable="true"
         android:textSize="16sp" />
 
-    <include layout="@layout/content_recyclerview"/>
-
+    <include layout = "@layout/content_recyclerview" />
 </LinearLayout>

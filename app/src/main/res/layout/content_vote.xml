@@ -12,18 +12,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom = "20dp"
         android:background="@drawable/shape_border_shadow"
         android:elevation="4dp"
         android:orientation="vertical"
-
         android:paddingLeft="22dp"
-        android:paddingRight="22dp"
         android:paddingTop="28dp"
-        android:paddingBottom="22dp"
-
-        android:layout_marginBottom="20dp"
-        >
-
+        android:paddingRight = "22dp"
+        android:paddingBottom = "22dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,27 +29,23 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_category"
-                android:contentDescription="@string/descript_category" />
-                />
+                android:contentDescription = "@string/descript_category"
+                app:srcCompat = "@drawable/ic_category" />
         <TextView
             android:id="@+id/tv_chat_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="기획"
             android:layout_marginStart="6dp"
-            />
+            tools:text = "기획" />
         </LinearLayout>
-
 
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginTop="18dp"
+            android:layout_marginBottom = "16dp"
             android:lineSpacingExtra="7sp"
-
             android:textSize="16sp"
             tools:text="저희 그날 강의실 대여가 안된다고 하는데 다들 주위 스터디룸 'ㅇㅇㅇ'에서 진행하는거 괜찮으신가요??
 다들 괜찮으신지 응답부탁드려요!" />
@@ -62,16 +54,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="bottom"
-
-            android:paddingTop="22dp"
-            >
+            android:orientation = "horizontal"
+            android:paddingTop = "22dp">
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/iv_profile"
                 android:layout_width="40dp"
-
                 android:layout_height="40dp"
                 android:src="@drawable/icon_profile_default"
                 app:civ_border_width="0dp" />
@@ -98,41 +87,32 @@
                     android:lineSpacingExtra="7sp"
                     android:textSize="12sp"
                     tools:text="3월 13일 13:00" />
-
-
             </LinearLayout>
-
         <TextView
             android:id="@+id/tv_end_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="5sp"
             android:gravity="end"
-
+            android:lineSpacingExtra = "5sp"
             android:textSize="14sp"
             tools:text="투표마감 : 3월 15일 13:00" />
         </LinearLayout>
-
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layout_result"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background = "@color/white"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility = "gone">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="63dp"
@@ -142,7 +122,6 @@
                 android:weightSum="3">
 
                 <TextView
-
                     android:id="@+id/btn_by_choice"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -151,12 +130,10 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-
-                    android:textStyle="bold"
                     android:text="@string/tab_by_choice"
                     android:textColor="@drawable/select_text_press"
-                    android:textSize="16sp" />
-
+                    android:textSize = "16sp"
+                    android:textStyle = "bold" />
 
                 <View
                     android:layout_width="1dp"
@@ -164,17 +141,15 @@
                     android:background="@color/gray" />
 
                 <TextView
-
                     android:id="@+id/btn_by_member"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_press_dark"
+                    android:clickable = "true"
+                    android:focusable = "true"
                     android:gravity="center"
                     android:text="@string/tab_by_member"
-
-                    android:clickable="true"
-                    android:focusable="true"
                     android:textColor="@drawable/select_text_press"
                     android:textSize="16sp" />
 
@@ -184,20 +159,17 @@
                     android:background="@color/gray" />
 
                 <TextView
-
                     android:id="@+id/btn_by_not_voted"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_press_dark"
-                    android:gravity="center"
-                    android:text="@string/tab_by_not_voted"
-
                     android:clickable="true"
                     android:focusable="true"
+                    android:gravity = "center"
+                    android:text = "@string/tab_by_not_voted"
                     android:textColor="@drawable/select_text_press"
                     android:textSize="16sp" />
-
             </LinearLayout>
 
             <View
@@ -211,41 +183,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginTop = "8dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-
-
             android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/layout_send_noti"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/shape_press_dark"
             android:layout_centerVertical="true"
+            android:background = "@drawable/shape_press_dark"
+            android:clickable = "true"
             android:focusable="true"
-            android:clickable="true"
-            android:visibility="gone"
-            >
+            android:gravity = "center_vertical"
+            android:orientation = "horizontal"
+            android:visibility = "gone">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_notifications"
-                />
+                app:srcCompat = "@drawable/ic_notifications" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:lineSpacingExtra="7sp"
                 android:layout_marginStart="10dp"
+                android:lineSpacingExtra = "7sp"
                 android:text="@string/action_send_notification"
-                />
-
-
+                android:textSize = "16sp" />
         </LinearLayout>
 
             <TextView
@@ -254,32 +219,30 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:textColor="@drawable/select_text_press"
                 android:clickable="true"
                 android:focusable="true"
+                android:textColor = "@drawable/select_text_press"
                 android:textStyle="bold"
-                tools:text="피자먹고싶어요"
-
-                />
+                tools:text = "피자먹고싶어요" />
 
         </RelativeLayout>
 
-        <include layout="@layout/content_recyclerview"
+        <include
+            layout = "@layout/content_recyclerview"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="7dp"
-            android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_marginEnd = "24dp"
+            android:overScrollMode = "never" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_choices"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background = "@color/white"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -287,12 +250,12 @@
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
             android:layout_gravity="end"
-            android:textColor="@drawable/select_text_press"
+            android:layout_marginStart = "8dp"
+            android:layout_marginBottom = "8dp"
             android:clickable="true"
             android:focusable="true"
+            android:textColor = "@drawable/select_text_press"
             android:textStyle="bold"
             tools:text="5명 참여중" />
 
@@ -313,10 +276,7 @@
             android:text="@string/action_complete"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:theme="@style/FlatButton"
-            android:textStyle="bold" />
-
+            android:textStyle = "bold"
+            android:theme = "@style/FlatButton" />
     </LinearLayout>
-
-
 </LinearLayout>
