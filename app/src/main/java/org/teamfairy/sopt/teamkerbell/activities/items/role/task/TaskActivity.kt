@@ -42,7 +42,6 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK_RESPONSE
 
-
 class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
@@ -51,23 +50,19 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-
     var group: Team by Delegates.notNull()
     var role: Role by Delegates.notNull()
     var roleTask: RoleTask by Delegates.notNull()
     var room: Room by Delegates.notNull()
 
-
     private var chkUser = HashMap<Int, Boolean>()
-    private var adapterUser: UserListAdapter  by Delegates.notNull()
+    private var adapterUser: UserListAdapter by Delegates.notNull()
     private var dataListUser = ArrayList<User>()
 
     private var isMaster = false
 
-
     var dataListResponse = ArrayList<TaskResponse>()
     var adapter: ResponseListAdapter by Delegates.notNull()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,16 +79,12 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         supportActionBar!!.title = role.title
 
-
-
         tv_chat_name.text = room.real_name
 
         tv_task_name.text = roleTask.content
 
         tv_name.text = ("작성자 : ${role.name}")
         tv_time.text = role.getTime()
-
-
 
         getTakeUserArray()
 
@@ -103,7 +94,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         setResponseList()
 
-        if(isMaster) {
+        if (isMaster) {
             MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
             tv_chat_name.text = ("${tv_chat_name.text}(마스터)")
         }
@@ -124,27 +115,23 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         } else
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_add))
 
-
-
         btn_back.setOnClickListener {
             onBackPressed()
         }
         fab.setOnClickListener {
 
-            if(roleTask.userIdArray.contains(LoginToken.getUserIdx(applicationContext))) {
+            if (roleTask.userIdArray.contains(LoginToken.getUserIdx(applicationContext))) {
                 val i = Intent(applicationContext, MakeTaskResponseActivity::class.java)
                 i.putExtra(IntentTag.INTENT_TASK, roleTask)
                 startActivity(i)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-            }else{
-                Toast.makeText(applicationContext,"맡은일에 최선을 다하자",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "맡은일에 최선을 다하자", Toast.LENGTH_SHORT).show()
             }
         }
 
-
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
     }
 
     private fun setResponseList() {
@@ -154,12 +141,11 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.layoutManager = linearLayoutManager
         adapter = ResponseListAdapter(dataListResponse, HandlerClick(this), this)
         recyclerView.adapter = adapter
-
     }
 
     private fun showUserDialog() {
 
-        val dialog = SelectUserDialog(this, room,roleTask.userIdArray)
+        val dialog = SelectUserDialog(this, room, roleTask.userIdArray)
         dialog.show()
 
         dialog.setOnClickListener(View.OnClickListener { p0 ->
@@ -175,7 +161,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                             minusArray.put(it.u_idx)
                     }
 
-                    connectUpdateUser(plusArray,minusArray)
+                    connectUpdateUser(plusArray, minusArray)
                     dialog.dismiss()
                 }
             }
@@ -191,8 +177,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-
-    private fun connectUpdateUser(plusArrayJson : JSONArray, minusArrayJson : JSONArray) {
+    private fun connectUpdateUser(plusArrayJson: JSONArray, minusArrayJson: JSONArray) {
         val task = GetMessageTask(applicationContext, HandlerUpdateUser(this), LoginToken.getToken(applicationContext))
 
         val jsonParam = JSONObject()
@@ -200,8 +185,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_TASK_IDX, roleTask.task_idx)
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_PLUS_ARRAY, plusArrayJson)
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
-        task.execute(USGS_REQUEST_URL.URL_ROLE_USER,METHOD_PUT, jsonParam.toString())
-
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER, METHOD_PUT, jsonParam.toString())
     }
 
     fun getUserArrayFromJson(str: String) {
@@ -209,7 +193,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         chkUser.clear()
 
         val jsonArray = JSONArray(str)
-        roleTask.userIdArray= IntArray(jsonArray.length())
+        roleTask.userIdArray = IntArray(jsonArray.length())
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         for (i in 0 until jsonArray.length()) {
             val uIdx = jsonArray.get(i).toString().toInt()
@@ -217,10 +201,9 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     ?: UserR()
             dataListUser.add(user.toUser())
             chkUser[user.u_idx] = true
-            roleTask.userIdArray[i]=uIdx
+            roleTask.userIdArray[i] = uIdx
         }
         realm.close()
-
 
         if (chkUser[LoginToken.getUserIdx(applicationContext)] == true) {
             btn_take_role.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_exclude_member))
@@ -229,16 +212,12 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         adapterUser.notifyDataSetChanged()
-
     }
-
 
     override fun onResume() {
         super.onResume()
         connectResponseList()
     }
-
-
 
     private fun connectUpdateUser(status: Int) {
         val task = GetMessageTask(applicationContext, HandlerUpdateUser(this), LoginToken.getToken(applicationContext))
@@ -260,10 +239,8 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_MINUS_ARRAY, minusArrayJson)
                 }
             }
-
         } else jsonParam.put(USGS_REQUEST_URL.URL_ROLE_USER_PARAM_ROLE_STATUS, status)
-        task.execute(USGS_REQUEST_URL.URL_ROLE_USER,METHOD_PUT, jsonParam.toString())
-
+        task.execute(USGS_REQUEST_URL.URL_ROLE_USER, METHOD_PUT, jsonParam.toString())
     }
 
     private class HandlerUpdateUser(activity: TaskActivity) : Handler() {
@@ -316,7 +293,6 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-
     private class HandlerClick(activity: TaskActivity) : Handler() {
         private val mActivity: WeakReference<TaskActivity> = WeakReference<TaskActivity>(activity)
 
@@ -331,10 +307,7 @@ class TaskActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 intent.putExtra(INTENT_ROLE, activity.role)
                 intent.putExtra(INTENT_ROOM, activity.room)
                 activity.startActivity(intent)
-
             }
         }
     }
-
-
 }

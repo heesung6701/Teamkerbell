@@ -19,7 +19,7 @@ open class VoteR() : RealmObject() {
     var room_idx: Int? = null
     var title: String? = null
     var status: Int? = null
-    var g_idx : Int?=null
+    var g_idx: Int? = null
 
     fun toVote(realm: Realm): Vote {
         val userR = realm.where(UserR::class.java).equalTo(User.ARG_U_IDX, u_idx).findFirst() ?: UserR()
@@ -28,6 +28,4 @@ open class VoteR() : RealmObject() {
         vote.photo = userR.photo
         return vote
     }
-
-
 }

@@ -13,11 +13,9 @@ import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ENTIRE_STATUS
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_G_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_NOTICE
@@ -55,7 +53,6 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                 if (message.contains("Success")) {
                     val dataJson: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
 
-
                     val datasNotice: JSONArray = dataJson.getJSONArray(JSON_NOTICES)
                     val noticeList = ArrayList<Notice>()
 
@@ -92,10 +89,8 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
                         signalList.add(signal)
                     }
 
-
                     val datasVote: JSONArray = dataJson.getJSONArray(JSON_VOTES)
                     val voteList = ArrayList<Vote>()
-
 
                     for (j in 0 until datasVote.length()) {
                         val data = datasVote.getJSONObject(j)
@@ -131,7 +126,6 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
         extractFeatureFromJson(result!!)
@@ -146,6 +140,5 @@ class UnperformedTask(context: Context, var handler: Handler, token: String?) : 
         data.putString("message", message)
         msg.data = data
         handler.sendMessage(msg)
-
     }
 }

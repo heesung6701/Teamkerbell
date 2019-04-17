@@ -14,8 +14,8 @@ class CurrentGroup {
 
         private var team: Team? = null
 
-        fun setGroup(group: Team){
-            this.team= group
+        fun setGroup(group: Team) {
+            this.team = group
         }
         fun getGroup(context: Context): Team {
             if (team == null) getPref(context)
@@ -30,16 +30,14 @@ class CurrentGroup {
                     pref.getString(Team.ARG_REAL_NAME, "그룹0"),
                     pref.getString(Team.ARG_CTRL_NAME, null),
                     pref.getString(Team.ARG_PHOTO, null),
-                    pref.getInt(Team.ARG_DEFAULT_ROOM_IDX,-1))
+                    pref.getInt(Team.ARG_DEFAULT_ROOM_IDX, -1))
 
             team = g
-
         }
 
         fun setPref(context: Context, group: Team) {
             Companion.team = group
             setPref(context)
-
         }
 
         private fun setPref(context: Context) {
@@ -56,7 +54,6 @@ class CurrentGroup {
             pref.putString(Team.ARG_PHOTO, g.photo)
 
             pref.apply()
-
         }
     }
 }

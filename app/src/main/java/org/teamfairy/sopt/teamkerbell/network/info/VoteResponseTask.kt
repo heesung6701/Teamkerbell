@@ -64,7 +64,6 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
                         )
                     }
 
-
                     if (baseJsonResponse.has(JSON_CHOICE)) {
                         val examplesArray: JSONArray = baseJsonResponse.getJSONArray(JSON_CHOICE)
                         for (i in 0 until examplesArray.length()) {
@@ -81,7 +80,6 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
                     for (i in 0 until responseArray.length()) {
                         val data: JSONObject = responseArray.getJSONObject(i)
 
-
                         val uIdx = data.getInt(JSON_U_IDX)
                         var value = -1
                         if (data.has(JSON_VALUE) && data.get(JSON_VALUE) is Int)
@@ -89,7 +87,7 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
                         responses[uIdx] = value
                     }
 
-                    msgCode= MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                     return VoteResponse(vote, choices, responses)
                 } else {
 //                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -102,20 +100,17 @@ class VoteResponseTask(context: Context, var handler: Handler, token: String?) :
         }
 
         return null
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
 
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
 
         val data = Bundle()

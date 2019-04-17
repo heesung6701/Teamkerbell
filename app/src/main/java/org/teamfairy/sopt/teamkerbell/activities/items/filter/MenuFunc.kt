@@ -17,13 +17,11 @@ import kotlin.properties.Delegates
  */
 class MenuFunc(activity: Activity, mode: MENU_OPT) {
 
-
     enum class MENU_OPT {
         EDIT_ONLY, DELETE_ONLY, SHOW_ALL
     }
 
-    constructor(activity: Activity): this(activity, MENU_OPT.SHOW_ALL)
-
+    constructor(activity: Activity) : this(activity, MENU_OPT.SHOW_ALL)
 
     private var btnMenu: ImageButton by Delegates.notNull()
     private var menuLayout: LinearLayout by Delegates.notNull()
@@ -39,11 +37,11 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
             menuEdit = activity.findViewById(R.id.tv_menu_edit)
             menuDelete = activity.findViewById(R.id.tv_menu_delete)
 
-            btnMenu=activity.findViewById(R.id.btn_more)
-            btnMenu.visibility=View.VISIBLE
+            btnMenu = activity.findViewById(R.id.btn_more)
+            btnMenu.visibility = View.VISIBLE
 
-            when(mode){
-                MENU_OPT.DELETE_ONLY->{
+            when (mode) {
+                MENU_OPT.DELETE_ONLY -> {
                     btnMenu.setImageDrawable(ContextCompat.getDrawable(activity.applicationContext, R.drawable.ic_delete))
                     btnMenu.setOnClickListener {
                         (activity as MenuActionInterface).menuDelete()
@@ -51,7 +49,7 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
                     }
 //                    setDelete(activity)
                 }
-                MENU_OPT.EDIT_ONLY->{
+                MENU_OPT.EDIT_ONLY -> {
                     btnMenu.setImageDrawable(ContextCompat.getDrawable(activity.applicationContext, R.drawable.ic_edit))
                     btnMenu.setOnClickListener {
                         (activity as MenuActionInterface).menuEdit()
@@ -59,7 +57,7 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
                     }
 //                    setEdit(activity)
                 }
-                MENU_OPT.SHOW_ALL->{
+                MENU_OPT.SHOW_ALL -> {
                     setDelete(activity)
                     setEdit(activity)
                     btnMenu.setOnClickListener {
@@ -70,26 +68,21 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
                     }
                 }
             }
-
-
-
         }
     }
 
-    private  fun setEdit(activity: Activity){
-        menuEdit.visibility= View.VISIBLE
+    private fun setEdit(activity: Activity) {
+        menuEdit.visibility = View.VISIBLE
         menuEdit.setOnClickListener {
             (activity as MenuActionInterface).menuEdit()
             closeMenu(activity.applicationContext)
         }
-
     }
-    private  fun setDelete(activity: Activity){
-        menuDelete.visibility=View.VISIBLE
+    private fun setDelete(activity: Activity) {
+        menuDelete.visibility = View.VISIBLE
         menuDelete.setOnClickListener {
             (activity as MenuActionInterface).menuDelete()
             closeMenu(activity.applicationContext)
-
         }
     }
 
@@ -102,7 +95,4 @@ class MenuFunc(activity: Activity, mode: MENU_OPT) {
         btnMenu.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
         menuLayout.visibility = View.GONE
     }
-
-
-
 }

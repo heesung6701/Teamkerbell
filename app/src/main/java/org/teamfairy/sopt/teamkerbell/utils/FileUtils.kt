@@ -1,6 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.utils
 
-
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
@@ -21,7 +20,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
-
 /**
  * Created by lumiere on 2018-01-01.
  */
@@ -29,13 +27,10 @@ class FileUtils {
     companion object {
         private val LOG_TAG = this::class.java.simpleName
 
-
         val PATH_FILE_DOWNLOAD = "Teamkerbell"
-
 
         val SELECT_FILE = 11
         val SELECT_IMAGE = 10
-
 
         val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE = 123
         val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE = 124
@@ -50,7 +45,6 @@ class FileUtils {
             return rotateBitmap(bitmap, exifDegree)
         }
 
-
         private fun exifOrientationToDegrees(exifOrientation: Int): Int {
             when (exifOrientation) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> return 90
@@ -63,17 +57,17 @@ class FileUtils {
         private fun rotateBitmap(bitmap: Bitmap, degrees: Int): Bitmap {
             var bitmapRotated: Bitmap = bitmap
             if (degrees != 0) {
-                val m: Matrix = Matrix();
+                val m: Matrix = Matrix()
 
                 m.setRotate(degrees.toFloat(), bitmap.width.toFloat() * 0.5f,
-                        bitmap.height.toFloat() * 0.5f);
+                        bitmap.height.toFloat() * 0.5f)
 
                 try {
                     val converted: Bitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            bitmap.width, bitmap.height, m, true);
+                            bitmap.width, bitmap.height, m, true)
                     if (bitmap != converted) {
-                        bitmap.recycle();
-                        bitmapRotated = converted;
+                        bitmap.recycle()
+                        bitmapRotated = converted
                     }
                 } catch (ex: OutOfMemoryError) {
                     bitmapRotated = bitmap
@@ -81,7 +75,6 @@ class FileUtils {
             }
             return bitmapRotated
         }
-
 
         fun getRealPathFromURI(contentURI: Uri, contentResolver: ContentResolver): String {
             val result: String
@@ -106,7 +99,6 @@ class FileUtils {
         private fun compressImage(bitmapOrig: Bitmap): ByteArrayOutputStream {
 
             val bitmap: Bitmap = bitmapOrig
-
 
             val baos = ByteArrayOutputStream()
 
@@ -139,21 +131,21 @@ class FileUtils {
 
             val bitmapRotated = checkExinterface(imagePath, bitmapCompressed)
 
-            if(imageView!=null)
+            if (imageView != null)
                 setImageView(bitmapRotated, imageView)
             val isBm = ByteArrayInputStream(bitmapToByteArray(bitmapRotated).toByteArray())
 
-            val folder = File(Environment.getExternalStorageDirectory(),  PATH_FILE_DOWNLOAD)
+            val folder = File(Environment.getExternalStorageDirectory(), PATH_FILE_DOWNLOAD)
             if (!folder.exists() || !folder.isDirectory)
                 folder.mkdir()
 
-            val fileNew = File(folder.absolutePath + File.separator +  name)
+            val fileNew = File(folder.absolutePath + File.separator + name)
             if (!fileNew.exists())
                 fileNew.createNewFile()
 
             Log.d("$LOG_TAG/file", fileNew.path)
 
-            val os = FileOutputStream(fileNew);
+            val os = FileOutputStream(fileNew)
 
             var read: Int
             val bytes = ByteArray(1024)
@@ -161,7 +153,7 @@ class FileUtils {
             while (true) {
                 read = isBm.read(bytes)
                 if (read == -1) break
-                os.write(bytes, 0, read);
+                os.write(bytes, 0, read)
             }
             os.flush()
             os.close()
@@ -178,7 +170,6 @@ class FileUtils {
             }
         }
 
-
         private fun resizeBitmap(imagePath: String): Bitmap {
 
             val options = BitmapFactory.Options()
@@ -193,11 +184,13 @@ class FileUtils {
             options.inJustDecodeBounds = false
 
             return BitmapFactory.decodeFile(imagePath, options)
-
         }
 
         private fun calculateInSampleSize(
-                bitmap: Bitmap, reqWidth: Int, reqHeight: Int): Int {
+            bitmap: Bitmap,
+            reqWidth: Int,
+            reqHeight: Int
+        ): Int {
             // Raw height and width of image
             val height = bitmap.height
             val width = bitmap.width
@@ -205,20 +198,19 @@ class FileUtils {
 
             if (height > reqHeight || width > reqWidth) {
 
-                val halfHeight = height / 2;
-                val halfWidth = width / 2;
+                val halfHeight = height / 2
+                val halfWidth = width / 2
 
                 // Calculate the largest inSampleSize value that is a power of 2 and keeps both
                 // height and width larger than the requested height and width.
-                while ((halfHeight / inSampleSize) >= reqHeight
-                        && (halfWidth / inSampleSize) >= reqWidth) {
-                    inSampleSize *= 2;
+                while ((halfHeight / inSampleSize) >= reqHeight &&
+                        (halfWidth / inSampleSize) >= reqWidth) {
+                    inSampleSize *= 2
                 }
             }
 
-            return inSampleSize;
+            return inSampleSize
         }
-
 
         fun convertDpToPixel(dp: Float, context: Context): Float {
             val resources = context.resources
@@ -226,13 +218,10 @@ class FileUtils {
             return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
 
-
         fun convertPixelsToDp(px: Float, context: Context): Float {
             val resources = context.resources
             val metrics = resources.displayMetrics
             return px / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
-
     }
-
 }

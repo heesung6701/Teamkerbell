@@ -7,13 +7,13 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 data class Pick(
-        var u_idx: Int,
-        var chat_idx: Int?,
-        var write_time: String,
-        var content: String?,
-        var g_idx: Int,
-        var room_idx: Int
-) : RoomInfoInterface(){
+    var u_idx: Int,
+    var chat_idx: Int?,
+    var write_time: String,
+    var content: String?,
+    var g_idx: Int,
+    var room_idx: Int
+) : RoomInfoInterface() {
 
     fun getMainTitle(): String {
         return content!!
@@ -21,5 +21,4 @@ data class Pick(
     fun getTime(): String {
         return Utils.getMonthDayTime(write_time)
     }
-
 }

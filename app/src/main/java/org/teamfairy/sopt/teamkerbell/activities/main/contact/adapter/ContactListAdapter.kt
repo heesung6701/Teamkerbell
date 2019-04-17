@@ -9,14 +9,11 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.contact.viewholder.ContactViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.User
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
 class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) : RecyclerView.Adapter<ContactViewHolder>() {
-
 
     private var onClickListener: View.OnClickListener? = null
 
@@ -31,7 +28,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         holder.tvEmail.text = user.id
         holder.tvPhone.text = user.phone
 
-        if(NetworkUtils.getBitmapList(user.photo, holder.ivProfile,mContext, "user${user.u_idx}"))
+        if (NetworkUtils.getBitmapList(user.photo, holder.ivProfile, mContext, "user${user.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
         holder.layoutEmail.setOnClickListener {
@@ -50,9 +47,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
             else
                 holder.layoutContactInfo.visibility = View.VISIBLE
         }
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -68,7 +63,7 @@ class ContactListAdapter(var dataList: ArrayList<User>, var mContext: Context) :
         return position.toLong()
     }
 
-    override fun getItemCount(): Int = dataList.size;
+    override fun getItemCount(): Int = dataList.size
 
     abstract class OnLongClickListenerByPosition(var position: Int) : View.OnLongClickListener
 }

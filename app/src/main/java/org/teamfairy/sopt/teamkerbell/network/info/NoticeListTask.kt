@@ -10,7 +10,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
@@ -31,7 +30,7 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-    fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Notice>?{
+    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Notice>? {
 
         message = "No Message"
         val datas = ArrayList<Notice>()
@@ -47,7 +46,6 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
                     for (i in 0 until dataArray.length()) {
                         val data: JSONObject = dataArray.getJSONObject(i)
 
-
                         val obj = Notice()
 
                         obj.u_idx = data.getInt(JSON_U_IDX)
@@ -55,11 +53,11 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
                         obj.content = data.getString(JSON_CONTENT)
                         obj.room_idx = data.getInt(JSON_ROOM_IDX)
                         obj.notice_idx = data.getInt(JSON_NOTICE_IDX)
-                        obj.status=data.getInt(JSON_RESPONSE_STATUS)
+                        obj.status = data.getInt(JSON_RESPONSE_STATUS)
 
                         datas.add(obj)
                     }
-                    msgCode= MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                     return datas
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -69,21 +67,19 @@ class NoticeListTask(context: Context, var handler: Handler, token: String?) : N
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-        }finally {
+        } finally {
         }
         return null
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
         val obj = extractFeatureFromJson(result!!)
 
-
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
 
         val data = Bundle()

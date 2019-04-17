@@ -3,13 +3,12 @@ package org.teamfairy.sopt.teamkerbell.listview.adapter
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder
+import org.teamfairy.sopt.teamkerbell.listview.viewholder.UserViewHolder
 import kotlinx.android.synthetic.main.li_user_chk.view.*
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.list.UserCheckData
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.data.User
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 
 /**
  * Created by lumiere on 2017-12-30.
@@ -22,7 +21,7 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
         mOnClick = l
     }
 
-    private  var isCheckable: Boolean = true
+    private var isCheckable: Boolean = true
     override fun onBindViewHolder(holder: UserViewHolder, pos: Int) {
         val position = holder.adapterPosition
         holder.itemView.visibility = View.VISIBLE
@@ -55,19 +54,14 @@ class UserListAdapter(var dataList: ArrayList<User>, var mContext: Context) : Re
             mainView.li_user_chk.visibility = View.VISIBLE
         } else {
             mainView = LayoutInflater.from(parent.context).inflate(R.layout.li_user, parent, false)
-            isCheckable=false
+            isCheckable = false
         }
-        if(mOnClick!=null)
+        if (mOnClick != null)
             mainView.setOnClickListener(mOnClick)
         viewHolder = UserViewHolder(mainView)
 
         return viewHolder
-
-
     }
 
-
     override fun getItemCount(): Int = dataList.size
-
-
 }

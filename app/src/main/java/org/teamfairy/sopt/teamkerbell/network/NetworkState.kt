@@ -8,12 +8,9 @@ import android.net.ConnectivityManager
  */
 object NetworkState {
 
-
-
     private const val WIFE_STATE = "WIFE"
     private const val MOBILE_STATE = "MOBILE"
     const val NONE_STATE = "NONE"
-
 
     fun getWhatKindOfNetwork(context: Context): String {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -27,6 +24,4 @@ object NetworkState {
         }
         return NONE_STATE
     }
-
-
 }

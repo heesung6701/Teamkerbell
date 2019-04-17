@@ -9,35 +9,29 @@ import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.ResponseV
 import org.teamfairy.sopt.teamkerbell.model.data.TaskResponse
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 
-
 /**
  * Created by lumiere on 2017-12-30.
  */
 class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHandler: Handler, var mContext: Context) : RecyclerView.Adapter<ResponseViewHolder>() {
 
-
     override fun onBindViewHolder(holder: ResponseViewHolder, position: Int) {
         val taskResponse = dataList[position]
-        holder.tvName.text=taskResponse.name
-        holder.tvDetail.text=taskResponse.write_time
+        holder.tvName.text = taskResponse.name
+        holder.tvDetail.text = taskResponse.write_time
 
-        if(taskResponse.fileArray.isNotEmpty()) {
-            holder.tvFileName.text=  (taskResponse.fileArray[0].substringAfterLast('/') + if(taskResponse.fileArray.size>1) "+${taskResponse.fileArray.size-1}" else "")
+        if (taskResponse.fileArray.isNotEmpty()) {
+            holder.tvFileName.text = (taskResponse.fileArray[0].substringAfterLast('/') + if (taskResponse.fileArray.size> 1) "+${taskResponse.fileArray.size - 1}" else "")
             holder.layoutFile.visibility = View.VISIBLE
-        }
-        else {
+        } else {
             holder.tvFileName.text = mContext.getString(R.string.txt_no_file)
 //            holder.layoutFile.visibility = View.GONE
         }
-        holder.tvContent.text=taskResponse.content
+        holder.tvContent.text = taskResponse.content
         holder.tvCommentC.text = if (taskResponse.count != 0) taskResponse.count.toString() else ""
 
         if (NetworkUtils.getBitmapList(taskResponse.photo, holder.ivProfile, mContext, "user${ taskResponse.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
-
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -52,7 +46,5 @@ class ResponseListAdapter(var dataList: ArrayList<TaskResponse>, var onClickHand
         return ResponseViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

@@ -11,18 +11,13 @@ import org.teamfairy.sopt.teamkerbell.viewholder.TeamViewHolder
 /**
  * Created by lumiere on 2017-12-30.
  */
-class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class TeamListAdapter(var dataList: ArrayList<HashMap<String, String>>, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onLongClickHandler: Handler? = null
 
     fun setOnLongClickHandler(I: Handler) {
         onLongClickHandler = I
     }
-
-
-
-
 
     companion object {
          const val TYPE_ITEM = 1
@@ -31,14 +26,13 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, pos: Int) {
         val position = holder.adapterPosition
-        when(getItemViewType(position)){
-            TYPE_FOOT->{
-
+        when (getItemViewType(position)) {
+            TYPE_FOOT -> {
             }
-            else->{ // TYPE_ITEM
+            else -> { // TYPE_ITEM
                 val h = holder as TeamViewHolder
-                h.tvName.text= dataList[position]["name"]
-                h.tvCount.text= dataList[position]["cnt"]
+                h.tvName.text = dataList[position]["name"]
+                h.tvCount.text = dataList[position]["cnt"]
 
                 h.itemView.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
                     override fun onLongClick(p0: View?): Boolean {
@@ -48,7 +42,6 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
                 })
             }
         }
-
     }
 
     fun sendMessage(position: Int) {
@@ -62,17 +55,15 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
         return if (position == dataList.lastIndex) TYPE_FOOT else TYPE_ITEM
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return when(viewType){
-            TYPE_FOOT->{
+        return when (viewType) {
+            TYPE_FOOT -> {
                 val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_team_add, parent, false)
                 mainView.setOnClickListener(mOnClickListener)
                 EmptyViewHolder(mainView)
             }
-            else->{ //TYPE_ITEM
+            else -> { // TYPE_ITEM
                 val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_team, parent, false)
                 mainView.setOnClickListener(mOnClickListener)
                 TeamViewHolder(mainView)
@@ -80,10 +71,7 @@ class TeamListAdapter(var dataList: ArrayList<HashMap<String,String>>,var mOnCli
         }
     }
 
-
     override fun getItemCount(): Int = dataList.size
-
-
 
     abstract class OnLongClickListenerByPosition(var position: Int) : View.OnLongClickListener
 }

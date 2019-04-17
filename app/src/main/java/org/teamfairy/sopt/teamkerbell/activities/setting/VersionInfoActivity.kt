@@ -16,7 +16,5 @@ class VersionInfoActivity : AppCompatActivity() {
         btn_back.setOnClickListener {
             onBackPressed()
         }
-
     }
-
 }

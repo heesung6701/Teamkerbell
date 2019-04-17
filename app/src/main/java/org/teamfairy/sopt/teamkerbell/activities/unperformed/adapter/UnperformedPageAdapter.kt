@@ -21,18 +21,16 @@ class UnperformedPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(f
     var signalTab: UnperformedFragment by Delegates.notNull()
     var voteTab: UnperformedFragment by Delegates.notNull()
 
-
     init {
         this.noticeTab = UnperformedFragment()
-        noticeTab.type= Utils.TAB_UNPERFORMED_NOTICE
+        noticeTab.type = Utils.TAB_UNPERFORMED_NOTICE
 
         this.signalTab = UnperformedFragment()
-        signalTab.type= Utils.TAB_UNPERFORMED_SIGNAL
+        signalTab.type = Utils.TAB_UNPERFORMED_SIGNAL
 
         this.voteTab = UnperformedFragment()
-        voteTab.type=Utils.TAB_UNPERFORMED_VOTE
+        voteTab.type = Utils.TAB_UNPERFORMED_VOTE
     }
-
 
     override fun getItem(position: Int): Fragment? {
         return when (position) {
@@ -41,25 +39,23 @@ class UnperformedPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(f
             Utils.TAB_UNPERFORMED_VOTE -> voteTab
             else -> null
         }
-
     }
 
     override fun getCount(): Int = tabCount
 
-    fun updateList(result : HashMap<String,ArrayList<*>>){
-        if(result.containsKey(USGS_REQUEST_URL.JSON_NOTICE)) {
+    fun updateList(result: HashMap<String, ArrayList<*>>) {
+        if (result.containsKey(USGS_REQUEST_URL.JSON_NOTICE)) {
             val noticeList = result[USGS_REQUEST_URL.JSON_NOTICE] as ArrayList<Notice>
             noticeTab.updateDataList(noticeList as ArrayList<*>)
         }
-        if(result.containsKey(USGS_REQUEST_URL.JSON_VOTES)) {
-            val voteList= result[USGS_REQUEST_URL.JSON_VOTES] as ArrayList<Vote>
+        if (result.containsKey(USGS_REQUEST_URL.JSON_VOTES)) {
+            val voteList = result[USGS_REQUEST_URL.JSON_VOTES] as ArrayList<Vote>
             voteTab.updateDataList(voteList as ArrayList<*>)
         }
 
-        if(result.containsKey(USGS_REQUEST_URL.JSON_SIGNALS)) {
-            val signalList  = result[USGS_REQUEST_URL.JSON_SIGNALS] as ArrayList<Signal>
+        if (result.containsKey(USGS_REQUEST_URL.JSON_SIGNALS)) {
+            val signalList = result[USGS_REQUEST_URL.JSON_SIGNALS] as ArrayList<Signal>
             signalTab.updateDataList(signalList as ArrayList<*>)
         }
-
     }
 }

@@ -8,17 +8,14 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.TaskListViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.RoleTask
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
-class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) : RecyclerView.Adapter<TaskListViewHolder>() {
-
+class TaskListAdapter(var dataList: ArrayList<RoleTask>, var mContext: Context) : RecyclerView.Adapter<TaskListViewHolder>() {
 
     companion object {
-        private  const  val MAX_PROFILE = 5
+        private const val MAX_PROFILE = 5
     }
     private var mOnClick: View.OnClickListener? = null
 
@@ -26,17 +23,15 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
         mOnClick = l
     }
 
-
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
 
         holder.tvContent.text = dataList[position].content
-
 
             var length = dataList.get(position).userIdArray.size
 
             if (length > MAX_PROFILE) {
                 holder.profileC.visibility = View.VISIBLE
-                holder.tvProfileC.text = ("""+${(length - MAX_PROFILE).toString()}""")
+                holder.tvProfileC.text = ("""+${(length - MAX_PROFILE)}""")
                 length = MAX_PROFILE
             } else {
                 holder.profileC.visibility = View.GONE
@@ -54,7 +49,6 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
             }
     }
 
-
     override fun getItemViewType(position: Int): Int {
         return position
     }
@@ -67,7 +61,5 @@ class TaskListAdapter(var dataList: ArrayList<RoleTask>,var mContext : Context) 
         return TaskListViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

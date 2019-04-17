@@ -7,10 +7,8 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.ChoiceListViewHolder
-import org.teamfairy.sopt.teamkerbell.viewholder.UserViewHolder
-
+import org.teamfairy.sopt.teamkerbell.listview.viewholder.UserViewHolder
 
 /**
  * Created by lumiere on 2017-12-30.
@@ -21,20 +19,17 @@ class ResultByChoiceListAdapter(var dataList: ArrayList<HashMap<String, String>>
         when (dataList[position]["type"]) {
             "header" -> {
                 val h = holder as ChoiceListViewHolder
-                h.tvCount.text=dataList[position]["count"]
-                h.tvContent.text=dataList[position]["content"]
+                h.tvCount.text = dataList[position]["count"]
+                h.tvContent.text = dataList[position]["content"]
             }
             else -> {
                 val h = holder as UserViewHolder
-                h.tvName.text=dataList[position]["name"]
-                if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext,"user${dataList[position][JSON_U_IDX]}"))
+                h.tvName.text = dataList[position]["name"]
+                if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext, "user${dataList[position][JSON_U_IDX]}"))
                     holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
-
             }
         }
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -51,10 +46,7 @@ class ResultByChoiceListAdapter(var dataList: ArrayList<HashMap<String, String>>
                 UserViewHolder(mainView)
             }
         }
-
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

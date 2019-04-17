@@ -35,7 +35,6 @@ import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import kotlin.properties.Delegates
 
-
 class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
     val TAG = this::class.java.simpleName
@@ -44,23 +43,22 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     private var dataListGroup = ArrayList<GroupInterface>()
     private var recyclerView: RecyclerView by Delegates.notNull()
 
-
     override var group: Team by Delegates.notNull()
-
 
     private var ivDropDown: ImageView by Delegates.notNull()
     private var tvTeamName: TextView by Delegates.notNull()
     var tvCount: TextView by Delegates.notNull()
 
+    private var badgeNotice: TextView by Delegates.notNull()
+    private var badgeSignal: TextView by Delegates.notNull()
+    private var badgeVote: TextView by Delegates.notNull()
+    private var badgeRole: TextView by Delegates.notNull()
 
-    private var badgeNotice : TextView by Delegates.notNull()
-    private var badgeSignal : TextView by Delegates.notNull()
-    private var badgeVote : TextView by Delegates.notNull()
-    private var badgeRole : TextView by Delegates.notNull()
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_home, container, false)
         tvTeamName = v.findViewById(R.id.tv_teamName)
@@ -69,19 +67,18 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         showGroupInfo()
 
-        badgeNotice=v.tv_notice_sign
-        badgeSignal=v.tv_signal_sign
-        badgeVote=v.tv_vote_sign
-        badgeRole=v.tv_role_sign
+        badgeNotice = v.tv_notice_sign
+        badgeSignal = v.tv_signal_sign
+        badgeVote = v.tv_vote_sign
+        badgeRole = v.tv_role_sign
 
         v.btn_notice.setOnClickListener { _ ->
             activity?.let {
-                BadgeCnt.clear(it.applicationContext,BadgeCnt.WHAT_NOTICE,group.g_idx)
+                BadgeCnt.clear(it.applicationContext, BadgeCnt.WHAT_NOTICE, group.g_idx)
                 val i = Intent(it.applicationContext, NoticeCardActivity::class.java)
                 i.putExtra(INTENT_GROUP, group)
                 startActivity(i)
             }
-
         }
 
         v.btn_pick.setOnClickListener { _ ->
@@ -100,7 +97,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 startActivity(i)
             }
         }
-
 
         v.btn_vote.setOnClickListener { _ ->
             activity?.let {
@@ -125,7 +121,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
                 i.putExtra(INTENT_GROUP, group)
                 startActivity(i)
             }
-
         }
 
         adapterGroup = TextListAdapter(dataListGroup, activity!!.applicationContext)
@@ -138,8 +133,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
 
         addChangeBadgeCntListener()
 
-
-
         v.layout_select_team.setOnClickListener {
             if (recyclerView.visibility == View.VISIBLE) closeGroupList()
             else openGroupList()
@@ -150,7 +143,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         v.layout_parent.setOnClickListener {
             closeGroupList()
         }
-
 
         return v
     }
@@ -163,7 +155,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             realm.close()
         }
     }
-
 
     override fun changeGroup(g: Team) {
         group = g
@@ -186,7 +177,7 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         dialog.setOnClickListener(View.OnClickListener { p0 ->
             when (p0.id) {
                 R.id.btn_add -> {
-                    activity?.let{
+                    activity?.let {
                         val i = Intent(it.applicationContext, InviteActivity::class.java)
                         i.putExtra(INTENT_GROUP, group)
                         startActivity(i)
@@ -197,13 +188,11 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         })
     }
 
-
     private fun closeGroupList() {
         if (recyclerView.visibility != View.GONE) {
             recyclerView.visibility = View.GONE
             ivDropDown.rotation = 0.0f
         }
-
     }
 
     private fun openGroupList() {
@@ -212,12 +201,10 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
             recyclerView.visibility = View.VISIBLE
             ivDropDown.rotation = 180.0f
 
-
             activity?.let {
                 DatabaseHelpUtils.getGroupListFromRealm(it.applicationContext, dataListGroup as ArrayList<Team>, adapterGroup as RecyclerView.Adapter<*>, group)
             }
         }
-
     }
 
     private fun changeGroup() {
@@ -234,12 +221,10 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         val activity = activity as MainActivity
         activity.changeGroup(group)
 
-
         removeBadgeCntListener()
         addChangeBadgeCntListener()
         }
     }
-
 
     override fun onClick(p0: View) {
         val pos = recyclerView.getChildAdapterPosition(p0)
@@ -248,10 +233,8 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
         closeGroupList()
     }
 
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
 
         activity?.let {
             NetworkUtils.connectGroupList(it.applicationContext, null)
@@ -260,83 +243,77 @@ class HomeFragment : Fragment(), View.OnClickListener, HasGroupFragment {
     }
 
     private var badgeCnts = ArrayList<BadgeCnt>()
-    private fun addChangeBadgeCntListener(){
+    private fun addChangeBadgeCntListener() {
         activity?.let {
         val realm = DatabaseHelpUtils.getRealmDefault(it.applicationContext)
 
         removeBadgeCntListener()
         Log.d("$TAG /BadgeCnt", "g_idx: ${group.g_idx} add listener")
-        for(key in BadgeCnt.WHAT_NOTICE..BadgeCnt.WHAT_ROLE){
-            var badgeCnt = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT, key).equalTo(BadgeCnt.ARG_G_IDX,group.g_idx).findFirst()
-            if(badgeCnt==null){
+        for (key in BadgeCnt.WHAT_NOTICE..BadgeCnt.WHAT_ROLE) {
+            var badgeCnt = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT, key).equalTo(BadgeCnt.ARG_G_IDX, group.g_idx).findFirst()
+            if (badgeCnt == null) {
                 Log.d("$TAG /BadgeCnt ", "[key:$key,g_idx: ${group.g_idx}] create")
                 realm.beginTransaction()
-                badgeCnt= realm.createObject(BadgeCnt::class.java)
-                badgeCnt!!.what=key
-                badgeCnt.g_idx=group.g_idx
+                badgeCnt = realm.createObject(BadgeCnt::class.java)
+                badgeCnt!!.what = key
+                badgeCnt.g_idx = group.g_idx
                 realm.commitTransaction()
             }
 
             Log.d("$TAG /BadgeCnt", "g_idx: ${group.g_idx} ${badgeCnt.cnt}")
-            setBadgeCnt(key,badgeCnt.cnt)
+            setBadgeCnt(key, badgeCnt.cnt)
 
             badgeCnts.add(badgeCnt)
             badgeCnt.addChangeListener<BadgeCnt> { t: BadgeCnt ->
                 Log.d("$TAG /BadgeCnt", "[key:${t.what},g_idx: ${t.g_idx}] is ${t.cnt}")
-                setBadgeCnt(t.what,t.cnt)
+                setBadgeCnt(t.what, t.cnt)
             }
         }
         }
     }
-    private fun removeBadgeCntListener(){
-        if(badgeCnts.size>0)
+    private fun removeBadgeCntListener() {
+        if (badgeCnts.size> 0)
             Log.d("$TAG /BadgeCnt", "g_idx: ${group.g_idx} remove listener")
         badgeCnts.forEach {
             it.removeAllChangeListeners()
         }
     }
 
-    private fun setBadgeCnt(key : Int, value : Int){
-        when(key){
-            BadgeCnt.WHAT_NOTICE->{
-                badgeNotice.text=when(value){
+    private fun setBadgeCnt(key: Int, value: Int) {
+        when (key) {
+            BadgeCnt.WHAT_NOTICE -> {
+                badgeNotice.text = when (value) {
                     in Int.MIN_VALUE..0 -> ""
                     in 999 downTo 0 -> value.toString()
-                    else-> "999+"
+                    else -> "999+"
                 }
-                badgeNotice.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
+                badgeNotice.visibility = if (value> 0) View.VISIBLE else View.INVISIBLE
             }
-            BadgeCnt.WHAT_SIGNAL->{
-                badgeSignal.text=when(value){
+            BadgeCnt.WHAT_SIGNAL -> {
+                badgeSignal.text = when (value) {
                     in Int.MIN_VALUE..0 -> ""
                     in 999 downTo 0 -> value.toString()
-                    else-> "999+"
+                    else -> "999+"
                 }
-                badgeSignal.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
-
-
+                badgeSignal.visibility = if (value> 0) View.VISIBLE else View.INVISIBLE
             }
-            BadgeCnt.WHAT_VOTE->{
+            BadgeCnt.WHAT_VOTE -> {
 
-                badgeVote.text=when(value){
+                badgeVote.text = when (value) {
                     in Int.MIN_VALUE..0 -> ""
                     in 999 downTo 0 -> value.toString()
-                    else-> "999+"
+                    else -> "999+"
                 }
-                badgeVote.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
-
+                badgeVote.visibility = if (value> 0) View.VISIBLE else View.INVISIBLE
             }
-            BadgeCnt.WHAT_ROLE->{
-                badgeRole.text=when(value){
+            BadgeCnt.WHAT_ROLE -> {
+                badgeRole.text = when (value) {
                     in Int.MIN_VALUE..0 -> ""
                     in 999 downTo 0 -> value.toString()
-                    else-> "999+"
+                    else -> "999+"
                 }
-                badgeRole.visibility=if(value>0) View.VISIBLE else View.INVISIBLE
-
+                badgeRole.visibility = if (value> 0) View.VISIBLE else View.INVISIBLE
             }
         }
-
     }
-
 }

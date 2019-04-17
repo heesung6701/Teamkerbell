@@ -3,36 +3,35 @@ package org.teamfairy.sopt.teamkerbell.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.util.Log
-import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 
 /**
  * Created by lumiere on 2018-01-05.
  */
-class LoginToken(){
+class LoginToken() {
 
     companion object {
 
-        private var user : User?=null
-        private var token: String=""
+        private var user: User? = null
+        private var token: String = ""
 
-        fun isValid() : Boolean=    (token.isNotBlank() && user != null )
+        fun isValid(): Boolean = (token.isNotBlank() && user != null)
 
-        fun getUserIdx(context: Context): Int{
-            if(user ==null) getPref(context)
+        fun getUserIdx(context: Context): Int {
+            if (user == null) getPref(context)
             return user!!.u_idx
         }
-        fun getUser(context: Context) : User{
-            if(user ==null) getPref(context)
+        fun getUser(context: Context): User {
+            if (user == null) getPref(context)
             return user!!
         }
 
-        fun getToken(context: Context) : String{
-            if(token.isBlank()) getPref(context)
+        fun getToken(context: Context): String {
+            if (token.isBlank()) getPref(context)
             return token
         }
 
-        fun getPref(context: Context){
+        fun getPref(context: Context) {
 
             val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE)
 
@@ -44,54 +43,49 @@ class LoginToken(){
                     pref.getString("id", null)
             )
 
-            user =u
+            user = u
             token = pref.getString("token", "")
-
         }
-        fun setPref(context: Context, user : User, token : String){
+        fun setPref(context: Context, user: User, token: String) {
 
-            Companion.user =user
-            Companion.token =token
+            Companion.user = user
+            Companion.token = token
 
             setPref(context)
-
         }
-        private fun setPref(context: Context){
+        private fun setPref(context: Context) {
             val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE).edit()
-
 
             val u = user!!
 
-            Log.d("LoginToken/", "${u.u_idx}/${u.name}/${token}")
-            pref.putInt("u_idx",u.u_idx)
-            pref.putString("name",u.name)
-            pref.putString("phone",u.phone)
-            pref.putString("bio",u.bio)
-            pref.putString("photo",u.photo)
-            pref.putString("id",u.id)
+            Log.d("LoginToken/", "${u.u_idx}/${u.name}/$token")
+            pref.putInt("u_idx", u.u_idx)
+            pref.putString("name", u.name)
+            pref.putString("phone", u.phone)
+            pref.putString("bio", u.bio)
+            pref.putString("photo", u.photo)
+            pref.putString("id", u.id)
             pref.putString("token", token)
             pref.apply()
-
         }
-        fun signOut(context : Context){
-            user=null
-            token=""
+        fun signOut(context: Context) {
+            user = null
+            token = ""
             val pref = context.getSharedPreferences("pref_login_token", MODE_PRIVATE).edit()
             pref.clear()
             pref.apply()
 
-
             DatabaseHelpUtils.clearForSignOut(context)
         }
-        fun updateToken(context: Context?,  token : String){
-            if(context ==null) return
+        fun updateToken(context: Context?, token: String) {
+            if (context == null) return
 
-            Companion.token =token
+            Companion.token = token
             setPref(context)
         }
-        fun updatePhoto(context : Context,photoUrl : String?){
-            if(photoUrl==null) return
-            user?.photo=photoUrl
+        fun updatePhoto(context: Context, photoUrl: String?) {
+            if (photoUrl == null) return
+            user?.photo = photoUrl
             setPref(context)
         }
     }

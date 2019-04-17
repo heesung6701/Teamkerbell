@@ -46,14 +46,13 @@ class ProfileActivity : AppCompatActivity() {
 
         val user = LoginToken.getUser(applicationContext)
 
-        tv_name.text=user.name
+        tv_name.text = user.name
         tv_email.text = user.id
-        tv_phone.text  = user.phone
+        tv_phone.text = user.phone
 
         val url = user.photo
-        if (NetworkUtils.getBitmapList(url, img_profile,applicationContext,"user${user.u_idx}"))
+        if (NetworkUtils.getBitmapList(url, img_profile, applicationContext, "user${user.u_idx}"))
             img_profile.setImageResource(R.drawable.icon_profile_default)
-
 
         img_profile.setOnClickListener {
 
@@ -96,8 +95,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadFIle(){
-
+    private fun uploadFIle() {
 
         val jsonParam = JSONObject()
         try {
@@ -109,34 +107,32 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        if(filePhoto!=null) task.photo = filePhoto!!
+        if (filePhoto != null) task.photo = filePhoto!!
         task.execute(USGS_REQUEST_URL.URL_PROFILE, METHOD_PUT, jsonParam.toString())
     }
 
-
-    fun getProfileUpdate(msg : Message){
+    fun getProfileUpdate(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
-                if(msg.obj is String){
+                if (msg.obj is String) {
 
                     val user = LoginToken.getUser(applicationContext)
-                    var photoUrl : String?= msg.obj as String
+                    var photoUrl: String? = msg.obj as String
                     if (!URLUtil.isValidUrl(photoUrl)) photoUrl = null
 
-                    LoginToken.updatePhoto(applicationContext,photoUrl)
+                    LoginToken.updatePhoto(applicationContext, photoUrl)
 
                     val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
                     realm.beginTransaction()
                     realm.copyToRealmOrUpdate(user.toUserR())
                     realm.commitTransaction()
 
-
                     Log.d("$LOG_TAG/LoginToken_user", user.toString())
 
                     Toast.makeText(applicationContext, "프로필 수정에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
-            else-> {
+            else -> {
                 val result = msg.data.getString("message")
 
                 if (result.contains("Failed")) {
@@ -145,11 +141,8 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
-
     }
-
 
     private class HandlerGet(activity: ProfileActivity) : Handler() {
         private val mActivity: WeakReference<ProfileActivity> = WeakReference<ProfileActivity>(activity)
@@ -158,5 +151,4 @@ class ProfileActivity : AppCompatActivity() {
             mActivity.get()?.getProfileUpdate(msg)
         }
     }
-
 }

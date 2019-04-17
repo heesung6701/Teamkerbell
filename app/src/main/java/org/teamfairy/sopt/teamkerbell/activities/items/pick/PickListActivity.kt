@@ -36,9 +36,9 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
         val pos = recyclerView.getChildAdapterPosition(p0)
         val pick = dataList[pos]
 
-        val pRoom : Room= DatabaseHelpUtils.getRoom(applicationContext,pick.room_idx)
-        if(pRoom.room_idx== ARG_NULL_IDX){
-            Toast.makeText(applicationContext,"해당 채팅방은 존재하지 않습니다.",Toast.LENGTH_SHORT).show()
+        val pRoom: Room = DatabaseHelpUtils.getRoom(applicationContext, pick.room_idx)
+        if (pRoom.room_idx == ARG_NULL_IDX) {
+            Toast.makeText(applicationContext, "해당 채팅방은 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -48,7 +48,6 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
         intent.putExtra(INTENT_PICK_IDX, pick.chat_idx)
         startActivity(intent)
     }
-
 
     private var adapter: PickListAdapter by Delegates.notNull()
     var dataList: ArrayList<Pick> = arrayListOf<Pick>()
@@ -78,7 +77,6 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
         recyclerView.adapter = adapter
         adapter.setOnItemClick(this)
 
-
         val divider = DividerItemDecoration(
                 recyclerView.context,
                 DividerItemDecoration.VERTICAL
@@ -88,11 +86,9 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
 
         FilterFunc(this)
 
-
         btn_back.setOnClickListener {
             onBackPressed()
         }
-
     }
 
     override fun onResume() {
@@ -106,14 +102,12 @@ class PickListActivity : AppCompatActivity(), RoomActivityInterface, View.OnClic
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         val pickRs = realm.where(PickR::class.java).equalTo(ARG_G_IDX, group.g_idx)
-        if (room?.room_idx?: ARG_ALL_IDX != ARG_ALL_IDX)
+        if (room?.room_idx ?: ARG_ALL_IDX != ARG_ALL_IDX)
             pickRs.equalTo(ARG_ROOM_IDX, room!!.room_idx)
         pickRs.findAll().forEach {
-            val pick : Pick = it.toPick(realm)
+            val pick: Pick = it.toPick(realm)
             dataList.add(pick)
         }
         adapter.notifyDataSetChanged()
     }
-
-
 }

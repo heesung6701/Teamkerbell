@@ -3,7 +3,6 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
@@ -34,12 +33,10 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
         val realm = getRealmDefault(context)
         try {
 
-
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has(JSON_MESSAGE)) {
                 val message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
-
 
                     realm.beginTransaction()
                     realm.where(GroupR::class.java).findAll().deleteAllFromRealm()
@@ -53,25 +50,19 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
                         g.ctrl_name = data.getString(JSON_CTRL_NAME)
                         if (data.has(JSON_PHOTO))
                             g.photo = data.getString(JSON_PHOTO)
-                        g.default_room_idx=data.getInt(JSON_DEFAULT_ROOM_IDX)
+                        g.default_room_idx = data.getInt(JSON_DEFAULT_ROOM_IDX)
                         realm.copyToRealmOrUpdate(g)
                     }
                     msgCode = MSG_SUCCESS
 
-                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_GROUP).findFirst() ?: realm.createObject(IsUpdateR::class.java,IsUpdateR.WHAT_GROUP)
-                    if(!isUpdateR.isUpdate) {
+                    val isUpdateR: IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, IsUpdateR.WHAT_GROUP).findFirst() ?: realm.createObject(IsUpdateR::class.java, IsUpdateR.WHAT_GROUP)
+                    if (!isUpdateR.isUpdate) {
                         isUpdateR.isUpdate = true
-                        Log.d(LOG_TAG,"Group Info is updated")
+                        Log.d(LOG_TAG, "Group Info is updated")
                     }
 
                     realm.commitTransaction()
-
-
-
-
-
-
-                }else {
+                } else {
                     Log.d(LOG_TAG, message)
                 }
             } else {
@@ -85,19 +76,17 @@ class GroupListTask(context: Context, var handler: Handler?, token: String?) : N
             }
             realm.close()
         }
-
     }
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-
         extractFeatureFromJson(result!!)
 
-        if(handler!=null) {
+        if (handler != null) {
             val msg = handler!!.obtainMessage()
             msg.what = msgCode
-            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+            Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

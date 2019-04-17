@@ -49,10 +49,9 @@ class InvitePhoneActivity : AppCompatActivity() {
 
             override fun afterTextChanged(editable: Editable) {
 
-
                 if (editable.toString().length > beforeLength) {
                     if ((editable.toString().length == 3 || editable.toString().length == 8)) {
-                        editable.append('-');
+                        editable.append('-')
                     }
                 } else {
                     if ((editable.toString().length == 3 || editable.toString().length == 8)) {
@@ -86,7 +85,7 @@ class InvitePhoneActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         val inviteTask = GetMessageTask(applicationContext, HandlerInvite(this))
-        inviteTask.execute(URL_INVITE_GROUP,METHOD_POST, jsonParam.toString())
+        inviteTask.execute(URL_INVITE_GROUP, METHOD_POST, jsonParam.toString())
     }
 
     fun invite(msg: Message) {
@@ -98,14 +97,13 @@ class InvitePhoneActivity : AppCompatActivity() {
 
                 val userR: UserR = realm.where(UserR::class.java).equalTo("name", name).equalTo("phone", phone).findFirst()
                         ?: UserR()
-                if (userR.u_idx == -2) //베짱이가 U_idx를 보내줘야됨
+                if (userR.u_idx == -2) // 베짱이가 U_idx를 보내줘야됨
                     setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
 
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
 
                 Toast.makeText(applicationContext, name + "님을 초대했습니다.", Toast.LENGTH_SHORT).show()
                 finish()
-
             }
             else -> {
                 val result = msg.data.getString("message")
@@ -115,7 +113,6 @@ class InvitePhoneActivity : AppCompatActivity() {
                     else -> Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
@@ -126,7 +123,4 @@ class InvitePhoneActivity : AppCompatActivity() {
             mActivity.get()?.invite(msg)
         }
     }
-
-
-
 }

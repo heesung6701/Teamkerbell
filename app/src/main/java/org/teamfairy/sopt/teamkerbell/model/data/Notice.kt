@@ -12,16 +12,16 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 data class Notice(
-        override var u_idx: Int,
-        var write_time: String,
-        var content: String?,
-        override var room_idx: Int,
-        var notice_idx: Int,
-        var status : Int
+    override var u_idx: Int,
+    var write_time: String,
+    var content: String?,
+    override var room_idx: Int,
+    var notice_idx: Int,
+    var status: Int
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
 
-    constructor(u_idx: Int,write_time: String,content: String?,room_idx: Int,notice_idx: Int) : this(u_idx,write_time,content,room_idx,notice_idx, ARG_STATUS_NOT_READ)
-    constructor() : this(u_idx = 0,  write_time = "", content = "", room_idx = 0, notice_idx = 0,status = ARG_STATUS_READ)
+    constructor(u_idx: Int, write_time: String, content: String?, room_idx: Int, notice_idx: Int) : this(u_idx, write_time, content, room_idx, notice_idx, ARG_STATUS_NOT_READ)
+    constructor() : this(u_idx = 0, write_time = "", content = "", room_idx = 0, notice_idx = 0, status = ARG_STATUS_READ)
 
     override fun getMainTitle(): String = content!!
 
@@ -71,11 +71,9 @@ data class Notice(
             override fun newArray(size: Int): Array<Notice?> = arrayOfNulls(size)
         }
 
-
         var ARG_NOTICE_IDX = "notice_idx"
         var ARG_STATUS = "status"
         var ARG_STATUS_READ = 1
         var ARG_STATUS_NOT_READ = 0
-
     }
 }

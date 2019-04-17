@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#BDBDBD</color>
     <color name="colorAccent">@color/mainColorM</color>
 
-
     <color name="mainColor">@color/mainColorP</color>
 
     <color name="mainColorP">@color/main_purple_blue</color>

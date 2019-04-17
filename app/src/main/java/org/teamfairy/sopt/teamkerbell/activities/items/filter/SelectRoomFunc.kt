@@ -29,15 +29,13 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
 
     private val mActivity: WeakReference<Activity> = WeakReference<Activity>(activity)
 
-
     private var adapter: TextListAdapter by Delegates.notNull()
     private var dataList = ArrayList<GroupInterface>()
     private var recyclerView: RecyclerView by Delegates.notNull()
 
-
     private var layoutSelectRoom: LinearLayout by Delegates.notNull()
-    private var ivDropDown : ImageView by Delegates.notNull()
-    private var tvRoomName : TextView by Delegates.notNull()
+    private var ivDropDown: ImageView by Delegates.notNull()
+    private var tvRoomName: TextView by Delegates.notNull()
 
     init {
         if (mActivity.get() != null) {
@@ -47,7 +45,6 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
             adapter = TextListAdapter(dataList, activity.applicationContext)
             adapter.setOnItemClickListener(this)
 
-
             ivDropDown = activity.findViewById(R.id.iv_drop_down)
             tvRoomName = activity.findViewById(R.id.tv_room_name)
 
@@ -56,24 +53,18 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
             adapter.currentIdx = room?.room_idx ?: -1
             recyclerView.adapter = adapter
 
-            if(room!=null && room.room_idx!=ARG_ALL_IDX)
-                tvRoomName.text=room.real_name
-
-
-
+            if (room != null && room.room_idx != ARG_ALL_IDX)
+                tvRoomName.text = room.real_name
 
             layoutSelectRoom = activity.findViewById(R.id.layout_select_room)
             layoutSelectRoom.setOnClickListener {
                 if (recyclerView.visibility != View.VISIBLE) {
                     openRoomList()
                     DatabaseHelpUtils.getRoomListFromRealm(activity.applicationContext, dataList as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group)
-                }
-                else
+                } else
                     closeRoomList()
             }
         }
-
-
     }
 
     private fun openRoomList() {
@@ -81,7 +72,6 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
         if (recyclerView.visibility != View.VISIBLE) {
             recyclerView.visibility = View.VISIBLE
             ivDropDown.rotation = 180.0f
-
         }
     }
 
@@ -90,18 +80,15 @@ class SelectRoomFunc(var activity: Activity) : View.OnClickListener {
             recyclerView.visibility = View.GONE
             ivDropDown.rotation = 0.0f
         }
-
     }
 
     private fun changeRoom(room: Room) {
 
         adapter.currentIdx = room.room_idx
-        tvRoomName.text=room.real_name
+        tvRoomName.text = room.real_name
 
         if (mActivity.get() == null) return
         (mActivity.get() as RoomActivityInterface).changeRoom(room)
         closeRoomList()
-
     }
-
 }

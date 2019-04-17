@@ -14,9 +14,9 @@ import org.teamfairy.sopt.teamkerbell.viewholder.TextViewHolder
 /**
  * Created by lumiere on 2018-05-05.
  */
-class  TextListAdapter(var dataList : ArrayList<GroupInterface>, var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
+class TextListAdapter(var dataList: ArrayList<GroupInterface>, var mContext: Context) : RecyclerView.Adapter<TextViewHolder>() {
 
-     var currentIdx : Int =-1
+     var currentIdx: Int = -1
     private var onItemClick: View.OnClickListener? = null
 
     override fun getItemCount(): Int = dataList.size
@@ -24,12 +24,12 @@ class  TextListAdapter(var dataList : ArrayList<GroupInterface>, var mContext: C
     override fun onBindViewHolder(holder: TextViewHolder, position: Int) { // binding
 
         holder.tvContent.text = dataList[position].real_name
-        if(dataList[position].getIdx()==currentIdx){
-            holder.tvContent.setTypeface(holder.tvContent.typeface,Typeface.BOLD)
-            holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.mainColor))
-        }else{
+        if (dataList[position].getIdx() == currentIdx) {
+            holder.tvContent.setTypeface(holder.tvContent.typeface, Typeface.BOLD)
+            holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.mainColor))
+        } else {
             holder.tvContent.typeface = Typeface.DEFAULT
-            holder.tvContent.setTextColor(ContextCompat.getColor(mContext,R.color.grayDark))
+            holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.grayDark))
         }
     }
 

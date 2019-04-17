@@ -35,11 +35,9 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-
     fun extractFeatureFromJson(jsonResponse: String): ArrayList<Vote>? {
 
         message = "No Message"
-
 
         val datas = ArrayList<Vote>()
 
@@ -66,8 +64,6 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
                                 obj.getInt(JSON_STATUS))
 
                         datas.add(vote)
-
-
                     }
 
                     val voteFinished: JSONArray = voteData.getJSONArray(JSON_FINISHED)
@@ -98,7 +94,6 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
 //                        obj.status = vote.getInt(JSON_STATUS)
 //
 //                        realm.copyToRealmOrUpdate(obj)
-
                     }
 //                    realm.commitTransaction()
                     msgCode = MSG_SUCCESS
@@ -110,20 +105,16 @@ class VoteListTask(context: Context, var handler: Handler, token: String?) : Net
             } else {
                 Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
             }
-
         } catch (e: JSONException) {
             e.printStackTrace()
         } finally {
 //            if (realm.isInTransaction) realm.commitTransaction()
         }
         return null
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 

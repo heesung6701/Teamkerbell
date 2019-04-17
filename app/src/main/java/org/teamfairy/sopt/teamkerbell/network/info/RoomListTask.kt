@@ -3,7 +3,6 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONArray
 import org.json.JSONException
@@ -32,12 +31,10 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
         val realm = getRealmDefault(context)
         try {
 
-
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has("message")) {
                 val message = baseJsonResponse.getString("message")
                 if (message.contains("Success")) {
-
 
                     realm.beginTransaction()
                     realm.where(RoomR::class.java).findAll().deleteAllFromRealm()
@@ -56,18 +53,14 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                     }
                     msgCode = MSG_SUCCESS
 
-
-                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_ROOM).findFirst()
+                    val isUpdateR: IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, IsUpdateR.WHAT_ROOM).findFirst()
                             ?: realm.createObject(IsUpdateR::class.java, IsUpdateR.WHAT_ROOM)
-                    if(!isUpdateR.isUpdate) {
+                    if (!isUpdateR.isUpdate) {
                         isUpdateR.isUpdate = true
-                        Log.d(LOG_TAG,"Room Info is updated")
+                        Log.d(LOG_TAG, "Room Info is updated")
                     }
 
-
                     realm.commitTransaction()
-
-
                 } else {
                     Log.d(LOG_TAG, message)
                 }
@@ -81,19 +74,17 @@ class RoomListTask(context: Context, var handler: Handler?, token: String?) : Ne
                 realm.commitTransaction()
             }
         }
-
     }
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-
         extractFeatureFromJson(result!!)
 
-        if(handler!=null) {
+        if (handler != null) {
             val msg = handler!!.obtainMessage()
             msg.what = msgCode
-            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+            Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

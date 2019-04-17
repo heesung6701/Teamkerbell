@@ -4,17 +4,13 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import org.teamfairy.sopt.teamkerbell.activities.items.signal.tutorial.*
-import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.utils.Utils
 
 /**
  * Created by lumiere on 2018-05-01.
  */
-class SignalTutorialAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
+class SignalTutorialAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
-    public var tutorial :  ArrayList<Fragment> = ArrayList<Fragment>()
-
-
+    public var tutorial: ArrayList<Fragment> = ArrayList<Fragment>()
 
     init {
         tutorial.clear()

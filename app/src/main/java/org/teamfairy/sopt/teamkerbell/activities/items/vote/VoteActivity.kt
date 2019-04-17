@@ -37,7 +37,6 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_VOTE
 import org.teamfairy.sopt.teamkerbell.network.info.VoteResponseTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_VOTE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
@@ -45,7 +44,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , MenuActionInterface{
+class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, MenuActionInterface {
     override fun menuEdit() {
         attemptEdit()
     }
@@ -60,23 +59,20 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-
     private var fromList = false
 
     var group: Team by Delegates.notNull()
     var room: Room by Delegates.notNull()
 
-    var vote: Vote?=null
-    private var voteIdx : Int by Delegates.notNull()
+    var vote: Vote? = null
+    private var voteIdx: Int by Delegates.notNull()
 
     var voteResponse: VoteResponse by Delegates.notNull()
-
 
     private var dataListChoice: ArrayList<HashMap<String, String>> = arrayListOf<HashMap<String, String>>()
 
     private var recyclerChoice: RecyclerView by Delegates.notNull()
     private var adapterChoice: ChoiceListAdapter by Delegates.notNull()
-
 
     private var dataListResult: ArrayList<HashMap<String, String>> = arrayListOf<HashMap<String, String>>()
     private var recyclerResult: RecyclerView by Delegates.notNull()
@@ -92,8 +88,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         setContentView(R.layout.activity_vote)
         setSupportActionBar(toolbar)
 
-
-
         recyclerChoice = findViewById(R.id.recyclerView_choice)
         recyclerChoice.layoutManager = LinearLayoutManager(this)
         adapterChoice = ChoiceListAdapter(dataListChoice, applicationContext)
@@ -107,33 +101,24 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         adapterResultN = ResultByChoiceListAdapter(dataListResult, applicationContext)
         recyclerResult.adapter = adapterResultC
 
-
         recentTap = btn_by_choice
-
 
         when {
             intent.hasExtra(INTENT_VOTE) -> {
                 vote = intent.getParcelableExtra<Vote>(INTENT_VOTE)
                 vote!!.setPhotoInfo(applicationContext)
                 setVoteInfo()
-
             }
-            intent.hasExtra(INTENT_VOTE_IDX) -> voteIdx=intent.getIntExtra(INTENT_VOTE_IDX,0)
+            intent.hasExtra(INTENT_VOTE_IDX) -> voteIdx = intent.getIntExtra(INTENT_VOTE_IDX, 0)
             else -> finish()
         }
-
-
 
         btn_by_choice.setOnClickListener(resultTabOnClickListener)
         btn_by_member.setOnClickListener(resultTabOnClickListener)
         btn_by_not_voted.setOnClickListener(resultTabOnClickListener)
 
-
         mSwipeRefreshLayout = findViewById(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
-
-
 
         btn_back.setOnClickListener {
             finish()
@@ -148,9 +133,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             updateChoiceList()
         }
 
-
-
-
         layout_send_noti.setOnClickListener {
             val task = GetMessageTask(applicationContext, HandlerPress(this), LoginToken.getToken(applicationContext))
             val jsonParam = JSONObject()
@@ -160,18 +142,15 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         }
 
         connectVoteResponse(vote?.vote_idx ?: voteIdx)
-
-
     }
 
     override fun onResume() {
         super.onResume()
-        if(vote !=null)
+        if (vote != null)
             setVoteInfo()
     }
 
-    private fun attemptEdit(){
-
+    private fun attemptEdit() {
     }
 
     private fun showDeleteDialog() {
@@ -183,20 +162,19 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             vote?.let { attemptDelete(it) }
         })
     }
-    private fun attemptDelete(vote : Vote){
+    private fun attemptDelete(vote: Vote) {
         val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
 
         val jsonParam = JSONObject()
         jsonParam.put(USGS_REQUEST_URL.URL_REMOVE_VOTE_PARAMS_VOTE_IDX, vote.vote_idx)
 
-        task.execute(USGS_REQUEST_URL.URL_REMOVE_VOTE, METHOD_DELETE,jsonParam.toString())
-
+        task.execute(USGS_REQUEST_URL.URL_REMOVE_VOTE, METHOD_DELETE, jsonParam.toString())
     }
 
     private fun setVoteInfo() {
         val vote = this.vote!!
 
-        if(vote.u_idx==LoginToken.getUserIdx(applicationContext))
+        if (vote.u_idx == LoginToken.getUserIdx(applicationContext))
             MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
 
         room = intent.getParcelableExtra(INTENT_ROOM) ?: DatabaseHelpUtils.getRoom(applicationContext, vote.room_idx)
@@ -221,7 +199,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 updateVoteResponse()
             }
         }
-
     }
 
     private var recentTap: TextView by Delegates.notNull()
@@ -258,7 +235,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 recyclerResult.adapter = adapterResultN
             }
         }
-
     }
 
     private fun updateResultList() {
@@ -297,11 +273,9 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     hashChoice["count"] = count.toString()
                 }
 
-
                 recyclerResult.adapter?.notifyDataSetChanged()
             }
             R.id.btn_by_member -> {
-
 
                 tv_back_choice.visibility = View.GONE
                 voteResponse.responses.iterator().forEach {
@@ -314,11 +288,9 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     h["photo"] = user.photo.toString()
                     h["name"] = user.name.toString()
                     h["content"] = choice ?: "투표내용"
-                    h["time"] = "투표한 시간도 보내주나??" //상형한테 물어봐야제
-
+                    h["time"] = "투표한 시간도 보내주나??" // 상형한테 물어봐야제
 
                     dataListResult.add(h)
-
                 }
 
                 recyclerResult.adapter?.notifyDataSetChanged()
@@ -341,15 +313,12 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
                         dataListResult.add(hashResponse)
                     }
-
                 }
 
                 recyclerResult.adapter?.notifyDataSetChanged()
             }
         }
-
     }
-
 
     private fun enableCompleteButton() {
         if (unableVote()) {
@@ -361,9 +330,9 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         }
     }
 
-    private fun unableVote(): Boolean = (vote!!.isFinished() || adapterChoice.selectedId != -1
-            && (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx")
-            && dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]))
+    private fun unableVote(): Boolean = (vote!!.isFinished() || adapterChoice.selectedId != -1 &&
+            (dataListChoice[adapterChoice.selectedId].containsKey("choice_idx") &&
+            dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]))
 
     private fun showResult() {
         isShowResult = true
@@ -380,13 +349,11 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
 
         layout_choices.visibility = View.VISIBLE
         layout_result.visibility = View.GONE
-
-
     }
 
     override fun onClick(p0: View) {
         val pos = recyclerChoice.getChildAdapterPosition(p0)
-        if (vote!=null && !vote!!.isFinished()) {
+        if (vote != null && !vote!!.isFinished()) {
             adapterChoice.selectedId = pos
             adapterChoice.notifyDataSetChanged()
 
@@ -397,8 +364,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     fun updateChoiceList() {
 
         val userChoiceIdx = if (isVoted()) voteResponse.responses[LoginToken.getUserIdx(applicationContext)]!! else -1
-
-
 
         dataListChoice.clear()
 
@@ -416,26 +381,23 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             totalCnt += cnt
             h["choice_idx"] = it.key.toString()
 
-
             dataListChoice.add(h)
 
             if (it.key == userChoiceIdx)
                 adapterChoice.selectedId = dataListChoice.lastIndex
         }
 
-        tv_count.text = ("""${totalCnt.toString()} 명 참여중""")
+        tv_count.text = ("""$totalCnt 명 참여중""")
         adapterChoice.notifyDataSetChanged()
-
 
         enableCompleteButton()
     }
 
-
     private fun updateVoteResponse() {
         val selectIdx = adapterChoice.selectedId
         if (selectIdx != -1) {
-            if (dataListChoice[selectIdx].containsKey("choice_idx")
-                    && dataListChoice[selectIdx]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]) {
+            if (dataListChoice[selectIdx].containsKey("choice_idx") &&
+                    dataListChoice[selectIdx]["choice_idx"]!!.toInt() == voteResponse.responses[LoginToken.getUserIdx(applicationContext)]) {
                 Toast.makeText(applicationContext, "변경사항이 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 val task = GetMessageTask(applicationContext, HandlerUpdateVoteResponse(this), LoginToken.getToken(applicationContext))
@@ -445,14 +407,12 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                 try {
                     jsonParam.put(URL_RESPONSE_VOTE_PARAM_VALUE, dataListChoice[selectIdx]["choice_idx"])
                     jsonParam.put(URL_RESPONSE_VOTE_PARAM_VOTEID, voteResponse.vote.vote_idx)
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
                 task.execute(USGS_REQUEST_URL.URL_RESPONSE_VOTE, METHOD_PUT, jsonParam.toString())
             }
-
         } else {
             Toast.makeText(applicationContext, "항목을 선택해주세요", Toast.LENGTH_SHORT).show()
         }
@@ -466,12 +426,11 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         voteResponse.responses[LoginToken.getUserIdx(applicationContext)] = dataListChoice[adapterChoice.selectedId]["choice_idx"]!!.toInt()
         showResult()
         updateResultList()
-
     }
 
     private fun connectVoteResponse(vote_idx: Int) {
         val task = VoteResponseTask(applicationContext, HandlerGetVoteResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + vote_idx,METHOD_GET)
+        task.execute(USGS_REQUEST_URL.URL_DETAIL_VOTE_RESPONSE + "/" + vote_idx, METHOD_GET)
     }
 
     private class HandlerGetVoteResponse(activity: VoteActivity) : Handler() {
@@ -493,7 +452,7 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     }
                     Utils.MSG_FAIL -> {
                         val message = msg.data.getString(JSON_MESSAGE)
-                        if(message.contains("Success") || message.contains("Internal"))
+                        if (message.contains("Success") || message.contains("Internal"))
                             Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
                         else
                             Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
@@ -503,7 +462,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             }
         }
     }
-
 
     private class HandlerUpdateVoteResponse(activity: VoteActivity) : Handler() {
         private val mActivity: WeakReference<VoteActivity> = WeakReference<VoteActivity>(activity)
@@ -516,7 +474,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                         activity.updateSuccess()
                     }
                     Utils.MSG_FAIL -> {
-
                     }
                 }
             }
@@ -534,7 +491,6 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
                     Toast.makeText(activity.applicationContext, "요청하였습니다", Toast.LENGTH_SHORT).show()
                 else
                     Toast.makeText(activity.applicationContext, "실패하였습니다", Toast.LENGTH_SHORT).show()
-
             }
         }
     }
@@ -542,14 +498,13 @@ class VoteActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     fun deleteResult(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
-                Toast.makeText(applicationContext,getString(R.string.txt_delete_success),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
                 finish()
             }
             else -> {
-                Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
             }
         }
-
     }
     private class HandlerDelete(activity: VoteActivity) : Handler() {
         private val mActivity: WeakReference<VoteActivity> = WeakReference<VoteActivity>(activity)

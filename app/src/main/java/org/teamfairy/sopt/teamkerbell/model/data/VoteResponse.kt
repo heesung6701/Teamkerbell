@@ -7,9 +7,9 @@ import android.os.Parcelable
  * Created by lumiere on 2018-01-01.
  */
 data class VoteResponse(
-        var vote: Vote,
-        var examples: HashMap<Int, String>, //Example_id , Example_content
-        var responses: HashMap<Int, Int>//User_id, Example_id
+    var vote: Vote,
+    var examples: HashMap<Int, String>, // Example_id , Example_content
+    var responses: HashMap<Int, Int> // User_id, Example_id
 ) : Parcelable {
     constructor(source: Parcel) : this(
             source.readParcelable<Vote>(Vote::class.java.classLoader),

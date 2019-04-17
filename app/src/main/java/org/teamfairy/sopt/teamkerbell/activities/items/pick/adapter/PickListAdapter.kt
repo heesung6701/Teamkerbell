@@ -9,14 +9,11 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.pick.viewholder.PickViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.Pick
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
 class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : RecyclerView.Adapter<PickViewHolder>() {
-
 
     private var mOnClick: View.OnClickListener? = null
 
@@ -29,16 +26,16 @@ class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : Re
         holder.tvTitle.text = dataList[position].name
         holder.tvContent.text = dataList[position].getMainTitle()
         holder.tvTime.text = dataList[position].getTime()
-        holder.tvRoomName.text=dataList[position].roomName
+        holder.tvRoomName.text = dataList[position].roomName
 
         val url = dataList[position].photo
-        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext,"user${dataList.get(position).u_idx}"))
+        if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "user${dataList.get(position).u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
-        val vto : ViewTreeObserver = holder.tvContent.getViewTreeObserver()
+        val vto: ViewTreeObserver = holder.tvContent.getViewTreeObserver()
         vto.addOnGlobalLayoutListener {
             val l = holder.tvContent.layout
-            if(l!=null) {
+            if (l != null) {
                 val lines = l.lineCount
                 if (lines > 0 && l.getEllipsisCount(lines - 1) > 0) holder.btnExpand.visibility = View.VISIBLE
             }
@@ -53,16 +50,13 @@ class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : Re
                 val layoutParam = holder.tvContent.layoutParams
                 layoutParam.height = LinearLayout.LayoutParams.WRAP_CONTENT
                 holder.tvContent.layoutParams = layoutParam
-
             } else {
                 it.rotation = 90.toFloat()
                 holder.tvContent.maxLines = 2
                 holder.tvContent.ellipsize = TextUtils.TruncateAt.END
             }
         }
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -75,7 +69,5 @@ class PickListAdapter(var dataList: ArrayList<Pick>, var mContext: Context) : Re
         return PickViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

@@ -42,21 +42,20 @@ class FilterFunc(activity: Activity) {
                 closeFilter(activity.applicationContext)
             })
             val room = (activity as RoomActivityInterface).room
-            adapter.currentIdx = room?.room_idx?: ARG_ALL_IDX
+            adapter.currentIdx = room?.room_idx ?: ARG_ALL_IDX
             recyclerView.adapter = adapter
 
             val group = (activity as RoomActivityInterface).group
 
-            btnFilter=activity.findViewById(R.id.btn_filter)
+            btnFilter = activity.findViewById(R.id.btn_filter)
             btnFilter.setOnClickListener {
                 if (recyclerView.visibility == View.VISIBLE) closeFilter(activity.applicationContext)
                 else {
-                    DatabaseHelpUtils.getRoomListFromRealm(activity.applicationContext, dataList as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group,true)
+                    DatabaseHelpUtils.getRoomListFromRealm(activity.applicationContext, dataList as ArrayList<Room>, adapter as RecyclerView.Adapter<*>, group, true)
                     openFilter(activity.applicationContext)
                 }
             }
         }
-
     }
 
     private fun openFilter(applicationContext: Context) {
@@ -74,7 +73,5 @@ class FilterFunc(activity: Activity) {
         adapter.currentIdx = room.room_idx
         if (mActivity.get() == null) return
         (mActivity.get() as RoomActivityInterface).changeRoom(room)
-
     }
-
 }

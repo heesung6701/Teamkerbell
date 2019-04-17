@@ -11,7 +11,6 @@ import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BIO
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CLIENT_TOKEN
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHONE
@@ -73,13 +72,10 @@ class LoginTask(context: Context, var handler: Handler) : NetworkTask(context) {
             }
             realm.close()
         }
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         extractFeatureFromJson(result!!)
 

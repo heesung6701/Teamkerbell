@@ -12,23 +12,21 @@ import kotlin.properties.Delegates
 /**
  * Created by lumiere on 2018-05-01.
  */
-class SignalTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
+class SignalTabAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
     var tabCount: Int = 0
     var receivedTab: SignalListFragment by Delegates.notNull()
     var requestedTab: SignalListFragment by Delegates.notNull()
 
-
-
-    constructor(fm: FragmentManager?, tabCount: Int,group : Team) : this(fm) {
+    constructor(fm: FragmentManager?, tabCount: Int, group: Team) : this(fm) {
         this.tabCount = tabCount
         this.receivedTab = SignalListFragment()
-        receivedTab.group=group
-        receivedTab.state=Utils.SIGNAL_RECEIVER
+        receivedTab.group = group
+        receivedTab.state = Utils.SIGNAL_RECEIVER
 
         this.requestedTab = SignalListFragment()
-        requestedTab.group=group
-        requestedTab.state=Utils.SIGNAL_SENDER
+        requestedTab.group = group
+        requestedTab.state = Utils.SIGNAL_SENDER
     }
 
     override fun getItem(position: Int): Fragment? {
@@ -44,10 +42,9 @@ class SignalTabAdapter (fm : FragmentManager?) : FragmentStatePagerAdapter(fm) {
         return null
     }
 
-    fun changeRoom(room: Room){
+    fun changeRoom(room: Room) {
         requestedTab.changeRoom(room)
         receivedTab.changeRoom(room)
-
     }
     override fun getCount(): Int = tabCount
 }

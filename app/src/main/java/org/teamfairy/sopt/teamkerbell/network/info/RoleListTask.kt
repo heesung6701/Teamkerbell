@@ -22,26 +22,24 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 /**
  * Created by lumiere on 2018-01-06.
  */
-class RoleListTask(context: Context, var handler: Handler, token : String?): NetworkTask(context,token) {
+class RoleListTask(context: Context, var handler: Handler, token: String?) : NetworkTask(context, token) {
 
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
+    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Role>? {
 
-    fun extractFeatureFromJson(jsonResponse: String) : ArrayList<Role>?{
-
-        val datas : ArrayList<Role> = ArrayList<Role>()
+        val datas: ArrayList<Role> = ArrayList<Role>()
 
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has("message")) {
                 message = baseJsonResponse.getString("message")
-                if(message.contains("Success")){
+                if (message.contains("Success")) {
 
-
-                    val dataArray : JSONArray = baseJsonResponse.getJSONArray("data")
-                    for(i in 0 until dataArray.length()){
-                        if(dataArray.getJSONObject(i)!=null) {
+                    val dataArray: JSONArray = baseJsonResponse.getJSONArray("data")
+                    for (i in 0 until dataArray.length()) {
+                        if (dataArray.getJSONObject(i) != null) {
                             val obj = dataArray.getJSONObject(i)
                             val role = Role(obj.getInt(JSON_ROLE_IDX),
                                     obj.getInt(JSON_ROOM_IDX),
@@ -49,40 +47,35 @@ class RoleListTask(context: Context, var handler: Handler, token : String?): Net
                                     obj.getInt(JSON_MASTER_IDX),
                                     obj.getString(JSON_WRITE_TIME))
                             datas.add(role)
-
                         }
                     }
-                    msgCode=MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                     return datas
+                } else {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
-                else{
-                    Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(context,jsonResponse.toString(),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-        }finally {
+        } finally {
         }
         return null
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-
-        val obj =extractFeatureFromJson(result!!)
+        val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
         val data = Bundle()
-        data.putString("message",message)
-        msg.data=data
+        data.putString("message", message)
+        msg.data = data
         handler.sendMessage(msg)
     }
 }

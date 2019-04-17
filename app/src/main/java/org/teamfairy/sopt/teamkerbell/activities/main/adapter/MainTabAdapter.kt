@@ -20,17 +20,15 @@ class MainTabAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     var roomTab: RoomListFragment by Delegates.notNull()
     var contactTab: ContactFragment by Delegates.notNull()
 
-
     constructor(fm: FragmentManager?, tabCount: Int, group: Team) : this(fm) {
         this.tabCount = tabCount
 
         this.homeTab = HomeFragment()
-        this.homeTab.group=group
+        this.homeTab.group = group
         this.roomTab = RoomListFragment()
-        this.roomTab.group=group
+        this.roomTab.group = group
         this.contactTab = ContactFragment()
-        this.contactTab.group=group
-
+        this.contactTab.group = group
     }
 
     fun changeGroup(g: Team) {
@@ -46,7 +44,6 @@ class MainTabAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
             Utils.TAB_CONTACT -> contactTab
             else -> null
         }
-
     }
 
     override fun getCount(): Int = tabCount

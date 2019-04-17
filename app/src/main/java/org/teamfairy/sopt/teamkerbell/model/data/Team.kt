@@ -9,29 +9,28 @@ import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
  * Created by lumiere on 2018-01-01.
  */
 data class Team(
-        var g_idx: Int, //Primary Key
-        override var real_name: String,
-        var ctrl_name: String,
-        var photo: String?,
-        var default_room_idx: Int=-1
-) : GroupInterface,Parcelable{
+    var g_idx: Int, // Primary Key
+    override var real_name: String,
+    var ctrl_name: String,
+    var photo: String?,
+    var default_room_idx: Int = -1
+) : GroupInterface, Parcelable {
 
-    constructor(g_idx: Int,real_name: String,ctrl_name: String,default_room_idx: Int):this(g_idx,real_name,ctrl_name,null,default_room_idx)
+    constructor(g_idx: Int, real_name: String, ctrl_name: String, default_room_idx: Int) : this(g_idx, real_name, ctrl_name, null, default_room_idx)
 
-    override fun toString(): String =("$g_idx/$real_name/$ctrl_name/$photo")
+    override fun toString(): String = ("$g_idx/$real_name/$ctrl_name/$photo")
 
-    override fun getIdx(): Int =g_idx
+    override fun getIdx(): Int = g_idx
 
     fun toGroupR(): GroupR {
-        val groupR= GroupR()
-        groupR.g_idx=g_idx
-        groupR.real_name=real_name
-        groupR.ctrl_name=ctrl_name
-        groupR.photo=photo?:""
+        val groupR = GroupR()
+        groupR.g_idx = g_idx
+        groupR.real_name = real_name
+        groupR.ctrl_name = ctrl_name
+        groupR.photo = photo ?: ""
         groupR.default_room_idx = default_room_idx
         return groupR
     }
-
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -58,8 +57,7 @@ data class Team(
             override fun newArray(size: Int): Array<Team?> = arrayOfNulls(size)
         }
 
-
-        var max_length  = 12
+        var max_length = 12
 
         var ARG_G_IDX = "g_idx"
         var ARG_REAL_NAME = "real_name"

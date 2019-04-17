@@ -28,11 +28,10 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 
 class FeedBackTask(context: Context, var handler: Handler, token: String?) : NetworkTask(context, token) {
 
-
     var msgCode: Int = MSG_FAIL
     var message: String = "No Message"
 
-    fun extractFeatureFromJson(jsonResponse: String) : TaskResponseWithFeedback? {
+    fun extractFeatureFromJson(jsonResponse: String): TaskResponseWithFeedback? {
 
         message = "No Message"
 
@@ -60,13 +59,12 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
                     for (i in 0 until feedbacks.length()) {
                         val obj = feedbacks.getJSONObject(i)
 
-
                         val responseIdx = obj.getInt(JSON_RESPONSE_IDX)
                         val feedbackIdx = obj.getInt(JSON_FEEDBACK_IDX)
                         val uIdx = obj.getInt(JSON_U_IDX)
                         val content: String = obj.getString(JSON_CONTENT)
                         val writeTime: String = obj.getString(JSON_WRITE_TIME)
-                        dataList.add(RoleFeedback(feedbackIdx,responseIdx, uIdx, content,writeTime))
+                        dataList.add(RoleFeedback(feedbackIdx, responseIdx, uIdx, content, writeTime))
                     }
 
                     msgCode = MSG_SUCCESS
@@ -74,7 +72,6 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
                     taskResponseWithFeedback.taskResponse = resp
                     taskResponseWithFeedback.feedbacks = dataList
                     return taskResponseWithFeedback
-
                 }
             }
         } catch (e: JSONException) {
@@ -85,17 +82,15 @@ class FeedBackTask(context: Context, var handler: Handler, token: String?) : Net
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== MSG_SUCCESS) "Success" else " failed")
-        msg.obj= extractFeatureFromJson(result)
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == MSG_SUCCESS) "Success" else " failed")
+        msg.obj = extractFeatureFromJson(result)
         val data = Bundle()
         data.putString("message", message)
         msg.data = data

@@ -7,16 +7,15 @@ import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
-
 /**
  * Created by lumiere on 2018-03-13.
  */
 data class Role(
-        var role_idx: Int,
-        var room_idx: Int,
-        var title: String?,
-        var master_idx: Int,
-        var write_time: String?
+    var role_idx: Int,
+    var room_idx: Int,
+    var title: String?,
+    var master_idx: Int,
+    var write_time: String?
 ) : UserInfoInterface(), Parcelable {
 
     fun setPhotoInfo(context: Context) = super.setPhotoInfo(context, master_idx)

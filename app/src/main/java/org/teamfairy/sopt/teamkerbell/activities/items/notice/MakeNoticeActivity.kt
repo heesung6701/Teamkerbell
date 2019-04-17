@@ -17,7 +17,6 @@ import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.SelectRoomFunc
 import org.teamfairy.sopt.teamkerbell.activities.items.filter.interfaces.RoomActivityInterface
-import org.teamfairy.sopt.teamkerbell.activities.items.signal.SignalActivity
 import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
@@ -30,7 +29,6 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_FROM_CHAT
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL_IDX
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
@@ -41,15 +39,12 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
         this.room = room
     }
 
-
     val LOG_TAG = this::class.java.name
-
 
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
 
     private var isConnecting: Boolean = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +70,6 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
         btn_commit.setOnClickListener {
             attemptMake()
         }
-
     }
 
     override fun finish() {
@@ -83,10 +77,9 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
 
-
     private fun attemptMake() {
         if (isConnecting) return
-        if(room==null || room!!.room_idx<0){
+        if (room == null || room!!.room_idx <0) {
             Toast.makeText(applicationContext, getText(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
             return
         }
@@ -104,29 +97,24 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
             jsonParam.put(URL_MAKE_NOTICE_PARAM_CHATID, group.g_idx)
             jsonParam.put(URL_MAKE_NOTICE_PARAM_ROOM_IDX, room!!.room_idx)
             jsonParam.put(URL_MAKE_NOTICE_PARAM_CONTENT, content)
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
         val registTask = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
         isConnecting = true
-        registTask.execute(URL_MAKE_NOTICE,METHOD_POST, jsonParam.toString())
-
+        registTask.execute(URL_MAKE_NOTICE, METHOD_POST, jsonParam.toString())
     }
-
 
     private fun makeSuccess(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
                 Toast.makeText(applicationContext, "공지 등록되었습니다", Toast.LENGTH_SHORT).show()
 
-
                 val obj = msg.obj as String
                 val idx = obj.toInt()
 
-                if(!intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                if (!intent.getBooleanExtra(INTENT_FROM_CHAT, false)) {
                     val intent = Intent(applicationContext, NoticeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     intent.putExtra(INTENT_GROUP, group)
@@ -134,8 +122,6 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
                     startActivity(intent)
                 }
                 finish()
-
-
             }
             else -> {
 
@@ -149,9 +135,7 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
                     Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
-
     }
 
     private class HandlerMake(activity: MakeNoticeActivity) : Handler() {
@@ -161,5 +145,4 @@ class MakeNoticeActivity : AppCompatActivity(), RoomActivityInterface {
             mActivity.get()?.makeSuccess(msg)
         }
     }
-
 }

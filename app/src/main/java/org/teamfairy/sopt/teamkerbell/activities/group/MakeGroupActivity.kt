@@ -28,19 +28,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.io.File
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
-import android.widget.EditText
-import android.text.InputFilter
 import org.teamfairy.sopt.teamkerbell.R.id.group_name
-import java.util.regex.Pattern
-import android.text.Spanned
 import org.teamfairy.sopt.teamkerbell.utils.EditTextFilter.Companion.setFilter
-
 
 class MakeGroupActivity : AppCompatActivity() {
 
     var user: User by Delegates.notNull()
 
-    private var filePhoto : File?= null
+    private var filePhoto: File? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_group)
@@ -56,8 +51,6 @@ class MakeGroupActivity : AppCompatActivity() {
         }
     }
 
-
-
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
@@ -65,7 +58,7 @@ class MakeGroupActivity : AppCompatActivity() {
 
     private fun attemptMakeGroup() {
 
-        group_name.error=null
+        group_name.error = null
 
         val groupName = group_name.text.toString()
 
@@ -75,7 +68,7 @@ class MakeGroupActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(groupName)) {
             group_name.error = getString(R.string.error_field_required)
             cancel = true
-        }else if (groupName.length>Team.max_length) {
+        } else if (groupName.length> Team.max_length) {
             group_name.error = getString(R.string.error_invalid_length_12)
             cancel = true
         }
@@ -88,19 +81,19 @@ class MakeGroupActivity : AppCompatActivity() {
             makeGroup(groupName)
         }
     }
-    private fun makeGroup(groupName : String){
+    private fun makeGroup(groupName: String) {
         val jsonParam = JSONObject()
         try {
-            jsonParam.put(URL_MAKE_GROUP_PARAM_NAME,groupName )
+            jsonParam.put(URL_MAKE_GROUP_PARAM_NAME, groupName)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         val makeGroupTask = MakeGroupTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext))
         if (filePhoto != null) makeGroupTask.photo = filePhoto!!
-        makeGroupTask.execute(URL_MAKE_GROUP,METHOD_POST, jsonParam.toString())
+        makeGroupTask.execute(URL_MAKE_GROUP, METHOD_POST, jsonParam.toString())
     }
 
-    fun createSuccess(msg : Message){
+    fun createSuccess(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
 
@@ -124,18 +117,16 @@ class MakeGroupActivity : AppCompatActivity() {
 
                     realm.commitTransaction()
 
-                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
-                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
-                    NetworkUtils.connectRoomList(applicationContext,null)
-                    NetworkUtils.connectJoinedRoomList(applicationContext,null)
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_ROOM, true)
+                    DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM, true)
+                    NetworkUtils.connectRoomList(applicationContext, null)
+                    NetworkUtils.connectJoinedRoomList(applicationContext, null)
 
-
-                    val i = Intent(application,MainActivity::class.java)
-                    i.putExtra(IntentTag.INTENT_GROUP,group)
+                    val i = Intent(application, MainActivity::class.java)
+                    i.putExtra(IntentTag.INTENT_GROUP, group)
                     startActivity(i)
 
                     finish()
-
                 }
             }
             else -> {

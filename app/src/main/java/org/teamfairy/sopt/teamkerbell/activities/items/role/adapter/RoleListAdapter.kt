@@ -8,11 +8,10 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.model.data.Role
 import org.teamfairy.sopt.teamkerbell.activities.items.role.viewholder.RoleListViewHolder
 
-
 /**
  * Created by lumiere on 2017-12-30.
  */
-class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : RecyclerView.Adapter<RoleListViewHolder>() {
+class RoleListAdapter(var dataList: ArrayList<Role>, var mContext: Context) : RecyclerView.Adapter<RoleListViewHolder>() {
 
     private var mOnClick: View.OnClickListener? = null
 
@@ -25,10 +24,8 @@ class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : Re
         holder.tvTime.text = dataList[position].getTime()
         holder.tvName.text = dataList[position].name
 
-
-        holder.tvRoom.text= DatabaseHelpUtils.getRoom(mContext,dataList[position].room_idx).real_name
+        holder.tvRoom.text = DatabaseHelpUtils.getRoom(mContext, dataList[position].room_idx).real_name
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -41,7 +38,5 @@ class RoleListAdapter(var dataList: ArrayList<Role>,var mContext : Context) : Re
         return RoleListViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

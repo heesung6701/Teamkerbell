@@ -29,12 +29,10 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_RESPONSE_NOTI
 import org.teamfairy.sopt.teamkerbell.network.info.NoticeTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_NOTICE_IDX
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
-
 
 class NoticeActivity : AppCompatActivity(), MenuActionInterface {
     override fun menuEdit() {
@@ -44,16 +42,13 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
         showDeleteDialog()
     }
 
-
-    var notice : Notice? = null
-    private var noticeIdx : Int by Delegates.notNull()
+    var notice: Notice? = null
+    private var noticeIdx: Int by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notice)
         setSupportActionBar(toolbar)
-
-
 
         when {
             intent.hasExtra(INTENT_NOTICE) -> {
@@ -61,39 +56,34 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
                 notice!!.setPhotoInfo(applicationContext)
                 notice!!.setGroupInfo(applicationContext)
                 setNoticeInfo()
-
-
-
             }
             intent.hasExtra(INTENT_NOTICE_IDX) -> {
-                noticeIdx=intent.getIntExtra(INTENT_NOTICE_IDX,0)
+                noticeIdx = intent.getIntExtra(INTENT_NOTICE_IDX, 0)
 
                 val task = NoticeTask(applicationContext, HandlerGetNotice(this), LoginToken.getToken(applicationContext))
-                task.execute(USGS_REQUEST_URL.URL_DETAIL_SINGLE_NOTICE + "/" + noticeIdx,METHOD_GET)
-
+                task.execute(USGS_REQUEST_URL.URL_DETAIL_SINGLE_NOTICE + "/" + noticeIdx, METHOD_GET)
             }
             else -> finish()
         }
-
     }
-    private fun setNoticeInfo(){
+    private fun setNoticeInfo() {
 
         val notice = this.notice!!
 
-        if(notice.u_idx==LoginToken.getUserIdx(applicationContext))
+        if (notice.u_idx == LoginToken.getUserIdx(applicationContext))
             MenuFunc(this, MenuFunc.MENU_OPT.DELETE_ONLY)
 
-        tv_title.text=("${notice.groupName}, ${notice.roomName}")
-        tv_content.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext,"user${notice.u_idx}"))
+        tv_title.text = ("${notice.groupName}, ${notice.roomName}")
+        tv_content.text = notice.content
+        if (NetworkUtils.getBitmapList(notice.photo, iv_profile, applicationContext, "user${notice.u_idx}"))
             iv_profile.setImageResource(R.drawable.icon_profile_default)
-        tv_name.text=notice.name
-        tv_time.text=notice.getSubTitle()
+        tv_name.text = notice.name
+        tv_time.text = notice.getSubTitle()
 
-        if(notice.status==ARG_STATUS_READ)
-            btn_commit.visibility= View.GONE
+        if (notice.status == ARG_STATUS_READ)
+            btn_commit.visibility = View.GONE
         else
-            btn_commit.visibility=View.VISIBLE
+            btn_commit.visibility = View.VISIBLE
 
         btn_commit.setOnClickListener {
             attemptResponse(notice)
@@ -101,9 +91,8 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
         btn_back.setOnClickListener {
             onBackPressed()
         }
-
     }
-    private fun attemptResponse(notice : Notice){
+    private fun attemptResponse(notice: Notice) {
         val jsonParam = JSONObject()
         try {
             jsonParam.put(URL_RESPONSE_NOTICE_PARAM_NOTICEID, notice.notice_idx)
@@ -111,7 +100,7 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
             e.printStackTrace()
         }
         val task = GetMessageTask(applicationContext, HandlerNoticeResponse(this), LoginToken.getToken(applicationContext))
-        task.execute(URL_RESPONSE_NOTICE,METHOD_POST, jsonParam.toString())
+        task.execute(URL_RESPONSE_NOTICE, METHOD_POST, jsonParam.toString())
     }
 
     private fun showDeleteDialog() {
@@ -124,7 +113,7 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
         })
     }
 
-    private fun attemptDelete(notice : Notice){
+    private fun attemptDelete(notice: Notice) {
         val jsonParam = JSONObject()
         try {
             jsonParam.put(URL_RESPONSE_NOTICE_PARAM_NOTICEID, notice.notice_idx)
@@ -142,24 +131,23 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
             if (activity != null) {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
-                        activity.notice=msg.obj as Notice
+                        activity.notice = msg.obj as Notice
                         activity.notice!!.setPhotoInfo(activity.applicationContext)
                         activity.notice!!.setGroupInfo(activity.applicationContext)
                         activity.setNoticeInfo()
                     }
                     else -> {
                         val message = msg.data.getString(JSON_MESSAGE)
-                        if(message.contains("Success") || message.contains("Internal"))
+                        if (message.contains("Success") || message.contains("Internal"))
                             Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
                         else
-                            Toast.makeText(activity.applicationContext,activity.getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                         activity.finish()
                     }
                 }
             }
         }
     }
-
 
     private class HandlerNoticeResponse(activity: NoticeActivity) : Handler() {
         private val mActivity: WeakReference<NoticeActivity> = WeakReference<NoticeActivity>(activity)
@@ -200,7 +188,4 @@ class NoticeActivity : AppCompatActivity(), MenuActionInterface {
             }
         }
     }
-
-
-
 }

@@ -18,10 +18,8 @@ import org.teamfairy.sopt.teamkerbell.model.data.Notice
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.Vote
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
-import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
-
 
 class UnperformedFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View) {
@@ -46,10 +44,12 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val v = inflater.inflate(R.layout.fragment_unperformed, container, false)
-
 
         tvEmpty = v.findViewById(R.id.tv_empty)
         tvEmpty!!.visibility = if (dataList.size == 0) View.VISIBLE else View.GONE
@@ -66,7 +66,6 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
             Utils.TAB_UNPERFORMED_VOTE -> {
                 v.tv_item_name.text = getString(R.string.action_vote)
                 tvEmpty!!.text = ("미확인된 ${getString(R.string.action_vote)}가 없습니다.")
-
             }
         }
 
@@ -77,19 +76,15 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         adapter?.setOnItemClick(this)
         recyclerView.adapter = adapter
 
-
         updateDataInfo()
-
-
 
         return v
     }
 
-
     fun updateDataList(datas: ArrayList<*>) {
         dataList.clear()
         datas.forEach {
-            if(activity!=null) updateDataInfo(it as ListDataInterface)
+            if (activity != null) updateDataInfo(it as ListDataInterface)
             dataList.add(it as ListDataInterface)
         }
 
@@ -97,7 +92,7 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         tvEmpty?.visibility = if (dataList.size == 0) View.VISIBLE else View.GONE
     }
 
-    private fun updateDataInfo(it : ListDataInterface){
+    private fun updateDataInfo(it: ListDataInterface) {
 
         activity?.let { activity ->
             when (type) {
@@ -142,7 +137,6 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         mListener = null
     }
 
-
     private fun onClickData(msg: Message) {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(msg)
@@ -153,5 +147,4 @@ class UnperformedFragment : Fragment(), View.OnClickListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(msg: Message)
     }
-
 }

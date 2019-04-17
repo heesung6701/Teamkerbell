@@ -16,25 +16,22 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.data.User
 import kotlin.properties.Delegates
 
-
 /**
  * Created by lumiere on 2018-05-20.
  */
-class  ShowUserDialog(context: Context?, var group: Team) : Dialog(context){
-
+class ShowUserDialog(context: Context?, var group: Team) : Dialog(context) {
 
     private var adapterUser: UserListAdapter by Delegates.notNull()
     private var dataListUser = ArrayList<User>()
-    private  var recyclerView : RecyclerView by Delegates.notNull()
+    private var recyclerView: RecyclerView by Delegates.notNull()
 
-    private var btnAdd : ImageButton by Delegates.notNull()
-
+    private var btnAdd: ImageButton by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.dialog_user_list);
+        window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        setContentView(R.layout.dialog_user_list)
 
         recyclerView = findViewById<RecyclerView>(R.id.dialog_recyclerView)
 
@@ -42,12 +39,11 @@ class  ShowUserDialog(context: Context?, var group: Team) : Dialog(context){
         adapterUser = UserListAdapter(dataListUser, context.applicationContext)
         recyclerView.adapter = adapterUser
 
-        DatabaseHelpUtils.getUserListFromRealm(context.applicationContext,dataListUser,adapterUser as RecyclerView.Adapter<*>,group)
+        DatabaseHelpUtils.getUserListFromRealm(context.applicationContext, dataListUser, adapterUser as RecyclerView.Adapter<*>, group)
 
-
-        btnAdd=findViewById(R.id.btn_add)
+        btnAdd = findViewById(R.id.btn_add)
     }
-    fun setOnClickListener(l : View.OnClickListener){
+    fun setOnClickListener(l: View.OnClickListener) {
         btnAdd.setOnClickListener(l)
     }
 }

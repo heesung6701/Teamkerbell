@@ -10,14 +10,11 @@ import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
 import org.teamfairy.sopt.teamkerbell.model.data.SignalResponse
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
 class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: Context) : RecyclerView.Adapter<ListContentHolder>() {
-
 
     private var mOnClick: View.OnClickListener? = null
 
@@ -46,24 +43,20 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
                 else ->
                     holder.ivSign.visibility = View.GONE
             }
-
         } else {
             holder.ivSign.visibility = View.GONE
         }
 
-
-        if (dataList[position] is SignalResponse){
+        if (dataList[position] is SignalResponse) {
             val sig = dataList[position] as SignalResponse
-            holder.itemView.isClickable =  (Signal.colorStrToByte(sig.color) != Signal.RED) || sig.content?.isNotBlank() ?: false
-        }else
-            holder.itemView.isClickable=true
+            holder.itemView.isClickable = (Signal.colorStrToByte(sig.color) != Signal.RED) || sig.content?.isNotBlank() ?: false
+        } else
+            holder.itemView.isClickable = true
 
         val url = dataList[position].photo
         if (NetworkUtils.getBitmapList(url, holder.ivProfile, mContext, "user${dataList.get(position).u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -73,15 +66,10 @@ class ListDataAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: 
 
         val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
 
-
-
         mainView.setOnClickListener(mOnClick)
-
 
         return ListContentHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

@@ -9,7 +9,6 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Signal
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_ROOM_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
@@ -43,7 +42,6 @@ class SignalResponseTask(context: Context, var handler: Handler, token: String?)
 
                     val data: JSONObject = baseJsonResponse.getJSONObject(JSON_DATA)
 
-
                     val obj = Signal(data.getInt(JSON_SIGNAL_IDX),
                             data.getInt(JSON_U_IDX),
                             data.getString(JSON_WRITE_TIME),
@@ -52,8 +50,8 @@ class SignalResponseTask(context: Context, var handler: Handler, token: String?)
                             data.getString(JSON_CONTENT),
                             data.getInt(JSON_ENTIRE_STATUS)
                     )
-                    if(data.has(JSON_RESPONSE_COLOR)) obj.responseColor = data.getString(JSON_RESPONSE_COLOR)
-                    if(data.has(JSON_RESPONSE_CONTENT)) obj.responseContent = data.getString(JSON_RESPONSE_CONTENT)
+                    if (data.has(JSON_RESPONSE_COLOR)) obj.responseColor = data.getString(JSON_RESPONSE_COLOR)
+                    if (data.has(JSON_RESPONSE_CONTENT)) obj.responseContent = data.getString(JSON_RESPONSE_CONTENT)
 
                     if (obj.content.equals("null")) obj.content = null
                     if (obj.responseContent.equals("null")) obj.responseContent = null
@@ -75,10 +73,8 @@ class SignalResponseTask(context: Context, var handler: Handler, token: String?)
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 

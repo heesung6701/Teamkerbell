@@ -35,8 +35,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-
-class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivityInterface , SwipeRefreshLayout.OnRefreshListener{
+class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivityInterface, SwipeRefreshLayout.OnRefreshListener {
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -48,14 +47,12 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         updateList()
     }
 
-
     private var adapterCard: CardListAdapter by Delegates.notNull()
 
     private var adapterList: ListDataAdapter by Delegates.notNull()
     var dataList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
     var noticeList: ArrayList<ListDataInterface> = arrayListOf<ListDataInterface>()
     private var recyclerView: RecyclerView by Delegates.notNull()
-
 
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
@@ -72,17 +69,14 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM) ?: Room()
 
-
         adapterCard = CardListAdapter(dataList, applicationContext, this)
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapterCard
 
-
         adapterList = ListDataAdapter(dataList, applicationContext)
         adapterList.setOnItemClick(this)
-
 
         divider = DividerItemDecoration(
                 recyclerView.context,
@@ -92,9 +86,7 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
         FilterFunc(this)
 
-
         tv_show_list.setOnClickListener { changeMode() }
-
 
         fab.setOnClickListener { _ ->
             val i = Intent(applicationContext, MakeNoticeActivity::class.java)
@@ -107,13 +99,9 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
         btn_back.setOnClickListener { onBackPressed() }
 
-
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
-
     }
-
 
     private fun changeMode() {
         showCard = !showCard
@@ -124,7 +112,6 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
             recyclerView.adapter = adapterCard
 
             recyclerView.removeItemDecoration(divider)
-
         } else {
             tv_show_list.text = getString(R.string.action_show_list)
             recyclerView.setPadding(16, 16, 16, 16)
@@ -133,7 +120,6 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
             recyclerView.addItemDecoration(divider)
         }
-
     }
 
     override fun onResume() {
@@ -159,11 +145,11 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
         }
         updateList()
     }
-    private fun updateList(){
+    private fun updateList() {
 
         dataList.clear()
         noticeList.iterator().forEach {
-            if(room?.room_idx == ARG_ALL_IDX || it.room_idx==room?.room_idx?:it.room_idx)
+            if (room?.room_idx == ARG_ALL_IDX || it.room_idx == room?.room_idx ?: it.room_idx)
                 dataList.add(it)
         }
 
@@ -171,9 +157,7 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
             adapterCard.notifyDataSetChanged()
         else
             adapterList.notifyDataSetChanged()
-
     }
-
 
     private fun connectNoticeList() {
 
@@ -185,7 +169,6 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
 
         val task = NoticeListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(URL_GROUP_NOTICE.plus("/${group.g_idx}"), METHOD_GET)
-
     }
 
     private class HandlerGet(fragment: NoticeCardActivity) : Handler() {
@@ -197,11 +180,8 @@ class NoticeCardActivity : AppCompatActivity(), View.OnClickListener, RoomActivi
                     mActivity.get()?.getNoticeList(msg.obj as ArrayList<Notice>)
                 }
                 else -> {
-
                 }
             }
         }
     }
-
-
 }

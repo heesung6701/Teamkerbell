@@ -28,12 +28,9 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
  */
 class UserListTask(context: Context, var handler: Handler?, token: String?) : NetworkTask(context, token) {
 
-
     private var msgCode: Int = MSG_FAIL
 
-
     fun extractFeatureFromJson(jsonResponse: String) {
-
 
         val realm: Realm = getRealmDefault(context)
         msgCode = MSG_FAIL
@@ -43,7 +40,6 @@ class UserListTask(context: Context, var handler: Handler?, token: String?) : Ne
             if (baseJsonResponse.has(JSON_MESSAGE)) {
                 val message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success")) {
-
 
                     realm.beginTransaction()
                     realm.where(UserR::class.java).notEqualTo(UserR.ARG_U_IDX, LoginToken.getUserIdx(context)).findAll().deleteAllFromRealm()
@@ -62,11 +58,9 @@ class UserListTask(context: Context, var handler: Handler?, token: String?) : Ne
                         user.photo = if (data.has(JSON_PHOTO)) data.getString(JSON_PHOTO) else ""
                         user.id = if (data.has(JSON_ID)) data.getString(JSON_ID) else ""
 
-
                         val userR = user.toUserR()
                         realm.copyToRealmOrUpdate(userR)
                     }
-
 
                     val isUpdateR: IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, IsUpdateR.WHAT_USER).findFirst()
                             ?: realm.createObject(IsUpdateR::class.java, IsUpdateR.WHAT_USER)
@@ -90,13 +84,10 @@ class UserListTask(context: Context, var handler: Handler?, token: String?) : Ne
             if (realm.isInTransaction)
                 realm.commitTransaction()
         }
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         extractFeatureFromJson(result!!)
 

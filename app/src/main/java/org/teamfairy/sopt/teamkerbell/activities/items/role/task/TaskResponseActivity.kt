@@ -45,7 +45,6 @@ import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_POST
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_TASK
 
-
 class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefreshLayout.OnRefreshListener {
     override fun menuEdit() {
         attemptEdit()
@@ -55,13 +54,11 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         attemptDelete()
     }
 
-
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
         connectFeedBackList()
         mSwipeRefreshLayout.isRefreshing = false
     }
-
 
     var adapter: FeedbackListAdapter by Delegates.notNull()
     val dataList = ArrayList<RoleFeedback>()
@@ -69,7 +66,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
     var role: Role by Delegates.notNull()
     var task: RoleTask by Delegates.notNull()
     var taskResponse: TaskResponse by Delegates.notNull()
-
 
     var ivProfile: ImageView by Delegates.notNull()
     var tvName: TextView by Delegates.notNull()
@@ -84,21 +80,16 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
     var selectedFile: Int = -1
 
-
     var dialogDelete: BottomSheetDialog by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_response)
         setSupportActionBar(toolbar)
 
-
-
-
         role = intent.getParcelableExtra(INTENT_ROLE)
         task = intent.getParcelableExtra(INTENT_TASK)
 
         supportActionBar!!.title = role.title
-
 
         ivProfile = findViewById(R.id.li_iv_profile)
         tvName = findViewById(R.id.li_tv_name)
@@ -111,7 +102,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         btnBefore = findViewById(R.id.li_btn_file_before)
         btnNext = findViewById(R.id.li_btn_file_next)
 
-
         taskResponse = intent.getParcelableExtra(INTENT_TASK_RESPONSE)
         taskResponse.setPhotoInfo(this)
 
@@ -119,11 +109,9 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
         adapter = FeedbackListAdapter(applicationContext, dataList)
         adapter.setOnLongClickHandler(HandlerDeleteFeedBack(this))
         recyclerView.adapter = adapter
-
 
         if (taskResponse.u_idx == LoginToken.getUserIdx(applicationContext))
             MenuFunc(this, MenuFunc.MENU_OPT.SHOW_ALL)
@@ -149,7 +137,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             tvFileName.text = ("${selectedFile + 1}.${taskResponse.fileArray[selectedFile].substringAfterLast('/')}")
 
             btnBefore.visibility = View.VISIBLE
-
         }
         btnBefore.setOnClickListener {
             selectedFile--
@@ -165,10 +152,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
-
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -195,12 +179,10 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_RESPONSE_IDX, taskResponse.response_idx)
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_FEEDBACK_PARAM_ROLE_FEEDBACK_IDX, feedback.feedback_idx.toString())
 
-        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK, METHOD_DELETE,jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK, METHOD_DELETE, jsonParam.toString())
     }
 
-
     private fun setResponseData(taskResponse: TaskResponse) {
-
 
         this.taskResponse = taskResponse
         tvName.text = taskResponse.name
@@ -220,8 +202,8 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             layoutFile.setOnClickListener {
                 if (selectedFile == -1) {
                     Toast.makeText(applicationContext, taskResponse.fileArray.first().substringAfterLast('/') +
-                            (if(taskResponse.fileArray.size>1)  "(+${taskResponse.fileArray.size - 1})" else "" )
-                            +"를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
+                            (if (taskResponse.fileArray.size> 1) "(+${taskResponse.fileArray.size - 1})" else "") +
+                            "를 다운로드 시작합니다", Toast.LENGTH_SHORT).show()
 //                    requestAppPermissions()
                     taskResponse.fileArray.forEach {
                         checkPermission(it)
@@ -233,13 +215,10 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             }
             if (taskResponse.fileArray.size > 1)
                 btnNext.visibility = View.VISIBLE
-
         } else {
             tvFileName.text = getString(R.string.txt_no_file)
 //            layoutFile.visibility = View.GONE
         }
-
-
     }
 
     private fun downLoadFile(url: String) {
@@ -260,13 +239,12 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             // Start download
             val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(r)
-
         } catch (e: URISyntaxException) {
             Toast.makeText(applicationContext, "올바르지 않은 파일형식입니다.", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
-            //Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
+            // Toast.makeText(applicationContext,"기한 만료된 파일입니다.",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -310,9 +288,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             else -> {
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
             }
-
         }
-
     }
 
     private fun connectFeedBackList() {
@@ -320,7 +296,6 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
 
         task.execute(USGS_REQUEST_URL.URL_ROLE_FEEDBACK + "/" + taskResponse.response_idx, METHOD_GET)
     }
-
 
     private class HandlerDelete(activity: TaskResponseActivity) : Handler() {
         private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
@@ -331,18 +306,14 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.finish()
-
                     }
                     else -> {
                         Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
-
                 }
-
             }
         }
     }
-
 
     private class HandlerGetFeedback(activity: TaskResponseActivity) : Handler() {
         private val mActivity: WeakReference<TaskResponseActivity> = WeakReference<TaskResponseActivity>(activity)
@@ -377,9 +348,7 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
                     else -> {
                         Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                     }
-
                 }
-
             }
         }
     }
@@ -401,5 +370,4 @@ class TaskResponseActivity : AppCompatActivity(), MenuActionInterface, SwipeRefr
             activity?.deleteFeedback(msg)
         }
     }
-
 }

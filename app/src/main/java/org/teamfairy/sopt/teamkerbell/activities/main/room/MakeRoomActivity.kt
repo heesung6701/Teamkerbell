@@ -43,13 +43,10 @@ import kotlin.properties.Delegates
 
 class MakeRoomActivity : AppCompatActivity() {
 
-
-    var group : Team by Delegates.notNull()
-    var filePhoto : File?= null
-
+    var group: Team by Delegates.notNull()
+    var filePhoto: File? = null
 
     internal val SELECT_IMAGE = 10
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +75,6 @@ class MakeRoomActivity : AppCompatActivity() {
             }
         }
 
-
         btn_start.setOnClickListener {
             attemptMakeRoom()
         }
@@ -94,7 +90,7 @@ class MakeRoomActivity : AppCompatActivity() {
 
     private fun attemptMakeRoom() {
 
-        room_name.error=null
+        room_name.error = null
 
         val roomName = room_name.text.toString()
 
@@ -103,7 +99,7 @@ class MakeRoomActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(roomName)) {
             room_name.error = getString(R.string.error_field_required)
             cancel = true
-        }else if (roomName.length>Room.max_length) {
+        } else if (roomName.length> Room.max_length) {
             room_name.error = getString(R.string.error_invalid_length_12)
             cancel = true
         }
@@ -114,15 +110,14 @@ class MakeRoomActivity : AppCompatActivity() {
             makeRoom(roomName)
         }
     }
-    private fun makeRoom(roomName : String){
+    private fun makeRoom(roomName: String) {
         val jsonParam = JSONObject()
-        jsonParam.put(URL_MAKE_ROOM_PARAM_NAME,roomName )
-        jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX,group.g_idx)
-        val makeRoomTask = MakeRoomTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext),group.g_idx)
+        jsonParam.put(URL_MAKE_ROOM_PARAM_NAME, roomName)
+        jsonParam.put(URL_MAKE_ROOM_PARAM_G_IDX, group.g_idx)
+        val makeRoomTask = MakeRoomTask(applicationContext, HandlerCreate(this), LoginToken.getToken(applicationContext), group.g_idx)
         if (filePhoto != null) makeRoomTask.photo = filePhoto!!
         makeRoomTask.execute(URL_MAKE_ROOM, METHOD_POST, jsonParam.toString())
     }
-
 
     private fun requestExplorer() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -130,7 +125,6 @@ class MakeRoomActivity : AppCompatActivity() {
         intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         startActivityForResult(intent, SELECT_IMAGE)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -145,8 +139,7 @@ class MakeRoomActivity : AppCompatActivity() {
         }
     }
 
-
-    fun createSuccess(msg : Message){
+    fun createSuccess(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
 
@@ -168,14 +161,13 @@ class MakeRoomActivity : AppCompatActivity() {
                     Log.d("RealmDB/added", room.toString())
 
                     val isUpdateJoined = IsUpdateR()
-                    isUpdateJoined.what=StatusCode.joinedRoomChange
+                    isUpdateJoined.what = StatusCode.joinedRoomChange
                     isUpdateJoined.isUpdate = true
                     realm.copyToRealmOrUpdate(isUpdateJoined)
 
                     realm.commitTransaction()
 
                     finish()
-
                 }
             }
             else -> {
@@ -193,6 +185,4 @@ class MakeRoomActivity : AppCompatActivity() {
             activity?.createSuccess(msg)
         }
     }
-
-
 }

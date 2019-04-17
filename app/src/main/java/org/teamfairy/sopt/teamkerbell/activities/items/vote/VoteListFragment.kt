@@ -43,7 +43,6 @@ import kotlin.properties.Delegates
  */
 class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
 
-
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
         connectVoteList()
@@ -60,7 +59,6 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
     var state = Utils.VOTE_RECEIVER
 
-
     private var showFinished = false
     private var voteList: ArrayList<Vote> = arrayListOf<Vote>()
     private var tvShowFinished: TextView by Delegates.notNull()
@@ -69,16 +67,18 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var adapter: VoteListAdapter by Delegates.notNull()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val v = inflater.inflate(R.layout.fragment_vote_list, container, false)
-
 
         recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
         activity?.let {
-        adapter = VoteListAdapter(it.applicationContext,dataList)
+        adapter = VoteListAdapter(it.applicationContext, dataList)
             adapter.setOnItemClick(this)
             recyclerView.adapter = adapter
 
@@ -92,8 +92,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         mSwipeRefreshLayout = v.findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
-
-        tvShowFinished=v.findViewById(R.id.tv_show_finished)
+        tvShowFinished = v.findViewById(R.id.tv_show_finished)
         tvShowFinished.setOnClickListener {
             showFinished = !showFinished
             updateVoteList()
@@ -101,7 +100,6 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
 
         return v
     }
-
 
     override fun onClick(p0: View) {
         activity?.let {
@@ -117,7 +115,7 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
         dataList.clear()
         adapter.notifyDataSetChanged()
 
-        activity?.let{
+        activity?.let {
         val task: NetworkTask = VoteListTask(it.applicationContext, HandlerGet(this),
                 LoginToken.getToken(it.applicationContext))
 
@@ -135,9 +133,8 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             }
         }
         adapter.notifyDataSetChanged()
-        tvShowFinished.text = if (!showFinished) getString(R.string.action_show_finished)+"(${voteList.size-dataList.size})" else getString(R.string.action_show_not_finished)+"(${voteList.size-dataList.size})"
+        tvShowFinished.text = if (!showFinished) getString(R.string.action_show_finished) + "(${voteList.size - dataList.size})" else getString(R.string.action_show_not_finished) + "(${voteList.size - dataList.size})"
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -162,11 +159,9 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
             result!!.iterator().forEach {
                 voteList.add(it.toVote(realm))
             }
-
         }
         updateVoteList()
     }
-
 
     fun getVoteList(result: ArrayList<Vote>) {
 
@@ -209,15 +204,10 @@ class VoteListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.On
                     if (fragment == null || fragment.activity == null) return
                     mFragment.get()?.getVoteList(msg.obj as ArrayList<Vote>)
 //                    mFragment.get()?.getVoteListFromRealm()
-
                 }
                 else -> {
-
                 }
-
             }
         }
     }
-
-
 }

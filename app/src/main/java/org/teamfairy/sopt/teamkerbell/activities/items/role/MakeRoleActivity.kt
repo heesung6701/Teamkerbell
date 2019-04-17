@@ -1,13 +1,10 @@
 package org.teamfairy.sopt.teamkerbell.activities.items.role
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.R
 
@@ -30,14 +27,13 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
+class MakeRoleActivity : AppCompatActivity(), RoomActivityInterface {
     override fun changeRoom(room: Room) {
-        this.room=room
+        this.room = room
     }
 
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
-
 
     private var edtViewList = ArrayList<ExampleEdit>()
 
@@ -54,7 +50,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
         layout_add_task.setOnClickListener {
             val edtView = layoutInflater.inflate(R.layout.item_example, null, false)
             val edt = edtView.findViewById<EditText>(R.id.edt_vote_example)
-            edtViewList.add(ExampleEdit(edtView,edt))
+            edtViewList.add(ExampleEdit(edtView, edt))
             layout_role_tasks.addView(edtView)
             edt.requestFocus()
         }
@@ -76,7 +72,7 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 val jsonArray = JSONArray()
                 edtViewList.forEach {
                     val edt = it.edtText
-                    if(edt.text.isNotEmpty()) jsonArray.put(edt.text.toString())
+                    if (edt.text.isNotEmpty()) jsonArray.put(edt.text.toString())
                 }
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_REGISTER_PARAM_TASK_ARRAY, jsonArray)
             } catch (e: Exception) {
@@ -84,8 +80,6 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
             }
             val task = GetMessageTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
             task.execute(USGS_REQUEST_URL.URL_ROLE_POST, METHOD_POST, jsonParam.toString())
-
-
         }
 
         btn_back.setOnClickListener {
@@ -93,15 +87,11 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
         }
     }
 
-
-
     override fun finish() {
 
         super.finish()
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
-
-
 
     private class HandlerGet(activity: MakeRoleActivity) : Handler() {
         private val mActivity: WeakReference<MakeRoleActivity> = WeakReference<MakeRoleActivity>(activity)
@@ -112,7 +102,6 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         activity.finish()
-
                     }
                     else -> {
                         Toast.makeText(activity.applicationContext, activity.getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
@@ -121,7 +110,4 @@ class MakeRoleActivity : AppCompatActivity(),RoomActivityInterface{
             }
         }
     }
-
-
-
 }

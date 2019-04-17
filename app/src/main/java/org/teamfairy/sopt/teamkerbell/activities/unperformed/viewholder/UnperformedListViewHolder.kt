@@ -8,9 +8,8 @@ import org.teamfairy.sopt.teamkerbell.R
 /**
  * Created by lumiere on 2017-12-30.
  */
-open class UnperformedListViewHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
-    val tvTitle : TextView = itemView.findViewById(R.id.li_tv_title)
-    val tvSubTitle : TextView = itemView.findViewById(R.id.li_tv_sub_title)
-    val tvTime : TextView = itemView.findViewById(R.id.li_tv_time)
-
+open class UnperformedListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val tvTitle: TextView = itemView.findViewById(R.id.li_tv_title)
+    val tvSubTitle: TextView = itemView.findViewById(R.id.li_tv_sub_title)
+    val tvTime: TextView = itemView.findViewById(R.id.li_tv_time)
 }

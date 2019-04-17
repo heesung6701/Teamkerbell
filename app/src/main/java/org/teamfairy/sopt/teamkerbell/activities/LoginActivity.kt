@@ -6,19 +6,13 @@ import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.app.LoaderManager.LoaderCallbacks
-import android.content.Loader
-import android.database.Cursor
-import android.net.Uri
 import android.provider.ContactsContract
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
-import android.content.CursorLoader
 import android.content.Intent
 import android.graphics.Color
 import android.os.*
@@ -48,8 +42,7 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_PWD
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 
-
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class LoginActivity : AppCompatActivity() {
 
     private val mHandlerLogin: Handler = HandlerLogin(this)
 
@@ -65,16 +58,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 activity.mAuthTask = null
                 activity.showProgress(false)
 
-
-                when(msg.what) {
-                    Utils.MSG_SUCCESS->{
+                when (msg.what) {
+                    Utils.MSG_SUCCESS -> {
                         activity.login()
                     }
-                    else->{
+                    else -> {
 
                         val result = msg.data.getString(JSON_MESSAGE)
 
-                        if(result.contains("Failed"))
+                        if (result.contains("Failed"))
                             Toast.makeText(activity.applicationContext, "아이디 또는 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
                         else
                             Toast.makeText(activity.applicationContext, result, Toast.LENGTH_SHORT).show()
@@ -84,15 +76,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
-
     fun login() {
 
-        //로그인할때 받아와야되나??
-        NetworkUtils.connectGroupList(applicationContext,null,true)
-        NetworkUtils.connectUserList(applicationContext,null,true)
-        NetworkUtils.connectJoinedGroupList(applicationContext,null,true)
-        NetworkUtils.connectJoinedRoomList(applicationContext,null,true)
-        NetworkUtils.connectRoomList(applicationContext,null,true)
+        // 로그인할때 받아와야되나??
+        NetworkUtils.connectGroupList(applicationContext, null, true)
+        NetworkUtils.connectUserList(applicationContext, null, true)
+        NetworkUtils.connectJoinedGroupList(applicationContext, null, true)
+        NetworkUtils.connectJoinedRoomList(applicationContext, null, true)
+        NetworkUtils.connectRoomList(applicationContext, null, true)
 
 //        DatabaseHelpUtils.setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
 //        DatabaseHelpUtils.setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
@@ -103,7 +94,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         startActivity(intent)
         finish()
     }
-
 
 //    val PREF_LOGIN_DATA = "pref_login_info"
 //    fun setPref(id: String, pwd: String) {
@@ -116,7 +106,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     override fun onBackPressed() {
         finish()
     }
-
 
     private var mAuthTask: LoginTask? = null
 
@@ -149,15 +138,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             attemptLogin()
         }
 
-
-        email.addTextChangedListener(object : TextWatcher{
+        email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if(password.text.isNotEmpty() && email.text.isNotEmpty()){
+                if (password.text.isNotEmpty() && email.text.isNotEmpty()) {
                     btn_sign_in.setTextColor(Color.WHITE)
-                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn)
-                }else{
+                    btn_sign_in.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn)
+                } else {
                     btn_sign_in.setTextColor(Color.BLACK)
-                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
+                    btn_sign_in.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn_gray)
                 }
             }
 
@@ -166,16 +154,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
-
         })
-        password.addTextChangedListener(object : TextWatcher{
+        password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if(password.text.isNotEmpty() && email.text.isNotEmpty()){
+                if (password.text.isNotEmpty() && email.text.isNotEmpty()) {
                     btn_sign_in.setTextColor(Color.WHITE)
-                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn)
-                }else{
+                    btn_sign_in.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn)
+                } else {
                     btn_sign_in.setTextColor(Color.BLACK)
-                    btn_sign_in.background=ContextCompat.getDrawable(applicationContext,R.drawable.shape_round_btn_gray)
+                    btn_sign_in.background = ContextCompat.getDrawable(applicationContext, R.drawable.shape_round_btn_gray)
                 }
             }
 
@@ -184,7 +171,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
-
         })
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -194,27 +180,19 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             false
         })
 
-
-
-
-
         btn_sign_in.setOnClickListener { attemptLogin() }
-
 
         btn_sign_up.setOnClickListener {
 
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
-
     }
 
     private fun populateAutoComplete() {
         if (!mayRequestContacts()) {
             return
         }
-
-        loaderManager.initLoader(0, null, this)
     }
 
     private fun mayRequestContacts(): Boolean {
@@ -237,15 +215,17 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     /**
      * Callback received when a permissions request has been completed.
      */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete()
             }
         }
     }
-
 
     private var emailStr = ""
     private var passwordStr = ""
@@ -262,18 +242,18 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         // Store values at the time of the login attempt.
         emailStr = email.text.toString()
         passwordStr = password.text.toString()
-        if(emailStr.isBlank()){
-            email.error=getString(R.string.error_enter)
+        if (emailStr.isBlank()) {
+            email.error = getString(R.string.error_enter)
             email.requestFocus()
             return
         }
-        if(!emailStr.contains("@")){
-            email.error=getString(R.string.error_invalid_email)
+        if (!emailStr.contains("@")) {
+            email.error = getString(R.string.error_invalid_email)
             email.requestFocus()
             return
         }
-        if(passwordStr.isBlank()){
-            password.error=getString(R.string.error_enter)
+        if (passwordStr.isBlank()) {
+            password.error = getString(R.string.error_enter)
             password.requestFocus()
             return
         }
@@ -290,9 +270,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             e.printStackTrace()
         }
         mAuthTask = LoginTask(applicationContext, mHandlerLogin)
-        mAuthTask!!.execute(URL_LOGIN, METHOD_POST , jsonParam.toString())
+        mAuthTask!!.execute(URL_LOGIN, METHOD_POST, jsonParam.toString())
     }
-
 
     /**
      * Shows the progress UI and hides the login form.
@@ -332,38 +311,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
-    override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
-        return CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?", arrayOf(ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE),
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC")
-    }
-
-    override fun onLoadFinished(cursorLoader: Loader<Cursor>, cursor: Cursor) {
-        val emails = ArrayList<String>()
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS))
-            cursor.moveToNext()
-        }
-
-        addEmailsToAutoComplete(emails)
-    }
-
-    override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
-
-    }
-
     private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        // Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         val adapter = ArrayAdapter(this@LoginActivity,
                 android.R.layout.simple_dropdown_item_1line, emailAddressCollection)
 
@@ -378,13 +327,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         val IS_PRIMARY = 1
     }
 
-
     companion object {
 
         /**
          * Id to identity READ_CONTACTS permission request.
          */
         private val REQUEST_READ_CONTACTS = 0
-
     }
 }

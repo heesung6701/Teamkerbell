@@ -96,7 +96,6 @@ import kotlin.properties.Delegates
 
 class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 
-
     private val LOG_TAG = ChatActivity::class.java.simpleName
 
     private var isOpenDrawLayout: Boolean = false
@@ -110,13 +109,12 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
     private var adapter_chat: ChatViewAdapter by Delegates.notNull()
     private var adapter_user: UserListAdapter by Delegates.notNull()
 
-
     private var userList = ArrayList<User>()
 
     private var lastChatIdx = -1
     private var lastChatPos = -1
 
-    private var forFinish= false
+    private var forFinish = false
 
     private var mSocket: Socket by Delegates.notNull()
 
@@ -126,57 +124,43 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         setSupportActionBar(toolbar)
-
         getUserList()
-
         group = intent.getParcelableExtra(INTENT_GROUP)
         room = intent.getParcelableExtra(INTENT_ROOM)
-
-
-        lastChatIdx = DatabaseHelpUtils.getRecentChatIdx(applicationContext,room.room_idx)
-//        Log.d("$LOG_TAG/lastChatIdx", lastChatIdx.toString())
+        lastChatIdx = DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx)
         supportActionBar!!.title = room.real_name
-
         val layoutManager = LinearLayoutManager(this)
         listView_chat.layoutManager = layoutManager
         adapter_chat = ChatViewAdapter(dataList, applicationContext, group, room)
         adapter_chat.setOnLongClickHandler(HandlerLongClick(this))
         listView_chat.adapter = adapter_chat
-
         adapter_chat.setPick(intent.getIntExtra(INTENT_PICK_IDX, -1))
-
         listView_chat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if(newState== RecyclerView.SCROLL_STATE_DRAGGING)
-                {
-//                    Log.d(LOG_TAG,"scroll dragging")
-                    if(adapter_chat.isFixedScroll)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    if (adapter_chat.isFixedScroll)
                         adapter_chat.setFixed(false)
-                    if(adapter_chat.pick_idx!=-1) {
+                    if (adapter_chat.pickIdx != -1) {
                         adapter_chat.setPick(-1)
                         adapter_chat.notifyDataSetChanged()
                     }
-                        clearReadLine()
-
+                    clearReadLine()
                 }
             }
         })
 
-        if(adapter_chat.pick_idx!=-1)
+        if (adapter_chat.pickIdx != -1)
             adapter_chat.setFixed(true)
 
         tv_nav_room_name.text = room.real_name
 
-
-        if(group.default_room_idx==room.room_idx) {
-            btn_nav_leave.isEnabled=false
+        if (group.default_room_idx == room.room_idx) {
+            btn_nav_leave.isEnabled = false
             btn_nav_leave.visibility = View.INVISIBLE
-            tv_nav_room_name.text =("${tv_nav_room_name.text}(기본 채팅방)")
-        }
-        else {
+            tv_nav_room_name.text = ("${tv_nav_room_name.text}(기본 채팅방)")
+        } else {
             btn_nav_leave.setOnClickListener(this)
         }
         edt_sendmessage.setOnFocusChangeListener { _, b ->
@@ -189,11 +173,9 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-                    imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
-
+                imm.showSoftInput(edt_sendmessage, InputMethodManager.SHOW_IMPLICIT)
 
                 scrollToPosition(listView_chat, dataList.lastIndex)
-
             }
         }
         btn_expand.setOnClickListener(this)
@@ -203,10 +185,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         btn_draw_menu.setOnClickListener(this)
         btn_board.setOnClickListener(this)
 
-
-//        btn_camera.setOnClickListener {
-//            //카메라 버튼을 눌렀을 때
-//        }
         btn_gallery.setOnClickListener(this)
         btn_video.setOnClickListener(this)
         btn_file.setOnClickListener(this)
@@ -215,16 +193,13 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         btn_vote.setOnClickListener(this)
         btn_role.setOnClickListener(this)
 
-
         btn_sendMessage.setOnClickListener(this)
-
 
         btn_nav_notice.setOnClickListener(this)
         btn_nav_pick.setOnClickListener(this)
         btn_nav_role.setOnClickListener(this)
         btn_nav_signal.setOnClickListener(this)
         btn_nav_vote.setOnClickListener(this)
-
 
         btn_nav_cloud_drive.setOnClickListener(this)
         attachSocket()
@@ -292,7 +267,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 drawer_layout.closeDrawer(Gravity.END)
             }
 
-
             R.id.btn_role -> {
                 val intent = Intent(this, MakeRoleActivity::class.java)
                 intent.putExtra(INTENT_GROUP, group)
@@ -301,7 +275,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-
             }
             R.id.btn_vote -> {
                 val intent = Intent(this, MakeVoteActivity::class.java)
@@ -351,9 +324,7 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 } else {
                     requestExplorer()
                 }
-
             }
-
 
             R.id.btn_back -> {
                 onBackPressed()
@@ -422,48 +393,48 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             intentImage()
         }
     }
-    var dialog : ConfirmDeleteDialog? = null
+
+    var dialog: ConfirmDeleteDialog? = null
     private fun showDeleteDialog() {
-        if(group.default_room_idx==room.room_idx){
-            Toast.makeText(applicationContext,getString(R.string.txt_default_cant_leave), Toast.LENGTH_SHORT).show()
+        if (group.default_room_idx == room.room_idx) {
+            Toast.makeText(applicationContext, getString(R.string.txt_default_cant_leave), Toast.LENGTH_SHORT).show()
             return
         }
-        dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
+        dialog = ConfirmDeleteDialog(this, getString(R.string.txt_confirm_leave))
         dialog!!.show()
 
         dialog!!.setOnClickListenerYes(View.OnClickListener {
-            forFinish=true
+            forFinish = true
             attemptExitSocket()
 //            attemptLeave()
         })
     }
 
-
     private fun hideKeyboard() {
         edt_sendmessage.clearFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(edt_sendmessage.windowToken, 0)
-
     }
 
     private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
-        if(position<0) return
+        if (position < 0) return
 //        Log.d(LOG_TAG ,"is Fixed? ${adapter_chat.isFixedScroll}")
 //        Log.d(LOG_TAG ,"is pick_id? ${adapter_chat.pick_idx}")
-        if( adapter_chat.pick_idx==dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pick_idx==-1 )) {
+        if (adapter_chat.pickIdx == dataList[position].chat_idx || (!adapter_chat.isFixedScroll && adapter_chat.pickIdx == -1)) {
             recyclerView.layoutManager = LinearLayoutManagerWithSmoothScroller(applicationContext)
             (recyclerView.layoutManager as LinearLayoutManagerWithSmoothScroller).offsetChildrenVertical(0)
             recyclerView.scrollToPosition(position)
         }
     }
 
-    private fun attemptExitSocket(){
+    private fun attemptExitSocket() {
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
         jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
-        mSocket.emit(Constants.EXIT_CHAT_ROOM , jsonObj.toString())
+        mSocket.emit(Constants.EXIT_CHAT_ROOM, jsonObj.toString())
         Log.d("$LOG_TAG/Socket ${Constants.EXIT_CHAT_ROOM}", jsonObj.toString())
     }
+
     private fun attemptLeave() {
         val task = GetMessageTask(applicationContext, HandlerLeave(this), LoginToken.getToken(applicationContext))
 
@@ -476,20 +447,20 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         task.execute(USGS_REQUEST_URL.URL_LEAVE_ROOM, METHOD_DELETE, jsonParam.toString())
     }
 
-    private fun deleteRoomFromRealm(){
+    private fun deleteRoomFromRealm() {
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         realm.beginTransaction()
         realm.where(JoinedRoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).equalTo(ARG_U_IDX, LoginToken.getUserIdx(applicationContext)).findAll().deleteAllFromRealm()
         realm.where(RoomR::class.java).equalTo(ARG_ROOM_IDX, room.room_idx).findAll().deleteAllFromRealm()
 
-        val isUpdateR
-                : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
+        val isUpdateR:
+                IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(ARG_WHAT, StatusCode.joinedRoomChange).findFirst()
                 ?: makeUpdateR(realm, StatusCode.joinedRoomChange)
         isUpdateR.isUpdate = true
 
         realm.commitTransaction()
-
     }
+
     private fun leavedRoom(msg: Message) {
         when (msg.what) {
             MSG_SUCCESS -> {
@@ -499,12 +470,10 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             else ->
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private class HandlerLeave(activity: ChatActivity) : Handler() {
         private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
-
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
@@ -521,8 +490,8 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         userList.clear()
         DatabaseHelpUtils.getRoomUserListFromRealm(applicationContext, userList, room)
 
-        //drawer layout
-        listView_user!!.layoutManager = LinearLayoutManager(applicationContext);
+        // drawer layout
+        listView_user!!.layoutManager = LinearLayoutManager(applicationContext)
         adapter_user = UserListAdapter(userList, applicationContext)
         listView_user.adapter = adapter_user
 //        val divider = DividerItemDecoration(
@@ -533,7 +502,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 //        listView_user.addItemDecoration(divider)
         tv_numberOfUser.text = if (userList.size > 0) "(" + userList.size.toString() + ")" else ""
     }
-
 
     var isUpdateJoined: IsUpdateR by Delegates.notNull()
 
@@ -567,16 +535,14 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         getUserList()
         updateUserList()
 //        Log.d(LOG_TAG, "onResume")
-        if(mSocket.connected()) {
-            if(!firstTimeResume)
+        if (mSocket.connected()) {
+            if (!firstTimeResume)
                 enterRoomSocket()
-            firstTimeResume=false
-        }
-        else
+            firstTimeResume = false
+        } else
             connectSocket()
         addChangeJoinedListener()
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -589,37 +555,34 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         leaveRoomSocket()
     }
 
-
     override fun onBackPressed() {
 
-        if(!mSocket.connected()) {
+        if (!mSocket.connected()) {
             detachSocket()
             finish()
-        }
-        else if(isConnectedRoom) {
-            forFinish=true
+        } else if (isConnectedRoom) {
+            forFinish = true
             finish()
-        }
-        else {
-            if(mSocket.connected())
+        } else {
+            if (mSocket.connected())
                 detachSocket()
             super.onBackPressed()
         }
     }
 
-
-    fun clearReadLine(){
-        lastChatIdx=-1
-        if(lastChatPos==-1) return
+    fun clearReadLine() {
+        lastChatIdx = -1
+        if (lastChatPos == -1) return
 
         dataList.removeAt(lastChatPos)
-        scrollToPosition(listView_chat,lastChatPos-1)
+        scrollToPosition(listView_chat, lastChatPos - 1)
 
-        listView_chat.adapter=adapter_chat
+        listView_chat.adapter = adapter_chat
         adapter_chat.notifyDataSetChanged()
-        lastChatPos=-1
+        lastChatPos = -1
 //        Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
     }
+
     fun makeDialog(position: Int) {
         val dialog = ChooseWorkDialog(this)
         dialog.show()
@@ -673,7 +636,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                     var txt: String = dataList[position].content!!
                     if (txt.length > 10) txt = txt.substring(0, 10) + "..."
                     Toast.makeText(applicationContext, txt + "내용을 픽! 했습니다", Toast.LENGTH_SHORT).show()
-
                 }
 
 //                R.id.btn_search -> {
@@ -681,7 +643,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 //                }
             }
         })
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -694,13 +655,10 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                     val file = File(url)
 
                     attemptUploadStorage(requestCode, file)
-
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
-
         }
 
         if (requestCode == SELECT_IMAGE) {
@@ -708,14 +666,12 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 try {
                     val file = FileUtils.updatePhoto(FileUtils.getRealPathFromURI(data!!.data, contentResolver), null)
                     attemptUploadStorage(requestCode, file)
-
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
         }
     }
-
 
     private fun checkPermissionREAD_EXTERNAL_STORAGE(context: Context, request: Int): Boolean {
         val currentAPIVersion = Build.VERSION.SDK_INT
@@ -728,7 +684,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                     showDialog("External storage", context,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             request)
-
                 } else {
                     ActivityCompat
                             .requestPermissions(
@@ -740,14 +695,17 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             } else {
                 return true
             }
-
         } else {
             return true
         }
     }
 
-    fun showDialog(msg: String, context: Context,
-                   permission: String, request: Int) {
+    fun showDialog(
+            msg: String,
+            context: Context,
+            permission: String,
+            request: Int
+    ) {
         val alertBuilder = AlertDialog.Builder(context)
         alertBuilder.setCancelable(true)
         alertBuilder.setTitle("Permission necessary")
@@ -756,21 +714,22 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             ActivityCompat.requestPermissions(context as Activity,
                     arrayOf(permission),
                     request)
-
         }
         val alert = alertBuilder.create()
         alert.show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+    ) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 intentImage()
             } else {
                 Toast.makeText(applicationContext, "GET_ACCOUNTS Denied",
                         Toast.LENGTH_SHORT).show()
-
             }
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 intentFile()
@@ -788,12 +747,11 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
 
 //       구글 드라이브 등에서 가져오는기 막음
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         intent.type = "*/*"
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 
-        startActivityForResult(intent, SELECT_FILE);
-
+        startActivityForResult(intent, SELECT_FILE)
     }
 
     private fun intentImage() {
@@ -801,9 +759,7 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         startActivityForResult(intent, SELECT_IMAGE)
-
     }
-
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     fun getPath(context: Context, uri: Uri): String? {
@@ -821,8 +777,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 if ("primary".equals(type, ignoreCase = true)) {
                     return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
                 }
-
-
             } else if (isDownloadsDocument(uri)) {
 
                 val id = DocumentsContract.getDocumentId(uri)
@@ -848,21 +802,19 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 val selectionArgs = arrayOf(split[1])
 
                 return getDataColumn(context, contentUri, selection, selectionArgs)
-            }// MediaProvider
+            } // MediaProvider
             // DownloadsProvider
         } else if ("content".equals(uri.scheme, ignoreCase = true)) {
 
             // Return the remote address
             return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(context, uri, null, null)
-
         } else if ("file".equals(uri.scheme, ignoreCase = true)) {
             return uri.path
-        }// File
+        } // File
         // MediaStore (and general)
 
         return null
     }
-
 
     fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
 
@@ -882,7 +834,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         }
         return null
     }
-
 
     /**
      * @param uri The Uri to check.
@@ -916,7 +867,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         return "com.google.android.apps.photos.content" == uri.authority
     }
 
-
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Docs
@@ -924,7 +874,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
     fun isGoogleDocssUri(uri: Uri): Boolean {
         return "com.google.android.apps.docs.storage" == uri.authority
     }
-
 
     private fun attemptUploadStorage(type: Int, file: File) {
         val task = GetMessageTask(applicationContext, HandlerUpload(this), LoginToken.getToken(applicationContext))
@@ -960,16 +909,15 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
                 when (msg.what) {
                     Utils.MSG_SUCCESS -> {
                         Toast.makeText(activity.applicationContext, "업로드 되었습니다.", Toast.LENGTH_SHORT).show()
-
                     }
                     else -> {
 //                        activity.isFailed()
                     }
                 }
-
             }
         }
     }
+
     private var makeContent: String? = null
     private var makeType: Int by Delegates.notNull()
     private fun makeSignal(position: Int) {
@@ -984,7 +932,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_CONTENT, dataList[position].content)
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_OPENSTATUS, OPEN_STATUS_OPEN)
             jsonParam.put(URL_MAKE_SIGNAL_PARAM_ENTIRESTATUS, ENTIRE_STATUS_ENTIRE)
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -1004,12 +951,11 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             jsonParam.put(USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CHATID, dataList[position].chat_idx)
             jsonParam.put(USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_ROOM_IDX, room.room_idx)
             jsonParam.put(USGS_REQUEST_URL.URL_MAKE_NOTICE_PARAM_CONTENT, dataList[position].content)
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
         val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
-        task.execute(USGS_REQUEST_URL.URL_MAKE_NOTICE,METHOD_POST , jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_MAKE_NOTICE, METHOD_POST, jsonParam.toString())
     }
 
     private class HandlerLongClick(activity: ChatActivity) : Handler() {
@@ -1020,7 +966,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             mActivity.get()?.makeDialog(position)
         }
     }
-
 
     private class HandlerMake(activity: ChatActivity) : Handler() {
         private val mActivity: WeakReference<ChatActivity> = WeakReference<ChatActivity>(activity)
@@ -1053,9 +998,8 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         }
     }
 
-
     /* 소켓 관련 함수 */
-    private fun attachSocket(){
+    private fun attachSocket() {
 
         val socket = ChatApplication.getSocket(group.g_idx)
         if (socket == null) finish()
@@ -1067,18 +1011,16 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         mSocket.on(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
         mSocket.on(Constants.EXIT_ROOM_RESULT, onExitResult)
 
-
         enterRoomSocket()
     }
-    private  fun detachSocket(){
+
+    private fun detachSocket() {
 
         Log.d(LOG_TAG, "detach socket listener")
         mSocket.off(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket.off(Constants.ENTER_ROOM_RESULT, onEnterResult)
         mSocket.off(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
         mSocket.off(Constants.EXIT_ROOM_RESULT, onExitResult)
-
-
     }
 
     private fun connectSocket() {
@@ -1095,7 +1037,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         mSocket.on(Constants.LEAVE_ROOM_RESULT, onLeaveResult)
         mSocket.on(Constants.EXIT_ROOM_RESULT, onExitResult)
         mSocket.connect()
-
     }
 
     private fun disconnectSocket() {
@@ -1111,9 +1052,8 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         mSocket.close()
     }
 
-
     private fun enterRoomSocket() {
-        if(!mSocket.connected()){
+        if (!mSocket.connected()) {
             connectSocket()
             return
         }
@@ -1123,17 +1063,13 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         jsonObj.put(Constants.JSON_ROOM_IDX, room.room_idx)
         mSocket.emit(Constants.ENTER_ROOM, jsonObj.toString())
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM}", jsonObj.toString())
-
-
-
-
-
     }
 
-    private fun leaveRoomSocket(b :Boolean){
-        forFinish=b
+    private fun leaveRoomSocket(b: Boolean) {
+        forFinish = b
         leaveRoomSocket()
     }
+
     private fun leaveRoomSocket() {
         val jsonObj = JSONObject()
         jsonObj.put(Constants.JSON_U_IDX, LoginToken.getUserIdx(applicationContext))
@@ -1141,7 +1077,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         mSocket.emit(Constants.LEAVE_ROOM, jsonObj.toString())
         Log.d("$LOG_TAG/Socket ${Constants.LEAVE_ROOM}", jsonObj.toString())
     }
-
 
     private fun sendMessageSocket(txt: String) {
         clearReadLine()
@@ -1151,9 +1086,8 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         jsonObj.put(Constants.JSON_CONTENT, txt)
         jsonObj.put(Constants.JSON_TYPE, ChatUtils.TYPE_MESSAGE)
         mSocket.emit(Constants.SEND_CHAT, jsonObj.toString())
-        Log.d("$LOG_TAG/Socket ${Constants.SEND_CHAT}" , jsonObj.toString())
+        Log.d("$LOG_TAG/Socket ${Constants.SEND_CHAT}", jsonObj.toString())
     }
-
 
     private val onConnect = Emitter.Listener {
 
@@ -1181,7 +1115,7 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 
     private val onEnterResult = Emitter.Listener { args ->
 
-        if(args[0]==null || args[0]==0) return@Listener
+        if (args[0] == null || args[0] == 0) return@Listener
 
         Log.d("$LOG_TAG/Socket ${Constants.ENTER_ROOM_RESULT}", args[0].toString())
         this.runOnUiThread(Runnable {
@@ -1197,45 +1131,43 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
             adapter_chat.notifyDataSetChanged()
 
 //            if(firstTime)
-                scrollToPosition(listView_chat, dataList.lastIndex)
-            isConnectedRoom=true
+            scrollToPosition(listView_chat, dataList.lastIndex)
+            isConnectedRoom = true
         })
     }
 
     private val onLeaveResult = Emitter.Listener { args ->
-        if(args[0]==null) return@Listener
+        if (args[0] == null) return@Listener
         this.runOnUiThread(Runnable {
 
             Log.d("$LOG_TAG/Socket ${Constants.LEAVE_ROOM_RESULT}", args[0].toString())
             if (args[0].toString() == "true") {
-                if(forFinish) {
+                if (forFinish) {
                     detachSocket()
                     finish()
                 }
-            }
-            else
+            } else
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         })
     }
 
     private val onExitResult = Emitter.Listener { args ->
-        if(args[0]==null) return@Listener
+        if (args[0] == null) return@Listener
         this.runOnUiThread(Runnable {
 
             Log.d("$LOG_TAG/Socket ${Constants.EXIT_ROOM_RESULT}", args[0].toString())
-            if (args[0].toString().length>1) {
-                if(forFinish) {
-                    forFinish=false
+            if (args[0].toString().length > 1) {
+                if (forFinish) {
+                    forFinish = false
                     deleteRoomFromRealm()
                     detachSocket()
                     finish()
-                }else{
+                } else {
                     addChatFromJSON(JSONObject(args[0].toString()))
                     adapter_chat.notifyDataSetChanged()
                     scrollToPosition(listView_chat, dataList.lastIndex)
                 }
-            }
-            else {
+            } else {
                 Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
                 dialog?.dismiss()
             }
@@ -1243,7 +1175,7 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
     }
 
     private val onUpdateChat = Emitter.Listener { args ->
-        if(args[0]==null) return@Listener
+        if (args[0] == null) return@Listener
         Log.d("$LOG_TAG/Socket ${Constants.UPDATE_CHAT}", args[0].toString())
         this.runOnUiThread(Runnable {
 
@@ -1251,7 +1183,6 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
 
             adapter_chat.notifyDataSetChanged()
             scrollToPosition(listView_chat, dataList.lastIndex)
-
         })
     }
 
@@ -1266,42 +1197,42 @@ class ChatActivity() : AppCompatActivity(), View.OnClickListener, Parcelable {
         makeContent = parcel.readString()
     }
 
-    private fun addChatFromJSON(data : JSONObject){
+    private fun addChatFromJSON(data: JSONObject) {
 
         val chatIdx = data.getInt(Constants.JSON_CHAT_IDX)
         val message: String = data.getString(JSON_CONTENT)
         val uIdx = data.getInt(JSON_U_IDX)
         val type = data.getInt(Constants.JSON_TYPE)
         val writeTime = data.getString(Constants.JSON_WRITE_TIME)
-        val count : Int =data.getInt(Constants.JSON_COUNT)
+        val count: Int = data.getInt(Constants.JSON_COUNT)
 
-        val chatList = dataList.filter {   it.chat_idx==chatIdx   }
+        val chatList = dataList.filter { it.chat_idx == chatIdx }
 
-        val chatData : ChatMessage= if(chatList.isEmpty())
+        val chatData: ChatMessage = if (chatList.isEmpty())
             ChatMessage(chatIdx, type, uIdx, message, writeTime)
         else chatList[0]
 
-        if(lastChatIdx==chatData.chat_idx-1) {
+        if (lastChatIdx == chatData.chat_idx - 1) {
 //            Log.d("$LOG_TAG/lastChatIdx==chat_idx", chatData.chat_idx.toString())
             val readChat = ChatMessage(0, ChatUtils.TYPE_READLINE, 0, "", "")
             dataList.add(readChat)
-            lastChatPos=dataList.indexOf(readChat)
+            lastChatPos = dataList.indexOf(readChat)
 //            Log.d("$LOG_TAG/lastChatPost", lastChatPos.toString())
-            lastChatIdx=-1
+            lastChatIdx = -1
         }
 
-        if(chatList.isEmpty())
+        if (chatList.isEmpty())
             dataList.add(chatData)
-        else  chatData.update(type,uIdx,message,writeTime)
+        else chatData.update(type, uIdx, message, writeTime)
 
         if (chatData.chat_idx > DatabaseHelpUtils.getRecentChatIdx(applicationContext, room.room_idx))
-                DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, chatData.chat_idx)
+            DatabaseHelpUtils.setRecentChatIdx(applicationContext, room.room_idx, chatData.chat_idx)
 
-        chatData.count=count
+        chatData.count = count
         chatData.setPhotoInfo(applicationContext)
 
-        if(chatIdx==adapter_chat.pick_idx){
-            scrollToPosition(listView_chat,dataList.indexOf(chatData))
+        if (chatIdx == adapter_chat.pickIdx) {
+            scrollToPosition(listView_chat, dataList.indexOf(chatData))
         }
     }
 

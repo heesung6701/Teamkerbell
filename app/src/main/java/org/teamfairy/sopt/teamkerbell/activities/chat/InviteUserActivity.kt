@@ -34,7 +34,7 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshListener {
+class InviteUserActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private var mSwipeRefreshLayout: SwipeRefreshLayout by Delegates.notNull()
     override fun onRefresh() {
@@ -42,36 +42,31 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-
-
-    var group : Team by Delegates.notNull()
-    var room : Room by Delegates.notNull()
+    var group: Team by Delegates.notNull()
+    var room: Room by Delegates.notNull()
 
     var adapter: UserListAdapter by Delegates.notNull()
     var dataList: ArrayList<UserCheckData> = arrayListOf<UserCheckData>()
     var dataListOrigin: ArrayList<User> = arrayListOf<User>()
     var recyclerView: RecyclerView by Delegates.notNull()
 
-    var txtSearch : String = ""
+    var txtSearch: String = ""
 
-
-    private val whoCheck = HashMap<Int,Boolean>()
+    private val whoCheck = HashMap<Int, Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_user)
         setSupportActionBar(toolbar)
-        group  = intent.getParcelableExtra<Team>(INTENT_GROUP)
-        room  = intent.getParcelableExtra<Room>(INTENT_ROOM)
-
+        group = intent.getParcelableExtra<Team>(INTENT_GROUP)
+        room = intent.getParcelableExtra<Room>(INTENT_ROOM)
 
         recyclerView = findViewById(R.id.recyclerView)
-        adapter = UserListAdapter(dataList as ArrayList<User>,applicationContext)
-        recyclerView.layoutManager= LinearLayoutManager(this)
-        recyclerView.adapter=adapter
+        adapter = UserListAdapter(dataList as ArrayList<User>, applicationContext)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
-
 
         btn_back.setOnClickListener {
             onBackPressed()
@@ -80,10 +75,10 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
         btn_commit.setOnClickListener {
 
             val checkedUserArray = dataList.filter { it.isChecked }
-            if(checkedUserArray.isNotEmpty())
+            if (checkedUserArray.isNotEmpty())
                 attemptCommit(checkedUserArray)
             else
-                Toast.makeText(applicationContext,"선택된 사용자가 없습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "선택된 사용자가 없습니다", Toast.LENGTH_SHORT).show()
         }
 
         edt_search.addTextChangedListener(object : TextWatcher {
@@ -97,7 +92,6 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
         })
     }
 
@@ -106,46 +100,42 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
         getUserList()
     }
 
-
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
 
-
-    fun getUserList(){
-        DatabaseHelpUtils.getUserListFromRealm(applicationContext,dataListOrigin,adapter as RecyclerView.Adapter<*>,group,true)
+    fun getUserList() {
+        DatabaseHelpUtils.getUserListFromRealm(applicationContext, dataListOrigin, adapter as RecyclerView.Adapter<*>, group, true)
         updateUserList()
-
     }
-    private fun updateUserList(){
+    private fun updateUserList() {
         dataList.forEach {
-            whoCheck[it.u_idx]=it.isChecked
+            whoCheck[it.u_idx] = it.isChecked
         }
         dataList.clear()
 
         val roomMemberList = ArrayList<Int>()
-        DatabaseHelpUtils.getRoomUIdxListFromRealm(applicationContext,roomMemberList,room)
+        DatabaseHelpUtils.getRoomUIdxListFromRealm(applicationContext, roomMemberList, room)
 
         dataListOrigin.forEach {
-            if(it.name!!.contains(txtSearch) && !roomMemberList.contains(it.u_idx)) {
-                dataList.add(it.toUserCheckData(whoCheck[it.u_idx]?:false))
+            if (it.name!!.contains(txtSearch) && !roomMemberList.contains(it.u_idx)) {
+                dataList.add(it.toUserCheckData(whoCheck[it.u_idx] ?: false))
             }
         }
         adapter.notifyDataSetChanged()
     }
 
-    fun invitedUser(msg : Message){
-        when(msg.what){
-            Utils.MSG_SUCCESS->
+    fun invitedUser(msg: Message) {
+        when (msg.what) {
+            Utils.MSG_SUCCESS ->
                     finish()
-            else->
-                    Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+            else ->
+                    Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
         }
-
     }
-    private fun attemptCommit(userCheckArray : List<UserCheckData>){
-        val task = GetMessageTask(applicationContext,HandlerInvite(this))
+    private fun attemptCommit(userCheckArray: List<UserCheckData>) {
+        val task = GetMessageTask(applicationContext, HandlerInvite(this))
         val jsonParam = JSONObject()
 
         try {
@@ -156,17 +146,14 @@ class InviteUserActivity : AppCompatActivity() , SwipeRefreshLayout.OnRefreshLis
                 jsonArray.put(it.u_idx)
             }
             jsonParam.put(URL_INVITE_ROOM_PARAM_USER_ARRAY, jsonArray)
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        task.execute(USGS_REQUEST_URL.URL_INVITE_ROOM,METHOD_POST, jsonParam.toString())
-
+        task.execute(USGS_REQUEST_URL.URL_INVITE_ROOM, METHOD_POST, jsonParam.toString())
     }
 
     private class HandlerInvite(activity: InviteUserActivity) : Handler() {
-        private val mActivity= WeakReference<InviteUserActivity>(activity)
+        private val mActivity = WeakReference<InviteUserActivity>(activity)
 
         override fun handleMessage(msg: Message) {
             mActivity.get()?.invitedUser(msg)

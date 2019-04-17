@@ -13,25 +13,23 @@ import java.io.File
  */
 class FileListAdapter(var dataList: ArrayList<File>) : RecyclerView.Adapter<FileViewHolder>() {
 
-
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-        holder.tvTitle.text= dataList[position].name
+        holder.tvTitle.text = dataList[position].name
 
         val len = dataList[position].length().toFloat()
-        var size: String=""
+        var size: String = ""
         size = when {
-            len>1048576 -> String.format("%.2f",len/1048576)+" Mb" //1024*1024 = 1048576
-            len>1024 -> String.format("%.2f",len/1024)+" kb"
-            else -> len.toString()+" bytes"
+            len> 1048576 -> String.format("%.2f", len / 1048576) + " Mb" // 1024*1024 = 1048576
+            len> 1024 -> String.format("%.2f", len / 1024) + " kb"
+            else -> len.toString() + " bytes"
         }
-        holder.subTitle.text=size
+        holder.subTitle.text = size
 
         holder.btnMinus.setOnClickListener {
             dataList.removeAt(position)
             notifyDataSetChanged()
         }
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -43,7 +41,5 @@ class FileListAdapter(var dataList: ArrayList<File>) : RecyclerView.Adapter<File
         return FileViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

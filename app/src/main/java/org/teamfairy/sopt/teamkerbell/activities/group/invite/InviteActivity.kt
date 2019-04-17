@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.annotation.NonNull
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -25,15 +24,13 @@ import kotlin.properties.Delegates
 
 class InviteActivity : AppCompatActivity() {
 
-
-    var group  : Team by Delegates.notNull()
+    var group: Team by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite)
         setSupportActionBar(toolbar)
 
-        group  = intent.getParcelableExtra<Team>(INTENT_GROUP)
-
+        group = intent.getParcelableExtra<Team>(INTENT_GROUP)
 
         btn_copy.setOnClickListener {
             val clipboardManager = applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -43,18 +40,18 @@ class InviteActivity : AppCompatActivity() {
         }
 
         tv_invite_mail.setOnClickListener {
-            val i = Intent(applicationContext,InviteMailActivity::class.java)
-            i.putExtra(INTENT_GROUP,group)
+            val i = Intent(applicationContext, InviteMailActivity::class.java)
+            i.putExtra(INTENT_GROUP, group)
             startActivity(i)
         }
 
         tv_invite_phone.setOnClickListener {
-            val i = Intent(applicationContext,InvitePhoneActivity::class.java)
-            i.putExtra(INTENT_GROUP,group)
+            val i = Intent(applicationContext, InvitePhoneActivity::class.java)
+            i.putExtra(INTENT_GROUP, group)
             startActivity(i)
         }
 
-        tv_invite_qr.setOnClickListener{
+        tv_invite_qr.setOnClickListener {
 
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -62,29 +59,27 @@ class InviteActivity : AppCompatActivity() {
                     if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
                     } else {
-                        val i = Intent(applicationContext,ScanActivity::class.java)
+                        val i = Intent(applicationContext, ScanActivity::class.java)
                         startActivity(i)
                     }
                 } else {
-                    val i = Intent(applicationContext,ScanActivity::class.java)
+                    val i = Intent(applicationContext, ScanActivity::class.java)
                     startActivity(i)
                 }
             } else {
-                val i = Intent(applicationContext,ScanActivity::class.java)
+                val i = Intent(applicationContext, ScanActivity::class.java)
                 startActivity(i)
             }
         }
 
-
         btn_back.setOnClickListener {
             onBackPressed()
         }
-        tv_invite_url.text="기본 링크입니다"
+        tv_invite_url.text = "기본 링크입니다"
         val stringForQRCode = tv_invite_url.text.toString()
-        val bitmapQRcode : Bitmap= QRCode.from(stringForQRCode).bitmap()
+        val bitmapQRcode: Bitmap = QRCode.from(stringForQRCode).bitmap()
         iv_qr_code.setImageBitmap(bitmapQRcode)
     }
-
 
     private fun requestExplorer() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -93,23 +88,16 @@ class InviteActivity : AppCompatActivity() {
         startActivityForResult(intent, MY_CAMERA_REQUEST_CODE)
     }
 
-
     private val MY_CAMERA_REQUEST_CODE = 100
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
-
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show()
             } else {
-
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show()
             }
-
         }
     }
 }

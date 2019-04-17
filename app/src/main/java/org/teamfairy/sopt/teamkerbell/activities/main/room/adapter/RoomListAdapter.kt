@@ -9,20 +9,17 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.activities.main.room.viewholder.RoomViewHolder
 import org.teamfairy.sopt.teamkerbell.model.data.Room
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
-class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : RecyclerView.Adapter<RoomViewHolder>() {
+class RoomListAdapter(var dataList: ArrayList<Room>, var mContext: Context) : RecyclerView.Adapter<RoomViewHolder>() {
 
     private var onLongClickHandler: Handler? = null
 
     fun setOnLongClickHandler(I: Handler) {
         onLongClickHandler = I
     }
-
 
     private var onClickListener: View.OnClickListener? = null
 
@@ -36,21 +33,20 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         holder.tvName.text = room.real_name
         holder.tvContent.text = room.lastMsgStr
         holder.tvTime.text = room.lastMsgTime
-        if(dataList[position].newMsgCnt>0){
-            holder.tvCount.visibility=View.VISIBLE
-            holder.tvCount.text=when(room.newMsgCnt){
+        if (dataList[position].newMsgCnt> 0) {
+            holder.tvCount.visibility = View.VISIBLE
+            holder.tvCount.text = when (room.newMsgCnt) {
                 in Int.MIN_VALUE..0 -> ""
                 in 999 downTo 0 -> room.newMsgCnt.toString()
-                else-> "999+"
+                else -> "999+"
             }
-        }else
-            holder.tvCount.visibility=View.INVISIBLE
+        } else
+            holder.tvCount.visibility = View.INVISIBLE
 
-        if(NetworkUtils.getBitmapList(room.photo, holder.ivProfile,mContext, "room${room.room_idx}"))
+        if (NetworkUtils.getBitmapList(room.photo, holder.ivProfile, mContext, "room${room.room_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
-
-        if(onLongClickHandler!=null) {
+        if (onLongClickHandler != null) {
             holder.itemView.setOnLongClickListener(object : OnLongClickListenerByPosition(position) {
                 override fun onLongClick(p0: View?): Boolean {
                     sendMessage(position)
@@ -58,7 +54,6 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
                 }
             })
         }
-
     }
 
     fun sendMessage(position: Int) {
@@ -82,7 +77,7 @@ class RoomListAdapter(var dataList: ArrayList<Room>,var mContext: Context) : Rec
         return position.toLong()
     }
 
-    override fun getItemCount(): Int = dataList.size;
+    override fun getItemCount(): Int = dataList.size
 
     abstract class OnLongClickListenerByPosition(var position: Int) : View.OnLongClickListener
 }

@@ -3,7 +3,6 @@ package org.teamfairy.sopt.teamkerbell.network.info
 import android.content.Context
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import io.realm.Realm
 import org.json.JSONArray
@@ -25,10 +24,9 @@ class JoinedGroupListTask(context: Context, var handler: Handler?, token: String
 
     var msgCode: Int? = MSG_FAIL
 
-
     fun extractFeatureFromJson(jsonResponse: String) {
 
-        var realm: Realm?=null
+        var realm: Realm? = null
 
         msgCode = MSG_FAIL
 
@@ -49,21 +47,18 @@ class JoinedGroupListTask(context: Context, var handler: Handler?, token: String
 
                         val data: JSONObject = dataArray.getJSONObject(i)
 
-
                         val uIdx = data.getInt(User.ARG_U_IDX)
                         val gIdx = data.getInt(Team.ARG_G_IDX)
 
                         val joinedR = realm.createObject(JoinedGroupR::class.java)
                         joinedR.g_idx = gIdx
                         joinedR.u_idx = uIdx
-
-
                     }
-                    val isUpdateR : IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT , IsUpdateR.WHAT_JOINED_GROUP).findFirst()
-                            ?: realm.createObject(IsUpdateR::class.java,IsUpdateR.WHAT_JOINED_GROUP)
-                    if(!isUpdateR.isUpdate) {
+                    val isUpdateR: IsUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, IsUpdateR.WHAT_JOINED_GROUP).findFirst()
+                            ?: realm.createObject(IsUpdateR::class.java, IsUpdateR.WHAT_JOINED_GROUP)
+                    if (!isUpdateR.isUpdate) {
                         isUpdateR.isUpdate = true
-                        Log.d(LOG_TAG,"Joined Group Info is updated")
+                        Log.d(LOG_TAG, "Joined Group Info is updated")
                     }
 
                     realm.commitTransaction()
@@ -76,27 +71,23 @@ class JoinedGroupListTask(context: Context, var handler: Handler?, token: String
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-        }finally {
-            if (realm!=null && realm.isInTransaction) {
+        } finally {
+            if (realm != null && realm.isInTransaction) {
                 realm.commitTransaction()
                 Log.d("RealmTransaction", "commit " + this::class.java.simpleName)
             }
         }
-
     }
-
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         extractFeatureFromJson(result!!)
 
         if (handler != null) {
             val msg = handler!!.obtainMessage()
             msg.what = msgCode!!
-            Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+            Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
             handler!!.sendMessage(msg)
         }
     }

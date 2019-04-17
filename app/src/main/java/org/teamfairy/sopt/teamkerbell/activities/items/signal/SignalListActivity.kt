@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_signal_list.*
 import kotlinx.android.synthetic.main.app_bar_filter_help.*
 import org.teamfairy.sopt.teamkerbell.R
@@ -25,18 +24,18 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 
-class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
-    override var room: Room?=null
+class SignalListActivity : AppCompatActivity(), RoomActivityInterface {
+    override var room: Room? = null
 
     private var tutorialPos = 1
     override fun changeRoom(room: Room) {
-        this.room=room
+        this.room = room
         tabAdapter.changeRoom(room)
     }
 
-    override var group : Team by Delegates.notNull()
-    private var tabAdapter : SignalTabAdapter by Delegates.notNull()
-    private var tutorialAdapter : SignalTutorialAdapter by Delegates.notNull()
+    override var group: Team by Delegates.notNull()
+    private var tabAdapter: SignalTabAdapter by Delegates.notNull()
+    private var tutorialAdapter: SignalTutorialAdapter by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +49,7 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
         top_tab.addTab(top_tab.newTab().setText(getString(R.string.txt_receiver)))
         top_tab.addTab(top_tab.newTab().setText(getString(R.string.txt_sender)))
 
-        tabAdapter = SignalTabAdapter(supportFragmentManager, top_tab.tabCount,group)
+        tabAdapter = SignalTabAdapter(supportFragmentManager, top_tab.tabCount, group)
 
         viewPager.adapter = tabAdapter
 
@@ -66,41 +65,38 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
         fab.setOnClickListener {
             val i = Intent(applicationContext, MakeSignalActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            i.putExtra(INTENT_GROUP,group)
-            i.putExtra(INTENT_ROOM,room)
+            i.putExtra(INTENT_GROUP, group)
+            i.putExtra(INTENT_ROOM, room)
             viewPager.currentItem = Utils.TAB_REQUEST
             startActivity(i)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
 
-
-        val isNeedTutorial = DatabaseHelpUtils.getPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL)
+        val isNeedTutorial = DatabaseHelpUtils.getPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL)
         setTutorial()
-        if(isNeedTutorial)
+        if (isNeedTutorial)
             showTutorial()
         btn_help.setOnClickListener {
-            DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL,true)
+            DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL, true)
             showTutorial()
         }
     }
 
-    private var ivSigns : ArrayList<ImageView?> = ArrayList<ImageView?>()
+    private var ivSigns: ArrayList<ImageView?> = ArrayList<ImageView?>()
 
-
-    private fun showTutorial(){
-        fab.visibility=View.GONE
-        tutorialPos=1
-        viewPager_tutorial.setCurrentItem(0,false)
+    private fun showTutorial() {
+        fab.visibility = View.GONE
+        tutorialPos = 1
+        viewPager_tutorial.setCurrentItem(0, false)
 
         ivSigns[1]?.setImageDrawable(getDrawable(R.drawable.ic_sign_white))
 
-        for(i in 2..ivSigns.lastIndex)
+        for (i in 2..ivSigns.lastIndex)
             ivSigns[i]?.setImageDrawable(getDrawable(R.drawable.ic_sign_gray))
 
-        layout_tutorial.visibility=View.VISIBLE
-
+        layout_tutorial.visibility = View.VISIBLE
     }
-    private fun setTutorial(){
+    private fun setTutorial() {
 
         ivSigns.clear()
         ivSigns.add(null)
@@ -111,13 +107,10 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
         ivSigns.add(iv_sign_5_tutorial)
         ivSigns.add(iv_sign_6_tutorial)
 
+        tutorialAdapter = SignalTutorialAdapter(supportFragmentManager)
+        viewPager_tutorial.adapter = tutorialAdapter
 
-
-
-        tutorialAdapter  = SignalTutorialAdapter(supportFragmentManager)
-        viewPager_tutorial.adapter=tutorialAdapter
-
-        viewPager_tutorial.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+        viewPager_tutorial.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
 
@@ -125,49 +118,45 @@ class SignalListActivity : AppCompatActivity(),RoomActivityInterface {
             }
 
             override fun onPageSelected(position: Int) {
-                setTutorial(position+1)
+                setTutorial(position + 1)
             }
-
         })
 
-
         btn_next_tutorial.setOnClickListener {
-            if(tutorialPos>=ivSigns.lastIndex)
+            if (tutorialPos >= ivSigns.lastIndex)
                 closeTutorial()
             else
-                setTutorial(tutorialPos+1)
-
+                setTutorial(tutorialPos + 1)
         }
 
         iv_close_tutorial.setOnClickListener {
             closeTutorial()
         }
 
-        for(i in 1..ivSigns.lastIndex){
+        for (i in 1..ivSigns.lastIndex) {
             ivSigns[i]?.setOnClickListener {
                 setTutorial(i)
             }
         }
     }
-    private fun closeTutorial(){
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext,DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL,false)
-        layout_tutorial.visibility=View.GONE
-        fab.visibility=View.VISIBLE
-        tutorialPos=0;
+    private fun closeTutorial() {
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_TUTORIAL_SIGNAL, false)
+        layout_tutorial.visibility = View.GONE
+        fab.visibility = View.VISIBLE
+        tutorialPos = 0
     }
-    private fun setTutorial(pos : Int){
+    private fun setTutorial(pos: Int) {
 
         ivSigns[tutorialPos]?.setImageDrawable(getDrawable(R.drawable.ic_sign_gray))
         ivSigns[pos]?.setImageDrawable(getDrawable(R.drawable.ic_sign_white))
 
-        viewPager_tutorial.setCurrentItem(pos-1,true)
+        viewPager_tutorial.setCurrentItem(pos - 1, true)
 
-        tutorialPos=pos
+        tutorialPos = pos
 
-        if(tutorialPos==ivSigns.lastIndex)
+        if (tutorialPos == ivSigns.lastIndex)
             btn_next_tutorial.setText(R.string.action_start)
         else
             btn_next_tutorial.setText(R.string.action_next)
     }
-
 }

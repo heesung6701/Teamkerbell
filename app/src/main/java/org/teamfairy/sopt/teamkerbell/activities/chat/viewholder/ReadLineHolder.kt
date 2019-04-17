@@ -1,11 +1,6 @@
-package org.teamfairy.sopt.teamkerbell.viewholder.chat
+package org.teamfairy.sopt.teamkerbell.activities.chat.viewholder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
-/**
- * Created by lumiere on 2017-12-30.
- */
-open class ReadLineHolder(itemView :  View)  : RecyclerView.ViewHolder(itemView){
-
-}
+open class ReadLineHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

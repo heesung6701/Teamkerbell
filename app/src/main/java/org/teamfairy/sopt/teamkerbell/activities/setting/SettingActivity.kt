@@ -27,8 +27,8 @@ import kotlin.properties.Delegates
 
 class SettingActivity : AppCompatActivity() {
 
-    var group : Team by Delegates.notNull()
-    var user : User by Delegates.notNull()
+    var group: Team by Delegates.notNull()
+    var user: User by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -37,7 +37,7 @@ class SettingActivity : AppCompatActivity() {
         group = intent.getParcelableExtra(IntentTag.INTENT_GROUP)
         user = LoginToken.getUser(applicationContext)
 
-        tv_group_name.text=group.real_name
+        tv_group_name.text = group.real_name
 
         if (NetworkUtils.getBitmapList(group.photo, iv_group_profile, applicationContext, "group${group.g_idx}"))
             iv_group_profile.setImageResource(R.drawable.icon_profile_default)
@@ -47,35 +47,34 @@ class SettingActivity : AppCompatActivity() {
 
         val settingNotificationAll = DatabaseHelpUtils.getSettingPush(applicationContext)
         swc_setting_allow_noti.isChecked = settingNotificationAll
-        swc_setting_allow_noti_group.isEnabled=settingNotificationAll
+        swc_setting_allow_noti_group.isEnabled = settingNotificationAll
 
-        swc_setting_allow_noti_group.isChecked =DatabaseHelpUtils.getSettingPush(applicationContext,group.g_idx)
+        swc_setting_allow_noti_group.isChecked = DatabaseHelpUtils.getSettingPush(applicationContext, group.g_idx)
 
         layout_profile.setOnClickListener {
             val i = Intent(this, ProfileActivity::class.java)
             startActivity(i)
         }
 
-        //그룹 설정
+        // 그룹 설정
         swc_setting_allow_noti_group.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(applicationContext,"${group.real_name}팀의 메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
-            DatabaseHelpUtils.setSettingPush(applicationContext,group.g_idx,isChecked)
-
+            Toast.makeText(applicationContext, "${group.real_name}팀의 메세지 알림이 ${if (isChecked) "설정" else "해제"}되었습니다.", Toast.LENGTH_SHORT).show()
+            DatabaseHelpUtils.setSettingPush(applicationContext, group.g_idx, isChecked)
         }
         layout_leave.setOnClickListener {
-            val dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_leave))
+            val dialog = ConfirmDeleteDialog(this, getString(R.string.txt_confirm_leave))
             dialog.show()
             dialog.setOnClickListenerYes(View.OnClickListener {
                 deleteGroup(group)
             })
         }
 
-        //앱설정
+        // 앱설정
         swc_setting_allow_noti.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(applicationContext,"메세지 알림이 ${if(isChecked) "설정" else "해제"}되었습니다.",Toast.LENGTH_SHORT).show()
-            DatabaseHelpUtils.setSettingPush(applicationContext,isChecked)
+            Toast.makeText(applicationContext, "메세지 알림이 ${if (isChecked) "설정" else "해제"}되었습니다.", Toast.LENGTH_SHORT).show()
+            DatabaseHelpUtils.setSettingPush(applicationContext, isChecked)
 
-            swc_setting_allow_noti_group.isEnabled=isChecked
+            swc_setting_allow_noti_group.isEnabled = isChecked
         }
         layout_version.setOnClickListener {
             val i = Intent(this, VersionInfoActivity::class.java)
@@ -86,27 +85,26 @@ class SettingActivity : AppCompatActivity() {
             startActivity(i)
         }
         layout_sign_out.setOnClickListener {
-            val dialog = ConfirmDeleteDialog(this,getString(R.string.txt_confirm_sign_out))
+            val dialog = ConfirmDeleteDialog(this, getString(R.string.txt_confirm_sign_out))
             dialog.show()
             dialog.setOnClickListenerYes(View.OnClickListener {
                 LoginToken.signOut(applicationContext)
 
                 val i = Intent(this, SplashActivity::class.java)
-                i.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 finishAffinity()
                 startActivity(i)
             })
         }
-
 
         btn_back.setOnClickListener {
             onBackPressed()
         }
     }
 
-    private  fun successLeave(){
+    private fun successLeave() {
         val i = Intent(this, GroupListActivity::class.java)
-        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(i)
     }
     private fun deleteGroup(group: Team) {

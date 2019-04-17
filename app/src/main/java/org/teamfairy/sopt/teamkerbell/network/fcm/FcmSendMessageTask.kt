@@ -23,9 +23,8 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
     private val LOG_TAG = NetworkTask::class.java.simpleName
     var message: String = "No Message"
 
-
-    private  val URL_FCM_SEND = "https://fcm.googleapis.com/fcm/send"
-    private  val FCM_MESSAGE_KEY = "AAAAP98voPY:APA91bEkm0NL1S2rjr5YCZTGxtmMafddBfxcN1SXakkZCL-dT4c36jV6V37nfWGWQ8NpoiSMv7KkrasibcqplDoZepZuSDr0kqTr6iuJDwa_Y1IrhuXl0HUcJ_d-H1ygOQkbpFcTaHLd"
+    private val URL_FCM_SEND = "https://fcm.googleapis.com/fcm/send"
+    private val FCM_MESSAGE_KEY = "AAAAP98voPY:APA91bEkm0NL1S2rjr5YCZTGxtmMafddBfxcN1SXakkZCL-dT4c36jV6V37nfWGWQ8NpoiSMv7KkrasibcqplDoZepZuSDr0kqTr6iuJDwa_Y1IrhuXl0HUcJ_d-H1ygOQkbpFcTaHLd"
 
     override fun doInBackground(vararg p0: String): String? {
         return makeHttpRequest(*p0)
@@ -33,7 +32,6 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
     }
 
     private fun createUrl(vararg params: String): URL? {
@@ -49,7 +47,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
     }
     @Throws(IOException::class)
     private fun makeHttpRequest(vararg params: String): String? {
-        var jsonResponse: String?=null
+        var jsonResponse: String? = null
         var inputStream: InputStream? = null
         var urlConnection: HttpURLConnection? = null
         try {
@@ -66,9 +64,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
             urlConnection.connectTimeout = 3000
             urlConnection.readTimeout = 3000
 
-
             urlConnection.doOutput = true
-
 
             urlConnection.connect()
 
@@ -76,7 +72,6 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
             val osw = OutputStreamWriter(os, "UTF-8")
             osw.write(params[0])
             osw.flush()
-
 
             try {
 
@@ -97,7 +92,6 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
 
             Log.d("$LOG_TAG/STATUS", urlConnection.responseCode.toString())
             Log.d("$LOG_TAG/MSG", urlConnection.responseMessage)
-
 
             urlConnection.disconnect()
         } catch (e: NoRouteToHostException) {
@@ -135,7 +129,7 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
     }
 
     companion object {
-        fun makeNotificationMessage(to : String,title : String, body : String,g_idx: Int,room_idx: Int) : String{
+        fun makeNotificationMessage(to: String, title: String, body: String, g_idx: Int, room_idx: Int): String {
             val jsonParam = JSONObject()
 
             try {
@@ -143,40 +137,35 @@ class FcmSendMessageTask : AsyncTask<String, Void, String>() {
 
                 val data = JSONObject()
                 data.put(JSON_DATA, StatusCode.chatMessage)
-                data.put(JSON_BODY,body)
-                data.put(JSON_TITLE,title)
-                data.put(JSON_G_IDX,g_idx)
-                data.put(JSON_ROOM_IDX,room_idx)
+                data.put(JSON_BODY, body)
+                data.put(JSON_TITLE, title)
+                data.put(JSON_G_IDX, g_idx)
+                data.put(JSON_ROOM_IDX, room_idx)
 
-                jsonParam.put("data",data)
-
+                jsonParam.put("data", data)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
-
             return jsonParam.toString()
         }
-        fun makeDataMessage(to : String,title : String, body : String,g_idx: Int,room_idx: Int) : String{
+        fun makeDataMessage(to: String, title: String, body: String, g_idx: Int, room_idx: Int): String {
             val jsonParam = JSONObject()
 
             try {
                 jsonParam.put("to", to)
 
                 val data = JSONObject()
-                data.put(JSON_DATA,StatusCode.chatMessage)
-                data.put(JSON_BODY,body)
-                data.put(JSON_TITLE,title)
-                data.put(JSON_G_IDX,g_idx)
+                data.put(JSON_DATA, StatusCode.chatMessage)
+                data.put(JSON_BODY, body)
+                data.put(JSON_TITLE, title)
+                data.put(JSON_G_IDX, g_idx)
                 jsonParam.put(JSON_DATA, data)
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
-
             return jsonParam.toString()
         }
-
     }
 }

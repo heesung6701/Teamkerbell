@@ -8,36 +8,20 @@ import android.os.Message
 import android.support.v4.app.ActivityCompat.finishAffinity
 import android.support.v4.content.ContextCompat.startActivity
 import android.util.Log
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_CLIENTTOKEN
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_ID
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LOGIN_PARAM_PWD
-import org.teamfairy.sopt.teamkerbell.network.auth.LoginTask
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
-import org.teamfairy.sopt.teamkerbell.activities.main.room.MakeRoomActivity
 import org.teamfairy.sopt.teamkerbell.activities.unperformed.UnperformedActivity
-import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask
 import org.teamfairy.sopt.teamkerbell.network.RefreshTokenTask
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_G_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_MAKE_ROOM_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REFRESH_TOKEN_PARAM_ID
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REFRESH_TOKEN_PARAM_U_IDX
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_REGIST_PARAM_NAME
 import org.teamfairy.sopt.teamkerbell.utils.*
-import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.getUserIdx
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken.Companion.signOut
 import java.lang.ref.WeakReference
-import java.lang.reflect.Method
 
 class SplashActivity : AppCompatActivity() {
-
 
     private fun login() {
 
@@ -45,11 +29,11 @@ class SplashActivity : AppCompatActivity() {
 
         val intent = Intent(applicationContext, UnperformedActivity::class.java)
 
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_GROUP,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_GROUP,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_USER,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_ROOM,true)
-        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM,true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_GROUP, true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_GROUP, true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_USER, true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_ROOM, true)
+        DatabaseHelpUtils.setPref_isUpdate(applicationContext, DatabaseHelpUtils.PREF_ISUPDATE_JOINED_ROOM, true)
 
 //        NetworkUtils.connectUserList(applicationContext, null,true)
 //        NetworkUtils.connectGroupList(applicationContext, null,true)
@@ -58,16 +42,12 @@ class SplashActivity : AppCompatActivity() {
 //        NetworkUtils.connectJoinedRoomList(applicationContext, null,true)
 
         startActivity(intent)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-
     }
-
 
     override fun onBackPressed() {
         finish()
@@ -81,12 +61,12 @@ class SplashActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if(intent.hasExtra(IntentTag.EXIT) && intent.getBooleanExtra(IntentTag.EXIT,false)) {
+        if (intent.hasExtra(IntentTag.EXIT) && intent.getBooleanExtra(IntentTag.EXIT, false)) {
             Handler().postDelayed({
                 finish()
                 return@postDelayed
             }, 1000)
-        }else {
+        } else {
 
             LoginToken.getPref(applicationContext)
             if (LoginToken.isValid()) {
@@ -99,21 +79,21 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
-    fun signOut(){
+    fun signOut() {
         LoginToken.signOut(applicationContext)
 
         val i = Intent(this, SplashActivity::class.java)
-        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         finishAffinity()
         startActivity(i)
     }
-    fun checkValidToken(){
-        val task = RefreshTokenTask(applicationContext, HandlerCheck(this),LoginToken.getToken(applicationContext))
+    fun checkValidToken() {
+        val task = RefreshTokenTask(applicationContext, HandlerCheck(this), LoginToken.getToken(applicationContext))
         val jsonParam = JSONObject()
         val u = LoginToken.getUser(applicationContext)
-        jsonParam.put(URL_REFRESH_TOKEN_PARAM_ID,u.id)
-        jsonParam.put(URL_REFRESH_TOKEN_PARAM_U_IDX,u.u_idx)
-        task.execute(USGS_REQUEST_URL.URL_REFRESH_TOKEN,NetworkTask.METHOD_POST,jsonParam.toString())
+        jsonParam.put(URL_REFRESH_TOKEN_PARAM_ID, u.id)
+        jsonParam.put(URL_REFRESH_TOKEN_PARAM_U_IDX, u.u_idx)
+        task.execute(USGS_REQUEST_URL.URL_REFRESH_TOKEN, NetworkTask.METHOD_POST, jsonParam.toString())
     }
 
     private class HandlerCheck(activity: SplashActivity) : Handler() {
@@ -121,25 +101,23 @@ class SplashActivity : AppCompatActivity() {
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
-            when(msg.what){
-                Utils.MSG_SUCCESS->{
+            when (msg.what) {
+                Utils.MSG_SUCCESS -> {
                     activity?.login()
                 }
-                Utils.MSG_EXPIRED->{
+                Utils.MSG_EXPIRED -> {
                     LoginToken.updateToken(activity?.applicationContext, msg.obj as String)
                     activity?.login()
                 }
-                Utils.MSG_INVALID->{
+                Utils.MSG_INVALID -> {
                     activity?.signOut()
                 }
-                else->{
+                else -> {
 
-                    //TODO 인터넷이 안좋아서 안될수도 있으니..
+                    // TODO 인터넷이 안좋아서 안될수도 있으니..
                     activity?.signOut()
                 }
             }
         }
     }
-
-
 }

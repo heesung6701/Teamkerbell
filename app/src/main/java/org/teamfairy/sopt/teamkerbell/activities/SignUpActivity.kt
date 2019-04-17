@@ -53,7 +53,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
     var emailStr: String = ""
     var passwordStr: String = ""
 
-
     private lateinit var mAuth: FirebaseAuth
 
     private var mVerificationInProgress = false
@@ -71,22 +70,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         btn_start_verification.setOnClickListener(this)
         btn_verify_phone.setOnClickListener(this)
 
-
         phone.addTextChangedListener(object : TextWatcher {
             var beforeLength: Int = 0
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
             }
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
             }
 
             override fun afterTextChanged(editable: Editable) {
 
-
                 if (editable.toString().length > beforeLength) {
                     if ((editable.toString().length == 3 || editable.toString().length == 8)) {
-                        editable.append('-');
+                        editable.append('-')
                     }
                 } else {
                     if ((editable.toString().length == 3 || editable.toString().length == 8)) {
@@ -99,7 +95,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
         password_chk.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
             }
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -107,27 +102,20 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 if (password.text.toString().equals(password_chk.text.toString())) {
                     isSamePwd = true
                     password_chk.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
-
                 } else {
                     isSamePwd = false
                     password_chk.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.red), PorterDuff.Mode.SRC_ATOP)
-
                 }
-
-
             }
 
             override fun afterTextChanged(editable: Editable) {
-
             }
         })
-
 
         email.setOnFocusChangeListener { v, hasFocus ->
 
             if (!hasFocus) {
                 attemptIdCheck(email.text.toString().toString())
-
             }
         }
         email.addTextChangedListener(object : TextWatcher {
@@ -146,9 +134,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                     email.background.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(applicationContext, R.color.mainColor), PorterDuff.Mode.SRC_ATOP)
                 }
             }
-
         })
-
 
         password_chk.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
 
@@ -197,8 +183,10 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 // ...
             }
 
-            override fun onCodeSent(verificationId: String?,
-                                    token: PhoneAuthProvider.ForceResendingToken) {
+            override fun onCodeSent(
+                verificationId: String?,
+                token: PhoneAuthProvider.ForceResendingToken
+            ) {
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
@@ -208,15 +196,12 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 mVerificationId = verificationId
                 mResendToken = token
 
-
-                //전화번호를 누르고 메세지가 보내졌다는 걸 의미한다.
-                //UI업데이트 하는 작업 필요
+                // 전화번호를 누르고 메세지가 보내졌다는 걸 의미한다.
+                // UI업데이트 하는 작업 필요
                 updateUI(STATE_CODE_SENT)
             }
         }
-
     }
-
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -239,7 +224,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 verifyPhoneNumberWithCode(mVerificationId, code)
             }
         }
-
     }
 
     private fun validatePhoneNumber(): Boolean {
@@ -259,21 +243,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         signInWithPhoneAuthCredential(credential)
     }
 
-
     private fun startPhoneNumberVerification(phoneNumber: String) {
         Log.d(TAG, "phoneNumber: $phoneNumber")
         // [START start_phone_auth]
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,      // Phone number to verify
-                60,               // Timeout duration
+                phoneNumber, // Phone number to verify
+                60, // Timeout duration
                 TimeUnit.SECONDS, // Unit of timeout
-                this,             // Activity (for callback binding)
-                mCallbacks)       // OnVerificationStateChangedCallbacks
+                this, // Activity (for callback binding)
+                mCallbacks) // OnVerificationStateChangedCallbacks
         // [END start_phone_auth]
 
         mVerificationInProgress = true
     }
-
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         mAuth.signInWithCredential(credential)
@@ -282,7 +264,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
                         Log.d(TAG, "signInWithCredential:success")
 
-
                         updateUI(STATE_VERIFY_SUCCESS)
 
 //                        task.result?.let {
@@ -290,7 +271,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 //
 //                            updateUI(STATE_SIGNIN_SUCCESS, user)
 //                        }
-
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
                         if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -301,7 +281,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
     }
-
 
     private fun updateUI(uiState: Int, cred: PhoneAuthCredential) {
         updateUI(uiState, null, cred)
@@ -320,7 +299,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
     private var countDown: CountDown = CountDown(onFinish, onTick)
 
-
     private fun updateUI(uiState: Int, user: FirebaseUser? = mAuth.currentUser, cred: PhoneAuthCredential? = null) {
         when (uiState) {
             STATE_INITIALIZED -> {
@@ -335,9 +313,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 btn_start_verification.isClickable = false
                 phone.isEnabled = false
 
-
                 countDown.start()
-
             }
             STATE_VERIFY_FAILED -> {
                 // Verification has failed, show all options
@@ -364,7 +340,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
             STATE_SIGNIN_SUCCESS -> {
                 //
             }
-        }// Np-op, handled by sign-in check
+        } // Np-op, handled by sign-in check
 
         if (user == null) {
 //            // Signed out
@@ -421,7 +397,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun attemptSignUp() {
 
-
         if (mSignUpTask != null) {
             return
         }
@@ -435,7 +410,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
 
         var cancel = false
         var focusView: View? = null
-
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(passwordStr)) {
@@ -464,11 +438,9 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
             cancel = true
         }
 
-
         // Store values at the time of the login attempt.
         val txtName = name.text.toString()
         val txtPhone = phone.text.toString()
-
 
         if (TextUtils.isEmpty(txtName)) {
             name.error = getString(R.string.error_field_required)
@@ -480,8 +452,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
             cancel = true
         }
 
-
-
         if (TextUtils.isEmpty(txtPhone)) {
             phone.error = getString(R.string.error_field_required)
             focusView = phone
@@ -491,7 +461,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
             focusView = phone
             cancel = true
         }
-
 
         if (!verifiedPhone) {
             phone.error = "핸드폰를 인증해주세요"
@@ -505,7 +474,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
             focusView?.requestFocus()
         } else {
 
-
             val jsonParam = JSONObject()
 
             try {
@@ -513,7 +481,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                 jsonParam.put(URL_REGIST_PARAM_PWD, passwordStr)
                 jsonParam.put(URL_REGIST_PARAM_NAME, txtName)
                 jsonParam.put(URL_REGIST_PARAM_PHONE, txtPhone)
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -522,10 +489,8 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
     fun signUpSuccess(msg: Message) {
         mSignUpTask = null
-
 
         when (msg.what) {
             MSG_SUCCESS -> {
@@ -567,15 +532,14 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
     private class HandlerIdCheck(activity: SignUpActivity) : Handler() {
         private val mActivity: WeakReference<SignUpActivity> = WeakReference<SignUpActivity>(activity)
 
         override fun handleMessage(msg: Message) {
+
             mActivity.get()?.updateIdCheck(msg)
         }
     }
-
 
     companion object {
         private val TAG = "PhoneAuthActivity"
@@ -587,15 +551,12 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         private val STATE_SIGNIN_FAILED = 5
         private val STATE_SIGNIN_SUCCESS = 6
     }
-
-
 }
 
 class CountDown(var finishFunc: () -> Unit, var tickFunc: (Int) -> Unit) {
     private val RESET_COUNT: Long = 60
 
     var count: Int = RESET_COUNT.toInt()
-
 
     var countDownTimer = object : CountDownTimer(RESET_COUNT * 1000, 1000) {
 
@@ -616,7 +577,6 @@ class CountDown(var finishFunc: () -> Unit, var tickFunc: (Int) -> Unit) {
 
     fun cancel() {
         countDownTimer.cancel()
-
     }
 
     fun resetCount() {
@@ -633,7 +593,5 @@ class CountDown(var finishFunc: () -> Unit, var tickFunc: (Int) -> Unit) {
                 count--
             }
         }.start()
-
     }
-
 }

@@ -19,17 +19,17 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROOM
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import kotlin.properties.Delegates
 
-class VoteListActivity : AppCompatActivity() ,RoomActivityInterface{
+class VoteListActivity : AppCompatActivity(), RoomActivityInterface {
 
     override fun changeRoom(room: Room) {
-        this.room=room
+        this.room = room
         tabAdapter.changeRoom(room)
     }
 
-    override var room: Room?=null
-    override var group : Team by Delegates.notNull()
+    override var room: Room? = null
+    override var group: Team by Delegates.notNull()
 
-    private var tabAdapter : VoteTabAdapter by Delegates.notNull()
+    private var tabAdapter: VoteTabAdapter by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +39,15 @@ class VoteListActivity : AppCompatActivity() ,RoomActivityInterface{
 
         group = intent.getParcelableExtra(INTENT_GROUP)
 
-
         top_tab.addTab(top_tab.newTab().setText(getText(R.string.txt_receiver)))
         top_tab.addTab(top_tab.newTab().setText(getText(R.string.txt_sender)))
 
-        tabAdapter = VoteTabAdapter(supportFragmentManager, top_tab.tabCount,group)
+        tabAdapter = VoteTabAdapter(supportFragmentManager, top_tab.tabCount, group)
 
         viewPager.adapter = tabAdapter
 
         top_tab.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(top_tab))
-
 
         FilterFunc(this)
 
@@ -57,15 +55,13 @@ class VoteListActivity : AppCompatActivity() ,RoomActivityInterface{
             finish()
         }
         fab.setOnClickListener {
-            val i = Intent(applicationContext,MakeVoteActivity::class.java)
+            val i = Intent(applicationContext, MakeVoteActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            i.putExtra(INTENT_GROUP,group)
-            i.putExtra(INTENT_ROOM,room)
+            i.putExtra(INTENT_GROUP, group)
+            i.putExtra(INTENT_ROOM, room)
             startActivity(i)
             viewPager.currentItem = Utils.TAB_REQUEST
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-
         }
     }
-
 }

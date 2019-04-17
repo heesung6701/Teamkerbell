@@ -20,7 +20,7 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
 
     override fun doInBackground(vararg params: String?): ByteArray? {
         var inputStream: InputStream? = null
-        if(!URLUtil.isValidUrl(params[0])) {
+        if (!URLUtil.isValidUrl(params[0])) {
             msgCode = MSG_FAIL
             return null
         }
@@ -31,7 +31,7 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
         for (i in 1..3) {
             try {
                 inputStream = url.openStream() as InputStream
-                msgCode= MSG_SUCCESS
+                msgCode = MSG_SUCCESS
             } catch (e: Exception) {
                 Log.d(LOG_TAG.plus("_ERROR"), e.toString())
                 e.printStackTrace()
@@ -41,14 +41,13 @@ class BitmapTask(var handler: Handler) : AsyncTask<String, Void, ByteArray>() {
         return inputStream?.readBytes()
     }
 
-
     override fun onPostExecute(result: ByteArray?) {
         super.onPostExecute(result)
 
         val msg = Message()
         msg.obj = result
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Bitmap Message"+if(msgCode== MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName, "get Bitmap Message" + if (msgCode == MSG_SUCCESS) "Success" else " failed")
 
         handler.sendMessage(msg)
     }

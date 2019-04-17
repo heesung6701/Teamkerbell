@@ -15,8 +15,11 @@ class LinearLayoutManagerWithSmoothScroller : LinearLayoutManager {
 
     constructor(context: Context, orientation: Int, reverseLayout: Boolean) : super(context, orientation, reverseLayout) {}
 
-    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State?,
-                                        position: Int) {
+    override fun smoothScrollToPosition(
+        recyclerView: RecyclerView,
+        state: RecyclerView.State?,
+        position: Int
+    ) {
         val smoothScroller = TopSnappedSmoothScroller(recyclerView.context)
         smoothScroller.targetPosition = position
         startSmoothScroll(smoothScroller)

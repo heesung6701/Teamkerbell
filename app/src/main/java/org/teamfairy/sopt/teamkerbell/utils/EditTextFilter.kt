@@ -6,22 +6,20 @@ import android.widget.EditText
 class EditTextFilter {
     companion object {
 
-
-        fun setFilter(edt : EditText){
+        fun setFilter(edt: EditText) {
 
             val filterKor = InputFilter { source, start, end, dest, dstart, dend ->
                 var r: CharSequence? = null
                 for (i in start until end) {
-                    r =  if (!Character.isLetterOrDigit(source[i])) {
+                    r = if (!Character.isLetterOrDigit(source[i])) {
                         ""
-                    }else
+                    } else
                         null
                 }
                 r
             }
 
             edt.filters = arrayOf(filterKor)
-
         }
     }
 }

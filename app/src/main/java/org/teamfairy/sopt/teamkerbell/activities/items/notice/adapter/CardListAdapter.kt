@@ -10,24 +10,23 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.CardViewHolder
 
 /**
  * Created by lumiere on 2017-12-30.
  */
-class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext : Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
+class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext: Context, var mOnClickListener: View.OnClickListener) : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val pos = holder.adapterPosition
 
         val notice = dataList[pos] as Notice
-        holder.tvTitle.text=notice.roomName
-        holder.tvTime.text=notice.getSubTitle()
-        holder.tvContent.text=notice.content
-        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext,"user${notice.u_idx}"))
+        holder.tvTitle.text = notice.roomName
+        holder.tvTime.text = notice.getSubTitle()
+        holder.tvContent.text = notice.content
+        if (NetworkUtils.getBitmapList(notice.photo, holder.ivProfile, mContext, "user${notice.u_idx}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
 
-        holder.tvName.text=notice.name
+        holder.tvName.text = notice.name
     }
 
     companion object {
@@ -35,20 +34,15 @@ class CardListAdapter(var dataList: ArrayList<ListDataInterface>, var mContext :
         val TYPE_FOOT = 2
     }
 
-
-
-    override fun getItemViewType(position: Int): Int =position
+    override fun getItemViewType(position: Int): Int = position
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val mainView: View = LayoutInflater.from(parent.context).inflate(R.layout.li_card, parent, false)
         mainView.setOnClickListener(mOnClickListener)
-        val c =  CardViewHolder(mainView)
+        val c = CardViewHolder(mainView)
         c.tvContent.movementMethod = ScrollingMovementMethod()
         return c
     }
 
-
     override fun getItemCount(): Int = dataList.size
-
-
 }

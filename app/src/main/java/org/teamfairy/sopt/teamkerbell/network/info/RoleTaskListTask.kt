@@ -24,7 +24,6 @@ class RoleTaskListTask(context: Context, var handler: Handler, token: String?) :
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-
     fun extractFeatureFromJson(jsonResponse: String): ArrayList<RoleTask>? {
 
         message = "No Message"
@@ -56,12 +55,10 @@ class RoleTaskListTask(context: Context, var handler: Handler, token: String?) :
 
                         realm.copyToRealmOrUpdate(taskR)
                         datas.add(taskR.toRoleTask())
-
                     }
                     realm.commitTransaction()
                     msgCode = MSG_SUCCESS
                     return datas
-
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -76,10 +73,8 @@ class RoleTaskListTask(context: Context, var handler: Handler, token: String?) :
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 

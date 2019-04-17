@@ -6,7 +6,6 @@ import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.RoomInfoInterface
-import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.model.realm.VoteR
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 
@@ -14,15 +13,14 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 data class Vote(
-        var vote_idx: Int,  // Primary Key
-        override var u_idx: Int,
-        var write_time: String,
-        var content: String?,
-        override var room_idx: Int,
-        var title: String?,
-        var status: Int?
+    var vote_idx: Int, // Primary Key
+    override var u_idx: Int,
+    var write_time: String,
+    var content: String?,
+    override var room_idx: Int,
+    var title: String?,
+    var status: Int?
 ) : RoomInfoInterface(), ListDataInterface, Parcelable {
-
 
     override fun getRoomTitle(): String {
         return roomName
@@ -32,12 +30,12 @@ data class Vote(
         return groupName
     }
 
-    fun setGroupInfo(context: Context){
-        super.setGroupInfo(context,room_idx)
+    fun setGroupInfo(context: Context) {
+        super.setGroupInfo(context, room_idx)
     }
 
-    fun setGroupInfo(realm: Realm){
-        super.setGroupInfo(realm,room_idx)
+    fun setGroupInfo(realm: Realm) {
+        super.setGroupInfo(realm, room_idx)
     }
     fun setPhotoInfo(context: Context) {
         super.setPhotoInfo(context, u_idx)
@@ -48,19 +46,18 @@ data class Vote(
     }
     fun toVoteR(): VoteR {
         val voteR = VoteR()
-        voteR.vote_idx=vote_idx
-        voteR.u_idx=u_idx
-        voteR.write_time=write_time
-        voteR.content=content
-        voteR.room_idx=room_idx
-        voteR.title=title
-        voteR.status=status
+        voteR.vote_idx = vote_idx
+        voteR.u_idx = u_idx
+        voteR.write_time = write_time
+        voteR.content = content
+        voteR.room_idx = room_idx
+        voteR.title = title
+        voteR.status = status
         return voteR
     }
 
-
-    //status : 마감 여부
-    fun isFinished() : Boolean =  (status == 1)
+    // status : 마감 여부
+    fun isFinished(): Boolean = (status == 1)
 
     override fun getMainTitle(): String {
         return title!!
@@ -68,10 +65,9 @@ data class Vote(
 
     override fun getSubTitle(): String {
         return content!!
-
     }
 
-    override fun getTime(): String{
+    override fun getTime(): String {
         return Utils.getMonthDayTime(write_time)
     }
 
@@ -103,7 +99,6 @@ data class Vote(
             override fun createFromParcel(source: Parcel): Vote = Vote(source)
             override fun newArray(size: Int): Array<Vote?> = arrayOfNulls(size)
         }
-
 
         val ARG_WRITETIME = "write_time"
     }

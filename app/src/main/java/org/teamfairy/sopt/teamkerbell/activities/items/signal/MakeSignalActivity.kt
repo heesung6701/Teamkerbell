@@ -55,7 +55,6 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
         getUserListFromRealm()
     }
 
-
     val LOG_TAG = this::class.java.name
 
     private var recyclerView: RecyclerView by Delegates.notNull()
@@ -69,12 +68,10 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
     private var entireStatus: Int = ENTIRE_STATUS_ENTIRE
     var content: String = ""
 
-
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
 
-    private val whoCheck = HashMap<Int,Boolean>()
-
+    private val whoCheck = HashMap<Int, Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,12 +81,11 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
         group = intent.getParcelableExtra<Team>(INTENT_GROUP)
         room = intent.getParcelableExtra<Room>(INTENT_ROOM)
 
-
         SelectRoomFunc(this)
         setUserListInit()
 
         chk_particular.setOnCheckedChangeListener { _, p1 ->
-            if (room == null  || room!!.room_idx<0) {
+            if (room == null || room!!.room_idx <0) {
                 Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
                 chk_particular.isChecked = false
                 return@setOnCheckedChangeListener
@@ -101,7 +97,6 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                 recyclerView.visibility = View.GONE
             adapter.notifyDataSetChanged()
         }
-
 
         btn_back.setOnClickListener {
             finish()
@@ -142,7 +137,6 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                     }
                 }
                 jsonParam.put(URL_MAKE_SIGNAL_PARAM_USERARRAY, jsonArray)
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -151,19 +145,14 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
             isConnecting = true
             task.execute(URL_MAKE_SIGNAL, METHOD_POST, jsonParam.toString())
         }
-
     }
-
 
     private fun setUserListInit() {
         recyclerView = findViewById(R.id.recyclerView_user)
-        recyclerView.layoutManager = LinearLayoutManager(applicationContext);
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
         adapter = UserListAdapter(userList as ArrayList<User>, applicationContext)
         recyclerView.adapter = adapter
-
     }
-
-
 
     private fun getUserListFromRealm() {
         if (room == null) return
@@ -173,7 +162,7 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
         val joinedRs = realm.where(JoinedRoomR::class.java).equalTo(Room.ARG_ROOM_IDX, room!!.room_idx).findAll()
 
         userList.forEach {
-            whoCheck[it.u_idx]=it.isChecked
+            whoCheck[it.u_idx] = it.isChecked
         }
 
         userList.clear()
@@ -181,19 +170,16 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
             if (it.u_idx != LoginToken.getUserIdx(applicationContext)) {
                 val u = (realm.where(UserR::class.java).equalTo(ARG_U_IDX, it.u_idx).findFirst()
                         ?: UserR()).toUser()
-                userList.add(u.toUserCheckData(whoCheck[it.u_idx]?:false))
+                userList.add(u.toUserCheckData(whoCheck[it.u_idx] ?: false))
             }
         }
         adapter.notifyDataSetChanged()
-
     }
-
 
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
-
 
     private class HandlerMake(activity: MakeSignalActivity) : Handler() {
         private val mActivity: WeakReference<MakeSignalActivity> = WeakReference<MakeSignalActivity>(activity)
@@ -207,9 +193,8 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                         val obj = msg.obj as String
                         val idx = obj.toInt()
 
-
                         Handler().postDelayed(Runnable {
-                            if(!activity.intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                            if (!activity.intent.getBooleanExtra(INTENT_FROM_CHAT, false)) {
                                 val intent = Intent(activity.applicationContext, SignalActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 intent.putExtra(INTENT_GROUP, activity.group)
@@ -217,7 +202,6 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
                                 activity.startActivity(intent)
                             }
                             activity.finish()
-
                         }, 500)
                     }
                     else -> {
@@ -229,5 +213,4 @@ class MakeSignalActivity : AppCompatActivity(), RoomActivityInterface {
             }
         }
     }
-
 }

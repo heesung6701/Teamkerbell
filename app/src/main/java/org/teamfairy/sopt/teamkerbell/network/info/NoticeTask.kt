@@ -10,7 +10,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.model.data.Notice
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_DATA
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_MESSAGE
@@ -51,11 +50,10 @@ class NoticeTask(context: Context, var handler: Handler, token: String?) : Netwo
                     obj.content = data.getString(JSON_CONTENT)
                     obj.room_idx = data.getInt(JSON_ROOM_IDX)
                     obj.notice_idx = data.getInt(JSON_NOTICE_IDX)
-                    if(data.has(JSON_RESPONSE_STATUS))
+                    if (data.has(JSON_RESPONSE_STATUS))
                         obj.status = data.getInt(JSON_RESPONSE_STATUS)
                     else
                         obj.status = Notice.ARG_STATUS_READ
-
 
                     msgCode = MSG_SUCCESS
                     return obj
@@ -72,12 +70,10 @@ class NoticeTask(context: Context, var handler: Handler, token: String?) : Netwo
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
         val obj = extractFeatureFromJson(result!!)
-
 
         val msg = handler.obtainMessage()
         msg.what = msgCode

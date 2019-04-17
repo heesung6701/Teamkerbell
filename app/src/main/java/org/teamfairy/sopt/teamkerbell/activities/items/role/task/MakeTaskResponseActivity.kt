@@ -47,15 +47,13 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-
 class MakeTaskResponseActivity : AppCompatActivity() {
 
     private var roleTask: RoleTask by Delegates.notNull()
-    private var taskResponse: TaskResponse?= null
+    private var taskResponse: TaskResponse? = null
     var fileArray = ArrayList<File>()
 
     var adapter: FileListAdapter by Delegates.notNull()
-
 
     var minusArray = JSONArray()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,21 +64,20 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         roleTask = intent.getParcelableExtra(IntentTag.INTENT_TASK)
         tv_task_name.text = roleTask.content
 
-        if(intent.hasExtra(IntentTag.INTENT_TASK_RESPONSE)) {
+        if (intent.hasExtra(IntentTag.INTENT_TASK_RESPONSE)) {
             taskResponse = intent.getParcelableExtra(IntentTag.INTENT_TASK_RESPONSE)
-            edt_content.setText(taskResponse?.content?:"")
+            edt_content.setText(taskResponse?.content ?: "")
 
             taskResponse?.fileArray?.forEach {
                 val layout = layoutInflater.inflate(R.layout.li_file, layout_uploaded, false)
                 val fileName = it
-                layout.li_tv_title.text= fileName
-                layout.li_tv_sub_title.text="업로드된 파일"
+                layout.li_tv_title.text = fileName
+                layout.li_tv_sub_title.text = "업로드된 파일"
                 layout.li_btn_minus.setOnClickListener {
                     layout_uploaded.removeView(layout)
                     minusArray.put(fileName)
                 }
                 layout_uploaded.addView(layout)
-
             }
         }
 
@@ -99,14 +96,14 @@ class MakeTaskResponseActivity : AppCompatActivity() {
 //        }
         btn_add_file.setOnClickListener {
 
-            if(checkPermissionREAD_EXTERNAL_STORAGE(this,MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE)){
+            if (checkPermissionREAD_EXTERNAL_STORAGE(this, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE)) {
                 intentFile()
             }
         }
 
         btn_commit.setOnClickListener {
-            if(edt_content.text.isEmpty() && edt_content.text.isBlank()){
-                Toast.makeText(applicationContext,getString(R.string.txt_enter_content),Toast.LENGTH_SHORT).show()
+            if (edt_content.text.isEmpty() && edt_content.text.isBlank()) {
+                Toast.makeText(applicationContext, getString(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             isUploading()
@@ -118,9 +115,9 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_IDX, roleTask.role_idx)
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_TASK_IDX, roleTask.task_idx)
                 jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_RESPONSE_CONTENT, edt_content.text.toString())
-                if(taskResponse!=null){
-                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_RESPONSE_IDX,taskResponse!!.response_idx)
-                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_MINUS_ARRAY,minusArray)
+                if (taskResponse != null) {
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_ROLE_RESPONSE_IDX, taskResponse!!.response_idx)
+                    jsonParam.put(USGS_REQUEST_URL.URL_ROLE_RESPONSE_PARAM_MINUS_ARRAY, minusArray)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -130,29 +127,25 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             }
             Log.d("NetworkTask", jsonParam.toString())
 
-
-            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE,if(taskResponse==null) NetworkTask.METHOD_POST else NetworkTask.METHOD_PUT, jsonParam.toString())
+            task.execute(USGS_REQUEST_URL.URL_ROLE_RESPONSE, if (taskResponse == null) NetworkTask.METHOD_POST else NetworkTask.METHOD_PUT, jsonParam.toString())
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = FileListAdapter(fileArray)
         recyclerView.adapter = adapter
-
-
     }
 
-    private fun isUploading(){
-        upload_progress.visibility= View.VISIBLE
-        btn_add_file.isEnabled=false
-        btn_commit.isEnabled=false
-        edt_content.isEnabled=false
+    private fun isUploading() {
+        upload_progress.visibility = View.VISIBLE
+        btn_add_file.isEnabled = false
+        btn_commit.isEnabled = false
+        edt_content.isEnabled = false
     }
-    private fun isFailed(){
-        upload_progress.visibility= View.GONE
-        btn_add_file.isEnabled=true
-        btn_commit.isEnabled=true
-        edt_content.isEnabled=true
-
+    private fun isFailed() {
+        upload_progress.visibility = View.GONE
+        btn_add_file.isEnabled = true
+        btn_commit.isEnabled = true
+        edt_content.isEnabled = true
     }
 
     private fun intentFile() {
@@ -160,12 +153,11 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
 
 //       구글 드라이브 등에서 가져오는기 막음
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         intent.type = "*/*"
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 
-        startActivityForResult(intent, SELECT_FILE);
-
+        startActivityForResult(intent, SELECT_FILE)
     }
 
     private fun intentImage() {
@@ -173,7 +165,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         startActivityForResult(intent, SELECT_IMAGE)
-
     }
 
     override fun finish() {
@@ -199,11 +190,9 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                         activity.isFailed()
                     }
                 }
-
             }
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -218,9 +207,7 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
-
         }
 
         if (requestCode == SELECT_IMAGE) {
@@ -236,7 +223,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         }
     }
 
-
     private fun checkPermissionREAD_EXTERNAL_STORAGE(context: Context, request: Int): Boolean {
         val currentAPIVersion = Build.VERSION.SDK_INT
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -248,7 +234,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                     showDialog("External storage", context,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             request)
-
                 } else {
                     ActivityCompat
                             .requestPermissions(
@@ -260,14 +245,17 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             } else {
                 return true
             }
-
         } else {
             return true
         }
     }
 
-    private fun showDialog(msg: String, context: Context,
-                           permission: String, request: Int) {
+    private fun showDialog(
+        msg: String,
+        context: Context,
+        permission: String,
+        request: Int
+    ) {
         val alertBuilder = AlertDialog.Builder(context)
         alertBuilder.setCancelable(true)
         alertBuilder.setTitle("Permission necessary")
@@ -276,21 +264,22 @@ class MakeTaskResponseActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(context as Activity,
                     arrayOf(permission),
                     request)
-
         }
         val alert = alertBuilder.create()
         alert.show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_IMAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 intentImage()
             } else {
                 Toast.makeText(applicationContext, "GET_ACCOUNTS Denied",
                         Toast.LENGTH_SHORT).show()
-
             }
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FOR_FILE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 intentFile()
@@ -302,7 +291,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                     grantResults)
         }
     }
-
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     fun getPath(context: Context, uri: Uri): String? {
@@ -320,8 +308,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 if ("primary".equals(type, ignoreCase = true)) {
                     return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
                 }
-
-
             } else if (isDownloadsDocument(uri)) {
 
                 val id = DocumentsContract.getDocumentId(uri)
@@ -347,24 +333,26 @@ class MakeTaskResponseActivity : AppCompatActivity() {
                 val selectionArgs = arrayOf(split[1])
 
                 return getDataColumn(context, contentUri, selection, selectionArgs)
-            }// MediaProvider
+            } // MediaProvider
             // DownloadsProvider
         } else if ("content".equals(uri.scheme, ignoreCase = true)) {
 
             // Return the remote address
             return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(context, uri, null, null)
-
         } else if ("file".equals(uri.scheme, ignoreCase = true)) {
             return uri.path
-        }// File
+        } // File
         // MediaStore (and general)
 
         return null
     }
 
-
-    fun getDataColumn(context: Context, uri: Uri?, selection: String?,
-                      selectionArgs: Array<String>?): String? {
+    fun getDataColumn(
+        context: Context,
+        uri: Uri?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
 
         var cursor: Cursor? = null
         val column = "_data"
@@ -382,7 +370,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
         }
         return null
     }
-
 
     /**
      * @param uri The Uri to check.
@@ -415,7 +402,6 @@ class MakeTaskResponseActivity : AppCompatActivity() {
     fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
     }
-
 
     /**
      * @param uri The Uri to check.

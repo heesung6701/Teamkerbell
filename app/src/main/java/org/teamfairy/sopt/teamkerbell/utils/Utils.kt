@@ -1,6 +1,5 @@
 package org.teamfairy.sopt.teamkerbell.utils
 
-import android.view.View
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,11 +12,9 @@ class Utils {
         const val TAB_ROOM = 1
         const val TAB_HOME = 2
 
-
         const val TAB_UNPERFORMED_NOTICE = 0
         const val TAB_UNPERFORMED_SIGNAL = 1
         const val TAB_UNPERFORMED_VOTE = 2
-
 
         const val TAB_RECEIVE = 0
         const val TAB_REQUEST = 1
@@ -26,17 +23,13 @@ class Utils {
         const val TAB_YELLOW = 1
         const val TAB_RED = 2
 
-
-
         const val SIGNAL_RECEIVER = 1
         const val SIGNAL_SENDER = 2
         const val SIGNAL_ALL = 3
 
-
         const val VOTE_RECEIVER = 1
         const val VOTE_SENDER = 2
         const val VOTE_ALL = 3
-
 
         const val MSG_SUCCESS: Int = 1
         const val MSG_NO_INTERNET: Int = 2
@@ -48,15 +41,11 @@ class Utils {
         const val MSG_NO_INTERNET_STR = "NO NETWORK"
         const val MSG_FAIL_STR = "CONNECT FAIL"
 
-
-
         const val OPEN_STATUS_SECRET: Int = 0
         const val OPEN_STATUS_OPEN: Int = 1
 
-
         const val ENTIRE_STATUS_ENTIRE: Int = 1
         const val ENTIRE_STATUS_CHOSE: Int = 0
-
 
         fun getNow(): String {
 
@@ -68,12 +57,10 @@ class Utils {
             return sdfNow.format(date)
         }
 
-
         fun getNowToTime(txt: String): String {
 
             return txt.substring("yyyy-MM-dd ".length, "yyyy-MM-dd HH:mm".length)
         }
-
 
         fun getNowToDateTime(txt: String): String {
 
@@ -89,12 +76,11 @@ class Utils {
         }
 
         fun getMonthDayTime(txt: String): String {
-            if(txt.isBlank() || txt.isEmpty()) return ""
+            if (txt.isBlank() || txt.isEmpty()) return ""
 
             return txt.substring("yyyy-".length, "yyyy-MM".length).toInt().toString() + "월" +
                     txt.substring("yyyy-MM-".length, "yyyy-MM-dd".length).toInt().toString() + "일" +
                     txt.substring("yyyy-MM-dd".length, "yyyy-MM-dd HH:mm".length)
         }
     }
-
 }

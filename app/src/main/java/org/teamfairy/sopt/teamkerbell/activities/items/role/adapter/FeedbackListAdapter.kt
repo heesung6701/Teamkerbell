@@ -12,13 +12,10 @@ import org.teamfairy.sopt.teamkerbell.model.data.RoleFeedback
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 
-
 /**
  * Created by lumiere on 2017-12-30.
  */
-class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFeedback>) : RecyclerView.Adapter<FeedbackViewHolder>() {
-
-
+class FeedbackListAdapter(var mContext: Context, var dataList: ArrayList<RoleFeedback>) : RecyclerView.Adapter<FeedbackViewHolder>() {
 
     private var onLongClickHandler: Handler? = null
 
@@ -28,13 +25,13 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
 
     override fun onBindViewHolder(holder: FeedbackViewHolder, position: Int) {
         val fdb = dataList[position]
-        holder.tvName.text=fdb.name
-        holder.tvContent.text=fdb.content
+        holder.tvName.text = fdb.name
+        holder.tvContent.text = fdb.content
 
         if (NetworkUtils.getBitmapList(fdb.photo, holder.ivProfile, mContext, "user${fdb.u_idx}")) {
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
         }
-        if(fdb.u_idx==LoginToken.getUserIdx(mContext)) {
+        if (fdb.u_idx == LoginToken.getUserIdx(mContext)) {
             holder.itemView.setOnLongClickListener(object : RoomListAdapter.OnLongClickListenerByPosition(position) {
                 override fun onLongClick(p0: View?): Boolean {
                     sendMessage(position)
@@ -42,7 +39,6 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
                 }
             })
         }
-
     }
 
     fun sendMessage(position: Int) {
@@ -51,8 +47,6 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
         msg.what = position
         onLongClickHandler?.sendMessage(msg)
     }
-
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -63,9 +57,7 @@ class FeedbackListAdapter(var mContext : Context, var dataList: ArrayList<RoleFe
         return FeedbackViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 
     abstract class OnLongClickListenerByPosition(var position: Int) : View.OnLongClickListener
 }

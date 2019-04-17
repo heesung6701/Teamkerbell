@@ -18,9 +18,7 @@ import android.graphics.Color
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.activities.SplashActivity
 import org.teamfairy.sopt.teamkerbell.activities.chat.socket.ChatApplication
-import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.realm.BadgeCnt
-import org.teamfairy.sopt.teamkerbell.model.realm.RoomR
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_BODY
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CHAT_IDX
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_CONTENT
@@ -42,11 +40,9 @@ import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_STATUS
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_TITLE
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getGroup
-import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRoom
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /**
  * Created by lumiere on 2018-01-13.
@@ -78,8 +74,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
             Log.d(TAG, "Message Notification Title: " + remoteMessage.notification?.title)
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification?.body?:"null")
-            sendNotification(remoteMessage.notification?.title ?: "팀커벨", remoteMessage.notification?.body ?: "메세지가 도착했습니다", "팀커벨",createID())
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification?.body ?: "null")
+            sendNotification(remoteMessage.notification?.title ?: "팀커벨", remoteMessage.notification?.body ?: "메세지가 도착했습니다", "팀커벨", createID())
         } else {
             if (remoteMessage.data.isNotEmpty()) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.data)
@@ -91,9 +87,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     // Handle message within 10 seconds
                     handleNow(remoteMessage)
                 }
-
             }
-
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -122,14 +116,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val params = remoteMessage.data
 
         var title: String = "팀커벨"
-        var body: String?=null
-        var idx : Int? =null
+        var body: String? = null
+        var idx: Int? = null
         var gIdx: Int = -1
         var roomIdx: Int = -1
         var chatIdx: Int = -1
         var roomName: String = ""
         var groupName: String = ""
-
 
         var status = 0
         try {
@@ -142,9 +135,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 idx = jsonObject.getInt(JSON_INDEX)
             if (jsonObject.has(JSON_ROOM_IDX)) {
                 roomIdx = jsonObject.getInt(JSON_ROOM_IDX)
-                val room =  getRoom(applicationContext, roomIdx)
-                roomName=  room.real_name
-                groupName =  getGroup(applicationContext, room.g_idx).real_name
+                val room = getRoom(applicationContext, roomIdx)
+                roomName = room.real_name
+                groupName = getGroup(applicationContext, room.g_idx).real_name
             }
             if (jsonObject.has(JSON_CHAT_IDX)) {
                 chatIdx = jsonObject.getInt(JSON_CHAT_IDX)
@@ -155,30 +148,28 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 status = jsonObject.getInt(JSON_DATA)
             if (jsonObject.has(JSON_G_IDX)) {
                 gIdx = jsonObject.getInt(JSON_G_IDX)
-                groupName =  getGroup(applicationContext, gIdx).real_name
+                groupName = getGroup(applicationContext, gIdx).real_name
             }
-            if(jsonObject.has(JSON_RESULT)){
+            if (jsonObject.has(JSON_RESULT)) {
                 val result = JSONObject(jsonObject.getString(JSON_RESULT))
                 roomIdx = result.getInt(JSON_ROOM_IDX)
-                val room =  getRoom(applicationContext, roomIdx)
-                gIdx=room.g_idx
-                roomName=  room.real_name
-                groupName =  getGroup(applicationContext, room.g_idx).real_name
+                val room = getRoom(applicationContext, roomIdx)
+                gIdx = room.g_idx
+                roomName = room.real_name
+                groupName = getGroup(applicationContext, room.g_idx).real_name
                 chatIdx = result.getInt(JSON_CHAT_IDX)
-                body=result.getString(JSON_CONTENT)
+                body = result.getString(JSON_CONTENT)
             }
 //            else{
 //                val realm = getRealmDefault(applicationContext)
 //                gIdx = realm.where(RoomR::class.java).findFirst()?.g_idx ?: -1
 //                realm.close()
 //            }
-
-
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        if(groupName.isNotEmpty())
-            title=groupName
+        if (groupName.isNotEmpty())
+            title = groupName
 
         when (status) {
             StatusCode.groupChange -> {
@@ -193,21 +184,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             StatusCode.joinedRoomChange ->
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
 
-            StatusCode.roomWithJoinedRoomChange-> {
+            StatusCode.roomWithJoinedRoomChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
 
-            StatusCode.joinedGroupWithJoinedRoom-> {
+            StatusCode.joinedGroupWithJoinedRoom -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
 
-            StatusCode.userWithJoinedGroupChange-> {
+            StatusCode.userWithJoinedGroupChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_GROUP, true)
             }
-            StatusCode.allChange-> {
+            StatusCode.allChange -> {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_GROUP, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_ROOM, true)
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_USER, true)
@@ -215,47 +206,45 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setPref_isUpdate(applicationContext, PREF_ISUPDATE_JOINED_ROOM, true)
             }
             StatusCode.votePush -> {
-                sendNotification(title, body?:"공지가 만들어졌습니다.", roomName,chatIdx)
-                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
+                sendNotification(title, body ?: "공지가 만들어졌습니다.", roomName, chatIdx)
+                BadgeCnt.increase(applicationContext, BadgeCnt.WHAT_VOTE, gIdx)
             }
-            StatusCode.makeSignal ->{
-                sendNotification(title, body?:"신호등이 만들어졌습니다.", roomName,chatIdx)
-                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_SIGNAL,gIdx)
+            StatusCode.makeSignal -> {
+                sendNotification(title, body ?: "신호등이 만들어졌습니다.", roomName, chatIdx)
+                BadgeCnt.increase(applicationContext, BadgeCnt.WHAT_SIGNAL, gIdx)
             }
-            StatusCode.makeNotice ->{
-                sendNotification(title, body?:"공지가 만들어 졌습니다", roomName,chatIdx)
-                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_NOTICE,gIdx)
+            StatusCode.makeNotice -> {
+                sendNotification(title, body ?: "공지가 만들어 졌습니다", roomName, chatIdx)
+                BadgeCnt.increase(applicationContext, BadgeCnt.WHAT_NOTICE, gIdx)
             }
-            StatusCode.makeVote ->{
-                sendNotification(title, body?:"투표가 등록되었습니다", roomName,chatIdx)
-                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_VOTE,gIdx)
+            StatusCode.makeVote -> {
+                sendNotification(title, body ?: "투표가 등록되었습니다", roomName, chatIdx)
+                BadgeCnt.increase(applicationContext, BadgeCnt.WHAT_VOTE, gIdx)
             }
-            StatusCode.makeRole ->{
-                sendNotification(title, body?:"역할분담이 등록되었습니다.", roomName,chatIdx)
-                BadgeCnt.increase(applicationContext,BadgeCnt.WHAT_ROLE,gIdx)
+            StatusCode.makeRole -> {
+                sendNotification(title, body ?: "역할분담이 등록되었습니다.", roomName, chatIdx)
+                BadgeCnt.increase(applicationContext, BadgeCnt.WHAT_ROLE, gIdx)
             }
 
-            StatusCode.chatMessage ->{
+            StatusCode.chatMessage -> {
 
-
-                if(DatabaseHelpUtils.getSettingPush(applicationContext) || DatabaseHelpUtils.getSettingPush(applicationContext,gIdx)){
-                    Log.d(TAG,"message make notification")
-                    sendNotification(title, body?:"메세지가 도착했습니다.", roomName,chatIdx,gIdx)
-                }else{
-                    Log.d(TAG,"message doesn't make notification")
+                if (DatabaseHelpUtils.getSettingPush(applicationContext) || DatabaseHelpUtils.getSettingPush(applicationContext, gIdx)) {
+                    Log.d(TAG, "message make notification")
+                    sendNotification(title, body ?: "메세지가 도착했습니다.", roomName, chatIdx, gIdx)
+                } else {
+                    Log.d(TAG, "message doesn't make notification")
                 }
             }
-
         }
 
         if (LoginToken.isValid()) {
 
             Log.d(TAG, "LoginToken is Valid ")
-            NetworkUtils.connectUserList(applicationContext,null)
-            NetworkUtils.connectGroupList(applicationContext,null)
-            NetworkUtils.connectRoomList(applicationContext,null)
-            NetworkUtils.connectJoinedGroupList(applicationContext,null)
-            NetworkUtils.connectJoinedRoomList(applicationContext,null)
+            NetworkUtils.connectUserList(applicationContext, null)
+            NetworkUtils.connectGroupList(applicationContext, null)
+            NetworkUtils.connectRoomList(applicationContext, null)
+            NetworkUtils.connectJoinedGroupList(applicationContext, null)
+            NetworkUtils.connectJoinedRoomList(applicationContext, null)
         }
     }
 
@@ -263,20 +252,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * Create and show a simple notification containing the received FCM message.
      *
      */
-    private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int,g_idx : Int) {
-        if(!DatabaseHelpUtils.getSettingPush(applicationContext)) return
-        if(!DatabaseHelpUtils.getSettingPush(applicationContext,g_idx)) return
-        if(ChatApplication.mSocket!=null && ChatApplication.recentGIdx==g_idx) return
-        sendNotification(title,content,CHANNEL_ID,nId)
+    private fun sendNotification(title: String, content: String, CHANNEL_ID: String, nId: Int, g_idx: Int) {
+        if (!DatabaseHelpUtils.getSettingPush(applicationContext)) return
+        if (!DatabaseHelpUtils.getSettingPush(applicationContext, g_idx)) return
+        if (ChatApplication.mSocket != null && ChatApplication.recentGIdx == g_idx) return
+        sendNotification(title, content, CHANNEL_ID, nId)
     }
-    private fun sendNotification(title: String, content: String, CHANNEL_ID: String,nId : Int) {
+    private fun sendNotification(title: String, content: String, CHANNEL_ID: String, nId: Int) {
 
         val intent = Intent(this, SplashActivity::class.java)
         LoginToken.getPref(applicationContext)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT)
-
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this)
@@ -288,30 +276,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
 
-
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.app_name);// The user-visible name of the channel.
+            val name = getString(R.string.app_name); // The user-visible name of the channel.
             val importance = NotificationManager.IMPORTANCE_HIGH
 
             val mChannel: NotificationChannel = NotificationChannel(CHANNEL_ID, name, importance)
-            mChannel.description=CHANNEL_ID
+            mChannel.description = CHANNEL_ID
             mChannel.enableLights(true)
-            mChannel.lightColor= Color.GREEN
+            mChannel.lightColor = Color.GREEN
             mChannel.enableVibration(true)
-            mChannel.vibrationPattern=longArrayOf(100, 200, 100, 200)
-            mChannel.lockscreenVisibility=Notification.VISIBILITY_PUBLIC
+            mChannel.vibrationPattern = longArrayOf(100, 200, 100, 200)
+            mChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             mNotificationManager.createNotificationChannel(mChannel)
 
             notificationBuilder.setChannelId(CHANNEL_ID)
-
         }
-
 
         mNotificationManager.notify(nId, notificationBuilder.build())
         Log.d(TAG, "nId : $nId")
-
     }
 
     private fun createID(): Int {

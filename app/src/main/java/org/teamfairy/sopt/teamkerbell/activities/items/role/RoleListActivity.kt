@@ -23,7 +23,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Room
 import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_GET
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_ROLE_GET
 import org.teamfairy.sopt.teamkerbell.network.info.RoleListTask
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_ROLE
@@ -33,10 +32,9 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
-
 class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RoomActivityInterface {
     override fun changeRoom(room: Room) {
-        this.room=room
+        this.room = room
         updateList()
     }
 
@@ -46,9 +44,8 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-
     override var group: Team by Delegates.notNull()
-    override var room : Room?=null
+    override var room: Room? = null
 
     private var dataList: ArrayList<Role> = arrayListOf<Role>()
     private var roleList: ArrayList<Role> = arrayListOf<Role>()
@@ -61,14 +58,13 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         setSupportActionBar(toolbar)
         tv_title.text = supportActionBar!!.title
 
-
         group = intent.getParcelableExtra(INTENT_GROUP)
-        room =intent.getParcelableExtra(INTENT_ROOM)
+        room = intent.getParcelableExtra(INTENT_ROOM)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = RoleListAdapter(dataList,applicationContext)
+        adapter = RoleListAdapter(dataList, applicationContext)
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 
@@ -82,19 +78,17 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
-
         FilterFunc(this)
 
         btn_back.setOnClickListener {
             finish()
         }
 
-
         fab.setOnClickListener {
             val i = Intent(applicationContext, MakeRoleActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            i.putExtra(INTENT_GROUP,group)
-            i.putExtra(INTENT_ROOM,room)
+            i.putExtra(INTENT_GROUP, group)
+            i.putExtra(INTENT_ROOM, room)
             startActivity(i)
             overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         }
@@ -115,25 +109,24 @@ class RoleListActivity : AppCompatActivity(), View.OnClickListener, SwipeRefresh
 
     private fun connectRoleList() {
         val task = RoleListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
-        val roomIdx = room?.room_idx?:""
+        val roomIdx = room?.room_idx ?: ""
 //        내 알고리즘상 채팅룸에 해당하는 정보를 받아오지 않는다..?
-        if(true || roomIdx== Room.ARG_ALL_IDX || roomIdx==""){
+        if (true || roomIdx == Room.ARG_ALL_IDX || roomIdx == "") {
             task.execute("$URL_ROLE/g/${group.g_idx}", METHOD_GET)
-        }else{
+        } else {
             task.execute("$URL_ROLE/c/$roomIdx", METHOD_GET)
         }
-
     }
-    private fun updateList(){
+    private fun updateList() {
         dataList.clear()
         roleList.forEach {
-            if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
+            if (it.room_idx == room?.room_idx ?: it.room_idx || room?.room_idx == Room.ARG_ALL_IDX)
                 dataList.add(it)
         }
         adapter.notifyDataSetChanged()
     }
 
-    private  fun successGetRoleList(msg : Message){
+    private fun successGetRoleList(msg: Message) {
         when (msg.what) {
             MSG_SUCCESS -> {
                 val datas = msg.obj as ArrayList<Role>

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.Realm
-import org.teamfairy.sopt.teamkerbell.R.color.red
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 import org.teamfairy.sopt.teamkerbell.utils.Utils
@@ -13,21 +12,19 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils
  * Created by lumiere on 2018-01-01.
  */
 data class SignalResponse(
-        var signal_idx: Int,
-        override var u_idx: Int,
-        var content: String?,
-        var write_time: String?,
-        var color: String?
+    var signal_idx: Int,
+    override var u_idx: Int,
+    var content: String?,
+    var write_time: String?,
+    var color: String?
 ) : UserInfoInterface(), ListDataInterface, Parcelable {
-    override fun getRoomTitle(): String  =""
+    override fun getRoomTitle(): String = ""
 
-    override fun getGroupTitle(): String =""
-
+    override fun getGroupTitle(): String = ""
 
     override var room_idx: Int = 0
 
     fun setPhotoInfo(context: Context) = super.setPhotoInfo(context, u_idx)
-
 
     fun setPhotoInfo(realm: Realm) = super.setPhotoInfo(realm, u_idx)
 
@@ -38,9 +35,7 @@ data class SignalResponse(
 
     override fun getSubTitle(): String = getTime()
 
-
-    override fun getTime(): String =if(write_time.isNullOrBlank()) "" else  Utils.getMonthDayTime(write_time!!)
-
+    override fun getTime(): String = if (write_time.isNullOrBlank()) "" else Utils.getMonthDayTime(write_time!!)
 
     constructor(source: Parcel) : this(
             source.readInt(),

@@ -11,36 +11,31 @@ import android.widget.TextView
 import org.teamfairy.sopt.teamkerbell.R
 import kotlin.properties.Delegates
 
-
 /**
  * Created by lumiere on 2018-05-20.
  */
-class  ConfirmDialog(context: Context, var content: String) : Dialog(context){
+class ConfirmDialog(context: Context, var content: String) : Dialog(context) {
 
-    constructor(context: Context) : this(context,context.getString(R.string.txt_unperformed_yet))
+    constructor(context: Context) : this(context, context.getString(R.string.txt_unperformed_yet))
 
-    private var btnConfirm : Button by Delegates.notNull()
-    private var tvContent : TextView by Delegates.notNull()
+    private var btnConfirm: Button by Delegates.notNull()
+    private var tvContent: TextView by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT));
-        setContentView(R.layout.dialog_confirm);
-
-
+        window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        setContentView(R.layout.dialog_confirm)
 
         tvContent = findViewById(R.id.dialog_tv_content)
-        tvContent.text= content
-        btnConfirm=findViewById(R.id.btn_confirm)
+        tvContent.text = content
+        btnConfirm = findViewById(R.id.btn_confirm)
         btnConfirm.setOnClickListener {
             this.dismiss()
         }
     }
 
-    fun setOnClickListenerYes(l : View.OnClickListener){
+    fun setOnClickListenerYes(l: View.OnClickListener) {
         btnConfirm.setOnClickListener(l)
     }
-
-
 }

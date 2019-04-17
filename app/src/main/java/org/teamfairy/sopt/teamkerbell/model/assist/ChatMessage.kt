@@ -6,16 +6,15 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils
 import org.teamfairy.sopt.teamkerbell.utils.LoginToken
 import org.teamfairy.sopt.teamkerbell.model.realm.UserR
 
-
 /**
  * Created by lumiere on 2018-01-01.
  */
 data class ChatMessage(
-        var chat_idx: Int,
-        var type: Int,
-        var u_idx: Int?,
-        var content: String?,
-        var date: String?
+    var chat_idx: Int,
+    var type: Int,
+    var u_idx: Int?,
+    var content: String?,
+    var date: String?
 ) {
 
     var count: Int? = 0
@@ -27,15 +26,15 @@ data class ChatMessage(
         return content!!.substring(delmi + 1)
     }
     fun update(
-                type: Int,
-                u_idx: Int?,
-                content: String?,
-                date: String?){
-        this.type=type
-        this.u_idx=u_idx
-        this.content=content
-        this.date=date
-
+        type: Int,
+        u_idx: Int?,
+        content: String?,
+        date: String?
+    ) {
+        this.type = type
+        this.u_idx = u_idx
+        this.content = content
+        this.date = date
     }
 
     fun isSender(context: Context): Boolean {
@@ -52,7 +51,5 @@ data class ChatMessage(
 
         name = userR.name
         photo = userR.photo
-
     }
-
 }

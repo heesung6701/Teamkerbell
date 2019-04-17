@@ -44,7 +44,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.properties.Delegates
 
-class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
+class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface {
     override fun changeRoom(room: Room) {
         this.room = room
     }
@@ -61,10 +61,8 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
     override var group: Team by Delegates.notNull()
     override var room: Room? = null
 
-
     private var cnt_vote_examples = 2
     var voteExamples = arrayListOf<EditText>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,23 +94,23 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
 
         btn_commit.setOnClickListener {
 
-            if(isConnecting) return@setOnClickListener
+            if (isConnecting) return@setOnClickListener
 
-            if(room==null || room!!.room_idx<0) {
+            if (room == null || room!!.room_idx <0) {
                 Toast.makeText(applicationContext, getString(R.string.txt_select_room), Toast.LENGTH_SHORT).show()
                 layout_select_room.requestFocus()
                 return@setOnClickListener
             }
             val title: String = edt_title.text.toString()
 
-            if(title.isEmpty()){
+            if (title.isEmpty()) {
                 Toast.makeText(applicationContext, getText(R.string.txt_enter_title), Toast.LENGTH_SHORT).show()
                 edt_title.requestFocus()
                 return@setOnClickListener
             }
 
             val content: String = edt_content.text.toString()
-            if(content.isEmpty()){
+            if (content.isEmpty()) {
                 Toast.makeText(applicationContext, getText(R.string.txt_enter_content), Toast.LENGTH_SHORT).show()
                 edt_content.requestFocus()
                 return@setOnClickListener
@@ -124,13 +122,11 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                 val str = it.text.toString()
                 if (str.isNotBlank())
                     voteExampleList.add(str.trim())
-
             }
             if (voteExampleList.size < 2) {
                 Toast.makeText(applicationContext, getText(R.string.txt_minimum_example_is_two), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
 
             val jsonParam = JSONObject()
             try {
@@ -138,7 +134,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                 jsonParam.put(URL_MAKE_VOTE_PARAM_ROOM_IDX, room!!.room_idx)
                 jsonParam.put(URL_MAKE_VOTE_PARAM_TITLE, title)
                 jsonParam.put(URL_MAKE_VOTE_PARAM_CONTENT, content)
-                if(chk_end_time.isChecked)
+                if (chk_end_time.isChecked)
                     jsonParam.put(URL_MAKE_VOTE_PARAM_ENDTIME, "$endDate $endTime")
 
                 val jsonArray = JSONArray()
@@ -146,7 +142,6 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                     jsonArray.put(it)
                 }
                 jsonParam.put(URL_MAKE_VOTE_PARAM_CHOICE, jsonArray)
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -154,10 +149,8 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
             val task = GetMessageTask(applicationContext, HandlerMake(this), LoginToken.getToken(applicationContext))
             isConnecting = true
 
-            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE,METHOD_POST, jsonParam.toString())
-
+            task.execute(USGS_REQUEST_URL.URL_MAKE_VOTE, METHOD_POST, jsonParam.toString())
         }
-
 
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -165,7 +158,6 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
 
         var day = calendar.get(Calendar.DAY_OF_MONTH)
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-
 
         if (hour > 20)
             day += 1
@@ -186,7 +178,6 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
 
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
             datePickerDialog.show()
-
         }
         btn_end_time_time.setOnClickListener {
             val dialog = TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
@@ -196,16 +187,11 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                         btn_end_time_time.text = ("오후 " + (hourOfDay - 12).toString() + ":" + if (minute < 10) "0" + minute.toString() else minute.toString())
                     else
                         btn_end_time_time.text = ("오전 " + hourOfDay.toString() + ":" + if (minute < 10) "0" + minute.toString() else minute.toString())
-
                 }
-            }, 22, 0, false);
+            }, 22, 0, false)
 
-            dialog.show();
+            dialog.show()
         }
-
-
-
-
 
         btn_back.setOnClickListener {
             finish()
@@ -242,7 +228,6 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
         overridePendingTransition(R.anim.fade_in, R.anim.slide_out_down)
     }
 
-
     private class HandlerMake(activity: MakeVoteActivity) : Handler() {
         private val mActivity: WeakReference<MakeVoteActivity> = WeakReference<MakeVoteActivity>(activity)
 
@@ -257,7 +242,7 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                         val idx = obj.toInt()
 
                         Handler().postDelayed(Runnable {
-                            if(!activity.intent.getBooleanExtra(INTENT_FROM_CHAT,false)){
+                            if (!activity.intent.getBooleanExtra(INTENT_FROM_CHAT, false)) {
                                 val intent = Intent(activity.applicationContext, VoteActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 intent.putExtra(INTENT_GROUP, activity.group)
@@ -265,7 +250,6 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
                                 activity.startActivity(intent)
                             }
                             activity.finish()
-
                         }, 500)
                     }
                     else -> {
@@ -277,5 +261,4 @@ class MakeVoteActivity : AppCompatActivity(), RoomActivityInterface{
             }
         }
     }
-
 }

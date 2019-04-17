@@ -6,23 +6,22 @@ import android.os.Parcelable
 import io.realm.Realm
 import org.teamfairy.sopt.teamkerbell.model.interfaces.UserInfoInterface
 
-
 /**
  * Created by lumiere on 2018-03-13.
  */
 class TaskResponse(
-        var u_idx: Int,
-        var task_idx: Int,
-        var response_idx: Int,
-        var content: String,
-        var write_time: String,
+    var u_idx: Int,
+    var task_idx: Int,
+    var response_idx: Int,
+    var content: String,
+    var write_time: String,
 
-        var fileArray: ArrayList<String>,
+    var fileArray: ArrayList<String>,
 
-        var count: Int
-) : UserInfoInterface(),Parcelable {
+    var count: Int
+) : UserInfoInterface(), Parcelable {
 
-    constructor(u_idx: Int, task_idx: Int,response_idx: Int,content: String,write_time: String) : this(u_idx,task_idx,response_idx,content,write_time,ArrayList<String>(),0)
+    constructor(u_idx: Int, task_idx: Int, response_idx: Int, content: String, write_time: String) : this(u_idx, task_idx, response_idx, content, write_time, ArrayList<String>(), 0)
     fun setPhotoInfo(context: Context) {
         super.setPhotoInfo(context, u_idx)
     }

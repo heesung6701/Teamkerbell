@@ -55,7 +55,6 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         mSwipeRefreshLayout.isRefreshing = false
     }
 
-
     var group: Team by Delegates.notNull()
     var role: Role by Delegates.notNull()
     var room: Room by Delegates.notNull()
@@ -82,7 +81,6 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         adapter.setOnItemClick(this)
         recyclerView.adapter = adapter
 
-
         mSwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_layout)
         mSwipeRefreshLayout.setOnRefreshListener(this)
 
@@ -90,10 +88,8 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             finish()
         }
 
-        if(role.master_idx==LoginToken.getUserIdx(applicationContext))
+        if (role.master_idx == LoginToken.getUserIdx(applicationContext))
              MenuFunc(this)
-
-
     }
 
     override fun onResume() {
@@ -102,7 +98,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         connectTaskList()
     }
 
-    private fun attemptEdit(){
+    private fun attemptEdit() {
         val i = Intent(applicationContext, EditRoleActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
         i.putExtra(INTENT_GROUP, group)
@@ -123,12 +119,12 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         })
     }
 
-    private fun attemptDelete(role: Role){
+    private fun attemptDelete(role: Role) {
         val task = GetMessageTask(applicationContext, HandlerDelete(this), LoginToken.getToken(applicationContext))
 
         val jsonParam = JSONObject()
         jsonParam.put(USGS_REQUEST_URL.URL_ROLE_PARAM_ROLE_IDX, role.role_idx)
-        task.execute(USGS_REQUEST_URL.URL_ROLE, METHOD_DELETE,jsonParam.toString())
+        task.execute(USGS_REQUEST_URL.URL_ROLE, METHOD_DELETE, jsonParam.toString())
     }
 
     override fun onClick(p0: View) {
@@ -141,14 +137,12 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         startActivity(i)
     }
 
-
     private fun connectTaskList() {
         dataList.clear()
         adapter.notifyDataSetChanged()
 
         val task = RoleTaskListTask(applicationContext, HandlerGet(this), LoginToken.getToken(applicationContext))
         task.execute(USGS_REQUEST_URL.URL_ROLE_TASK + "/" + role.role_idx, METHOD_GET)
-
     }
 
     fun connectedTaskList(msg: Message) {
@@ -163,7 +157,7 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             }
             else -> {
                 val message = msg.data.getString(JSON_MESSAGE)
-                if(message.contains("Success") || message.contains("Internal"))
+                if (message.contains("Success") || message.contains("Internal"))
                     Toast.makeText(applicationContext, getString(R.string.txt_deleted_item), Toast.LENGTH_SHORT).show()
                 else
                     Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
@@ -183,14 +177,13 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
     fun deleteResult(msg: Message) {
         when (msg.what) {
             Utils.MSG_SUCCESS -> {
-                Toast.makeText(applicationContext,getString(R.string.txt_delete_success),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_delete_success), Toast.LENGTH_SHORT).show()
                 finish()
             }
             else -> {
-                Toast.makeText(applicationContext,getString(R.string.txt_message_fail),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.txt_message_fail), Toast.LENGTH_SHORT).show()
             }
         }
-
     }
     private class HandlerDelete(activity: RoleActivity) : Handler() {
         private val mActivity: WeakReference<RoleActivity> = WeakReference<RoleActivity>(activity)
@@ -199,5 +192,4 @@ class RoleActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
             mActivity.get()?.deleteResult(msg)
         }
     }
-
 }

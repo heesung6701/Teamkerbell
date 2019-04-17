@@ -11,20 +11,19 @@ import org.teamfairy.sopt.teamkerbell.model.data.User
  */
 open class UserR : RealmObject() {
     @PrimaryKey
-    var u_idx: Int=-2
+    var u_idx: Int = -2
 
-    var name: String="이름없음"
-    var phone: String="010-2081-3818"
-    var bio: String=""
-    var photo: String=""
+    var name: String = "이름없음"
+    var phone: String = "010-2081-3818"
+    var bio: String = ""
+    var photo: String = ""
 
-    var id: String=""
+    var id: String = ""
 
-    fun toContactListData(): ContactListData = ContactListData(null, User(u_idx, name, phone, bio, photo, id),false)
-    fun toUser() : User = User(u_idx, name, phone, bio, photo, id)
+    fun toContactListData(): ContactListData = ContactListData(null, User(u_idx, name, phone, bio, photo, id), false)
+    fun toUser(): User = User(u_idx, name, phone, bio, photo, id)
 
     companion object {
         const val ARG_U_IDX = Constants.JSON_U_IDX
-
     }
 }

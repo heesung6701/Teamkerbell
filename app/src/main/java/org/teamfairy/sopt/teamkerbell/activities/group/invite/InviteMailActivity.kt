@@ -12,14 +12,13 @@ import kotlin.properties.Delegates
 
 class InviteMailActivity : AppCompatActivity() {
 
-    var group  : Team by Delegates.notNull()
+    var group: Team by Delegates.notNull()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_mail)
         setSupportActionBar(toolbar)
 
-
-        group  = intent.getParcelableExtra<Team>(INTENT_GROUP)
+        group = intent.getParcelableExtra<Team>(INTENT_GROUP)
 
         btn_send.setOnClickListener {
             finish()
@@ -29,5 +28,4 @@ class InviteMailActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }

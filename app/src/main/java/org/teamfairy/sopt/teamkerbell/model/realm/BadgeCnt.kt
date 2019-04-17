@@ -8,70 +8,67 @@ import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealm
 /**
  * Created by lumiere on 2018-01-01.
  */
-open class BadgeCnt() : RealmObject(){
-    var what: Int=-1
-    var g_idx : Int = -1
-    var cnt : Int = 0
+open class BadgeCnt() : RealmObject() {
+    var what: Int = -1
+    var g_idx: Int = -1
+    var cnt: Int = 0
 
     companion object {
-        const  val ARG_WHAT = "what"
-        const  val ARG_G_IDX = "g_idx"
+        const val ARG_WHAT = "what"
+        const val ARG_G_IDX = "g_idx"
 
-        const val WHAT_NOTICE =0
-        const val WHAT_SIGNAL  = 1
-        const val WHAT_VOTE =2
-        const val WHAT_ROLE  = 3
+        const val WHAT_NOTICE = 0
+        const val WHAT_SIGNAL = 1
+        const val WHAT_VOTE = 2
+        const val WHAT_ROLE = 3
 
-        fun increase(applicationContext : Context, key : Int, g_idx: Int){
+        fun increase(applicationContext: Context, key: Int, g_idx: Int) {
 
             val realm = getRealmDefault(applicationContext)
 
-            var badgeCnt : BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT,key).equalTo(ARG_G_IDX,g_idx).findFirst()
+            var badgeCnt: BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT, key).equalTo(ARG_G_IDX, g_idx).findFirst()
 
             realm.beginTransaction()
-            if(badgeCnt==null) {
+            if (badgeCnt == null) {
                 Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] create")
-                badgeCnt= realm.createObject(BadgeCnt::class.java)
-                badgeCnt!!.what=key
-                badgeCnt.g_idx=g_idx
+                badgeCnt = realm.createObject(BadgeCnt::class.java)
+                badgeCnt!!.what = key
+                badgeCnt.g_idx = g_idx
             }
-            badgeCnt.cnt+=1
+            badgeCnt.cnt += 1
             realm.commitTransaction()
             Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] increase - > ${badgeCnt.cnt}")
             realm.close()
-
-
         }
-        fun clear(applicationContext : Context, key : Int, g_idx: Int){
+        fun clear(applicationContext: Context, key: Int, g_idx: Int) {
             val realm = getRealmDefault(applicationContext)
 
-            var badgeCnt : BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT,key).equalTo(ARG_G_IDX,g_idx).findFirst()
+            var badgeCnt: BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT, key).equalTo(ARG_G_IDX, g_idx).findFirst()
 
             realm.beginTransaction()
-            if(badgeCnt==null) {
+            if (badgeCnt == null) {
                 Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] create")
-                badgeCnt= realm.createObject(BadgeCnt::class.java)
-                badgeCnt!!.what=key
-                badgeCnt.g_idx=g_idx
+                badgeCnt = realm.createObject(BadgeCnt::class.java)
+                badgeCnt!!.what = key
+                badgeCnt.g_idx = g_idx
             }
-            badgeCnt.cnt=0
+            badgeCnt.cnt = 0
             realm.commitTransaction()
             Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] clear")
             realm.close()
         }
 
-        fun getCount(applicationContext: Context, key : Int, g_idx: Int) : Int{
+        fun getCount(applicationContext: Context, key: Int, g_idx: Int): Int {
             val realm = getRealmDefault(applicationContext)
 
+            var badgeCnt: BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT, key).equalTo(ARG_G_IDX, g_idx).findFirst()
 
-            var badgeCnt : BadgeCnt? = realm.where(BadgeCnt::class.java).equalTo(BadgeCnt.ARG_WHAT,key).equalTo(ARG_G_IDX,g_idx).findFirst()
-
-            if(badgeCnt==null) {
+            if (badgeCnt == null) {
                 Log.d("BadgeCnt", "[key:$key,g_idx: $g_idx] create")
                 realm.beginTransaction()
-                badgeCnt= realm.createObject(BadgeCnt::class.java)
-                badgeCnt!!.what=key
-                badgeCnt.g_idx=g_idx
+                badgeCnt = realm.createObject(BadgeCnt::class.java)
+                badgeCnt!!.what = key
+                badgeCnt.g_idx = g_idx
                 realm.commitTransaction()
             }
 
@@ -80,20 +77,17 @@ open class BadgeCnt() : RealmObject(){
             realm.close()
             return c
         }
-         fun badgeClearAll(applicationContext: Context){
+         fun badgeClearAll(applicationContext: Context) {
 
             val realm = getRealmDefault(applicationContext)
 
             val result = realm.where(BadgeCnt::class.java).notEqualTo(BadgeCnt.ARG_WHAT, WHAT_ROLE).findAll()
             realm.beginTransaction()
             result.forEach {
-                it.cnt=0
+                it.cnt = 0
             }
             realm.commitTransaction()
             realm.close()
         }
-
-
     }
-
 }

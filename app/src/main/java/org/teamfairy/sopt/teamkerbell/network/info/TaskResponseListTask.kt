@@ -42,17 +42,15 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
                         val dataResponse = data.getJSONObject(JSON_RESPONSE)
                         val dataFile = data.getJSONArray(JSON_FILE)
 
-
                         val files: ArrayList<String> = ArrayList<String>()
                         for (j in 0 until dataFile.length()) {
-                            val dataFilsString  : JSONObject= dataFile.getJSONObject(j)
-                            val fileUrl :String = dataFilsString.getString(JSON_FILE)
+                            val dataFilsString: JSONObject = dataFile.getJSONObject(j)
+                            val fileUrl: String = dataFilsString.getString(JSON_FILE)
                             files.add(fileUrl)
                         }
 
-
                         var uIdx = dataResponse.getString(USGS_REQUEST_URL.JSON_U_IDX)
-                        if(uIdx == "null") uIdx="-2"
+                        if (uIdx == "null") uIdx = "-2"
                         val response = TaskResponse(
                                 uIdx.toInt(),
                                 dataResponse.getInt(USGS_REQUEST_URL.JSON_TASK_IDX),
@@ -64,9 +62,7 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
 
                         result.add(response)
                     }
-                    msgCode=MSG_SUCCESS
-
-
+                    msgCode = MSG_SUCCESS
                 } else {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -77,22 +73,18 @@ class TaskResponseListTask(context: Context, var handler: Handler, token: String
             e.printStackTrace()
         } finally {
             if (realm.isInTransaction) realm.commitTransaction()
-
         }
         return result
-
     }
-
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
 
         val obj = extractFeatureFromJson(result!!)
 
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
         msg.obj = obj
         val data = Bundle()
         data.putString("message", message)

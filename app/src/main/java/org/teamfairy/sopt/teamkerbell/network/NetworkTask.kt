@@ -27,7 +27,6 @@ import java.io.*
 import java.net.*
 import java.nio.charset.Charset
 
-
 /**
  * Created by lumiere on 2018-01-04.
  */
@@ -35,13 +34,11 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
     val LOG_TAG = NetworkTask::class.java.simpleName
 
-
     var files: ArrayList<File> = ArrayList<File>()
     var file: File? = null
     var photo: File? = null
     internal var token: String? = null
     internal var context: Context
-
 
     companion object {
         const val METHOD_POST = "POST"
@@ -98,7 +95,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         return jsonResponse
     }
 
-
     private fun createUrl(vararg params: String): URL? {
         val url: URL
         try {
@@ -120,7 +116,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             Log.d("$LOG_TAG/REQUEST_URL", params[0])
             Log.d("$LOG_TAG/REQUEST_METHOD", params[1])
-            if(params.lastIndex<=2)
+            if (params.lastIndex <= 2)
                 Log.d("$LOG_TAG/REQUEST_JSON", params[2])
 
             val url = createUrl(*params)
@@ -135,16 +131,14 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 urlConnection.setRequestProperty("token", token!!)
             urlConnection.doOutput = true
 
-
             urlConnection.connect()
 
             val os = urlConnection.outputStream
             val osw = OutputStreamWriter(os, "UTF-8")
-            if(params.lastIndex<=2) {
+            if (params.lastIndex <= 2) {
                 osw.write(params[2])
             }
             osw.flush()
-
 
             inputStream = try {
                 if (urlConnection.responseCode / 100 == 2) {
@@ -162,14 +156,12 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             Log.d("$LOG_TAG/RESPONSE", jsonResponse)
             osw.close()
 
-
             Log.d("$LOG_TAG/STATUS", urlConnection.responseCode.toString())
             Log.d("$LOG_TAG/MSG", urlConnection.responseMessage)
 
             if (jsonResponse.contains("UnauthorizedError: invalid token") || jsonResponse.contains("UnauthorizedError: invalid signature")) {
                 //   LoginToken.logout(context, LoginToken.STATE_TOKEN_OVER)
             }
-
 
             urlConnection.disconnect()
         } catch (e: NoRouteToHostException) {
@@ -198,7 +190,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         var urlConnection: HttpURLConnection? = null
         try {
 
-
             Log.d("$LOG_TAG/REQUEST_URL", params[0])
 
             val url = createUrl(*params)
@@ -211,7 +202,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 urlConnection.setRequestProperty("token", token!!)
 
             urlConnection.connect()
-
 
             inputStream = try {
 
@@ -233,7 +223,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             Log.d("$LOG_TAG/MSG", urlConnection.responseMessage)
             if (jsonResponse.contains("UnauthorizedError: invalid token") || jsonResponse.contains("UnauthorizedError: invalid signature"))
 
-
                 urlConnection.disconnect()
         } catch (e: Exception) {
             Log.d("$LOG_TAG/Error", e.toString())
@@ -253,7 +242,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         return jsonResponse
     }
 
-
     @Throws(IOException::class)
     private fun makeHttpRequestDelete(vararg params: String): String? {
         var jsonResponse: String? = null
@@ -267,7 +255,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 urlConnection.requestMethod = "DELETE"
             } else {
-                urlConnection.setRequestProperty("X-HTTP-Method-Override", "DELETE");
+                urlConnection.setRequestProperty("X-HTTP-Method-Override", "DELETE")
                 urlConnection.requestMethod = "POST"
             }
             urlConnection.setRequestProperty("Content-Type", "application/json")
@@ -278,7 +266,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 urlConnection.setRequestProperty("token", token!!)
 
             urlConnection.doOutput = true
-
 
             Log.d("$LOG_TAG/REQUEST_URL", params[0])
             Log.d("$LOG_TAG/REQUEST_METHOD", params[1])
@@ -307,14 +294,12 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             Log.d("$LOG_TAG/RESPONSE", jsonResponse)
             osw.close()
 
-
             Log.d("$LOG_TAG/STATUS", urlConnection.responseCode.toString())
             Log.d("$LOG_TAG/MSG", urlConnection.responseMessage)
 
             if (jsonResponse.contains("UnauthorizedError: invalid token") || jsonResponse.contains("UnauthorizedError: invalid signature")) {
                 //   LoginToken.logout(context, LoginToken.STATE_TOKEN_OVER)
             }
-
 
             urlConnection.disconnect()
         } catch (e: NoRouteToHostException) {
@@ -339,7 +324,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
         return jsonResponse
     }
-
 
     private val crlf = "\r\n"
     private val twoHyphens = "--"
@@ -375,10 +359,8 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             urlConnection.setRequestProperty("accept", "*/*")
             urlConnection.setRequestProperty("accept-encoding", "gzip, deflate")
             urlConnection.setRequestProperty(
-                    "content-type", "multipart/form-data;boundary=" + this.boundary);
+                    "content-type", "multipart/form-data;boundary=" + this.boundary)
             urlConnection.setRequestProperty("connection", "keep-alive")
-
-
 
             try {
                 urlConnection.requestProperties.iterator().forEach {
@@ -388,8 +370,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 e.printStackTrace()
             }
 
-
-
             if (token != null)
                 urlConnection.setRequestProperty("token", token!!)
 
@@ -398,8 +378,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
 
             val jsonObj = JSONObject(params[2])
             Log.d(LOG_TAG, jsonObj.toString())
-
-
 
             if (jsonObj.has(JSON_G_IDX)) {
                 addFormField(request, JSON_G_IDX, jsonObj.getString(JSON_G_IDX))
@@ -411,8 +389,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 Log.d(LOG_TAG, "$JSON_USER_ARRAY/" + jsonObj.getString(JSON_USER_ARRAY))
             }
 
-
-            //프로필, 그룹 추가
+            // 프로필, 그룹 추가
             if (jsonObj.has(JSON_NAME)) {
                 addFormField(request, JSON_NAME, jsonObj.getString(JSON_NAME))
                 Log.d(LOG_TAG, "$JSON_NAME/" + jsonObj.getString(JSON_NAME))
@@ -435,7 +412,7 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                 Log.d(LOG_TAG, "$JSON_FILE/" + file.toString())
             }
 
-            //역할추가
+            // 역할추가
             if (jsonObj.has(JSON_ROLE_IDX)) {
                 addFormField(request, JSON_ROLE_IDX, jsonObj.getString(JSON_ROLE_IDX))
                 Log.d(LOG_TAG, "$JSON_ROLE_IDX/" + jsonObj.getString(JSON_ROLE_IDX))
@@ -453,12 +430,10 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                     Log.d(LOG_TAG, "$JSON_FILE/" + it.toString())
                     addFilePart(request, os, JSON_FILE, it)
                 }
-
             }
 
-            //content wrapper 종료
+            // content wrapper 종료
             addFormFinish(request)
-
 
             urlConnection.connect()
             inputStream = try {
@@ -479,7 +454,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
             os?.close()
             request.close()
 
-
             Log.d("$LOG_TAG/STATUS", urlConnection.responseCode.toString())
             Log.d("$LOG_TAG/MSG", urlConnection.responseMessage)
 
@@ -493,7 +467,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
                     it.delete()
                 }
             }
-
         } catch (e: NoRouteToHostException) {
             Log.d("$LOG_TAG/Error", e.toString())
             e.printStackTrace()
@@ -514,14 +487,13 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         request.flush()
     }
 
-
     private fun addFormField(request: DataOutputStream, name: String, value: String) {
 
         request.writeBytes(this.twoHyphens + this.boundary + this.crlf)
 
         request.writeBytes("Content-Disposition: form-data; name=\"" +
                 name + "\";" + this.crlf)
-        request.writeBytes("Content-Type: text/plain; charset=" + charset.toString() + this.crlf + this.crlf);
+        request.writeBytes("Content-Type: text/plain; charset=" + charset.toString() + this.crlf + this.crlf)
         request.write(value.toByteArray(charset))
         request.writeBytes(this.crlf)
     }
@@ -538,8 +510,6 @@ open class NetworkTask : AsyncTask<String, Void, String> {
         request.writeBytes("Content-Transfer-Encoding: binary" + this.crlf)
 
         request.writeBytes(this.crlf)
-
-
 
         Log.d("$LOG_TAG/file", uploadFile.readText(Charset.defaultCharset()))
         val buffer = ByteArray(4096)

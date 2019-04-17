@@ -3,15 +3,14 @@ package org.teamfairy.sopt.teamkerbell.model.data
 import android.os.Parcel
 import android.os.Parcelable
 
-
 /**
  * Created by lumiere on 2018-03-13.
  */
 data class RoleTask(
-        var role_idx: Int?,
-        var task_idx: Int?,
-        var content: String,
-        var userIdArray: IntArray
+    var role_idx: Int?,
+    var task_idx: Int?,
+    var content: String,
+    var userIdArray: IntArray
 ) : Parcelable {
   constructor(content: String) : this(null, null, content, IntArray(0))
 

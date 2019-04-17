@@ -36,7 +36,6 @@ import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_SIGNAL
 import org.teamfairy.sopt.teamkerbell.utils.Utils
 import java.lang.ref.WeakReference
 import kotlin.experimental.and
-import kotlin.experimental.or
 import kotlin.properties.Delegates
 
 /**
@@ -63,7 +62,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         updateList()
     }
 
-
     var state = Utils.SIGNAL_RECEIVER
 
     private var signalList: ArrayList<Signal> = arrayListOf<Signal>()
@@ -74,10 +72,11 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
     private var signFilter: Byte = Signal.ALL
 
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val v = inflater.inflate(R.layout.fragment_signal_list, container, false)
 
@@ -109,8 +108,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         connectSignalList()
 
-
-
         return v
     }
 
@@ -132,7 +129,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             else Signal.YELLOW
             updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
-
         }
 
         signGreen.setOnClickListener {
@@ -142,7 +138,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             updateColorFilter(iv_focus_red, iv_focus_yellow, iv_focus_green)
             updateList()
         }
-
     }
 
     private fun updateColorFilter(ivFocusRed: ImageView, ivFocusYellow: ImageView, ivFocusGreen: ImageView) {
@@ -155,7 +150,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
 
         if (dataList.size > 0)
             recyclerView.scrollToPosition(0)
-
     }
 
     private fun updateList() {
@@ -164,7 +158,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             val c: Byte = Signal.colorStrToByte(it.responseColor)
 
             if (c and signFilter != 0.toByte()) {
-                if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
+                if (it.room_idx == room?.room_idx ?: it.room_idx || room?.room_idx == Room.ARG_ALL_IDX)
                     dataList.add(it)
             }
         }
@@ -173,7 +167,7 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
             val c: Byte = Signal.colorStrToByte(it.responseColor)
 
             if (c and signFilter == 0.toByte()) {
-                if(it.room_idx==room?.room_idx ?: it.room_idx || room?.room_idx==Room.ARG_ALL_IDX)
+                if (it.room_idx == room?.room_idx ?: it.room_idx || room?.room_idx == Room.ARG_ALL_IDX)
                     dataList.add(it)
             }
         }
@@ -191,7 +185,6 @@ class SignalListFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.
         intent.putExtra(INTENT_RESPONDED, (signal!!.responseColor.equals("g") || state == Utils.SIGNAL_SENDER))
         startActivity(intent)
     }
-
 
     private fun connectSignalList() {
         dataList.clear()

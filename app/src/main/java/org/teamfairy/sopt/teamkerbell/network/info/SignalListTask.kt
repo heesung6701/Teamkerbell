@@ -30,29 +30,29 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
 /**
  * Created by lumiere on 2018-01-06.
  */
-class SignalListTask(context: Context, var handler: Handler, token : String?): NetworkTask(context,token) {
+class SignalListTask(context: Context, var handler: Handler, token: String?) : NetworkTask(context, token) {
 
-    constructor(context: Context, handler : Handler) : this(context,handler,null)
+    constructor(context: Context, handler: Handler) : this(context, handler, null)
     var message: String = "No Message"
     var msgCode = MSG_FAIL
 
-    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Signal>?{
+    fun extractFeatureFromJson(jsonResponse: String): ArrayList<Signal>? {
 
         message = "No Message"
         val datas = ArrayList<Signal>()
 
-        val realm  = getRealmDefault(context)
+        val realm = getRealmDefault(context)
         try {
             val baseJsonResponse = JSONObject(jsonResponse.toString())
             if (baseJsonResponse.has(JSON_MESSAGE)) {
                 message = baseJsonResponse.getString(JSON_MESSAGE)
-                if(message.contains("Success")){
+                if (message.contains("Success")) {
 
-                    val dataArray : JSONArray = baseJsonResponse.getJSONArray(JSON_DATA)
+                    val dataArray: JSONArray = baseJsonResponse.getJSONArray(JSON_DATA)
 
                     realm.beginTransaction()
-                    for( i in 0 until dataArray.length()){
-                        val data : JSONObject = dataArray.getJSONObject(i)
+                    for (i in 0 until dataArray.length()) {
+                        val data: JSONObject = dataArray.getJSONObject(i)
 
                         val obj = Signal(data.getInt(JSON_SIGNAL_IDX),
                                 data.getInt(JSON_U_IDX),
@@ -62,15 +62,14 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
                                 data.getString(JSON_CONTENT),
                                 data.getInt(JSON_ENTIRE_STATUS)
                         )
-                        if(data.has(JSON_COLOR))
-                            obj.responseColor=data.getString(JSON_COLOR)
-                        if(data.has(JSON_RESPONSE_COLOR))
-                            obj.responseColor=data.getString(JSON_RESPONSE_COLOR)
-                        if(data.has(JSON_RESPONSE_CONTENT))
-                            obj.responseColor=data.getString(JSON_RESPONSE_CONTENT)
+                        if (data.has(JSON_COLOR))
+                            obj.responseColor = data.getString(JSON_COLOR)
+                        if (data.has(JSON_RESPONSE_COLOR))
+                            obj.responseColor = data.getString(JSON_RESPONSE_COLOR)
+                        if (data.has(JSON_RESPONSE_CONTENT))
+                            obj.responseColor = data.getString(JSON_RESPONSE_CONTENT)
 
-
-                        if (obj.responseColor.equals("null")) obj.responseColor="a"
+                        if (obj.responseColor.equals("null")) obj.responseColor = "a"
                         if (obj.responseContent.equals("null")) obj.responseContent = null
                         if (obj.responseColor.equals("null")) obj.responseColor = "a"
 
@@ -79,38 +78,35 @@ class SignalListTask(context: Context, var handler: Handler, token : String?): N
                     msgCode = MSG_SUCCESS
 
                     return datas
+                } else {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
-                else{
-                    Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(context,jsonResponse.toString(),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, jsonResponse.toString(), Toast.LENGTH_SHORT).show()
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-        }finally {
-            if(realm.isInTransaction)
+        } finally {
+            if (realm.isInTransaction)
                 realm.commitTransaction()
         }
 
         return null
     }
 
-
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
         val obj = extractFeatureFromJson(result!!)
 
-
         val msg = handler.obtainMessage()
         msg.what = msgCode
-        msg.obj=obj
-        Log.d(NetworkTask::class.java.simpleName,"get Message "+if(msgCode== Utils.MSG_SUCCESS) "Success" else " failed")
+        msg.obj = obj
+        Log.d(NetworkTask::class.java.simpleName, "get Message " + if (msgCode == Utils.MSG_SUCCESS) "Success" else " failed")
 
         val data = Bundle()
-        data.putString("message",message)
-        msg.data=data
+        data.putString("message", message)
+        msg.data = data
         handler.sendMessage(msg)
     }
 }

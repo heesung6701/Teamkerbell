@@ -7,9 +7,9 @@ import android.widget.EditText
  * Created by lumiere on 2018-06-03.
  */
 data class ExampleEdit(
-        var view : View,
-        var edtText : EditText,
-        var id : Int?
-){
-    constructor(view: View,edtText: EditText) : this(view,edtText,-1)
+    var view: View,
+    var edtText: EditText,
+    var id: Int?
+) {
+    constructor(view: View, edtText: EditText) : this(view, edtText, -1)
 }

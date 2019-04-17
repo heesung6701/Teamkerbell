@@ -7,15 +7,12 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.utils.NetworkUtils
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_PHOTO
 import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.JSON_U_IDX
-import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_USER
 import org.teamfairy.sopt.teamkerbell.viewholder.ResultByMemberViewHolder
-
 
 /**
  * Created by lumiere on 2017-12-30.
  */
-class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>, var mContext: Context) : RecyclerView.Adapter<ResultByMemberViewHolder>() {
-
+class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String, String>>, var mContext: Context) : RecyclerView.Adapter<ResultByMemberViewHolder>() {
 
     override fun onBindViewHolder(holder: ResultByMemberViewHolder, position: Int) {
         holder.tvContent.text = dataList[position]["content"]
@@ -23,9 +20,7 @@ class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>,
 
         if (NetworkUtils.getBitmapList(dataList[position][JSON_PHOTO], holder.ivProfile, mContext, "user${dataList[position][JSON_U_IDX]}"))
             holder.ivProfile.setImageResource(R.drawable.icon_profile_default)
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -37,7 +32,5 @@ class ResultByMemberListAdapter(var dataList: ArrayList<HashMap<String,String>>,
         return ResultByMemberViewHolder(mainView)
     }
 
-
     override fun getItemCount(): Int = dataList.size
-
 }

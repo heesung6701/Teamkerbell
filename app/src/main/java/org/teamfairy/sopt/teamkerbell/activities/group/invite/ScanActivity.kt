@@ -15,19 +15,19 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     public override fun onCreate(state: Bundle?) {
         super.onCreate(state)
-        mScannerView = ZXingScannerView(this)   // Programmatically initialize the scanner view
-        setContentView(mScannerView)                // Set the scanner view as the content view
+        mScannerView = ZXingScannerView(this) // Programmatically initialize the scanner view
+        setContentView(mScannerView) // Set the scanner view as the content view
     }
 
     public override fun onResume() {
         super.onResume()
         mScannerView!!.setResultHandler(this) // Register ourselves as a handler for scan results.
-        mScannerView!!.startCamera()          // Start camera on resume
+        mScannerView!!.startCamera() // Start camera on resume
     }
 
     public override fun onPause() {
         super.onPause()
-        mScannerView!!.stopCamera()           // Stop camera on pause
+        mScannerView!!.stopCamera() // Stop camera on pause
     }
 
     override fun handleResult(rawResult: Result) {
@@ -38,12 +38,12 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(rawResult.text))
             startActivity(intent)
             finish()
-        }catch(e : Exception){
-            Toast.makeText(applicationContext,"올바르지 않은 QR코드 입니다",Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(applicationContext, "올바르지 않은 QR코드 입니다", Toast.LENGTH_SHORT).show()
         }
         finish()
 
         // If you would like to resume scanning, call this method below:
-        //mScannerView.resumeCameraPreview(this);
+        // mScannerView.resumeCameraPreview(this);
     }
 }

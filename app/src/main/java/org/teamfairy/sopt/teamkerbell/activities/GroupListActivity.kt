@@ -10,9 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_group_list.*
-import org.json.JSONObject
 import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.R.id.tv_hello
 import org.teamfairy.sopt.teamkerbell.utils.DatabaseHelpUtils.Companion.getRealmDefault
@@ -24,10 +22,6 @@ import org.teamfairy.sopt.teamkerbell.model.data.Team
 import org.teamfairy.sopt.teamkerbell.model.realm.GroupR
 import org.teamfairy.sopt.teamkerbell.model.realm.IsUpdateR
 import org.teamfairy.sopt.teamkerbell.model.realm.JoinedGroupR
-import org.teamfairy.sopt.teamkerbell.network.GetMessageTask
-import org.teamfairy.sopt.teamkerbell.network.NetworkTask.Companion.METHOD_DELETE
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL
-import org.teamfairy.sopt.teamkerbell.network.USGS_REQUEST_URL.URL_LEAVE_GROUP_PARAM_GID
 import org.teamfairy.sopt.teamkerbell.utils.*
 import org.teamfairy.sopt.teamkerbell.utils.IntentTag.Companion.INTENT_GROUP
 import java.lang.ref.WeakReference
@@ -41,22 +35,15 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
                 addItem()
                 return
             }
-
             val intent = Intent(applicationContext, MainActivity::class.java)
             intent.putExtra(INTENT_GROUP, groupList[pos])
             startActivity(intent)
-
     }
-
-
     private val TAG = this::class.java.simpleName
-
     private var dataList = ArrayList<HashMap<String, String>>()
     private var groupList = ArrayList<Team>()
-
     private var recyclerView: RecyclerView by Delegates.notNull()
     private var adapter: TeamListAdapter by Delegates.notNull()
-
 
     var isUpdateRs: HashMap<Int, IsUpdateR> = HashMap()
 
@@ -72,10 +59,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-
-
     }
-
 
     private fun addItem() {
 
@@ -129,21 +113,19 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
             h["cnt"] = (realm.where(JoinedGroupR::class.java).equalTo(Team.ARG_G_IDX, it.g_idx).findAll().size).toString()
             dataList.add(h)
             groupList.add(it.toGroup())
-
         }
         dataList.add(HashMap<String, String>())
         adapter.notifyDataSetChanged()
     }
 
-
-    private fun addChangeListener(what : Int) {
+    private fun addChangeListener(what: Int) {
         val LOG_TAG = "$TAG /isUpdateR : User"
 
         Log.d(LOG_TAG, "add ChangeListener what : $what")
 
         val realm = DatabaseHelpUtils.getRealmDefault(applicationContext)
         val isUpdateR = realm.where(IsUpdateR::class.java).equalTo(IsUpdateR.ARG_WHAT, what).findFirst()
-                ?: IsUpdateR.create(realm,what)
+                ?: IsUpdateR.create(realm, what)
 
         if (isUpdateR.isUpdate) {
             Log.d(LOG_TAG, "was true")
@@ -164,7 +146,7 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-        isUpdateRs[what]= isUpdateR
+        isUpdateRs[what] = isUpdateR
     }
 
     private class HandlerGet(activity: GroupListActivity) : Handler() {
@@ -206,8 +188,8 @@ class GroupListActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         val i = Intent(this, SplashActivity::class.java)
-        i.putExtra(IntentTag.EXIT,true)
-        i.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+        i.putExtra(IntentTag.EXIT, true)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(i)
         finish()
     }

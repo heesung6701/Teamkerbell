@@ -6,12 +6,10 @@ import org.teamfairy.sopt.teamkerbell.R
 import org.teamfairy.sopt.teamkerbell.model.interfaces.ListDataInterface
 import org.teamfairy.sopt.teamkerbell.viewholder.UnperformedListViewHolder
 
-
 /**
  * Created by lumiere on 2017-12-30.
  */
 class UnperformedListAdapter(var dataList: ArrayList<ListDataInterface>) : RecyclerView.Adapter<UnperformedListViewHolder>() {
-
 
     private var mOnClick: View.OnClickListener? = null
 
@@ -24,9 +22,7 @@ class UnperformedListAdapter(var dataList: ArrayList<ListDataInterface>) : Recyc
         holder.tvTitle.text = dataList[position].getGroupTitle()
         holder.tvSubTitle.text = dataList[position].getMainTitle()
         holder.tvTime.text = dataList[position].getTime()
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return position
@@ -41,7 +37,5 @@ class UnperformedListAdapter(var dataList: ArrayList<ListDataInterface>) : Recyc
         return UnperformedListViewHolder(mainView)
     }
 
-
-    override fun getItemCount(): Int = dataList.size;
-
+    override fun getItemCount(): Int = dataList.size
 }

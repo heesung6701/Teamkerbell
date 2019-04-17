@@ -22,31 +22,27 @@ import org.teamfairy.sopt.teamkerbell.utils.Utils.Companion.MSG_SUCCESS
  * Created by lumiere on 2018-01-05.
  */
 
+class MakeRoomTask(context: Context, handler: Handler, token: String?, var g_idx: Int) : GetMessageTask(context, handler, token) {
 
-class MakeRoomTask(context: Context, handler: Handler, token : String?,var g_idx : Int): GetMessageTask(context,handler,token) {
-
-    override  fun extractFeatureFromJson(jsonResponse: String) : Room? {
+    override fun extractFeatureFromJson(jsonResponse: String): Room? {
         try {
 
             val baseJsonResponse = JSONObject(jsonResponse)
 
-
             if (baseJsonResponse.has(JSON_MESSAGE)) {
                 message = baseJsonResponse.getString(JSON_MESSAGE)
                 if (message.contains("Success") || message.contains("success"))
-                    msgCode= MSG_SUCCESS
+                    msgCode = MSG_SUCCESS
                 else if (message.contains(MSG_NO_INTERNET_STR)) {
                     msgCode = MSG_NO_INTERNET
-                    Toast.makeText(context,"인터넷 연결상태를 확인해주세요", Toast.LENGTH_SHORT).show()
-                }
-                else if (message.contains("Failed") || message.contains("failed")) {
+                    Toast.makeText(context, "인터넷 연결상태를 확인해주세요", Toast.LENGTH_SHORT).show()
+                } else if (message.contains("Failed") || message.contains("failed")) {
                     msgCode = MSG_FAIL
-                    Toast.makeText(context,"잠시후 다시 도전 해주세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "잠시후 다시 도전 해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
 
-
-            if(baseJsonResponse.has(JSON_DATA)) {
+            if (baseJsonResponse.has(JSON_DATA)) {
                 val data = baseJsonResponse.getJSONObject(JSON_DATA)
 
                 val room = Room(g_idx,
@@ -58,12 +54,9 @@ class MakeRoomTask(context: Context, handler: Handler, token : String?,var g_idx
 
                 return room
             }
-
         } catch (e: JSONException) {
             e.printStackTrace()
         }
         return null
     }
-
-
 }
